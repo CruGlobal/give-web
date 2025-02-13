@@ -73,9 +73,6 @@ const SessionModalService = /* @ngInject */ function ($uibModal, $log, modalStat
     }).result,
     accountBenefits: (lastPurchaseId) => openModal('account-benefits', { resolve: { lastPurchaseId: () => lastPurchaseId }, size: 'sm' }).result,
     registerAccount: () => openModal('register-account', {
-      resolve: {
-        welcomeBack: () => true
-      },
       backdrop: 'static',
       keyboard: false
     }).result,

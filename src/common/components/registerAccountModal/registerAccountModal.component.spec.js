@@ -312,7 +312,6 @@ describe('registerAccountModal', function () {
         $ctrl.verificationService.postDonorMatches.mockImplementation(() => Observable.of({}))
         $ctrl.postDonorMatches()
 
-        expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
         expect($ctrl.verificationService.postDonorMatches).toHaveBeenCalled()
         expect($ctrl.stateChanged).toHaveBeenCalledWith('user-match')
       })
@@ -323,7 +322,6 @@ describe('registerAccountModal', function () {
         $ctrl.verificationService.postDonorMatches.mockImplementation(() => Observable.throw({}))
         $ctrl.postDonorMatches()
 
-        expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
         expect($ctrl.verificationService.postDonorMatches).toHaveBeenCalled()
         expect($ctrl.stateChanged).not.toHaveBeenCalled()
         expect($ctrl.onCancel).toHaveBeenCalled()
@@ -355,7 +353,7 @@ describe('registerAccountModal', function () {
     it('changes to \'sign-in\' state', () => {
       $ctrl.stateChanged('sign-in')
 
-      expect($ctrl.setModalSize).toHaveBeenCalledWith('sm')
+      expect($ctrl.setModalSize).toHaveBeenCalledWith('md')
       expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: false })
       expect($ctrl.state).toEqual('sign-in')
     })
@@ -363,7 +361,7 @@ describe('registerAccountModal', function () {
     it('changes to \'sign-up\' state', () => {
       $ctrl.stateChanged('sign-up')
 
-      expect($ctrl.setModalSize).toHaveBeenCalledWith('sm')
+      expect($ctrl.setModalSize).toHaveBeenCalledWith('md')
       expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: false })
       expect($ctrl.state).toEqual('sign-up')
     })
@@ -371,72 +369,35 @@ describe('registerAccountModal', function () {
     it('changes to \'contact-info\' state', () => {
       $ctrl.stateChanged('contact-info')
 
-      expect($ctrl.setModalSize).toHaveBeenCalledWith('md')
+      expect($ctrl.setModalSize).toHaveBeenCalledWith('lg')
       expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: false })
       expect($ctrl.state).toEqual('contact-info')
     })
 
-    it('changes to \'failed-verification\' state', () => {
-      $ctrl.stateChanged('failed-verification')
+    it('changes to \'user-match\' state', () => {
+      $ctrl.stateChanged('user-match')
 
-      expect($ctrl.setModalSize).toHaveBeenCalledWith('sm')
+      expect($ctrl.setModalSize).toHaveBeenCalledWith('md')
       expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: false })
-      expect($ctrl.state).toEqual('failed-verification')
+      expect($ctrl.state).toEqual('user-match')
     })
 
-    describe('when welcomeBack is true', () => {
-      beforeEach(() => {
-        $ctrl.welcomeBack = true
-      })
+    it('sets the sign-in modal size to medium', () => {
+      $ctrl.stateChanged('sign-in')
 
-      it('sets the sign-in modal size to large on wide screens', () => {
-        $ctrl.$window.innerWidth = 1200
-        $ctrl.stateChanged('sign-in')
-
-        expect($ctrl.setModalSize).toHaveBeenCalledWith('lg')
-      })
-
-      it('sets the sign-in modal size to small on narrow screens', () => {
-        $ctrl.stateChanged('sign-in')
-
-        expect($ctrl.setModalSize).toHaveBeenCalledWith('sm')
-      })
-
-      it('sets the sign-up modal size to small', () => {
-        $ctrl.stateChanged('sign-up')
-
-        expect($ctrl.setModalSize).toHaveBeenCalledWith('sm')
-      })
-
-      it('sets the contact-info modal size to medium', () => {
-        $ctrl.stateChanged('contact-info')
-
-        expect($ctrl.setModalSize).toHaveBeenCalledWith('md')
-      })
+      expect($ctrl.setModalSize).toHaveBeenCalledWith('md')
     })
 
-    describe('when the screen is wide', () => {
-      beforeEach(() => {
-        $ctrl.$window.innerWidth = 1200
-      })
+    it('sets the sign-up modal size to medium', () => {
+      $ctrl.stateChanged('sign-up')
 
-      it('sets the sign-in modal size to small', () => {
-        $ctrl.stateChanged('sign-in')
+      expect($ctrl.setModalSize).toHaveBeenCalledWith('md')
+    })
 
-        expect($ctrl.setModalSize).toHaveBeenCalledWith('sm')
-      })
+    it('sets the contact-info modal size to large', () => {
+      $ctrl.stateChanged('contact-info')
 
-      it('sets the sign-up modal size to small', () => {
-        $ctrl.stateChanged('sign-up')
-
-        expect($ctrl.setModalSize).toHaveBeenCalledWith('sm')
-      })
-
-      it('sets the contact-info modal size to large', () => {
-        $ctrl.stateChanged('contact-info')
-
-        expect($ctrl.setModalSize).toHaveBeenCalledWith('lg')
-      })
+      expect($ctrl.setModalSize).toHaveBeenCalledWith('lg')
     })
   })
 

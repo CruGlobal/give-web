@@ -32,7 +32,6 @@ class SessionModalController {
       this.stateChanged(state)
     })
     this.stateChanged(this.resolve.state)
-    this.welcomeBack = this.resolve.welcomeBack
     this.hideCloseButton = this.resolve.hideCloseButton
     this.lastPurchaseId = this.resolve.lastPurchaseId
   }

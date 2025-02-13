@@ -1,57 +1,96 @@
-<div class="modal-header {{$ctrl.state}}" ng-if="$ctrl.state !== 'sign-in' || $ctrl.welcomeBack">
-  <button type="button" class="close" aria-label="Close" ng-click="$ctrl.onCancel()" ng-if="!$ctrl.hideCloseButton">
-    <span aria-hidden="true">×</span>
-  </button>
-  <div ng-switch="$ctrl.state">
-    <h3 ng-switch-when="loading-donor" translate>Checking your donor account</h3>
-    <h3 ng-switch-when="sign-up" class="signup-header" translate>Create Your Account</h3>
-    <h3 ng-switch-when="user-match" translate>Access Your Account</h3>
-    <div ng-switch-when="sign-in" class="section">
-      <ul>
-        <li translate>Give to thousands of opportunities.</li>
-        <li translate>View giving history (online and offline).</li>
-        <li translate>Access your tax receipts and forms.</li>
-      </ul>
-    </div>
-    <div ng-switch-when="contact-info" class="section paragraph" translate>
-      Please fill in your information for your online account.
+<div class="user-state" data-new-user="{{$ctrl.newUser}}">
+  <div class="modal-header {{$ctrl.state}}">
+    <button type="button" class="close" aria-label="Close" ng-click="$ctrl.onCancel()" ng-if="!$ctrl.hideCloseButton">
+      <span aria-hidden="true">×</span>
+    </button>
+    <div ng-switch="$ctrl.state">
+      <h3 ng-switch-when="loading-donor" translate>Checking your donor account</h3>
+      <h3 ng-switch-when="user-match" translate>Access Your Account</h3>
+      <div ng-switch-when="sign-in,sign-up" ng-switch-when-separator="," class="new-user-info">
+        <div class="header-container">
+          <picture>
+            <source srcset="{{$ctrl.imgDomain}}/assets/img/register-account-header.jpeg 1x, {{$ctrl.imgDomain}}/assets/img/register-account-header@2x.jpeg 2x">
+            <img class="header-image" ng-src="{{$ctrl.imgDomain}}/assets/img/register-account-header.jpeg" alt="College students outside studying the Bible">
+          </picture>
+          <div class="cru-info">
+            <img class="cru-logo" ng-src="{{$ctrl.imgDomain}}/assets/img/cru-logo.png" width="64" height="40" alt="Cru logo">
+            <p class="tagline desktop" translate>Cru&reg; is a caring community passionate about connecting people to Jesus Christ.</p>
+            <p class="tagline mobile">
+              <span translate>One account to access:</span><br>
+              <span translate>Resources, Giving, and Events</span>
+            </p>
+            <p class="okta-info mobile">
+              <span translate>Powered by</span> &bull;
+              <img ng-src="{{$ctrl.imgDomain}}/assets/img/okta-logo.png" width="44" height="16" alt="Okta logo">
+              <span uib-tooltip="{{'Okta is our preferred partner for authentication. They help us keep your access to Cru&rsquo;s websites and software secure. You will be redirected to signon.okta.com next time you log in.' | translate}}">
+                <span translate>What does this mean?</span> <i class="fa fa-info-circle"></i>
+              </span>
+            </p>
+          </div>
+        </div>
+        <div class="benefits desktop">
+          <h2 translate>One account to access:</h2>
+          <p>
+            <span class="benefit" translate>Resources</span>
+            <span translate>that enrich your understanding of the Gospel and equip you to share it with others.</span>
+          </p>
+          <p>
+            <span class="benefit" translate>Giving</span>
+            <span translate>that supports local and global opportunities for every person to learn, connect and go.</span>
+          </p>
+          <p>
+            <span class="benefit" translate>Events</span>
+            <span translate>that empower you to journey together as you deepen your relationship with God and others.</span>
+          </p>
+          <div class="okta-info">
+            <p>
+              <span translate>Powered by Okta</span> &bull;
+              <span uib-tooltip="{{'Okta is our preferred partner for authentication. They help us keep your access to Cru&rsquo;s websites and software secure. You will be redirected to signon.okta.com next time you log in.' | translate}}" translate>
+                What does this mean?
+              </span>
+            </p>
+            <img ng-src="{{$ctrl.imgDomain}}/assets/img/okta-logo.png" width="66" height="24" alt="Okta logo">
+          </div>
+        </div>
+      </div>
+      <div ng-switch-when="contact-info" class="section paragraph" translate>
+        Please fill in your information for your online account.
+      </div>
     </div>
   </div>
-</div>
-<div ng-switch="$ctrl.state">
-  <sign-in-modal
-    ng-switch-when="sign-in"
-    modal-title="$ctrl.modalTitle"
-    last-purchase-id="$ctrl.lastPurchaseId"
-    on-sign-up="$ctrl.onSignUp()"
-    on-success="$ctrl.onIdentitySuccess()"
-    on-failure="$ctrl.onIdentityFailure()"
-    is-inside-another-modal="true"
-  ></sign-in-modal>
-  <sign-up-modal
-    ng-switch-when="sign-up"
-    on-sign-up="$ctrl.onSignUpSuccess(donorDetails)"
-    on-sign-in="$ctrl.onSignIn()"
-    is-inside-another-modal="true"
-  ></sign-up-modal>
-  <div ng-switch-when="loading-donor">
-    <div class="modal-body">
+  <div class="inner-modal" ng-switch="$ctrl.state">
+    <sign-in-modal
+      ng-switch-when="sign-in"
+      modal-title="$ctrl.modalTitle"
+      last-purchase-id="$ctrl.lastPurchaseId"
+      on-sign-up="$ctrl.onSignUp()"
+      on-success="$ctrl.onIdentitySuccess()"
+      on-failure="$ctrl.onIdentityFailure()"
+      is-inside-another-modal="true"
+    ></sign-in-modal>
+    <sign-up-modal
+      ng-switch-when="sign-up"
+      on-sign-up="$ctrl.onSignUpSuccess(donorDetails)"
+      on-sign-in="$ctrl.onSignIn()"
+      is-inside-another-modal="true"
+    ></sign-up-modal>
+    <div ng-switch-when="loading-donor" class="modal-body">
       <loading></loading>
     </div>
+    <contact-info-modal
+      ng-switch-when="contact-info"
+      modal-title="$ctrl.modalTitle"
+      sign-up-donor-details="$ctrl.signUpDonorDetails"
+      on-success="$ctrl.onContactInfoSuccess()"
+      on-cancel="$ctrl.onCancel()"
+    ></contact-info-modal>
+    <user-match-modal
+      ng-switch-when="user-match"
+      cart-count="$ctrl.cartCount"
+      modal-title="$ctrl.modalTitle"
+      on-success="$ctrl.onUserMatchSuccess()"
+      set-loading="$ctrl.setLoading({loading: loading})"
+    ></user-match-modal>
+    <div ng-switch-default class="modal-body"></div>
   </div>
-  <contact-info-modal
-    ng-switch-when="contact-info"
-    modal-title="$ctrl.modalTitle"
-    sign-up-donor-details="$ctrl.signUpDonorDetails"
-    on-success="$ctrl.onContactInfoSuccess()"
-    on-cancel="$ctrl.onCancel()"
-  ></contact-info-modal>
-  <user-match-modal
-    ng-switch-when="user-match"
-    cart-count="$ctrl.cartCount"
-    modal-title="$ctrl.modalTitle"
-    on-success="$ctrl.onUserMatchSuccess()"
-    set-loading="$ctrl.setLoading({loading: loading})"
-  ></user-match-modal>
-  <div ng-switch-default class="modal-body" style="height: 100px;"></div>
 </div>

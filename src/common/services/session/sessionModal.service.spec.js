@@ -186,7 +186,6 @@ describe('sessionModalService', function () {
 
       expect($uibModal.open).toHaveBeenCalledTimes(1)
       expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('register-account')
-      expect($uibModal.open.mock.calls[0][0].resolve.welcomeBack()).toBe(true)
     })
   })
 
