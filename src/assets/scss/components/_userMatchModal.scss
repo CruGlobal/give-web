@@ -1,6 +1,5 @@
 user-match-modal {
   display: block;
-  width: 100%;
 
   .modal-body {
     padding: 20px;
@@ -43,10 +42,7 @@ user-match-modal {
     justify-content: flex-end;
 
     .btn.back {
-      margin-right: auto;
-    }
-    .btn-primary {
-      width: 400px;
+      margin-right: 20px;
     }
   }
 }
