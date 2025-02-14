@@ -24,12 +24,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16.10.0
+          node-version-file: .tool-versions
       
       - name: Install Dependencies
-        run: yarn install --immutable --immutable-cache
+      # --ignore-optional is used to avoid installing optional dependencies like fsevents which is not supported on Linux
+        run: yarn install --immutable --immutable-cache --ignore-optional
       
       - name: Lint Check
         run: yarn lint
@@ -42,12 +43,12 @@ jobs:
           # Help Codecov detect commit SHA
           fetch-depth: 2
       
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16.10.0
+          node-version-file: .tool-versions
       
       - name: Install Dependencies
-        run: yarn install --immutable --immutable-cache
+        run: yarn install --immutable --immutable-cache --ignore-optional
       
       - name: Run Tests
         run: yarn test:coverage
@@ -64,12 +65,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16.10.0
+          node-version-file: .tool-versions
       
       - name: Install Dependencies
-        run: yarn install --immutable --immutable-cache
+        run: yarn install --immutable --immutable-cache --ignore-optional
       
       - name: Build App
         env:
