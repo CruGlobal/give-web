@@ -176,8 +176,8 @@ Use yarn for faster installs and to update the yarn lock file: https://yarnpkg.c
 3. Browse to [`http://localhost:9000`](http://localhost:9000)
 Note: For session cookies to work correctly, add the below entries to your hosts file, and use [`https://localhost.cru.org:9000`](http://localhost.cru.org:9000) for development
 ```
-localhost.cru.org         127.0.0.1
 ::1                       localhost.cru.org
+localhost.cru.org         127.0.0.1
 ```
 
 ### Development Tasks
