@@ -174,7 +174,11 @@ Use yarn for faster installs and to update the yarn lock file: https://yarnpkg.c
 1. `yarn` or `npm install`
 2. `yarn start` or `npm start`
 3. Browse to [`http://localhost:9000`](http://localhost:9000)
-Note: For session cookies to work correctly, add an entry to your hosts file for `localhost.cru.org` pointing to `127.0.0.1` and use [`http://localhost.cru.org:9000`](http://localhost.cru.org:9000) for development
+Note: For session cookies to work correctly, add the below entries to your hosts file, and use [`https://localhost.cru.org:9000`](http://localhost.cru.org:9000) for development
+```
+localhost.cru.org         127.0.0.1
+::1                       localhost.cru.org
+```
 
 ### Development Tasks
 
