@@ -26,7 +26,7 @@ jobs:
 
       - uses: actions/setup-node@v2
         with:
-          node-version-file: .tool-versions  
+          node-version: .tool-versions  
       
       - name: Install Dependencies
       # --ignore-optional is used to avoid installing optional dependencies like fsevents which is not supported on Linux
@@ -45,7 +45,7 @@ jobs:
       
       - uses: actions/setup-node@v2
         with:
-          node-version-file: .tool-versions  
+          node-version: .tool-versions  
       
       - name: Install Dependencies
         run: yarn install --immutable --immutable-cache --ignore-optional
@@ -67,7 +67,7 @@ jobs:
 
       - uses: actions/setup-node@v2
         with:
-          node-version-file: .tool-versions  
+          node-version: .tool-versions  
       
       - name: Install Dependencies
         run: yarn install --immutable --immutable-cache --ignore-optional
