@@ -307,8 +307,8 @@ class Order {
   submit (cvv, cardBin) {
     return this.getPurchaseForm()
       .mergeMap((data) => {
-        console.log("cvv in submit", cvv)
-        console.log("cardBin in submit", cardBin)
+        console.log('cvv in submit', cvv)
+        console.log('cardBin in submit', cardBin)
         const postData = cvv && cardBin ? { 'security-code': cvv, 'card-bin': cardBin } : {}
         postData['cover-cc-fees'] = !!this.retrieveCoverFeeDecision()
         postData['radio-call-letters'] = this.retrieveRadioStationCallLetters()

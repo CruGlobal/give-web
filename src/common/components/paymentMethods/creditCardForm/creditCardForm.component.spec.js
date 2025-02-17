@@ -129,7 +129,7 @@ describe('credit card form', () => {
         cardholderName: 'Person Name',
         expiryMonth: 12,
         expiryYear: 2019,
-        securityCode: '123'
+        securityCode: '123',
       }
       self.controller.useMailingAddress = false
       self.formController.$valid = true
@@ -154,6 +154,7 @@ describe('credit card form', () => {
           'expiry-month': 12,
           'expiry-year': 2019,
           'last-four-digits': '1111',
+          'card-bin': '411111',
           transactionId: '<transaction id>',
           cvv: '123'
         }
@@ -188,6 +189,7 @@ describe('credit card form', () => {
           'expiry-month': 12,
           'expiry-year': 2019,
           'last-four-digits': '1111',
+          'card-bin': '411111',
           transactionId: '<transaction id>',
           cvv: '123'
         }
@@ -244,6 +246,7 @@ describe('credit card form', () => {
           'expiry-month': 12,
           'expiry-year': 2019,
           'last-four-digits': '4567',
+          'card-bin': null,
           transactionId: undefined,
           cvv: '123'
         }
