@@ -24,6 +24,6 @@
 
 .col-sm-6 {
   @media (max-width: 550px) {
-    width: 100% !important;
+    max-width: 100% !important;
   }
 }
