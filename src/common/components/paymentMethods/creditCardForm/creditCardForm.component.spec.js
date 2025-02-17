@@ -129,7 +129,7 @@ describe('credit card form', () => {
         cardholderName: 'Person Name',
         expiryMonth: 12,
         expiryYear: 2019,
-        securityCode: '123',
+        securityCode: '123'
       }
       self.controller.useMailingAddress = false
       self.formController.$valid = true
@@ -162,6 +162,28 @@ describe('credit card form', () => {
 
       expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading', payload: expectedData } })
       expect(self.outerScope.onPaymentFormStateChange).toHaveBeenCalledWith({ state: 'loading', payload: expectedData })
+    })
+
+    it('should correctly extract and store the card bin (first 6 digits) when card number is provided', () => {
+      self.controller.creditCardPayment = {
+        cardNumber: '4111 1111 1111 1111',
+      }
+      self.formController.$valid = true
+      self.controller.savePayment()
+
+      expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ 
+        $event: { 
+          state: 'loading', payload: {
+            creditCard: {
+              'card-number': 'YfxWvtXJxjET5100',
+              'card-type': 'Visa',
+              'last-four-digits': '1111',
+              'card-bin': '411111',
+              transactionId: '<transaction id>',
+            }
+          } 
+        } 
+      })
     })
 
     it('should not send a billing address if the Same as Mailing Address box is checked as the api will use the mailing address there', () => {
