@@ -72,10 +72,10 @@
     "standard": "^16.0.4",
     "style-loader": "^1.0.0",
     "typescript-eslint": "^0.0.1-alpha.0",
-    "webpack": "^4.39.2",
+    "webpack": "^4.47.0",
     "webpack-bundle-analyzer": "^3.4.1",
     "webpack-cli": "^3.3.7",
-    "webpack-dev-server": "^3.8.0",
+    "webpack-dev-server": "^3.11.3",
     "webpack-manifest-plugin": "^2.1.1"
   },
   "scripts": {
