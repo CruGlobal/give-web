@@ -45,7 +45,7 @@
     .input-group {
       display: inline-block;
       width: 60%;
-      margin-right: $gutter*.25;
+      margin-right: $gutter * .25;
       margin-left: auto;
 
       @media screen and (max-width: 465px) {
@@ -83,7 +83,7 @@
 }
 
 .search-section {
-  margin-bottom: $gutter*2;
+  margin-bottom: $gutter * 2;
 }
 
 .search-result-block {
@@ -226,7 +226,7 @@
 }
 
 .is-top {
-  padding: $gutter*1.5 0;
+  padding: $gutter * 1.5 0;
   background: $colorGrayscale-stone;
 
   h1 {
@@ -241,9 +241,9 @@
   }
 
   h4 {
-    padding-bottom: $gutter*0.5;
+    padding-bottom: $gutter * 0.5;
     border-bottom: 2px solid $colorGrayscale-rock;
-    margin-bottom: $gutter*0.5;
+    margin-bottom: $gutter * 0.5;
   }
 }
 
@@ -260,8 +260,8 @@
 
   .btn {
     height: 54px;
-    padding-right: $gutter*.9;
-    padding-left: $gutter*.9;
+    padding-right: $gutter * .9;
+    padding-left: $gutter * .9;
     margin-left: 5px !important;
   }
 }
@@ -310,10 +310,10 @@
 .is-row {
   display: flex;
   align-items: center;
-  padding-bottom: $gutter*.65;
+  padding-bottom: $gutter * .65;
   border-bottom: 1px solid $colorGrayscale-stone;
-  margin-bottom: $gutter*.65;
-  column-gap: $gutter*.5;
+  margin-bottom: $gutter * .65;
+  column-gap: $gutter * .5;
 
   &:last-child {
     padding-bottom: 0;

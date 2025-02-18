@@ -104,7 +104,7 @@ $border-radius: 4px;
     .hero-lead-second, 
     .hero-lead-third {
       overflow: hidden;
-      width: 33.333333333%;
+      width: 33.3333%;
       padding: 0;
       margin: 0;
       float: left;
@@ -278,7 +278,10 @@ $border-radius: 4px;
     }
 
     @media screen and (max-width: 850px) {
-      h3 {font-size: 22px; font-weight: 500;}
+      h3 {
+        font-size: 22px;
+        font-weight: 500;
+      }
 
       p:nth-last-child(2) {
         display: block;
@@ -287,7 +290,7 @@ $border-radius: 4px;
   }
 
   .give-featured-image {
-    margin-bottom: $gutter*.5;
+    margin-bottom: $gutter * .5;
 
     img {
       width: 100%;
@@ -321,7 +324,7 @@ $border-radius: 4px;
 
   .form-group {
     &:not(:last-child) {
-      margin-right: $gutter*0.5;
+      margin-right: $gutter * 0.5;
     }
 
     > input, button[type="submit"] {
@@ -373,8 +376,8 @@ $border-radius: 4px;
 }
 
 #give-integrity {
-  padding-top: $gutter*2;
-  padding-bottom: $gutter*2;
+  padding-top: $gutter * 2;
+  padding-bottom: $gutter * 2;
 
   h1, p {
     text-align: center;
@@ -424,8 +427,8 @@ $border-radius: 4px;
 }
 
 #give-credibility {
-  padding-top: $gutter*2;
-  padding-bottom: $gutter*2;
+  padding-top: $gutter * 2;
+  padding-bottom: $gutter * 2;
   background: $colorCru-white;
 
   h4 {

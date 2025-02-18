@@ -52,10 +52,6 @@
 		font-weight: normal;
 	}
 
-	.payment-icon {
-		padding-right: 10px;
-	}
-
 	.payment-nickname {
 		font-weight: bold;
 	}
@@ -149,6 +145,7 @@
 	.payment-icon {
 		display: inline-block;
 		height: 1.4em;
+    padding-right: 10px;
 	}
 
 	.panel--buttons-column {

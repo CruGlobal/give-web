@@ -108,16 +108,13 @@
       left: auto;
       width: 45%;
       height: auto;
-      padding: $gutter*1.2;
+      padding: $gutter * 1.2;
       background: #E7E7E7;
       transition: .5s all;
 
       @media screen and (max-width: 1200px) {
         width: 60%;
         padding: $gutter * .8;
-
-        h3 {
-        }
 
         .btn {
           padding: 0 10px;

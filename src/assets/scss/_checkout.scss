@@ -1,6 +1,6 @@
 .steps-wrap {
   .steps-single {
-    width: 33.33333%;
+    width: 33.3333%;
     float: left;
     text-align: center;
 
@@ -10,7 +10,6 @@
       float: none;
       text-align: left;
     }
-    .step-title {}
 
     .step-bar {
       position: relative;
@@ -78,7 +77,7 @@
   }
 
   .steps-single-mobile {
-    width: 33.33333%;
+    width: 33.3333%;
     height: 3px;
     margin: 0;
     background: $colorCru-border;
@@ -105,7 +104,7 @@
 }
 
 .tab-btn {
-  margin-bottom: $gutter*0.25;
+  margin-bottom: $gutter * 0.25;
   background: $colorCru-white;
 
   input[type="radio"] {
@@ -155,7 +154,7 @@
   .radio-inline + .radio-inline, 
   .checkbox-inline + .checkbox-inline {
     @include respond-to(medium) {
-      //margin-left: 0;
+    // margin-left: 0;
     }
   }
 }
@@ -209,7 +208,7 @@
 }
 
 .btn-panel-head {
-  padding: 0 $gutter*.5;
+  padding: 0 $gutter * .5;
   font-size: 15px;
   font-weight: 600;
 }

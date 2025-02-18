@@ -376,7 +376,7 @@ hr.horizontal-divider {
 @media screen and (max-width: $sm - 1) {
   .prod-edit-btns{
     &.text-right {
-      margin-top: $gutter*.25 - 4;
+      margin-top: $gutter * .25 - 4;
       text-align: left;
     }
     .btn {margin-top: 4px;}
@@ -395,7 +395,7 @@ hr.horizontal-divider {
 
   &.inline {
     display: inline-block;
-    margin: 0 $gutter*.5;
+    margin: 0 $gutter * .5;
     float: none;
     vertical-align: middle;
   }
@@ -408,7 +408,7 @@ hr.horizontal-divider {
 
 .upload-drag-target {
   border: 2px dashed $colorCru-border;
-  border-radius: $gutter*.5;
+  border-radius: $gutter * .5;
 }
 
 .margin-bottom {
@@ -499,7 +499,7 @@ hr.horizontal-divider {
 
   img {
     display: inline-block;
-    margin-right: $gutter*.5;
+    margin-right: $gutter * .5;
     vertical-align: middle;
   }
 
@@ -507,7 +507,7 @@ hr.horizontal-divider {
     position: static;
     display: inline-block;
     margin: 0;
-    margin-right: $gutter*.5;
+    margin-right: $gutter * .5;
     float: none;
     vertical-align: 0%;
   }
@@ -551,9 +551,6 @@ hr.horizontal-divider {
       &.status-pending {
         color: red;
       }
-
-      &.amount {
-      }
     }
   }
 }
@@ -565,7 +562,7 @@ hr.horizontal-divider {
 
 .modal-meta{
   display: block;
-  margin-bottom: $gutter*.25;
+  margin-bottom: $gutter * .25;
   color: lighten($colorGrayscale-text, 40%);
   line-height: 1.15em;
 }
@@ -586,8 +583,8 @@ hr.horizontal-divider {
 	}
 
 	.recipient-name {
-    margin-top: $gutter*.15;
-		margin-bottom: $gutter*.25;
+    margin-top: $gutter * .15;
+		margin-bottom: $gutter * .25;
 	}
 
 	.checkbox-right {
@@ -600,7 +597,7 @@ hr.horizontal-divider {
 		}
 
 		input[type="checkbox"], input[type="radio"] {
-			margin-left: $gutter*.25;
+			margin-left: $gutter * .25;
 		}
 	}
 }
@@ -608,7 +605,7 @@ hr.horizontal-divider {
 @media screen and (min-width: 550px ) and (max-width: 991px ) {
   .split-row {
     width: 100%;
-    margin-top: $gutter*0.5;
+    margin-top: $gutter * 0.5;
 
     .split-col-left, .split-col-right {
       width: 45%;
@@ -650,7 +647,7 @@ hr.horizontal-divider {
   input[type="password"] {
     display: inline-block;
     width: 175px;
-    margin-right: $gutter*.5;
+    margin-right: $gutter * .5;
   }
 }
 
@@ -747,8 +744,8 @@ img.full-width {
 
 .socialIcon {
   @media screen and (max-width: 640px) {
-    padding-right: $gutter*.35;
-    padding-left: $gutter*.35;
+    padding-right: $gutter * .35;
+    padding-left: $gutter * .35;
   }
 }
 
@@ -758,7 +755,7 @@ img.full-width {
   img, div {
     display: inline-block;
     max-height: 70px;
-    margin: 0 $gutter*.5;
+    margin: 0 $gutter * .5;
     vertical-align: top;
     &:focus {outline: none;}
   }

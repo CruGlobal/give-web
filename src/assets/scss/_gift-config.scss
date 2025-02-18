@@ -127,10 +127,6 @@ div[data-toggle="buttons"] label.active {
   font-weight: 600;
 }
 
-div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active {
-  box-shadow: none;
-}
-
 label.btn.btn-default-form.custom-amount.mr.u-textLeft {
   padding-left: 0;
   border: none;

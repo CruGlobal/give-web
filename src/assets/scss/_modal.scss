@@ -60,10 +60,10 @@
 
       &::after {
         display: block;
-        padding-bottom: $gutter*0.5;
+        padding-bottom: $gutter * 0.5;
         border-bottom: 1px solid lighten($colorGrayscale-text, 60%);
         margin-right: 15px;
-        margin-bottom: $gutter*0.5;
+        margin-bottom: $gutter * 0.5;
         margin-left: 15px;
       }
 
@@ -75,7 +75,7 @@
   }
 
   .alert {
-    margin-bottom: $gutter *.5;
+    margin-bottom: $gutter * .5;
   }
 }
 
@@ -104,7 +104,7 @@ body{
         max-width: 800px;
         margin: 30px auto;
 
-        $modpad: $gutter*1;
+        $modpad: $gutter * 1;
 
         .modal-body {
           padding: $modpad $modpad 0 $modpad;
