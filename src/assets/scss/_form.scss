@@ -12,7 +12,7 @@
       display: inline-block;
       margin-right: 6px;
       content: "\f071";
-      font-family: fontawesome, "Font Awesome 5 Pro";
+      font-family: fontawesome, "Font Awesome 5 Pro", sans-serif;
     }
   }
 }
@@ -29,7 +29,7 @@
       display: inline-block;
       margin-right: 6px;
       content: "\f00c";
-      font-family: fontawesome, "Font Awesome 5 Pro";
+      font-family: fontawesome, "Font Awesome 5 Pro", sans-serif;
     }
   }
 }
@@ -46,7 +46,7 @@ label:not(:has(input[type="checkbox"])) {
     display: inline-block;
     margin-left: 6px;
     content: "*";
-    font-family: fontawesome, "Font Awesome 5 Pro";
+    font-family: fontawesome, "Font Awesome 5 Pro", sans-serif;
     font-size: 115%;
     line-height: 0;
   }
