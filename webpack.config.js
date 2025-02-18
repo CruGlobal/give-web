@@ -67,11 +67,6 @@ const sharedConfig = {
       failOnError: true,
       quiet: false,
     }),
-    ...(isBuild ?
-      new MiniCssExtractPlugin({
-        filename: '[name].min.css',
-      })
-    : []),
     // To strip all locales except “en”
     new MomentLocalesPlugin()
   ],
@@ -199,6 +194,13 @@ module.exports = (env = {}) => [
       path: path.resolve(__dirname, 'dist')
     },
     plugins: [
+      ...(!isBuild ?
+        [
+          new MiniCssExtractPlugin({
+            filename: 'chunks/[name].[contenthash].min.css',
+          })
+        ]
+      : []),
       ...sharedConfig.plugins,
       new BundleAnalyzerPlugin({
         analyzerMode: env.analyze ? 'static' : 'disabled'
@@ -240,6 +242,13 @@ module.exports = (env = {}) => [
       'branded-checkout': brandedComponents
     },
     plugins: [
+      ...(!isBuild ?
+        [
+          new MiniCssExtractPlugin({
+            filename: '[name].min.css',
+          }),
+        ]
+      : []),
       ...sharedConfig.plugins,
       new BundleAnalyzerPlugin({
         analyzerMode: env.analyze ? 'static' : 'disabled'
