@@ -208,6 +208,7 @@ export default angular
       radioStationApiUrl: '<',
       hideSpouseDetails: '<',
       compactAddress: '<',
-      useV3: '<'
+      useV3: '<',
+      radioStationRadius: '<'
     }
   })
