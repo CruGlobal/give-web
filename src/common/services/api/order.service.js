@@ -307,8 +307,6 @@ class Order {
   submit (cvv, cardBin) {
     return this.getPurchaseForm()
       .mergeMap((data) => {
-        console.log('cvv in submit', cvv)
-        console.log('cardBin in submit', cardBin)
         const postData = cvv && cardBin ? { 'security-code': cvv, 'card-bin': cardBin } : {}
         postData['cover-cc-fees'] = !!this.retrieveCoverFeeDecision()
         postData['radio-call-letters'] = this.retrieveRadioStationCallLetters()
@@ -330,7 +328,6 @@ class Order {
   }
 
   retrieveCardBin () {
-    console.log('retrieveCardBin', this.sessionStorage.getItem('cardBin'))
     return this.sessionStorage.getItem('cardBin')
   }
 
@@ -345,7 +342,6 @@ class Order {
   }
 
   storeCardBin (cardBin, uri) {
-    console.log('storeCardBin initial', cardBin)
     const storedBins = this.retrieveCardBins()
     if (!cardBin) {
       cardBin = storedBins[uri] // Try looking up previously stored cardBin by payment method uri
@@ -354,7 +350,6 @@ class Order {
       storedBins[uri] = cardBin
       this.sessionStorage.setItem('storedBins', angular.toJson(storedBins))
     }
-    console.log('storeCardBin after', cardBin)
 
     if (cardBin) {
       this.sessionStorage.setItem('cardBin', cardBin)
@@ -364,7 +359,6 @@ class Order {
   }
 
   storeCardSecurityCode (cvv, uri) {
-    console.log('storeCardSecurityCode initial', cvv)
     const storedCvvs = this.retrieveCardSecurityCodes()
     if (!cvv) {
       cvv = storedCvvs[uri] // Try looking up previously stored CVV by payment method uri
@@ -373,7 +367,6 @@ class Order {
       storedCvvs[uri] = cvv
       this.sessionStorage.setItem('storedCvvs', angular.toJson(storedCvvs))
     }
-    console.log('storeCardSecurityCode after', cvv)
 
     if (cvv) {
       this.sessionStorage.setItem('cvv', cvv)
