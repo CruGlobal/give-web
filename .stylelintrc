@@ -1,0 +1,45 @@
+{
+  "extends": [
+    "stylelint-config-standard-scss",
+    "stylelint-config-idiomatic-order"
+  ],
+  "overrides": [
+    {
+      "files": ["src/assets/scss/*.{css,scss}"],
+      "customSyntax": "postcss-scss",
+      "rules": {
+        "media-feature-range-notation": "prefix",
+        "color-function-notation": "legacy",
+        "shorthand-property-no-redundant-values": null,
+        "declaration-block-no-redundant-longhand-properties": [true, {
+          "ignoreShorthands": [
+            "inset",
+            "inset-block",
+            "inset-inline",
+            "mask",
+            "overscroll-behavior",
+            "padding-block",
+            "padding-inline",
+            "place-content",
+            "place-items",
+            "place-self",
+            "scroll-margin",
+            "border-block",
+            "border-block-end",
+            "border-block-start",
+            "border-inline",
+            "border-inline-end",
+            "border-inline-start"
+          ]
+        }],
+        "no-invalid-position-at-import-rule": null,
+        "no-descending-specificity": null,
+        "selector-class-pattern": null,
+        "scss/dollar-variable-pattern": null,
+        "selector-id-pattern": null,
+        "scss/no-global-function-names": null,
+        "selector-type-no-unknown": null
+      }
+    }
+  ]
+}
