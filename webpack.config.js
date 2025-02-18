@@ -7,7 +7,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const ManifestPlugin = require('webpack-manifest-plugin')
-const StyleLintPlugin = require('stylelint-webpack-plugin');
+const StyleLintPlugin = require('stylelint-webpack-plugin')
 
 const giveComponents = [
   'app/cart/cart.component.js',
@@ -65,7 +65,7 @@ const sharedConfig = {
       context: 'src/assets/scss',
       files: '**/*.(css|scss)',
       failOnError: true,
-      quiet: false,
+      quiet: false
     }),
     // To strip all locales except “en”
     new MomentLocalesPlugin()
@@ -194,13 +194,13 @@ module.exports = (env = {}) => [
       path: path.resolve(__dirname, 'dist')
     },
     plugins: [
-      ...(!isBuild ?
-        [
-          new MiniCssExtractPlugin({
-            filename: 'chunks/[name].[contenthash].min.css',
-          })
-        ]
-      : []),
+      ...(!isBuild
+        ? [
+            new MiniCssExtractPlugin({
+              filename: 'chunks/[name].[contenthash].min.css'
+            })
+          ]
+        : []),
       ...sharedConfig.plugins,
       new BundleAnalyzerPlugin({
         analyzerMode: env.analyze ? 'static' : 'disabled'
@@ -242,13 +242,13 @@ module.exports = (env = {}) => [
       'branded-checkout': brandedComponents
     },
     plugins: [
-      ...(!isBuild ?
-        [
-          new MiniCssExtractPlugin({
-            filename: '[name].min.css',
-          }),
-        ]
-      : []),
+      ...(!isBuild
+        ? [
+            new MiniCssExtractPlugin({
+              filename: '[name].min.css'
+            })
+          ]
+        : []),
       ...sharedConfig.plugins,
       new BundleAnalyzerPlugin({
         analyzerMode: env.analyze ? 'static' : 'disabled'
