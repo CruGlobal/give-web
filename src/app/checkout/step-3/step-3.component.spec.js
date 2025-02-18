@@ -22,6 +22,7 @@ describe('checkout', () => {
         }
       }
       self.storedCvv = null
+      self.storedCardBin = null
       self.coverFeeDecision = false
 
       self.controller = $componentController(module.name, {
@@ -38,9 +39,11 @@ describe('checkout', () => {
           checkErrors: () => Observable.of(['email-info']),
           submit: () => Observable.of('called submit'),
           retrieveCardSecurityCode: () => self.storedCvv,
+          retrieveCardBin: () => self.storedCardBin,
           retrieveLastPurchaseLink: () => Observable.of('purchaseLink'),
           retrieveCoverFeeDecision: () => self.coverFeeDecision,
           clearCardSecurityCodes: jest.fn(),
+          clearCardBins: jest.fn(),
           clearCoverFees: jest.fn()
         },
         profileService: {
@@ -377,26 +380,28 @@ describe('checkout', () => {
           expect(self.controller.$window.scrollTo).toHaveBeenCalledWith(0, 0)
         })
 
-        it('should submit the order with a CVV if paying with a credit card', () => {
+        it('should submit the order with a CVV and cardBin if paying with a credit card', () => {
           self.controller.creditCardPaymentDetails = {}
           self.storedCvv = '1234'
+          self.storedCardBin = '411111'
           self.coverFeeDecision = true
           self.controller.submitOrder()
 
-          expect(self.controller.orderService.submit).toHaveBeenCalledWith('1234')
+          expect(self.controller.orderService.submit).toHaveBeenCalledWith(self.storedCvv, self.storedCardBin)
           expect(self.controller.analyticsFactory.purchase).toHaveBeenCalledWith(self.controller.donorDetails, self.controller.cartData, self.coverFeeDecision)
           expect(self.controller.orderService.clearCardSecurityCodes).toHaveBeenCalled()
           expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
           expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
         })
 
-        it('should submit the order without a CVV if paying with an existing credit card or the cvv in session storage is missing', () => {
+        it('should submit the order without a CVV and cardBin if paying with an existing credit card or the cvv/cardBin in session storage is missing', () => {
           self.controller.creditCardPaymentDetails = {}
           self.storedCvv = undefined
+          self.storedCardBin = undefined
           self.coverFeeDecision = true
           self.controller.submitOrder()
 
-          expect(self.controller.orderService.submit).toHaveBeenCalledWith(undefined)
+          expect(self.controller.orderService.submit).toHaveBeenCalledWith(self.storedCvv, self.storedCardBin)
           expect(self.controller.analyticsFactory.purchase).toHaveBeenCalledWith(self.controller.donorDetails, self.controller.cartData, self.coverFeeDecision)
           expect(self.controller.orderService.clearCardSecurityCodes).toHaveBeenCalled()
           expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
@@ -407,9 +412,10 @@ describe('checkout', () => {
           self.controller.orderService.submit.mockImplementation(() => Observable.throw({ data: 'CardErrorException: Invalid Card Number: some details' }))
           self.controller.creditCardPaymentDetails = {}
           self.storedCvv = '1234'
+          self.storedCardBin = '411111'
           self.controller.submitOrder()
 
-          expect(self.controller.orderService.submit).toHaveBeenCalledWith('1234')
+          expect(self.controller.orderService.submit).toHaveBeenCalledWith(self.storedCvv, self.storedCardBin)
           expect(self.controller.analyticsFactory.purchase).not.toHaveBeenCalled()
           expect(self.controller.orderService.clearCardSecurityCodes).not.toHaveBeenCalled()
           expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'CardErrorException: Invalid Card Number: some details' }])
@@ -422,9 +428,10 @@ describe('checkout', () => {
           self.controller.orderService.submit.mockReturnValue(Observable.throw({ data: 'some error', config: { data: { 'security-code': '1234' } } }))
           self.controller.creditCardPaymentDetails = {}
           self.storedCvv = '1234'
+          self.storedCardBin = '411111'
           self.controller.submitOrder()
 
-          expect(self.controller.orderService.submit).toHaveBeenCalledWith('1234')
+          expect(self.controller.orderService.submit).toHaveBeenCalledWith(self.storedCvv, self.storedCardBin)
           expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'some error', config: { data: { 'security-code': 'XXXX' } } }])
         })
 

@@ -113,12 +113,16 @@ class ExistingPaymentMethodsController {
 
   selectPayment () {
     if (this.selectedPaymentMethod.chosen) {
-      this.orderService.storeCardSecurityCode(null, this.selectedPaymentMethod.self.uri) // Unset the CVV unless the user has provided a CVV for the selected payment method this order
+      // Unset the CVV and CardBin unless the user has provided a CVV for the selected payment method this order
+      this.orderService.storeCardSecurityCode(null, this.selectedPaymentMethod.self.uri)
+      this.orderService.storeCardBin(null, this.selectedPaymentMethod.self.uri)
       this.onPaymentFormStateChange({ $event: { state: 'loading' } })
     } else {
       this.orderService.selectPaymentMethod(this.selectedPaymentMethod.selectAction)
         .subscribe(() => {
-          this.orderService.storeCardSecurityCode(null, this.selectedPaymentMethod.self.uri) // Unset the CVV unless the user has provided a CVV for the selected payment method this order
+          // Unset the CVV and CardBin unless the user has provided a CVV for the selected payment method this order
+          this.orderService.storeCardBin(null, this.selectedPaymentMethod.self.uri)
+          this.orderService.storeCardSecurityCode(null, this.selectedPaymentMethod.self.uri)
           this.onPaymentFormStateChange({ $event: { state: 'loading' } })
         },
         (error) => {

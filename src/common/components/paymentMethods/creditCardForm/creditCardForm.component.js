@@ -158,6 +158,7 @@ class CreditCardController {
                 'expiry-month': this.creditCardPayment.expiryMonth,
                 'expiry-year': this.creditCardPayment.expiryYear,
                 'last-four-digits': tokenObj.maskedCardNumber,
+                'card-bin': this.creditCardPayment.cardNumber?.replace(/\s+/g, '').substring(0, 6) || null,
                 transactionId: tokenObj.transactionID,
                 cvv: this.creditCardPayment.securityCode
               }
