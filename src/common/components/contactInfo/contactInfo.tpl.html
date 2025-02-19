@@ -44,15 +44,15 @@
   </div>
 
   <form novalidate ng-keyup="$event.key === 'Enter' && $ctrl.submitDetails()" name="$ctrl.detailsForm">
-    <div class="mb">
+    <div class="name mb">
       <h4 ng-if="$ctrl.useV3 !== 'true'" class="panel-title  border-bottom-small  visible" translate>{{'YOUR_INFORMATION'}}</h4>
       <h4 ng-if="$ctrl.useV3 === 'true'" class="panel-title  border-bottom-small  visible" translate>{{'CONTACT_INFO'}}</h4>
       <div class="row">
-        <div ng-class="{'col-sm-3': $ctrl.hideSpouseDetails, 'col-sm-4': !$ctrl.hideSpouseDetails, 'col-sm-4': $ctrl.useV3 !== 'true', 'col-sm-6': $ctrl.useV3 === 'true'}">
+        <div ng-class="{'col-sm-3': $ctrl.hideSpouseDetails, 'col-svb m-4': !$ctrl.hideSpouseDetails, 'col-sm-4': $ctrl.useV3 !== 'true', 'col-sm-6': $ctrl.useV3 === 'true'}">
           <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.nameGivenName | showErrors)}">
             <label>
               <span translate>{{'FIRST_NAME'}}</span>
-              <input 
+              <input
                 type="text"
                 class="form-control  form-control-subtle"
                 name="nameGivenName"
@@ -121,7 +121,7 @@
           </div>
         </div>
         <div class="col-sm-2" ng-if="$ctrl.hideSpouseDetails && $ctrl.useV3 !== 'true'">
-          <button type="button" 
+          <button type="button"
                   id="showSpouseButton"
                   class="btn btn-link"
                   style="font-weight:bold"
@@ -252,7 +252,7 @@
 
     </div>
 
-    <div class="mb">
+    <div class="address mb">
       <h4 class="panel-title  border-bottom-small  visible" translate>{{'MAILING_ADDRESS'}}</h4>
 
       <address-form
@@ -265,7 +265,7 @@
       </address-form>
     </div>
 
-    <div ng-if="$ctrl.useV3 !== 'true'" class="mb">
+    <div ng-if="$ctrl.useV3 !== 'true'" class="contact-info mb">
       <h4 class="panel-title  border-bottom-small  visible" translate>{{'CONTACT_INFO'}}</h4>
       <div class="row">
         <div class="col-sm-6">

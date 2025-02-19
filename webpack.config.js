@@ -75,7 +75,7 @@ const sharedConfig = {
       })),
       {
         context: 'src',
-        from: '**/*.+(eot|png|svg|ttf|woff)',
+        from: '**/*.+(eot|png|jpeg|svg|ttf|woff)',
         to: '[path][name].[ext]'
       },
       {

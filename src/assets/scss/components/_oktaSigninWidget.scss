@@ -8,7 +8,8 @@
   }
 
   .auth-content {
-    padding-bottom: 0;
+    padding: 0;
+    padding-top: 10px;
   }
 
   .okta-form-title {
@@ -17,11 +18,6 @@
 }
 
 sign-up-modal {
-  #osw-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
 
   .back-to-sign-in {
     margin-top: 20px;
@@ -29,30 +25,259 @@ sign-up-modal {
 }
 
 #okta-sign-in.auth-container {
-  // Injected cru back button
-  .o-form-button-bar {
+  $okta-grey: #f5f5f5;
+  width: 100%;
+
+  // ============== Container ============== //
+
+  .o-form-content {
+    overflow: hidden;
+    padding-top: 10px;
+  }
+
+  &.main-container {
+    box-shadow: none;
+  }
+
+  .o-form-fieldset-container {
+    border: 1px solid $okta-grey;
+    border-radius: 7px;
     display: flex;
-    gap: 50px;
-    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  // ============== Errors ============== //
+
+  .o-form-explain.o-form-input-error {
+    background: #ffe3e3;
+    padding-left: 20px;
+    padding-top: 6px;
+  }
+
+  // ============== Fields ============== //
+
+  .o-form-fieldset {
+    margin: 0;
+    position: relative;
+  }
+
+  .o-form-label {
+    @include transition(top 0.3s ease, font-size 0.3s ease);
+    padding: 0;
+    padding-left: 8px;
+    position: absolute;
+    top: 17px;
+    width: auto;
+    z-index: 20;
+
+    @media (prefers-reduced-motion) {
+      transition: none;
+    }
+
+    &.active {
+      top: 2px;
+
+      label {
+        font-size: 12px;
+      }
+    }
+
+    label {
+      color: #9C9C9C;
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .o-form-explain {
+      font-size: 12px;
+    }
+  }
+
+  .o-form-select-fieldset {
+    .o-form-label {
+      top: 2px;
+
+      label {
+        font-size: 12px;
+      }
+    }
+
+    .chzn-container {
+      &:focus-within {
+        box-shadow: none;
+
+        &>.chzn-single {
+          border-color: $colorCru-gold;
+          box-shadow: none;
+        }
+      }
+
+      &>.chzn-single {
+        border: 1px solid transparent;
+        border-radius: 0;
+        height: auto;
+        padding-top: 12px;
+
+        div {
+          top: 6px;
+        }
+      }
+    }
+
+    .chzn-container-single .chzn-drop {
+      border-radius: 0 0 6px 6px;
+    }
+  }
+
+  // override okta styles
+  .focused-input,
+  .link.help:focus,
+  input[type=radio]:focus+label,
+  input[type=text]:focus {
+
+    box-shadow: none
+  }
+
+  .o-form-fieldset {
+    border-top: 1px solid $okta-grey;
+    width: 100%;
+
+    &[data-se="o-form-fieldset-userProfile.state"],
+    &[data-se="o-form-fieldset-userProfile.zipCode"] {
+      width: 50%;
+    }
+
+    &[data-se="o-form-fieldset-userProfile.zipCode"] {
+      border-left: 1px solid $okta-grey;
+    }
+
+    &:first-child {
+      border-top: none;
+    }
+
+    &:first-of-type {
+
+      input[type=text]:not(.chzn-search input),
+      input[type=password],
+      .chzn-container a {
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+      }
+    }
+
+    &:last-of-type {
+
+      // We don't include password as it's the only field on it's step and has the password requirements below it.
+      input[type=text]:not(.chzn-search input),
+      .chzn-container a {
+        border-bottom-left-radius: 6px;
+        border-bottom-right-radius: 6px;
+      }
+    }
+
+    // Allow the account type dropdown to have rounded corners if the organisation field is hidden
+    &:has(+ .o-form-fieldset[style="display: none;"]) .chzn-container a {
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 6px;
+    }
+  }
+
+  .o-form-input .o-form-control {
+    background: none;
+    border: none;
+    border-radius: 0;
+    height: auto;
+
+    // Style input fields, but not input fields in dropdowns
+    input[type=text]:not(.chzn-search input),
+    input[type=password] {
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+      border: 1px solid transparent;
+      height: auto;
+      padding-bottom: 12px;
+      padding-top: 20px;
+
+      &:focus {
+        border-color: $colorCru-gold;
+        box-shadow: none;
+      }
+    }
+  }
+
+  // ============== Password rules ============== //
+
+  section[data-se="password-authenticator--rules"] {
+    border-radius: 0 0 6px 6px;
+    border-top: 1px solid $okta-grey;
+    padding: 10px;
+    width: 100%;
+
+    .password-authenticator--list {
+      margin: 0;
+    }
+  }
+
+  // ============== Injected buttons ============== //
+
+  // cru back button
+  .o-form-button-bar {
     align-items: center;
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+
+    #backButton,
+    .button.button-primary {
+      padding-top: 7px;
+      padding-bottom: 7px;
+    }
 
     #backButton {
+      color: $colorCru-gray !important;
+      background-color: $colorCru-white !important;
+      border-color: $colorCru-gray !important;
       width: 100%;
+
+      &:hover,
+      &:focus,
+      &:active {
+        color: $colorCru-white !important;
+        background: $colorCru-gray !important;
+      }
     }
 
     .button.button-primary {
+      color: #3a3a3a;
       height: auto;
+
       @extend .btn;
       @extend .btn-primary;
     }
   }
-  // Injected cru error message
+
+  // cru error message
   .cru-error {
-    float: left
+    float: left;
   }
 
-  // Injected cru retry button
+  // cru retry button
   .cru-retry-button:hover {
     text-decoration: underline;
   }
+}
+
+// ============== Okta overrides ============== //
+// select dropdown focus style
+.chzn-container:focus-within {
+  box-shadow: none;
+}
+
+// select dropdown border radius style
+.chzn-container-single .chzn-single {
+  border-radius: 0;
+}
+#countryCodeInput_chzn.chzn-container-single .chzn-single {
+  border-radius: 6px 6px 0 0;
 }

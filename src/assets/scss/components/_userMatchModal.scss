@@ -1,6 +1,5 @@
 user-match-modal {
-  display: inline-block;
-  width: 100%;
+  display: block;
 
   .modal-body {
     padding: 20px;
@@ -25,8 +24,6 @@ user-match-modal {
   }
 
   .activate-progress {
-    padding-bottom: 30px;
-
     progress {
       width: 100%;
       accent-color: $colorCru-gold;
@@ -34,11 +31,9 @@ user-match-modal {
 
     .step-label {
       font-weight: bold;
-      padding-left: calc(var(--progress) * 320px);
-
-      .modal-dialog.modal-lg & {
-        padding-left: calc(var(--progress) * 370px);
-      }
+      /* Subtract 32px to roughly center the text with the right edge of the progress bar */
+      padding-left: calc(max(var(--progress) * 100% - 32px, 0px));
+      margin-bottom: 30px;
     }
   }
 
@@ -47,10 +42,7 @@ user-match-modal {
     justify-content: flex-end;
 
     .btn.back {
-      margin-right: auto;
-    }
-    .btn-primary {
-      width: 400px;
+      margin-right: 20px;
     }
   }
 }

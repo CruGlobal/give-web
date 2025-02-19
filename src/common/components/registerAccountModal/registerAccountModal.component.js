@@ -46,6 +46,7 @@ class RegisterAccountModalController {
     this.gettext = gettext
     this.scrollModalToTop = scrollModalToTop
     this.imgDomain = envService.read('imgDomain')
+    this.newUser = sessionService.getRole() === Roles.public
   }
 
   $onInit () {
@@ -168,8 +169,6 @@ class RegisterAccountModalController {
   }
 
   postDonorMatches () {
-    this.setLoading({ loading: true })
-
     // Step 4. Post to Donor Matches.
     if (angular.isDefined(this.verificationServiceSubscription)) {
       this.verificationServiceSubscription.unsubscribe()
@@ -182,20 +181,7 @@ class RegisterAccountModalController {
 
   stateChanged (state) {
     this.element.dataset.state = state
-    if ((!this.welcomeBack && state === 'sign-in') || state === 'sign-up') {
-      // Use a small modal for sign in modals without a welcome back message and for sign up modals
-      // regardless of the screen size because they can't take advantage of the extra width
-      this.setModalSize('sm')
-    } else if (this.$window.innerWidth >= 1200) {
-      // Use a large modal on wide screens for other modals
-      this.setModalSize('lg')
-    } else if (state === 'contact-info') {
-      // Use a medium modal for contact info modals, even on narrow screens, because they need the extra width
-      this.setModalSize('md')
-    } else {
-      // Use a small modal for all other modals on narrow screens
-      this.setModalSize('sm')
-    }
+    this.setModalSize(state === 'contact-info' ? 'lg' : 'md')
 
     this.state = state
     if (!this.sessionService.isOktaRedirecting()) {
@@ -228,10 +214,7 @@ export default angular
     controller: RegisterAccountModalController,
     templateUrl: template,
     bindings: {
-      firstName: '=',
       modalTitle: '=',
-      // If true, show the "Welcome back!" message in the header/sidebar
-      welcomeBack: '<?',
       lastPurchaseId: '<',
       onSuccess: '&',
       onCancel: '&',

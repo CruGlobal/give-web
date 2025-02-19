@@ -5,16 +5,58 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-xs-12">
-        <div class="signup-header">
-          <h3 translate>Create Your Account</h3>
-        </div>
+        <h3 class="signup-header" translate>Create Your Account</h3>
       </div>
     </div>
   </div>
 </div>
 
 <div class="modal-body" class="sticky-buttons">
+  <h3 ng-if="$ctrl.isInsideAnotherModal" class="signup-header" translate>Create Your Account</h3>
   <div class="content">
+    <div class="signup-steps">
+      <div class="step">
+        <img
+          alt="Step 1 - Identity"
+          ng-src="{{$ctrl.imgDomain}}/assets/img/okta-sign-up-steps/one.svg"
+          ng-if="$ctrl.currentStep === 1"
+        />
+        <img
+          alt="Step 1 - Identity"
+          ng-src="{{$ctrl.imgDomain}}/assets/img/okta-sign-up-steps/one-complete.svg"
+          ng-if="$ctrl.currentStep > 1"
+        />
+      </div>
+      <span class="between-steps">
+        <img ng-src="{{$ctrl.imgDomain}}/assets/img/okta-sign-up-steps/dots.svg" alt="" />
+      </span>
+      <div class="step">
+        <img
+          alt="Step 2 - Address"
+          ng-src="{{$ctrl.imgDomain}}/assets/img/okta-sign-up-steps/two.svg"
+          ng-if="$ctrl.currentStep <= 2"
+          ng-class="{'semi-transparent': $ctrl.currentStep === 1}"
+        />
+        <img
+          alt="Step 2 - Address"
+          ng-src="{{$ctrl.imgDomain}}/assets/img/okta-sign-up-steps/two-complete.svg"
+          ng-if="$ctrl.currentStep > 2"
+        />
+      </div>
+      <span class="between-steps">
+        <img ng-src="{{$ctrl.imgDomain}}/assets/img/okta-sign-up-steps/dots.svg" alt="" />
+      </span>
+      <div class="step">
+        <img
+          alt="Step 3 - Security"
+          ng-src="{{$ctrl.imgDomain}}/assets/img/okta-sign-up-steps/three.svg"
+          ng-class="{'semi-transparent': $ctrl.currentStep < 3}"
+        />
+      </div>
+    </div>
+    
+    <loading ng-if="$ctrl.isLoading" class="okta-signup-loading"></loading>
+
     <div id="osw-container"></div>
   </div>
 </div>

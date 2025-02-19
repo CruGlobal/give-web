@@ -10,7 +10,8 @@ export const customFields = {
     label: 'Account Type',
     required: true,
     wide: true,
-    value: 'Household'
+    value: 'Household',
+    className: 'o-form-select-fieldset'
   },
   organizationName: {
     name: 'organizationName',
@@ -33,7 +34,8 @@ export const customFields = {
     'label-top': true,
     multirowError: true,
     'data-se': 'o-form-fieldset-userProfile.countryCode',
-    wide: true
+    wide: true,
+    className: 'o-form-select-fieldset'
   },
   streetAddress: {
     name: 'userProfile.streetAddress',
@@ -110,7 +112,8 @@ export const customFields = {
     wide: true,
     showWhen: {
       'userProfile.countryCode': 'US'
-    }
+    },
+    className: 'o-form-select-fieldset'
   },
   zipCode: {
     name: 'userProfile.zipCode',
