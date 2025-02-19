@@ -12,7 +12,7 @@ register-account-modal:has(sign-up-modal) {
 
   @media (min-width: $screen-md-min) {
     &:has(.user-state[data-new-user=true]) {
-      width: 900px;
+      width: 840px;
     }
   }
 }
@@ -196,10 +196,6 @@ register-account-modal:has(sign-in-modal, sign-up-modal) {
         padding-top: 25px;
       }
     }
-  }
-
-  .signup-header {
-    text-align: center;
   }
 }
 
