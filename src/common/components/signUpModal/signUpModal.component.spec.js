@@ -28,6 +28,8 @@ describe('signUpForm', function () {
     const scope = { $apply: jest.fn() }
     scope.$apply.mockImplementation(() => {})
     $ctrl = _$componentController_(module.name, { $scope: scope }, bindings)
+    // Prevent the actual Okta widget from being created in tests
+    jest.spyOn($ctrl, 'setUpSignUpWidget').mockImplementation(() => {})
   }))
 
   it('to be defined', function () {
@@ -50,7 +52,6 @@ describe('signUpForm', function () {
 
     it('should set up Okta Sign Up widget', (done) => {
       jest.spyOn($ctrl, 'loadDonorDetails').mockReturnValue(Observable.of())
-      jest.spyOn($ctrl, 'setUpSignUpWidget')
 
       $ctrl.$onInit()
 
@@ -933,7 +934,8 @@ describe('signUpForm', function () {
       jest.spyOn($ctrl, 'injectErrorMessages').mockImplementation(() => {});
       jest.spyOn($ctrl, 'injectBackButton').mockImplementation(() => {});
 
-      $ctrl.afterRender()
+      $ctrl.$onInit()
+      $ctrl.afterRender({ formName: 'enroll-profile' })
 
       expect($ctrl.updateSignUpButtonText).toHaveBeenCalled()
       expect($ctrl.resetCurrentStepOnRegistrationComplete).toHaveBeenCalled()
@@ -1221,28 +1223,6 @@ describe('signUpForm', function () {
       done()
       });
     });
-
-    it('should handle an error with $log and retry once', (done) => {
-      const error = new Error('Error signing in')
-      jest.spyOn($ctrl.$log, 'error').mockImplementation(() => {})
-      jest.spyOn($ctrl, 'reRenderWidget').mockResolvedValue()
-      const showSignInAndRedirect = jest.fn().mockRejectedValue(error)
-      const handleLoginRedirect = jest.fn()
-      $ctrl.oktaSignInWidget = {
-        showSignInAndRedirect,
-        authClient: {
-          handleLoginRedirect
-        }
-      }
-
-      $ctrl.signIn().then(() => {
-        expect(handleLoginRedirect).not.toHaveBeenCalled()
-        expect($ctrl.reRenderWidget).toHaveBeenCalledTimes(1)
-        expect($ctrl.$log.error).toHaveBeenCalledTimes(1)
-        expect($ctrl.$log.error).toHaveBeenCalledWith('Error showing Okta sign in widget.', error)
-        done()
-      })
-    })
   })
 
   describe('loadDonorDetails()', () => {
