@@ -100,32 +100,32 @@ $row-eq-height-breakpoints: 549;
 body{
   @media (min-width: 1024px) {
     .modal-large {
-        width: auto;
-        max-width: 800px;
-        margin: 30px auto;
+      width: auto;
+      max-width: 800px;
+      margin: 30px auto;
 
-        $modpad: $gutter * 1;
+      $modpad: $gutter * 1;
 
-        .modal-body {
-          padding: $modpad $modpad 0 $modpad;
-        }
+      .modal-body {
+        padding: $modpad $modpad 0 $modpad;
+      }
 
-        .modal-footer {
-          padding-right: $modpad;
-          padding-left: $modpad;
-        }
+      .modal-footer {
+        padding-right: $modpad;
+        padding-left: $modpad;
+      }
     }
   }
 }
 
 .modal-content {
-    .form-group {
-        label.radio {
-          padding-bottom: 10px;
-          padding-left: 23px;
-          text-transform: none;
-        }
+  .form-group {
+    label.radio {
+      padding-bottom: 10px;
+      padding-left: 23px;
+      text-transform: none;
     }
+  }
 
   p {
     line-height: 1.425em;
@@ -133,9 +133,9 @@ body{
 }
 
 @media (min-width: 550px) {
-	.modal-sm {
-		width: 450px;
-	}
+  .modal-sm {
+    width: 450px;
+  }
 }
 
 @media (max-width: 440px) {
@@ -163,14 +163,14 @@ body{
 }
 
 #addNewPaymentModal{
-	background-color: rgba(138, 138, 138, 0.9); 
+  background-color: rgba(138, 138, 138, 0.9); 
 
-	.light-font{
+  .light-font{
     /* stylelint-disable-next-line */
 		color: #d3d3d3;
-		font-size: 14px;
-		font-weight: bold;
-	}
+    font-size: 14px;
+    font-weight: bold;
+  }
 }
 
 .modal-backdrop {

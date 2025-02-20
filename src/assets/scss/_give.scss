@@ -1,10 +1,10 @@
 // Give Specific Styles
-$colorGrayscale-sand: #f4f4f4;
-$colorGrayscale-pebble: #f0f0f0;
-$colorGrayscale-stone: #e7e7e7;
-$colorGrayscale-rock: #b9b9b9;
-$colorGrayscale-slate: #909b9c;
-$colorCru-border: #ddd;
+$colorGrayscale-sand: #F4F4F4;
+$colorGrayscale-pebble: #F0F0F0;
+$colorGrayscale-stone: #E7E7E7;
+$colorGrayscale-rock: #B9B9B9;
+$colorGrayscale-slate: #909B9C;
+$colorCru-border: #DDD;
 $data-font: "Source Sans Pro", "Helvetica Neue", helvetica, sans-serif;
 
 .data-font {
@@ -13,7 +13,7 @@ $data-font: "Source Sans Pro", "Helvetica Neue", helvetica, sans-serif;
 
 @media screen and (max-width: 750px) {
   .container {
-      width: auto;
+    width: auto;
   }
 }
 
@@ -573,38 +573,38 @@ hr.horizontal-divider {
 }
 
 .repeating-row {
-	clear: both;
-	line-height: 1em;
+  clear: both;
+  line-height: 1em;
 
-	&::before,
-	&::after {
-		display: block;
-		clear: both;
-		content: "";
-	}
+  &::before,
+  &::after {
+    display: block;
+    clear: both;
+    content: "";
+  }
 
-	.recipient-image {
-		max-width: 100px;
-	}
+  .recipient-image {
+    max-width: 100px;
+  }
 
-	.recipient-name {
+  .recipient-name {
     margin-top: $gutter * 0.15;
-		margin-bottom: $gutter * 0.25;
-	}
+    margin-bottom: $gutter * 0.25;
+  }
 
-	.checkbox-right {
-		text-align: right;
+  .checkbox-right {
+    text-align: right;
 
-		label {
-			padding: 0;
-			font-weight: normal;
-			text-align: right;
-		}
+    label {
+      padding: 0;
+      font-weight: normal;
+      text-align: right;
+    }
 
-		input[type="checkbox"], input[type="radio"] {
-			margin-left: $gutter * 0.25;
-		}
-	}
+    input[type="checkbox"], input[type="radio"] {
+      margin-left: $gutter * 0.25;
+    }
+  }
 }
 
 @media screen and (min-width: 550px ) and (max-width: 991px ) {
@@ -784,8 +784,8 @@ img.full-width {
 
 .saved-payment-methods {
   .row {
-      label {
-        padding-left: 15px;
-      }
+    label {
+      padding-left: 15px;
+    }
   }
 }

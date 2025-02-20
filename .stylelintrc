@@ -61,7 +61,9 @@
             "disableFix": true
           }
         ],
-        "@stylistic/number-leading-zero": "always"
+        "@stylistic/number-leading-zero": "always",
+        "@stylistic/color-hex-case": "upper",
+        "@stylistic/indentation": 2
       }
     }
   ]
