@@ -91,7 +91,7 @@
     "lint": "standard",
     "lint:write": "standard --fix",
     "lint:ts": "tsc",
-    "lint:styles": "stylelint \"src/assets/scss/*.{css,scss}\""
+    "lint:styles": "stylelint \"src/assets/scss/*.{css,scss}\" --quiet-deprecation-warnings"
   },
   "standard": {
     "env": {
