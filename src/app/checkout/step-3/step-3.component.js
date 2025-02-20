@@ -149,7 +149,8 @@ class Step3Controller {
       submitRequest = componentInstance.orderService.submit()
     } else if (componentInstance.creditCardPaymentDetails) {
       const cvv = componentInstance.orderService.retrieveCardSecurityCode()
-      submitRequest = componentInstance.orderService.submit(cvv)
+      const cardBin = componentInstance.orderService.retrieveCardBin()
+      submitRequest = componentInstance.orderService.submit(cvv, cardBin)
     } else {
       submitRequest = Observable.throw({ data: 'Current payment type is unknown' })
     }
@@ -158,6 +159,7 @@ class Step3Controller {
       componentInstance.submittingOrder = false
       componentInstance.onSubmittingOrder({ value: false })
       componentInstance.orderService.clearCardSecurityCodes()
+      componentInstance.orderService.clearCardBins()
       componentInstance.orderService.clearCoverFees()
       componentInstance.onSubmitted()
       componentInstance.$scope.$emit(cartUpdatedEvent)
