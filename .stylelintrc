@@ -3,6 +3,9 @@
     "stylelint-config-standard-scss",
     "stylelint-config-idiomatic-order"
   ],
+  "plugins": [
+    "stylelint-declaration-strict-value"
+  ],
   "overrides": [
     {
       "files": ["src/assets/scss/*.{css,scss}"],
@@ -44,7 +47,19 @@
             "ignoreProperties": ["backdrop-filter", "user-select", "initial-letter", "text-decoration", "text-stroke", "text-fill-color", "line-clamp", "box-decoration-break", "stretch"]
           }
         ],
-        "alpha-value-notation": "number"
+        "alpha-value-notation": "number",
+        "scale-unlimited/declaration-strict-value": [
+          [
+           "/color$/",
+           "background",
+            "fill",
+            "stroke"
+          ],
+          {
+            "ignoreValues": ["inherit", "transparent", "initial", "unset", "none", "no-repeat", "repeat", "center", "scroll"],
+            "disableFix": true
+          }
+        ]
       }
     }
   ]
