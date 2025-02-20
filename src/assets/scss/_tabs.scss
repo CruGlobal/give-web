@@ -8,11 +8,13 @@
     &.active > a {
       border-color: $colorGrayscale-stone;
       background-color: $colorGrayscale-stone;
+      /* stylelint-disable-next-line */
       color: #626262;
 
       &:hover, &:focus {
         border-color: $colorGrayscale-stone;
         background-color: $colorGrayscale-stone;
+        /* stylelint-disable-next-line */
         color: #626262;
       }
     }
@@ -32,6 +34,7 @@
       &:hover, &:focus {
         border-color: transparent;
         background: transparent;
+        /* stylelint-disable-next-line */
         color: #626262;
       }
 
@@ -118,6 +121,7 @@
       width: 100%;
       height: 0;
       backface-visibility: hidden;
+      /* stylelint-disable-next-line */
       background-color: #f55753;
       content: '';
       transition: all 0.1s linear 0s;
@@ -146,36 +150,42 @@
 
   &.nav-tabs-primary {
     > li::after {
+      /* stylelint-disable-next-line */
       background-color: #6d5cae;
     }
   }
 
   &.nav-tabs-success {
     > li::after {
+      /* stylelint-disable-next-line */
       background-color: #10cfbd;
     }
   }
 
   &.nav-tabs-complete {
     > li::after {
+      /* stylelint-disable-next-line */
       background-color: #48b0f7;
     }
   }
 
   &.nav-tabs-danger {
     > li::after {
+      /* stylelint-disable-next-line */
       background-color: #f55753;
     }
   }
 
   &.nav-tabs-warning {
-    > li::after {
+    > li::after 
+    /* stylelint-disable-next-line */{
       background-color: #f8d053;
     }
   }
 
   &.nav-tabs-info {
     > li::after {
+      /* stylelint-disable-next-line */
       background-color: #3b4752;
     }
   }
@@ -240,6 +250,7 @@
 
       &::after {
         border-width: 10px;
+        /* stylelint-disable-next-line */
         border-top-color: #fafafa;
         margin-left: -10px;
       }
@@ -270,7 +281,7 @@
   }
 
   ~ .tab-content {
-    background: #fff;
+    background: $colorCru-white;
   }
 
   &.nav-tabs-left.nav-tabs {
@@ -294,6 +305,7 @@
         left: auto;
         border-top: 10px solid transparent;
         border-bottom: 10px solid transparent;
+        /* stylelint-disable-next-line */
         border-left: 10px solid #fafafa;
         margin-top: 1px;
         margin-right: 2px;
@@ -321,6 +333,7 @@
         right: auto;
         left: -12px;
         border-top: 10px solid transparent;
+        /* stylelint-disable-next-line */
         border-right: 10px solid #fafafa;
         border-bottom: 10px solid transparent;
         margin-top: 1px;
@@ -355,8 +368,10 @@
         left: 0;
         width: 100%;
         height: calc(100% + 1px);
+        /* stylelint-disable-next-line */
         border: 1px solid #10cfbd;
         backface-visibility: hidden;
+        /* stylelint-disable-next-line */
         background: none repeat scroll 0 0 #10cfbd;
         content: "";
         transform: translate3d(0, 100%, 0);
@@ -380,12 +395,12 @@
       > a {
         border-color: transparent;
         background: transparent;
-        color: #fff;
+        color: $colorCru-white;
 
         &:hover, &:focus {
           border-color: transparent;
           background: transparent;
-          color: #fff;
+          color: $colorCru-white;
         }
 
         &::after {
@@ -404,32 +419,44 @@
   }
 
   &.nav-tabs-primary > li > a::after {
+    /* stylelint-disable-next-line */
     border: 1px solid #6d5cae;
+    /* stylelint-disable-next-line */
     background: none repeat scroll 0 0 #6d5cae;
   }
 
   &.nav-tabs-success > li > a::after {
+    /* stylelint-disable-next-line */
     border: 1px solid #10cfbd;
+    /* stylelint-disable-next-line */
     background: none repeat scroll 0 0 #10cfbd;
   }
 
   &.nav-tabs-complete > li > a::after {
+    /* stylelint-disable-next-line */
     border: 1px solid #48b0f7;
+    /* stylelint-disable-next-line */
     background: none repeat scroll 0 0 #48b0f7;
   }
 
   &.nav-tabs-warning > li > a::after {
+    /* stylelint-disable-next-line */
     border: 1px solid #f8d053;
+    /* stylelint-disable-next-line */
     background: none repeat scroll 0 0 #f8d053;
   }
 
   &.nav-tabs-danger > li > a::after {
+    /* stylelint-disable-next-line */
     border: 1px solid #f55753;
+    /* stylelint-disable-next-line */
     background: none repeat scroll 0 0 #f55753;
   }
 
   &.nav-tabs-info > li > a::after {
+    /* stylelint-disable-next-line */
     border: 1px solid #3b4752;
+    /* stylelint-disable-next-line */
     background: none repeat scroll 0 0 #3b4752;
   }
 
@@ -442,7 +469,7 @@
   }
 
   ~ .tab-content {
-    background: #fff;
+    background: $colorCru-white;
   }
 
   &.nav-tabs-left, &.nav-tabs-right, &.nav-tabs-left::after, &.nav-tabs-right::after {

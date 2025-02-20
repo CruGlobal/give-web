@@ -11,7 +11,7 @@
 }
 
 .light-font {
-	color: #666062;
+	color: $colorCru-gray;
 }
 
 .bold {
@@ -34,11 +34,13 @@
 	.panel {
 		&.bg-danger {
 			border-color: $colorHighlight-danger;
+      /* stylelint-disable-next-line */
 			background-color: #f2dede;
 		}
 	}
 
 	.panel.panel-with-gray-background, .panel .panel-heading {
+    /* stylelint-disable-next-line */
 		background-color: #FAFAFA !important;
 		font-size: 1em;
 	}

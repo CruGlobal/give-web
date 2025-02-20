@@ -38,7 +38,7 @@ $border-radius: 4px;
         border-radius: $border-radius;
 
         /* Discover more button BG: */
-        background: #F9B625;
+        background: $colorCru-gold;
         font-size: 20px;
         line-height: 43px;
       }
@@ -81,9 +81,9 @@ $border-radius: 4px;
       a {
         display: inline-block;
         padding-right: .5em;
-        border-right: 1px solid #fff;
+        border-right: 1px solid $colorCru-white;
         margin-right: .5em;
-        color: #fff;
+        color: $colorCru-white;
         font-size: 16px;
         font-weight: 400;
 
@@ -144,7 +144,7 @@ $border-radius: 4px;
         .image-container {
           position: relative;
           height: 100%;
-          background-color: #ccc;
+          background-color: $input-border;
           background-position: 50%;
           background-size: cover;
           text-align: center;
@@ -273,7 +273,7 @@ $border-radius: 4px;
     }
 
     a:not(.btn) {
-      color: #3a3a3a;
+      color: $colorText;
       text-decoration:none;
     }
 

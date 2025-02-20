@@ -31,6 +31,7 @@
       width: 9%;
       height: 16px;
       margin: 0;
+      /* stylelint-disable-next-line */
       background: no-repeat 50% 50%;
       background-size: 16px auto;
       cursor: pointer;
@@ -71,8 +72,8 @@
       }
 
       .cycle-pager-active {
-        background: #3EB1C8;
-        color: #3EB1C8;
+        background: $colorCru-blueBright;
+        color: $colorCru-blueBright;
       }
     }
   }
@@ -109,7 +110,7 @@
       width: 45%;
       height: auto;
       padding: $gutter * 1.2;
-      background: #E7E7E7;
+      background: $colorGrayscale-stone;
       transition: .5s all;
 
       @media screen and (max-width: 1200px) {

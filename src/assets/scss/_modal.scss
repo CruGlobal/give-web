@@ -166,6 +166,7 @@ body{
 	background-color: rgba(138, 138, 138, 0.9); 
 
 	.light-font{
+    /* stylelint-disable-next-line */
 		color: #d3d3d3;
 		font-size: 14px;
 		font-weight: bold;
@@ -179,5 +180,5 @@ body{
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: #000;
+  background-color: $color-black;
 }

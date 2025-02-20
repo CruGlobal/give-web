@@ -9,8 +9,8 @@
 
   input[type="radio"]:checked + label{
     width: 100%;
-    background: #67747c;
-    color: #fff;
+    background: $colorText--muted;
+    color: $colorCru-white;
   }
 
   input[type="radio"]{
@@ -43,7 +43,7 @@ label.btn-radio {
 
   input[type="radio"] ~ i.fa.fa-circle-o {
     display: inline; 
-    color: #f0f0f0;
+    color: $colorGrayscale-pebble;
     font-size: 1em;
     transition-delay: 200ms;
     transition-duration: 200ms;
@@ -65,11 +65,13 @@ label.btn-radio {
   }
 
   &:hover input[type="radio"] ~ i.fa {
+    /* stylelint-disable-next-line */
     color: #7AA3CC;
   }
 
   input[type="checkbox"] ~ i.fa.fa-square-o{
     display: inline;
+    /* stylelint-disable-next-line */
     color: #c8c8c8;
   }
 
@@ -83,15 +85,18 @@ label.btn-radio {
 
   input[type="checkbox"]:checked ~ i.fa.fa-check-square-o{
     display: inline;
+    /* stylelint-disable-next-line */
     color: #7AA3CC;
   }
 
   &:hover input[type="checkbox"] ~ i.fa {
+    /* stylelint-disable-next-line */
     color: #7AA3CC;
   }
 }
 
 div[data-toggle="buttons"] label.active{
+  /* stylelint-disable-next-line */
   color: #7AA3CC;
 }
 
@@ -118,8 +123,9 @@ div[data-toggle="buttons"] label {
 }
 
 div[data-toggle="buttons"] label:hover {
+  /* stylelint-disable-next-line */
   background: #f9f9f9;
-  color: #3a3a3a;
+  color: $colorText;
 }
 
 div[data-toggle="buttons"] label:active,
@@ -161,7 +167,7 @@ label.btn.btn-default-form.active {
     bottom: 0;
     left: 0;
     display: none;
-    background: black;
+    background: $colorGrayscale-black;
     background: rgba(0, 0, 0, 0.55);
     transition-delay: 100ms;
     transition-duration: 100ms;
@@ -265,7 +271,7 @@ label.btn.btn-default-form.active {
     border: none;
     background-color: transparent;
     box-shadow: none;
-    color: #fff;
+    color: $colorCru-white;
   }
 
   &:last-child {
@@ -287,7 +293,7 @@ label.btn.btn-default-form.active {
       background-color: $colorGrayscale-text !important;
 
       ::placeholder {
-        color: #fff;
+        color: $colorCru-white;
       }
     }
   }

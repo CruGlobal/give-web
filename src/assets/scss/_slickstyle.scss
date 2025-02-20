@@ -31,9 +31,9 @@
   width: 38px;
   height: 60px;
   border: 0;
-  background: #fff;
+  background: $colorCru-white;
   background-image: none !important;
-  color: #555;
+  color: $list-group-link-color;
   line-height: 60px;
   opacity: 1 !important;
   transform: translateY(-50%);
@@ -43,7 +43,7 @@
     right: -15px;
     left: auto;
     overflow: hidden;
-    box-shadow: -3px 0 5px #ccc;
+    box-shadow: -3px 0 5px $input-border;
     text-indent: -138px;
 
     &::after {
@@ -61,7 +61,7 @@
     right: auto;
     left: -15px;
     overflow: hidden;
-    box-shadow: 3px 0 5px #ccc;
+    box-shadow: 3px 0 5px $input-border;
     text-indent: -138px;
 
     &::after {
