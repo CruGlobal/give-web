@@ -147,7 +147,7 @@ class SignUpModalController {
       2: this.getStep2Fields(schema),
       // Step 3: Password (We don't save the password for security reasons.
       // Which is why it's the last step)
-      3: [schema[9]]
+      3: [schema[4]]
     }
   }
 
@@ -183,7 +183,7 @@ class SignUpModalController {
     ]
   }
 
-  getStep2Fields () {
+  getStep2Fields (schema) {
     // Retain the values entered by the user when navigating between steps.
     // Pre-populate the form fields with existing user details.
     return [
@@ -230,7 +230,7 @@ class SignUpModalController {
         value: this.$scope.zipCode || this.donorDetails?.mailingAddress?.postalCode || ''
       },
       {
-        ...customFields.primaryPhone,
+        ...schema[3],
         value: this.$scope.primaryPhone || this.donorDetails?.['phone-number'] || ''
       }
     ]

@@ -126,16 +126,5 @@ export const customFields = {
     showWhen: {
       'userProfile.countryCode': 'US'
     }
-  },
-  primaryPhone: {
-    name: 'userProfile.primaryPhone',
-    type: 'text',
-    label: 'Primary phone',
-    required: false,
-    maxLength: 100,
-    'label-top': true,
-    multirowError: true,
-    'data-se': 'o-form-fieldset-userProfile.primaryPhone',
-    sublabel: 'Optional'
   }
 }
