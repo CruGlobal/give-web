@@ -211,7 +211,7 @@
 }
 
 .btn-panel-head {
-  padding: 0 $gutter * .5;
+  padding: 0 $gutter * 0.5;
   font-size: 15px;
   font-weight: 600;
 }
@@ -220,7 +220,7 @@
   overflow: hidden;
   height: 100%;
   max-height: 0;
-  transition: .5s all;
+  transition: 0.5s all;
 
   &.on {
     max-height: 600px;

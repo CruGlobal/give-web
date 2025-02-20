@@ -30,7 +30,7 @@
     tr {
       th {
         border-bottom-color: $colorCru-border;
-        font-size: .9em;
+        font-size: 0.9em;
         font-weight: 200;
         text-transform: uppercase;
       }
@@ -83,7 +83,7 @@
       display: block;
       color: $colorGrayscale-slate;
       font-family: $data-font;
-      font-size: .75em;
+      font-size: 0.75em;
 
       @include respond-to(extrasmall) {
         display: inline-block;
@@ -91,7 +91,7 @@
     }
 
     .giftsum-actions {
-      font-size: .8em;
+      font-size: 0.8em;
       text-transform: uppercase;
 
       @include respond-to(extrasmall) {

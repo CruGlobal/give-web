@@ -6,7 +6,7 @@
 
 .panel-body {
   @include respond-to(extrasmall) {
-    padding: $gutter * .6666;
+    padding: $gutter * 0.6666;
   }
 }
 

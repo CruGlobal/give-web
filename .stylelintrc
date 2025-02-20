@@ -4,7 +4,8 @@
     "stylelint-config-idiomatic-order"
   ],
   "plugins": [
-    "stylelint-declaration-strict-value"
+    "stylelint-declaration-strict-value",
+    "@stylistic/stylelint-plugin"
   ],
   "overrides": [
     {
@@ -59,7 +60,8 @@
             "ignoreValues": ["inherit", "transparent", "initial", "unset", "none", "no-repeat", "repeat", "center", "scroll"],
             "disableFix": true
           }
-        ]
+        ],
+        "@stylistic/number-leading-zero": "always"
       }
     }
   ]
