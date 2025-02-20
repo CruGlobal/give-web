@@ -171,8 +171,8 @@ Use yarn for faster installs and to update the yarn lock file: https://yarnpkg.c
 
 ### Install & Run
 
-1. `yarn` or `npm install`
-2. `yarn start` or `npm start`
+1. `yarn`
+2. `yarn start`
 3. Browse to [`http://localhost:9000`](http://localhost:9000)
 Note: For session cookies to work correctly, add the below entries to your hosts file, and use [`https://localhost.cru.org:9000`](https://localhost.cru.org:9000) for development
 ```
@@ -182,15 +182,15 @@ Note: For session cookies to work correctly, add the below entries to your hosts
 
 ### Development Tasks
 
-- `yarn run test` or `npm run test` to run karma tests
-- `yarn run lint` or `npm run lint` to run eslint
-- `yarn run build` or `npm run build` to generate minified output files. These files are output to `/dist`. `common.js` must be included before any of the other JS files.
-- `yarn run build:analyze` or `npm run build:analyze` to open a visualization of bundle sizes after building
+- `yarn test` to run karma tests
+- `yarn lint` to run eslint
+- `yarn build` to generate minified output files. These files are output to `/dist`. `common.js` must be included before any of the other JS files.
+- `yarn build:analyze` to open a visualization of bundle sizes after building
 
 ### Adding dependencies
 
-- Use `yarn add <package-name>` or `npm install <package-name> --save` to install app dependencies
-- Use `yarn add <package-name> -dev` `npm install <package-name> --save-dev` to install tooling dependencies
+- Use `yarn add <package-name>` to install app dependencies
+- Use `yarn add <package-name> --dev` to install tooling dependencies
 
 ### Making queries to Cortex
 Use the `cortexApiService` which provides convenience methods for sending requests to Cortex. For more documentation see the [cortexApiService docs](docs/cortexApiService.md).
