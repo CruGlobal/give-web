@@ -177,8 +177,8 @@
   }
 
   &.nav-tabs-warning {
-    > li::after 
-    /* stylelint-disable-next-line */{
+    > li::after {
+      /* stylelint-disable-next-line */
       background-color: #f8d053;
     }
   }
