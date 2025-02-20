@@ -101,6 +101,10 @@ div[data-toggle="buttons"] label {
   transition-delay: 100ms;
   transition-duration: 100ms;
   transition-property: all;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
   user-select: none;
 }
 
