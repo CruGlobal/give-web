@@ -374,7 +374,7 @@
         /* stylelint-disable-next-line */
         background: none repeat scroll 0 0 #10cfbd;
         content: "";
-        transform: translate3d(0, 100%, 0);
+        transform: translate(0, 100%);
         transition: transform 0.3s ease 0s;
       }
 
@@ -383,7 +383,7 @@
         backface-visibility: hidden;
         font-weight: 700;
         line-height: 1.5;
-        transform: translate3d(0, 5px, 0);
+        transform: translate(0, 5px);
         transition: -webkit-transform 0.5s ease 0s;
         transition: transform 0.5s ease 0s;
       }
