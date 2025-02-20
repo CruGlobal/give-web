@@ -43,7 +43,8 @@
           {
             "ignoreProperties": ["backdrop-filter", "user-select", "initial-letter", "text-decoration", "text-stroke", "text-fill-color", "line-clamp", "box-decoration-break", "stretch"]
           }
-        ]
+        ],
+        "alpha-value-notation": "number"
       }
     }
   ]

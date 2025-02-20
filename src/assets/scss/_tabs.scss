@@ -23,7 +23,7 @@
       border-color: transparent;
       border-radius: 0;
       margin-right: 0;
-      color: rgba(98, 98, 98, 70%);
+      color: rgba(98, 98, 98, 0.7);
       font-family: inherit;
       font-size: inherit;
       font-weight: 600;
@@ -85,7 +85,7 @@
     float: left;
 
     ~ .tab-content {
-      border-left: 1px solid rgba(0, 0, 0, 10%);
+      border-left: 1px solid rgba(0, 0, 0, 0.1);
     }
   }
 
@@ -93,7 +93,7 @@
     float: right;
 
     ~ .tab-content {
-      border-right: 1px solid rgba(0, 0, 0, 10%);
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
     }
   }
 }
@@ -106,7 +106,7 @@
     z-index: 120;
     bottom: 3px;
     width: 100%;
-    border-bottom: 1px solid rgba(0, 0, 0, 10%);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }
 
   > li {
@@ -212,7 +212,7 @@
     position: relative;
     bottom: 0;
     width: 100%;
-    border-bottom: 1px solid rgba(0, 0, 0, 10%);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }
 
   > li {
@@ -246,7 +246,7 @@
 
       &::before {
         border-width: 11px;
-        border-top-color: rgba(0, 0, 0, 20%);
+        border-top-color: rgba(0, 0, 0, 0.2);
         margin-left: -11px;
       }
     }
@@ -285,7 +285,7 @@
         left: auto;
         border-top: 11px solid transparent;
         border-bottom: 11px solid transparent;
-        border-left: 11px solid rgba(0, 0, 0, 20%);
+        border-left: 11px solid rgba(0, 0, 0, 0.2);
       }
 
       &::after {
@@ -312,7 +312,7 @@
         right: auto;
         left: -12px;
         border-top: 11px solid transparent;
-        border-right: 11px solid rgba(0, 0, 0, 20%);
+        border-right: 11px solid rgba(0, 0, 0, 0.2);
         border-bottom: 11px solid transparent;
       }
 

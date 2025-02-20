@@ -327,14 +327,14 @@ hr.horizontal-divider {
     width: 28px;
     height: 28px;
     border-radius: 100px;
-    background: rgba(0, 0, 0, 50%);
+    background: rgba(0, 0, 0, 0.5);
     color: $colorCru-white;
     line-height: 28px;
     text-align: center;
     transition: .25s all;
 
     &:hover {
-      background: rgba(0, 0, 0, 100%);
+      background: rgba(0, 0, 0, 1);
     }
   }
 
