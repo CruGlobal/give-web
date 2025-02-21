@@ -182,8 +182,8 @@ Note: For session cookies to work correctly, add the below entries to your hosts
 
 ### Development Tasks
 
-- `yarn test` to run karma tests
-- `yarn lint` to run eslint
+- `yarn test` to run Jest tests
+- `yarn lint` to run StandardJS linter
 - `yarn build` to generate minified output files. These files are output to `/dist`. `common.js` must be included before any of the other JS files.
 - `yarn build:analyze` to open a visualization of bundle sizes after building
 
@@ -200,7 +200,4 @@ Replace `https://give-static.cru.org` with `https://give-stage-static.cru.org` t
 
 ### Deployments
 
-Travis auto-deploys master builds to a pre-prod s3 bucket.
-http://devtools.aws.cru.org:8080/view/Give%20Site/job/Give%20NG%20prod%20deploy/ copies
-to the live bucket, which backs CloudFront.
-
+GitHub actions auto-deploys master and staging builds to S3 buckets, which backs CloudFront.
