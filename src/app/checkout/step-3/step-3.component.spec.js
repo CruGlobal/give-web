@@ -21,6 +21,7 @@ describe('checkout', () => {
         }
       }
       self.storedCvv = null
+      self.storedCardBin = null
       self.coverFeeDecision = false
 
       self.controller = $componentController(module.name, {
@@ -38,9 +39,11 @@ describe('checkout', () => {
           submit: () => Observable.of('called submit'),
           submitOrder: () => Observable.of('called submitOrder'),
           retrieveCardSecurityCode: () => self.storedCvv,
+          retrieveCardBin: () => self.storedCardBin,
           retrieveLastPurchaseLink: () => Observable.of('purchaseLink'),
           retrieveCoverFeeDecision: () => self.coverFeeDecision,
           clearCardSecurityCodes: jest.fn(),
+          clearCardBins: jest.fn(),
           clearCoverFees: jest.fn()
         },
         profileService: {
