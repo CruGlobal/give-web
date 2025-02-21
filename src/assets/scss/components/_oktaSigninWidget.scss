@@ -195,7 +195,6 @@ sign-up-modal {
       -webkit-appearance: none;
       appearance: none;
       border: 1px solid transparent;
-      height: auto;
       padding-bottom: 12px;
       padding-top: 20px;
 
@@ -203,6 +202,10 @@ sign-up-modal {
         border-color: $colorCru-gold;
         box-shadow: none;
       }
+    }
+
+    input[type=password] {
+      height: auto;
     }
   }
 
