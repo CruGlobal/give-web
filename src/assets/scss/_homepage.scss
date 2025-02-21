@@ -2,29 +2,29 @@ $border-radius: 4px;
 
 #give-hero {
   .hero-image {
-    background-size: cover;
     position: relative;
     height: 220px;
+    background-size: cover;
   }
 
   .hero-content {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
     width: 100%;
+    text-align: center;
+    transform: translate(-50%, -50%);
 
     h1 {
-      color: $colorCru-gold;
-      font-weight: 400;
-      font-size: 24px;
       margin-bottom: 0;
+      color: $colorCru-gold;
+      font-size: 24px;
+      font-weight: 400;
     }
 
     h4 {
-      font-size: 20px;
       margin-top: 0;
+      font-size: 20px;
     }
 
     h4, p {
@@ -33,27 +33,29 @@ $border-radius: 4px;
 
     form {
       button.submit-search {
-        /* Discover more button BG: */
-        background: #F9B625;
-        border-radius: $border-radius;
         height: 46px;
-        line-height: 43px;
         padding: 0 35px;
+        border-radius: $border-radius;
+
+        /* Discover more button BG: */
+        background: $colorCru-gold;
         font-size: 20px;
+        line-height: 43px;
       }
+
       .form-group {
         margin-right: 15px;
 
         input {
-          border-radius: $border-radius;
-          box-shadow: none;
-          border: none;
-          font-size: 16px;
-          line-height: 20px;
-          padding: 0 13px;
-          height: 48px;
           width: 300px;
           max-width: 100%;
+          height: 48px;
+          padding: 0 13px;
+          border: none;
+          border-radius: $border-radius;
+          box-shadow: none;
+          font-size: 16px;
+          line-height: 20px;
         }
 
         @media screen and (max-width: 720px) {
@@ -68,67 +70,67 @@ $border-radius: 4px;
 
     .homepage-hero-links {
       display: block;
-      clear: both;
-      padding-top: .25em;
+      padding-top: 0.25em;
       margin-top: 29px;
+      clear: both;
 
       @media screen and (max-width: 720px) {
         margin-top: 1em;
       }
 
       a {
-        color: #fff;
+        display: inline-block;
+        padding-right: 0.5em;
+        border-right: 1px solid $colorCru-white;
+        margin-right: 0.5em;
+        color: $colorCru-white;
         font-size: 16px;
         font-weight: 400;
-        display: inline-block;
-        border-right: 1px solid #fff;
-        margin-right: .5em;
-        padding-right: .5em;
 
         &:last-child {
-          margin-right: 0;
           padding-right: 0;
           border-right: none;
+          margin-right: 0;
         }
       }
     }
   }
 
   .hero-leads {
-    margin-top: -30px;
     position: relative;
+    margin-top: -30px;
 
     .hero-lead-first, 
     .hero-lead-second, 
     .hero-lead-third {
-      float: left;
-      width: 33.333333333%;
-      margin: 0;
-      padding: 0;
       overflow: hidden;
+      width: 33.3333%;
+      padding: 0;
+      margin: 0;
+      float: left;
 
 
       h3 {
-        font-size: 20px;
-        font-weight: 600;
-        color: $colorCru-white;
         position: absolute;
         bottom: 0;
         left: 0;
         width: 100%;
-        background-color: rgba(#000, .4);
         padding-top: 5px;
         padding-bottom: 5px;
         margin-top: 9px;
         margin-bottom: 9px;
+        background-color: rgba(#000, 0.4);
+        color: $colorCru-white;
+        font-size: 20px;
+        font-weight: 600;
       }
 
       a {
         display: block;
-        padding-top: 30px;
         height: 220px;
-        transition: .25s all;
+        padding-top: 30px;
         text-decoration: none;
+        transition: 0.25s all;
 
         @media screen and (max-width: 860px) {
           height: 185px;
@@ -140,53 +142,59 @@ $border-radius: 4px;
         }
 
         .image-container {
-          background-color: #ccc;
-          background-size: cover;
-          background-position: 50%;
-          height: 100%;
-          text-align: center;
-          transition: .25s all;
           position: relative;
+          height: 100%;
+          background-color: $input-border;
+          background-position: 50%;
+          background-size: cover;
+          text-align: center;
+          transition: 0.25s all;
 
         }
       }
     }
+
     .hero-lead-first {
       .image-container {
-        background-image: url(/assets/images/people.jpg);
+        background-image: url("/assets/images/people.jpg");
       }
     }
+
     .hero-lead-second {
       .image-container {
-        background-image: url(/assets/images/ministry.jpg);
+        background-image: url("/assets/images/ministry.jpg");
       }
     }
+
     .hero-lead-third {
       .image-container {
-        background-image: url(/assets/images/featured-opportunities.jpg);
+        background-image: url("/assets/images/featured-opportunities.jpg");
       }
     }
 
     @media screen and (max-width: 720px) {
       margin-top: 0;
-      background-size: cover;
       background-position: 50% 50%;
+      background-size: cover;
 
       .hero-lead-first, 
       .hero-lead-second, 
       .hero-lead-third {
         width: 100%;
         border-bottom: 1px solid #333;
+
         .image-container {
           padding-top: 9px;
           padding-bottom: 9px;
-          background-color: rgba(0,0,0,.8);
+          background-color: rgba(0,0,0,0.8);
         }
+
         h3 {
+          position: relative;
           margin-top: 0;
           margin-bottom: 0;
-          position: relative;
         }
+
         a {
           position: relative;
           height: auto;
@@ -197,13 +205,15 @@ $border-radius: 4px;
 
     @media only screen and (min-width: 1400px) {
       margin-top: 0;
+
       .hero-lead-first, 
       .hero-lead-second, 
       .hero-lead-third {
         a {
-          padding-top: 0;
           height: auto;
+          padding-top: 0;
           transition: none;
+
           .image-container {
             padding-top: 40.1%;
             transition: none;
@@ -232,40 +242,47 @@ $border-radius: 4px;
 }
 
 .panel-give-featured {
-  box-shadow: none;
   max-width: 290px;
+  box-shadow: none;
 
   @media only screen and (max-width: 720px) {
     max-width: none;
   }
 
   .panel-header {
-    background: $colorCru-mid-gray;
-    color: $colorCru-white;
+    padding-left: 20px;
     border: 1px solid $colorCru-mid-gray;
     border-radius: $border-radius $border-radius 0 0;
-    padding-left: 20px;
+    background: $colorCru-mid-gray;
+    color: $colorCru-white;
 
     h3 {
-      font-weight: 500;
+      margin: 0 0 0.25em;
       font-size: 20px;
-      margin: 0 0 .25em;
+      font-weight: 500;
     }
   }
 
   .panel-body {
+    padding: 20px;
     border: 1px solid $colorGrayscale-pebble;
     border-top: none;
-    padding: 20px;
+
     p {
       line-height: 1.45em;
     }
+
     a:not(.btn) {
-      color: #3a3a3a;
+      color: $colorText;
       text-decoration:none;
     }
+
     @media screen and (max-width: 850px) {
-      h3 {font-size: 22px; font-weight: 500;}
+      h3 {
+        font-size: 22px;
+        font-weight: 500;
+      }
+
       p:nth-last-child(2) {
         display: block;
       }  
@@ -273,9 +290,11 @@ $border-radius: 4px;
   }
 
   .give-featured-image {
-    margin-bottom: $gutter*.5;
+    margin-bottom: $gutter * 0.5;
+
     img {
       width: 100%;
+
       @media screen and (max-width: 840px) {
         font-size: 18px;
       }
@@ -284,10 +303,10 @@ $border-radius: 4px;
 }
 
 .form-give-home-signin {
-
   @media screen and (max-width: 991px) {
     .home-self-service {
       margin-top: 8px;
+
       a.u-block {
         display: inline-block !important;
         margin-left: 16px;
@@ -305,40 +324,43 @@ $border-radius: 4px;
 
   .form-group {
     &:not(:last-child) {
-      margin-right: $gutter*0.5;
+      margin-right: $gutter * 0.5;
     }
 
-    > input, button[type=submit] {
+    > input, button[type="submit"] {
       border-radius: $border-radius;
     }
 
     &.input-widths {
       width: 200px;
+
       @media screen and (max-width: 1200px) {
         width: 165px;
       }
     }
 
-    > input[type=text],
-    > input[type=password],
-    > input[type=email] {
+    > input[type="text"],
+    > input[type="password"],
+    > input[type="email"] {
       width: 100%;
     }
   }
 
   .form-heading {
-    text-transform: uppercase;
     pointer-events: none;
+    text-transform: uppercase;
   }
 
-  button[type=submit] {
-    background-color: $colorCru-white;
-    border-color: $colorCru-gold;
+  button[type="submit"] {
     width: 150px;
+    border-color: $colorCru-gold;
+    background-color: $colorCru-white;
+
     &:hover {
       background-color: $colorCru-gold;
       color: $colorCru-white;
     }
+
     @media screen and (max-width: 1200px) {
       width: auto;
     }
@@ -346,6 +368,7 @@ $border-radius: 4px;
 
   .home-self-service {
     line-height: 1.1em;
+
     a {
       color: $colorText;
     }
@@ -353,16 +376,16 @@ $border-radius: 4px;
 }
 
 #give-integrity {
-  padding-top: $gutter*2;
-  padding-bottom: $gutter*2;
+  padding-top: $gutter * 2;
+  padding-bottom: $gutter * 2;
 
   h1, p {
     text-align: center;
   }
 
   h1 {
-    font-size: 36px;
     color: $colorCru-gray;
+    font-size: 36px;
     font-weight: 600;
   }
 
@@ -376,12 +399,13 @@ $border-radius: 4px;
 
   .integrity-col {
     line-height: 1.35em;
-    &:before {
+
+    &::before {
+      display: block;
       height: 100px;
       background: no-repeat center center;
       background-size: 70px;
       content: "";
-      display: block;
     }
 
     @media only screen and (max-width: 560px) {
@@ -389,20 +413,22 @@ $border-radius: 4px;
     }
   }
 
-  .win:before {
+  .win::before {
     background-image: url("/assets/images/win.png");
   }
-  .build:before {
+
+  .build::before {
     background-image: url("/assets/images/build.png");
   }
-  .send:before {
+
+  .send::before {
     background-image: url("/assets/images/send.png");
   }
 }
 
 #give-credibility {
-  padding-top: $gutter*2;
-  padding-bottom: $gutter*2;
+  padding-top: $gutter * 2;
+  padding-bottom: $gutter * 2;
   background: $colorCru-white;
 
   h4 {
@@ -410,14 +436,14 @@ $border-radius: 4px;
     font-weight: 600;
   }
 
-    .credibility-security {
-      width: 65%;
-    }
+  .credibility-security {
+    width: 65%;
+  }
 
-    .trust {
-      width: 35%;
+  .trust {
+    width: 35%;
 
-    }
+  }
 
   .credibility-col {
     float: left;
@@ -435,23 +461,26 @@ $border-radius: 4px;
     }
 
     .credibility-seal {
-      width: 15%;
-      float: right;
-      margin-left: 30px; 
+      width: 15%; 
       margin-right: 30px;
+      margin-left: 30px;
+      float: right;
+
       @media screen and (max-width: 550px) {
-        float: none;
         display: block;
         width: 100px;
         margin: 0 auto 15px auto;
+        float: none;
       }
     }
 
     .credibility,
     .security {
       margin-bottom: $gutter;
+
       p {
         width: 75%;
+
         @media screen and (max-width: 550px) {
           width: auto;
         }
@@ -460,6 +489,7 @@ $border-radius: 4px;
       h4 {
         width: 80%;
         margin-bottom: 5px;
+
         @media screen and (max-width: 550px) {
           width: auto;
         }
@@ -467,8 +497,8 @@ $border-radius: 4px;
     }
 
     @media screen and (max-width: 991px) {
-      float: none;
       width: 100% !important;
+      float: none;
     }
   }  
 }

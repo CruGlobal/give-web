@@ -1,74 +1,65 @@
-$colorCru-gold:             #f9b625;
-$colorCru-gray:             #666062;
-$colorCru-mid-gray:         #444244;
-$colorCru-white:            #fff;
-$colorCru-blueBright:       #3eb1c8;
-
+$colorCru-gold: #f9b625;
+$colorCru-gray: #666062;
+$colorCru-mid-gray: #444244;
+$colorCru-white: #fff;
+$colorCru-blueBright: #3eb1c8;
 $colorGrayscale-background: #f7f7f7;
-$colorGrayscale-sand:       #f4f4f4;
-$colorGrayscale-pebble:     #f0f0f0;
-$colorGrayscale-stone:      #e7e7e7;
-$colorGrayscale-rock:       #b9b9b9;
-$colorGrayscale-slate:      #909b9c;
-$colorGrayscale-black:      #000;
-$colorText:                 #3a3a3a;
-
-$sm:                        992px;
-$header-height:             84px;
-$gutter:                    30px;
-
-$query-unit:                16px;
-$nav-break-min:             400px;
-$fontWeight5:               500;
-
-$data-font:                 "Helvetica Neue", Helvetica, sans-serif;
-$border-radius:             4px;
+$colorGrayscale-sand: #f4f4f4;
+$colorGrayscale-pebble: #f0f0f0;
+$colorGrayscale-stone: #e7e7e7;
+$colorGrayscale-rock: #b9b9b9;
+$colorGrayscale-slate: #909b9c;
+$colorGrayscale-black: #000;
+$colorText: #3a3a3a;
+$sm: 992px;
+$header-height: 84px;
+$gutter: 30px;
+$query-unit: 16px;
+$nav-break-min: 400px;
+$fontWeight5: 500;
+$data-font: "Helvetica Neue", helvetica, sans-serif;
+$border-radius: 4px;
 
 
 /***** UPDATED COLORS *****/
-$cru-bahama-blue:               #05699B;
-  $cru-bahama-blue-light:       #BED7E6;
-  $cru-bahama-blue-alt:         #3282AF;
-  $cru-bahama-blue-dark:        #00557D;
-
-$cru-scooter:                   #32C3D7;
-  $cru-scooter-light:           #D7F0F5;
-  $cru-scooter-alt:             #87D2E1;
-  $cru-scooter-dark:            #2DAFC3;
-
-$cru-buttercup:                 #F5BE19;
-  $cru-buttercup-light:         #FAE6A5;
-  $cru-buttercup-alt:           #FACD46;
-  $cru-buttercup-dark:          #E6AF28;
-
-$cru-scorpion:                  #5A5A5A;
-  $cru-scorpion-light:          #E6E6E6;
-  $cru-scorpion-alt:            #BEBEBE;
-  $cru-scorpion-dark:           #323232;
-
-$cru-tango:                     #EB8223;
-  $cru-tango-light:             #F5BE87;
-  $cru-tango-alt:               #F5A055;
-  $cru-tango-dark:              #D77328;
-
-$color-white:                   #FFFFFF;
+$cru-bahama-blue: #05699b;
+$cru-bahama-blue-light: #bed7e6;
+$cru-bahama-blue-alt: #3282af;
+$cru-bahama-blue-dark: #00557d;
+$cru-scooter: #32c3d7;
+$cru-scooter-light: #d7f0f5;
+$cru-scooter-alt: #87d2e1;
+$cru-scooter-dark: #2dafc3;
+$cru-buttercup: #f5be19;
+$cru-buttercup-light: #fae6a5;
+$cru-buttercup-alt: #facd46;
+$cru-buttercup-dark: #e6af28;
+$cru-scorpion: #5a5a5a;
+$cru-scorpion-light: #e6e6e6;
+$cru-scorpion-alt: #bebebe;
+$cru-scorpion-dark: #323232;
+$cru-tango: #eb8223;
+$cru-tango-light: #f5be87;
+$cru-tango-alt: #f5a055;
+$cru-tango-dark: #d77328;
+$color-white: #fff;
 
 
 
 
 #nav-cart-dropdown {
-  background-color: $cru-scorpion-light;
-  border: none;
   top: 0;
   right: 0;
   left: auto;
-  padding: 0;
   width: 360px;
+  padding: 0;
+  border: none;
   margin: 0;
+  background-color: $cru-scorpion-light;
   color: $cru-scorpion;
 
   .repeating-row {
-    padding: 28px 0px;
+    padding: 28px 0;
     border-top: 1px solid $colorCru-white;
 
     &:first-child {
@@ -77,42 +68,45 @@ $color-white:                   #FFFFFF;
 
     p {
       margin: 0 0 7.5px;
+
       &:last-child {
         margin-bottom: 0;
       }
     }
 
     &.sub-total {
-      text-transform: uppercase;
       font-weight: 600;
+      text-transform: uppercase;
     }
   }
 
   .top-row {
-    border-bottom: 1px solid $colorCru-white;
     padding: 12px 0;
+    border-bottom: 1px solid $colorCru-white;
+
     .col-xs-6 {
-      padding-left: 18px;
       padding-right: 18px;
+      padding-left: 18px;
     }
+
     .btn-default {
-      padding: 8px 20px;
       width: auto;
-      line-height: 1;
+      padding: 8px 20px;
       font-size: 14px;
+      line-height: 1;
     }
   }
 
   .close-cart {
+    margin-top: 2px;
     cursor: pointer;
     float: right;
-    margin-top: 2px;
     font-size: 150%;
   }
 
   .desktop-cart-list {
-    overflow-y: auto;
     max-height: 240px;
+    overflow-y: auto;
   }
 
   .title, .price {
@@ -125,41 +119,47 @@ $color-white:                   #FFFFFF;
 
   .btn-cart {
     width: 100%;
-    text-transform: uppercase;
     padding-top: 10px;
     padding-bottom: 10px;
     font-weight: 500;
     letter-spacing: 1px;
+    text-transform: uppercase;
+
     &.btn-default {
-      background-color: transparent;
       border-color: $cru-scorpion;
+      background-color: transparent;
+
       &:hover {
         background-color: $cru-scorpion;
         color: $colorCru-white;
       }
     }
+
     &.btn-mobile {
       padding-top: 4px;
       padding-bottom: 4px;
     }
+
     &:not(.btn-default) {
       border-radius: 0;
     }
   }
 
   .col-xs-9 {
-    padding-left: 28px;
     padding-right: 14px;
+    padding-left: 28px;
   }
+
   .col-xs-3 {
-    padding-left: 14px;
     padding-right: 28px;
+    padding-left: 14px;
   }
 
   .btn-primary {
-    background-color: $cru-buttercup;
     border-color: transparent;
+    background-color: $cru-buttercup;
     color: $colorCru-white;
+
     &:hover {
       background-color: $cru-buttercup-dark;
     }

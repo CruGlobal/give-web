@@ -1,16 +1,19 @@
 // Cart Specific Styles
 .giftsum-actions {
-  text-align: left;
   width: 20%;
+  text-align: left;
+
   .btn-giftsum-action {
-    color: inherit;
-    padding-bottom: 0;
     padding-top: 0;
+    padding-bottom: 0;
+    color: inherit;
+
     @include respond-to(extrasmall) {
+      border: 1px solid $input-border;
       border-radius: 3px;
-      border: 1px solid #ccc;
-      background: #eee;
       margin-right: 8px;
+      /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
+      background: #eee;
     }
   }  
 }
@@ -18,16 +21,18 @@
 
 .giftsum-table {
   margin-bottom: 0;
+
   thead {
     @include respond-to(extrasmall) {
       display: none;
     }
+
     tr {
       th {
         border-bottom-color: $colorCru-border;
-        font-size: .9em;
-        text-transform: uppercase;
+        font-size: 0.9em;
         font-weight: 200;
+        text-transform: uppercase;
       }
     }
   }
@@ -35,60 +40,74 @@
   .giftsum-gift-row {
     @include respond-to(extrasmall) {
       display: block;
-      border-top: 2px solid $colorCru-border;
       padding-top: 1em;
+      border-top: 2px solid $colorCru-border;
       margin-top: 1em;
+
       &:first-child {
         margin-top: 0;
       }
     }
+
     td {
       padding-top: 30px;
       padding-bottom: 30px;
       border-bottom: 2px solid $colorCru-border;
+
       @include respond-to(extrasmall) {
         display: block;
         width: 100%;
-        border: none;
         padding: 0;
+        border: none;
       }
     }
+
     .giftsum-profile {
       height: auto;
       margin-right: 15px;
+
       @include respond-to(extrasmall) {
         display: none;
       }
     }
+
     .giftsum-title {
       display: block;
+
       @include respond-to(extrasmall) {
         display: inline-block;
       }
     }
+
     .giftsum-detail {
-      color: $colorGrayscale-slate;
       display: block;
-      font-size: .75em;
+      color: $colorGrayscale-slate;
       font-family: $data-font;
+      font-size: 0.75em;
+
       @include respond-to(extrasmall) {
         display: inline-block;
       }
     }
+
     .giftsum-actions {
-      font-size: .8em;
+      font-size: 0.8em;
       text-transform: uppercase;
+
       @include respond-to(extrasmall) {
         text-align: left;
+
         .sep {
           display: none;
         }
       }
     }
+
     .giftsum-about {
       font-family: $data-font;
     }
   }
+
   tfoot {
     tr {
       @include respond-to(extrasmall) {
@@ -96,31 +115,39 @@
         width: 100%;
         border: none;
       }
+
       @include mq(500px, max) {
         td {
           text-align: center;
+
           .btn {
             display: block;
           }
+
           .pull-left, .pull-right {
             float: none !important;
           }
+
           .checkout-cta {
             margin-top: 16px;
           }
         }
       }
+
       td {
         padding: 40px 0 0;
         vertical-align: middle;
+
         @include respond-to(extrasmall) {
           display: block;
           width: 100%;
           border: none;
         }
       }
+
       .checkout-cta {
         margin-left: $gutter;
+
         @include respond-to(extrasmall) {
           padding-top: 0;
           margin-left: 0;
@@ -128,9 +155,11 @@
       }
     }
   }
+
   .giftsum-line {
     display: block;
     line-height: 1.5em;
+
     strong {
       font-family: $data-font;
     }
@@ -141,22 +170,27 @@
   .th-title-amount {
     font-size: 14px;
   }
+
   .td-frequency {
-    text-align: right;
     font-size: 14px;
+    text-align: right;
   }
+
   .giftsum-gift-row {
     td {
       padding-top: 15px;
       padding-bottom: 15px;
     }
+
     .giftsum-about {
       font-weight: bold;
     }
   }
+
   .giftsum-line {
     font-size: 16px;
   }
+
   tfoot {
     tr {
       td {
@@ -171,14 +205,15 @@ product-config-modal .modal-footer {
 }
 
 @media screen and (max-width: 549px) {
-    .btn-block-xs {
-        display: block;
-        width: 100%;
-        &.pull-right {float: none !important;}
-        + .btn-block-xs {margin-top: 10px;}
-    }
-    .modal-footer .btn.btn-block-xs + .btn.btn-block-xs {
-      margin-left: 0;
-    }
+  .btn-block-xs {
+    display: block;
+    width: 100%;
+    &.pull-right {float: none !important;}
+    + .btn-block-xs {margin-top: 10px;}
+  }
+
+  .modal-footer .btn.btn-block-xs + .btn.btn-block-xs {
+    margin-left: 0;
+  }
 }
 

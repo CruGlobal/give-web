@@ -1,130 +1,138 @@
 .give-home-slider-wrap {
   .cycle-nav {
     position: absolute;
-    bottom: 0;
     z-index: 120;
+    bottom: 0;
     width: 52%;
     text-align: center;
 
     @media screen and (max-width: 1200px) {
-      width: 35%;
       bottom: 60px;
+      width: 35%;
     }
 
     @media screen and (max-width: 991px) {
-      width: 100%;
       position: static;
+      width: 100%;
       padding-top: 20px;
-      &:before,
-      &:after {
-        content: "";
+
+      &::before,
+      &::after {
         display: block;
         width: 100%;
+        content: "";
       }
     }
 
     .prevControl,
     .nextControl {
       display: inline-block;
-      background: no-repeat 50% 50%;
-      background-size: 16px auto;
+      overflow: hidden;
       width: 9%;
       height: 16px;
-      text-indent: -1000px;
-      overflow: hidden;
       margin: 0;
-      vertical-align: top;
+      /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
+      background: no-repeat 50% 50%;
+      background-size: 16px auto;
       cursor: pointer;
+      text-indent: -1000px;
+      vertical-align: top;
     }
 
     .prevControl {
-      background-image: url(/assets/img/arrow-left-slide.png);
+      background-image: url("/assets/img/arrow-left-slide.png");
       background-position: middle left;
     }
+
     .nextControl {
-      background-image: url(/assets/img/arrow-right-slide.png);
+      background-image: url("/assets/img/arrow-right-slide.png");
       background-position: middle-right;
     }
+
     .cycle-pager {
       display: inline-block;
       width: 60%;
-      margin: 0;
       height: 16px;
-      vertical-align: top;
-      text-align: center;
+      margin: 0;
       cursor: pointer;
+      text-align: center;
+      vertical-align: top;
+
       span {
-        vertical-align: top;
-        line-height: 16px;
-        height: 16px;
-        margin: 2px 3px;
-        font-size: 16px;
-        color: $colorCru-gold;
-        background: $colorCru-gold;
-        border-radius: 100px;
+        display: inline-block;
         width: 12px;
         height: 12px;
-        display: inline-block;
+        border-radius: 100px;
+        margin: 2px 3px;
+        background: $colorCru-gold;
+        color: $colorCru-gold;
+        font-size: 16px;
+        line-height: 16px;
+        vertical-align: top;
       }
+
       .cycle-pager-active {
-        color: #3EB1C8;
-        background: #3EB1C8;
+        background: $colorCru-blueBright;
+        color: $colorCru-blueBright;
       }
     }
   }
 }
 
 .give-home-slider.cycle-slideshow {
-  background: none;
   position: relative;
+  background: none;
 
   .slide {
     position: relative;
-    height: 400px;
     max-width: 750px;
+    height: 400px;
 
     @media screen and (max-width: 991px) {
-      height: auto;
       max-width: auto;
+      height: auto;
     }
 
     .slide-image {
       width: 85%;
+
       @media screen and (max-width: 991px) {
         width: auto;
       }
     }
 
     .slide-caption {
-      background: #E7E7E7;
       position: absolute;
-      left: auto;
+      top: auto;
       right: 0;
       bottom: 0;
-      top: auto;
+      left: auto;
       width: 45%;
       height: auto;
-      transition: .5s all;
-      padding: $gutter*1.2;
+      padding: $gutter * 1.2;
+      background: $colorGrayscale-stone;
+      transition: 0.5s all;
+
       @media screen and (max-width: 1200px) {
         width: 60%;
-        padding: $gutter * .8;
-        h3 {
-        }
+        padding: $gutter * 0.8;
+
         .btn {
           padding: 0 10px;
         }
       }
+
       @media screen and (max-width: 991px) {
-        width: auto;
         position: static;
+        width: auto;
         padding: $gutter;
       }
+
       h3 {
+        margin-left: 0;
         font-size: 24px;
         line-height: 1.35em;
-        margin-left: 0px;
-        transition: .35s all;
+        transition: 0.35s all;
       }
     }
 

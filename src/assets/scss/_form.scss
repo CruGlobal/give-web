@@ -1,36 +1,40 @@
 
 .form-group.has-error {
   .form-control {
-    box-shadow: inset 0px 0px 0px 1px $state-danger-text;
+    box-shadow: inset 0 0 0 1px $state-danger-text;
   }
+
   label > span, label > translate {
     color: $state-danger-text;
     font-weight: 600;
-    &:before {
-      content: "\f071";
+
+    &::before {
       display: inline-block;
-      font-family: "fontawesome", "Font Awesome 5 Pro";
       margin-right: 6px;
+      content: "\f071";
+      font-family: fontawesome, "Font Awesome 5 Pro", sans-serif;
     }
   }
 }
 
 .form-group.has-success {
   .form-control {
-    box-shadow: inset 0px 0px 0px 1px $colorHelper-success;
+    box-shadow: inset 0 0 0 1px $colorHelper-success;
   }
+
   label > span, label > translate {
     color: $colorHelper-success;
-    &:before {
-      content: "\f00c";
+
+    &::before {
       display: inline-block;
-      font-family: "fontawesome", "Font Awesome 5 Pro";
       margin-right: 6px;
+      content: "\f00c";
+      font-family: fontawesome, "Font Awesome 5 Pro", sans-serif;
     }
   }
 }
 
-label:not(:has(input[type=checkbox])) {
+label:not(:has(input[type="checkbox"])) {
   & > span, & > translate {
     display: block;
     margin-bottom: 4px;
@@ -38,22 +42,13 @@ label:not(:has(input[type=checkbox])) {
 }
 
 .is-required {
-  label > span:after, label > translate:after {
-    content: "*";
+  label > span::after, label > translate::after {
     display: inline-block;
+    margin-left: 6px;
+    content: "*";
+    font-family: fontawesome, "Font Awesome 5 Pro", sans-serif;
     font-size: 115%;
     line-height: 0;
-    font-family: "fontawesome", "Font Awesome 5 Pro";
-    margin-left: 6px;
-  }
-  input[type=text],
-  input[type=number],
-  input[type=password],
-  input[type=email],
-  input[type=search],
-  input[type=url],
-  input[type=tel],
-  select {
   }
 }
 
@@ -63,32 +58,30 @@ label:not(:has(input[type=checkbox])) {
     font-size: 14px;
     font-weight: 500;
   }
-
-  span {
-    // removed to resolve EP-1182
-    //font-weight: normal;
-  }
 }
 
 .phone-row {
   position: relative;
+
   select.form-control-subtle {
     display: inline-block !important;
     width: 23%;
     margin-right: -4px;
   }
-  input[type=tel] {
+
+  input[type="tel"] {
     display: inline-block !important;
     width: 50% !important;
     margin: 0 1% 0 2% !important;
     vertical-align: bottom;
   }
+
   a {
     position: absolute;
     top: 50%;
     right: -20px;
-    transform: translateY(-50%);
     color: $colorHelper-wanger;
+    transform: translateY(-50%);
     .fa {font-size: 18px;}
   }
 }
@@ -103,45 +96,55 @@ label:not(:has(input[type=checkbox])) {
   select, input {margin-left: 3px;}
   select, input, .fa {float: left;}
   .fa {line-height: 39px;}
+
   select.form-control-subtle {
     display: inline-block !important;
     width: 12%;
-    padding-left: 0;
     padding-right: 0;
+    padding-left: 0;
   }
-  input[type=name] {
+
+  input[type="name"] {
     display: inline-block !important;
     width: 50% !important;
     margin: 0 1% 0 2% !important;
     vertical-align: bottom;
   }
+
   select.prefix {
     @include respond-to(extrasmall) {
-      padding-left: 0;
       padding-right: 0;
+      padding-left: 0;
       margin-bottom: 5px;
     }
   }
+
   input.first {
     width: 30%;
+
     @include respond-to(extrasmall) {
       width: 73%;
       margin-bottom: 5px;
     }
   }
+
   input.last {
     width: 30%;
+
     @include respond-to(extrasmall) {
       width: 60%;
     }
   }
+
   input.middle {
     width: 8%;
+
     @include respond-to(extrasmall) {
       width: 12%;
       margin-left: 14px;
     }
   }
+
   input.first,
   input.last,
   input.middle {
@@ -156,12 +159,18 @@ label:not(:has(input[type=checkbox])) {
   line-height: 1.25rem;
 }
 
-.btn:focus, .btn:active:focus { outline: none;  -webkit-appearance: none; }
+.btn:focus, .btn:active:focus {
+  appearance: none;
+  outline: none;
+}
 
 form.new-gift {
-  .input-group-addon {padding: 0;}
+  .input-group-addon {
+    padding: 0;
+  }
+
   .btn-link {
-    border-width: 0;
     padding: 8px 22px;
+    border-width: 0;
   }
 }
