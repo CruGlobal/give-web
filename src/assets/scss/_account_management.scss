@@ -35,13 +35,13 @@
     &.bg-danger {
       border-color: $colorHighlight-danger;
       /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
-      background-color: #F2DEDE;
+      background-color: #f2dede;
     }
   }
 
   .panel.panel-with-gray-background, .panel .panel-heading {
     /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
-    background-color: #FAFAFA !important;
+    background-color: #fafafa !important;
     font-size: 1em;
   }
 

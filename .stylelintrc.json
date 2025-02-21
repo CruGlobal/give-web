@@ -62,7 +62,7 @@
           }
         ],
         "@stylistic/number-leading-zero": "always",
-        "@stylistic/color-hex-case": "upper",
+        "@stylistic/color-hex-case": "lower",
         "@stylistic/indentation": 2
       }
     }
