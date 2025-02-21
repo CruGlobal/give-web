@@ -166,8 +166,8 @@ body{
   background-color: rgba(138, 138, 138, 0.9); 
 
   .light-font{
-    /* stylelint-disable-next-line */
-		color: #d3d3d3;
+    /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
+    color: #D3D3D3;
     font-size: 14px;
     font-weight: bold;
   }

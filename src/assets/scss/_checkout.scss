@@ -125,9 +125,9 @@
 
   &.on {
     border-color: $colorCru-border;
-    /* stylelint-disable-next-line */
+    /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
     background-color: #F1F1F1;
-    /* stylelint-disable-next-line */
+    /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
     color: #595455;
   }
 }
@@ -206,8 +206,8 @@
 }
 
 .panel-secondary {
-  /* stylelint-disable-next-line */
-  background: #eee;
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
+  background: #EEE;
 }
 
 .btn-panel-head {

@@ -51,8 +51,8 @@
         "alpha-value-notation": "number",
         "scale-unlimited/declaration-strict-value": [
           [
-           "/color$/",
-           "background",
+            "/color$/",
+            "background",
             "fill",
             "stroke"
           ],

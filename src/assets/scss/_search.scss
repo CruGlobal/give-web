@@ -134,8 +134,8 @@
       width: 38%;
       height: 1px;
       margin-top: 16px;
-      /* stylelint-disable-next-line */
-      background: #bbb;
+      /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
+      background: #BBB;
       content: "";
 
       @media screen and (max-width: 991px) {
@@ -291,8 +291,8 @@
     width: 30%;
     height: 1px;
     margin-top: 16px;
-    /* stylelint-disable-next-line */
-    background: #bbb;
+    /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
+    background: #BBB;
     content: "";
 
     @media screen and (max-width: 991px) {

@@ -65,14 +65,14 @@ label.btn-radio {
   }
 
   &:hover input[type="radio"] ~ i.fa {
-    /* stylelint-disable-next-line */
+    /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
     color: #7AA3CC;
   }
 
   input[type="checkbox"] ~ i.fa.fa-square-o{
     display: inline;
-    /* stylelint-disable-next-line */
-    color: #c8c8c8;
+    /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
+    color: #C8C8C8;
   }
 
   input[type="checkbox"] ~ i.fa.fa-check-square-o{
@@ -85,18 +85,18 @@ label.btn-radio {
 
   input[type="checkbox"]:checked ~ i.fa.fa-check-square-o{
     display: inline;
-    /* stylelint-disable-next-line */
+    /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
     color: #7AA3CC;
   }
 
   &:hover input[type="checkbox"] ~ i.fa {
-    /* stylelint-disable-next-line */
+    /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
     color: #7AA3CC;
   }
 }
 
 div[data-toggle="buttons"] label.active{
-  /* stylelint-disable-next-line */
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
   color: #7AA3CC;
 }
 
@@ -123,8 +123,8 @@ div[data-toggle="buttons"] label {
 }
 
 div[data-toggle="buttons"] label:hover {
-  /* stylelint-disable-next-line */
-  background: #f9f9f9;
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
+  background: #F9F9F9;
   color: $colorText;
 }
 

@@ -76,8 +76,8 @@ hr.vertical-divider {
   height: 100%;
   border: none;
   margin: 0;
-  /* stylelint-disable-next-line */
-  background: #e9e9e9;
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
+  background: #E9E9E9;
 }
 
 hr.horizontal-divider {
@@ -212,8 +212,8 @@ hr.horizontal-divider {
     display: block;
     width: 1px;
     min-height: 70px;
-    /* stylelint-disable-next-line */
-    background: #e0e0e0;
+    /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
+    background: #E0E0E0;
     content: "";
   }
 
@@ -226,8 +226,8 @@ hr.horizontal-divider {
       display: block;
       width: 100%;
       min-height: 1px;
-      /* stylelint-disable-next-line */
-      background: #e0e0e0;
+      /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
+      background: #E0E0E0;
       content: "";
     }
   }
@@ -494,7 +494,7 @@ hr.horizontal-divider {
   }
 
   .expiring {
-    /* stylelint-disable-next-line */
+    /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
     color: red;
     font-size: 1em;
     line-height: 1em;
@@ -553,7 +553,7 @@ hr.horizontal-divider {
       }
 
       &.status-pending {
-        /* stylelint-disable-next-line */
+        /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
         color: red;
       }
     }

@@ -34,14 +34,14 @@
   .panel {
     &.bg-danger {
       border-color: $colorHighlight-danger;
-      /* stylelint-disable-next-line */
-			background-color: #f2dede;
+      /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
+      background-color: #F2DEDE;
     }
   }
 
   .panel.panel-with-gray-background, .panel .panel-heading {
-    /* stylelint-disable-next-line */
-		background-color: #FAFAFA !important;
+    /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
+    background-color: #FAFAFA !important;
     font-size: 1em;
   }
 
