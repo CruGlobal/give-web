@@ -12,7 +12,7 @@ const dataDogConfig = /* @ngInject */ function (envServiceProvider) {
       env: envServiceProvider.get(),
       allowedTracingUrls: [envServiceProvider.read('apiUrl') + '/cortex'],
       version: process.env.GITHUB_SHA,
-      sessionSampleRate: envServiceProvider.is('staging') ? 100 : 10,
+      sessionSampleRate: envServiceProvider.is('staging') ? 100 : 50,
       sessionReplaySampleRate: envServiceProvider.is('staging') ? 100 : 1,
       trackUserInteractions: true,
       trackResources: true,
