@@ -536,7 +536,7 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     REVIEW_DEFAULT_ERROR: 'There was an issue processing your request. Please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
     ACCOUNT_NUM_FULL: 'Account Number',
     ROUTING_NUM_FULL: 'Routing Number',
-    CARD_NUM_FULL: 'Card Number',
+    CARD_NUM_FULL: 'Número de tarjeta',
     CARD_TYPE: 'Card Type',
     EXPIRES: 'Expires',
     REVIEW_GIFTS: 'Review Gifts',
