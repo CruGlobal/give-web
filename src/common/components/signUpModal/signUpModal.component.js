@@ -399,7 +399,7 @@ class SignUpModalController {
       'donor-type': this.$scope.accountType,
       'organization-name': this.$scope.organizationName,
       email: this.$scope.email,
-      phone: this.$scope.primaryPhone,
+      'phone-number': this.$scope.primaryPhone,
       mailingAddress: {
         streetAddress: this.$scope.streetAddress,
         locality: this.$scope.city,
