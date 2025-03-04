@@ -5,6 +5,10 @@ import pick from 'lodash/pick'
 import 'rxjs/add/operator/finally'
 import { map, catchError } from 'rxjs/operators'
 import { Observable } from 'rxjs/Observable'
+import merge from 'lodash/merge'
+import 'rxjs/add/observable/forkJoin'
+import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/switchMap'
 import OktaSignIn from '@okta/okta-signin-widget'
 import sessionService, { Roles } from 'common/services/session/session.service'
 import orderService from 'common/services/api/order.service'
@@ -37,6 +41,7 @@ class SignUpModalController {
     this.geographiesService = geographiesService
     this.imgDomain = envService.read('imgDomain')
     this.publicCru = envService.read('publicCru')
+    this.$injector = angular.injector()
   }
 
   $onInit () {
@@ -52,6 +57,9 @@ class SignUpModalController {
 
   $onDestroy () {
     this.oktaSignInWidget?.remove()
+    if (angular.isDefined(this.getDonorDetailsSubscription)) {
+      this.getDonorDetailsSubscription.unsubscribe()
+    }
   }
 
   initializeVariables () {
@@ -253,7 +261,7 @@ class SignUpModalController {
       })
       .catch(error => {
         this.loadingCountriesError = true
-        this.$log.error('Error loading countries.', error)
+        this.$log.error('Okta Sign up: Error loading countries.', error)
       })
   }
 
@@ -282,7 +290,7 @@ class SignUpModalController {
       }),
       catchError((error) => {
         this.loadingRegionsError = true
-        this.$log.error('Error loading regions.', error)
+        this.$log.error('Okta Sign up: Error loading regions.', error)
         return Observable.throw(error)
       })
     )
@@ -444,7 +452,7 @@ class SignUpModalController {
     // The verification code field is only shown when the button link "Enter a verification code instead" is clicked.
     // This makes the process of creating an account more streamlined as we remove that click.
     const verificationCodeButtonLink = document.querySelector('.button-link.enter-auth-code-instead-link')
-    verificationCodeButtonLink?.click();
+    verificationCodeButtonLink?.click()
   }
 
   updateSignUpButtonText () {
@@ -469,7 +477,7 @@ class SignUpModalController {
 
   injectErrorMessages (errors = this.signUpErrors) {
     // Inject error messages into the form since errors are cleared when switching steps/rerendering.
-    errors.forEach(error => {
+    errors?.forEach(error => {
       const field = document.querySelector(`${inputFieldErrorSelectorPrefix}${error.property.replace(/\./g, '\\.')}`)
       if (field) {
         // Only add an error message if it doesn't already exist
@@ -552,7 +560,7 @@ class SignUpModalController {
     this.floatingLabelAbortControllers.forEach(controller => controller.abort())
     this.floatingLabelAbortControllers = []
 
-    document.querySelectorAll('.o-form-content input[type="text"], .o-form-content input[type="password"]').forEach(input => {
+    document.querySelectorAll('.o-form-content input[type="text"], .o-form-content input[type="password"]')?.forEach(input => {
       const label = input.labels[0]?.parentNode
       if (!label) {
         return
@@ -593,9 +601,18 @@ class SignUpModalController {
     this.oktaSignInWidget.remove()
     return this.oktaSignInWidget.renderEl(
       { el: '#osw-container' },
-      null,
+      (res) => {
+        // On sign up and email verification success, save the donor details
+        if (res.status === 'SUCCESS') {
+          this.saveDonorDetails()
+        } else {
+          // Handle the case where tokens are not available
+          const errorName = 'Okta Sign up: Tokens not available in response'
+          this.$log.error(errorName)
+        }
+      },
       (error) => {
-        const errorName = 'Error rendering Okta sign up widget.'
+        const errorName = 'Okta Sign up: Error rendering Okta sign up widget.'
         console.error(errorName, error)
         this.$log.error(errorName, error)
       }
@@ -608,7 +625,7 @@ class SignUpModalController {
     }).then(tokens => {
       this.oktaSignInWidget.authClient.handleLoginRedirect(tokens)
     }).catch(error => {
-      this.$log.error('Error showing Okta sign in widget.', error)
+      this.$log.error('Okta Sign up: Error showing Okta sign in widget.', error)
     })
   }
 
@@ -625,12 +642,63 @@ class SignUpModalController {
       return donorData
     })
       .catch(error => {
-        this.$log.error('Error loading donorDetails.', error)
+        this.$log.error('Okta Sign up: Error loading donorDetails.', error)
         return Observable.throw(error)
       })
       .finally(() => {
         this.loadingDonorDetails = false
       })
+  }
+
+  saveDonorDetails () {
+    const signUpDonorDetails = {
+      name: {
+        'given-name': this.$scope.firstName,
+        'family-name': this.$scope.lastName
+      },
+      'donor-type': this.$scope.accountType,
+      'organization-name': this.$scope.organizationName,
+      email: this.$scope.email,
+      'phone-number': this.$scope.primaryPhone,
+      mailingAddress: {
+        streetAddress: this.$scope.streetAddress,
+        streetAddressExtended: this.$scope.streetAddressExtended,
+        internationalAddressLine3: this.$scope.internationalAddressLine3,
+        internationalAddressLine4: this.$scope.internationalAddressLine4,
+        locality: this.$scope.city,
+        region: this.$scope.state,
+        postalCode: this.$scope.zipCode,
+        country: this.$scope.countryCode
+      }
+    }
+
+    if (angular.isDefined(this.getDonorDetailsSubscription)) {
+      this.getDonorDetailsSubscription.unsubscribe()
+    }
+    this.getDonorDetailsSubscription = this.orderService.getDonorDetails().switchMap((donorDetails) => {
+      merge(donorDetails, signUpDonorDetails)
+      // Send each of the requests
+      return Observable.forkJoin([
+        this.orderService.updateDonorDetails(donorDetails),
+        this.orderService.addEmail(donorDetails.email, donorDetails.emailFormUri)
+      ]).map(() => donorDetails)
+    }).subscribe({
+      next: () => this.logIntoOkta(),
+      error: () => this.logIntoOkta()
+    })
+  }
+
+  logIntoOkta () {
+    this.sessionService.signIn(this.lastPurchaseId).subscribe(() => {
+      const $injector = this.$injector
+      if (!$injector.has('sessionService')) {
+        $injector.loadNewModules(['sessionService'])
+      }
+
+      this.$document[0].body.dispatchEvent(
+        new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } })
+      )
+    })
   }
 }
 

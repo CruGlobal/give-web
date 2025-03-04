@@ -476,7 +476,7 @@ describe('signUpForm', function () {
       $ctrl.loadCountries({initial: false}).subscribe({
         error: () => {
           expect($ctrl.loadingCountriesError).toBe(true);
-          expect($ctrl.$log.error).toHaveBeenCalledWith('Error loading countries.', error);
+          expect($ctrl.$log.error).toHaveBeenCalledWith('Okta Sign up: Error loading countries.', error);
           done();
         }
       });
@@ -608,7 +608,7 @@ describe('signUpForm', function () {
       $ctrl.refreshRegions('country').subscribe({
         error: () => {
           expect($ctrl.loadingRegionsError).toBe(true);
-          expect($ctrl.$log.error).toHaveBeenCalledWith('Error loading regions.', error);
+          expect($ctrl.$log.error).toHaveBeenCalledWith('Okta Sign up: Error loading regions.', error);
           done();
         }
       });
@@ -978,7 +978,7 @@ describe('signUpForm', function () {
       renderEl.mockImplementation((_, __, callback) => callback(error));
       $ctrl.reRenderWidget()
       setTimeout(() => {
-        expect($ctrl.$log.error).toHaveBeenCalledWith('Error rendering Okta sign up widget.', error);
+        expect($ctrl.$log.error).toHaveBeenCalledWith('Okta Sign up: Error rendering Okta sign up widget.', error);
         done();
       });
     });
@@ -1234,7 +1234,7 @@ describe('signUpForm', function () {
 
       $ctrl.signIn().then(() => {
         expect(handleLoginRedirect).not.toHaveBeenCalled()
-        expect($ctrl.$log.error).toHaveBeenCalledWith('Error showing Okta sign in widget.', error)
+        expect($ctrl.$log.error).toHaveBeenCalledWith('Okta Sign up: Error showing Okta sign in widget.', error)
         done()
       }, done)
     })
@@ -1295,7 +1295,7 @@ describe('signUpForm', function () {
       $ctrl.loadingDonorDetails = true
       $ctrl.loadDonorDetails().subscribe({
         error: () => {
-          expect($ctrl.$log.error).toHaveBeenCalledWith('Error loading donorDetails.', error)
+          expect($ctrl.$log.error).toHaveBeenCalledWith('Okta Sign up: Error loading donorDetails.', error)
         }
       })
 
@@ -1305,6 +1305,67 @@ describe('signUpForm', function () {
         expect($ctrl.loadingDonorDetails).toEqual(false)
         done()
       })
+    })
+  });
+
+  describe('saveDonorDetails()', () => {
+    const emailFormUri = '/emails/crugive'
+    const signUpDonorDetails = {
+      name: {
+        'given-name': user.firstName,
+        'family-name': user.lastName
+      },
+      'donor-type': user.accountType,
+      email: user.email,
+      'phone-number': user.primaryPhone,
+      mailingAddress: {
+        streetAddress: user.streetAddress,
+        locality: user.city,
+        region: user.state,
+        postalCode: '12345-678',
+        country: user.countryCode
+      }
+    }
+    beforeEach(() => {
+      $ctrl.$scope.firstName = user.firstName
+      $ctrl.$scope.lastName = user.lastName
+      $ctrl.$scope.email = user.email
+      $ctrl.$scope.accountType = user.accountType
+      $ctrl.$scope.streetAddress = user.streetAddress
+      $ctrl.$scope.city = user.city
+      $ctrl.$scope.state = user.state
+      $ctrl.$scope.zipCode = user.zipCode
+      $ctrl.$scope.countryCode = user.countryCode
+      $ctrl.$scope.primaryPhone = user.primaryPhone
+
+      jest.spyOn($ctrl.orderService, 'getDonorDetails').mockReturnValue(Observable.of({
+        'registration-state': 'NEW',
+        name: {
+          'given-name': 'Existing',
+          'family-name': 'Existing'
+        },
+        'donor-type': '',
+        email: 'existing.email@cru.org',
+        'phone-number': '',
+        mailingAddress: {
+          streetAddress: '',
+          locality: '',
+          region: '',
+          postalCode: '',
+          country: 'CANADA'
+        },
+        emailFormUri
+      }))
+      jest.spyOn($ctrl.orderService, 'updateDonorDetails').mockImplementation(() => Observable.of({}))
+      jest.spyOn($ctrl.orderService, 'addEmail').mockImplementation(() => Observable.of({}))
+      jest.spyOn($ctrl, 'logIntoOkta').mockImplementation(() => Observable.of({}))
+    })
+
+    it("should update the user's data, updating email separately", () => {
+      $ctrl.saveDonorDetails()
+
+      expect($ctrl.orderService.updateDonorDetails).toHaveBeenCalledWith(expect.objectContaining(signUpDonorDetails))
+      expect($ctrl.orderService.addEmail).toHaveBeenCalledWith(signUpDonorDetails.email, emailFormUri)
     })
   });
 })
