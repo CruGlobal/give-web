@@ -412,25 +412,39 @@ class SignUpModalController {
       return
     }
 
+    // All steps
     this.updateSignUpButtonText()
     this.resetCurrentStepOnRegistrationComplete(context)
     this.redirectToSignInModalIfNeeded(context)
     this.injectErrorMessages()
     this.injectBackButton()
-    this.initializeFloatingLabels()
 
+    // Step 1: Identity
     if (this.loadingCountriesError && this.currentStep === 1) {
       this.injectCountryLoadError()
     }
+    // Step 2: Address
     if (this.loadingRegionsError && this.currentStep === 2) {
       this.injectRegionLoadError()
     }
+    // Step 3: Security
+    this.showVerificationCodeField()
+
+    // This needs to be last to ensure even the verification code field is styled correctly
+    this.initializeFloatingLabels()
   }
 
   ready () {
     this.$scope.$apply(() => {
       this.isLoading = false
     })
+  }
+
+  showVerificationCodeField () {
+    // The verification code field is only shown when the button link "Enter a verification code instead" is clicked.
+    // This makes the process of creating an account more streamlined as we remove that click.
+    const verificationCodeButtonLink = document.querySelector('.button-link.enter-auth-code-instead-link')
+    verificationCodeButtonLink?.click();
   }
 
   updateSignUpButtonText () {
