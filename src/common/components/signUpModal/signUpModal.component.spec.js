@@ -863,45 +863,11 @@ describe('signUpForm', function () {
   });
 
   describe('postSubmit()', () => {
-    it('should call onSignUp with details of donor', () => {
-      jest.spyOn($ctrl.$scope, '$apply').mockImplementation((callback) => callback());
-      jest.spyOn($ctrl, 'onSignUp').mockImplementation(() => {});
-
-      $ctrl.$scope.firstName = user.firstName
-      $ctrl.$scope.lastName = user.lastName
-      $ctrl.$scope.email = user.email
-      $ctrl.$scope.accountType = user.accountType
-      $ctrl.$scope.streetAddress = user.streetAddress
-      $ctrl.$scope.city = user.city
-      $ctrl.$scope.state = user.state
-      $ctrl.$scope.zipCode = user.zipCode
-      $ctrl.$scope.countryCode = user.countryCode
-      $ctrl.$scope.primaryPhone = user.primaryPhone
-      $ctrl.$scope.organizationName = user.organizationName
-
+    it('should call onSuccess', () => {
       const response = 'response'
       const onSuccess = jest.fn()
       $ctrl.postSubmit(response, onSuccess)
 
-      expect($ctrl.onSignUp).toHaveBeenCalledWith({
-        donorDetails: {
-          name: {
-            'given-name': user.firstName,
-            'family-name': user.lastName,
-          },
-          'donor-type': user.accountType,
-          'organization-name': user.organizationName,
-          email: user.email,
-          phone: user.primaryPhone,
-          mailingAddress: {
-            streetAddress: user.streetAddress,
-            locality: user.city,
-            region: user.state,
-            postalCode: user.zipCode,
-            country: user.countryCode,
-          }
-        }
-      });
       expect(onSuccess).toHaveBeenCalledWith(response)
     });
   });

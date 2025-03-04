@@ -391,24 +391,6 @@ class SignUpModalController {
   }
 
   postSubmit (response, onSuccess) {
-    const donorDetails = {
-      name: {
-        'given-name': this.$scope.firstName,
-        'family-name': this.$scope.lastName
-      },
-      'donor-type': this.$scope.accountType,
-      'organization-name': this.$scope.organizationName,
-      email: this.$scope.email,
-      phone: this.$scope.primaryPhone,
-      mailingAddress: {
-        streetAddress: this.$scope.streetAddress,
-        locality: this.$scope.city,
-        region: this.$scope.state,
-        postalCode: this.$scope.zipCode,
-        country: this.$scope.countryCode
-      }
-    }
-    this.$scope.$apply(() => this.onSignUp({ donorDetails }))
     onSuccess(response)
   }
 
