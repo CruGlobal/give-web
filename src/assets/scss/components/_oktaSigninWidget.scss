@@ -125,7 +125,7 @@ sign-up-modal {
     }
 
     .chzn-container-single .chzn-drop {
-      border-radius: 0 0 6px 6px;
+      border-radius: 0;
     }
   }
 
@@ -176,9 +176,11 @@ sign-up-modal {
     }
 
     // Allow the account type dropdown to have rounded corners if the organisation field is hidden
-    &:has(+ .o-form-fieldset[style="display: none;"]) .chzn-container a {
-      border-bottom-left-radius: 6px;
-      border-bottom-right-radius: 6px;
+    &:has([data-se="o-form-input-accountType"]):has(+ .o-form-fieldset[style="display: none;"] [data-se="o-form-input-organizationName"]) .chzn-container {
+      .chzn-drop, a {
+        border-bottom-left-radius: 6px;
+        border-bottom-right-radius: 6px;
+      }
     }
   }
 
@@ -195,7 +197,6 @@ sign-up-modal {
       -webkit-appearance: none;
       appearance: none;
       border: 1px solid transparent;
-      height: auto;
       padding-bottom: 12px;
       padding-top: 20px;
 
@@ -203,6 +204,10 @@ sign-up-modal {
         border-color: $colorCru-gold;
         box-shadow: none;
       }
+    }
+
+    input[type=password] {
+      height: auto;
     }
   }
 
