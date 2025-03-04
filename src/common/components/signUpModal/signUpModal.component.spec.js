@@ -1307,4 +1307,65 @@ describe('signUpForm', function () {
       })
     })
   });
+
+  describe('saveDonorDetails()', () => {
+    const emailFormUri = '/emails/crugive'
+    const signUpDonorDetails = {
+      name: {
+        'given-name': user.firstName,
+        'family-name': user.lastName
+      },
+      'donor-type': user.accountType,
+      email: user.email,
+      phone: user.primaryPhone,
+      mailingAddress: {
+        streetAddress: user.streetAddress,
+        locality: user.city,
+        region: user.state,
+        postalCode: '12345-678',
+        country: user.countryCode
+      }
+    }
+    beforeEach(() => {
+      $ctrl.$scope.firstName = user.firstName
+      $ctrl.$scope.lastName = user.lastName
+      $ctrl.$scope.email = user.email
+      $ctrl.$scope.accountType = user.accountType
+      $ctrl.$scope.streetAddress = user.streetAddress
+      $ctrl.$scope.city = user.city
+      $ctrl.$scope.state = user.state
+      $ctrl.$scope.zipCode = user.zipCode
+      $ctrl.$scope.countryCode = user.countryCode
+      $ctrl.$scope.primaryPhone = user.primaryPhone
+
+      jest.spyOn($ctrl.orderService, 'getDonorDetails').mockReturnValue(Observable.of({
+        'registration-state': 'NEW',
+        name: {
+          'given-name': 'Existing',
+          'family-name': 'Existing'
+        },
+        'donor-type': '',
+        email: 'existing.email@cru.org',
+        phone: '',
+        mailingAddress: {
+          streetAddress: '',
+          locality: '',
+          region: '',
+          postalCode: '',
+          country: 'CANADA'
+        },
+        emailFormUri
+      }))
+      jest.spyOn($ctrl.orderService, 'updateDonorDetails').mockImplementation(() => Observable.of({}))
+      jest.spyOn($ctrl.orderService, 'addEmail').mockImplementation(() => Observable.of({}))
+      jest.spyOn($ctrl, 'logIntoOkta').mockImplementation(() => Observable.of({}))
+    })
+
+    it("should update the user's data, updating email separately", () => {
+      $ctrl.saveDonorDetails()
+
+      expect($ctrl.orderService.updateDonorDetails).toHaveBeenCalledWith(expect.objectContaining(signUpDonorDetails))
+      expect($ctrl.orderService.addEmail).toHaveBeenCalledWith(signUpDonorDetails.email, emailFormUri)
+    })
+  });
 })
