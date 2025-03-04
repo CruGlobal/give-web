@@ -499,7 +499,7 @@ class SignUpModalController {
     const buttonBar = document.querySelector('.o-form-button-bar')
     // Ensure the button is only added once
     if (buttonBar && !buttonBar.querySelector(`#${backButtonId}`)) {
-      const backButton = angular.element(`<button id="${backButtonId}" class="btn btn-secondary">${backButtonText}</button>`)
+      const backButton = angular.element(`<button id="${backButtonId}" class="btn btn-secondary" type="button">${backButtonText}</button>`)
       // Add click behavior to go back a step
       backButton.on('click', (e) => {
         e.preventDefault()
