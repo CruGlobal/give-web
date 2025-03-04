@@ -863,45 +863,11 @@ describe('signUpForm', function () {
   });
 
   describe('postSubmit()', () => {
-    it('should call onSignUp with details of donor', () => {
-      jest.spyOn($ctrl.$scope, '$apply').mockImplementation((callback) => callback());
-      jest.spyOn($ctrl, 'onSignUp').mockImplementation(() => {});
-
-      $ctrl.$scope.firstName = user.firstName
-      $ctrl.$scope.lastName = user.lastName
-      $ctrl.$scope.email = user.email
-      $ctrl.$scope.accountType = user.accountType
-      $ctrl.$scope.streetAddress = user.streetAddress
-      $ctrl.$scope.city = user.city
-      $ctrl.$scope.state = user.state
-      $ctrl.$scope.zipCode = user.zipCode
-      $ctrl.$scope.countryCode = user.countryCode
-      $ctrl.$scope.primaryPhone = user.primaryPhone
-      $ctrl.$scope.organizationName = user.organizationName
-
+    it('should call onSuccess', () => {
       const response = 'response'
       const onSuccess = jest.fn()
       $ctrl.postSubmit(response, onSuccess)
 
-      expect($ctrl.onSignUp).toHaveBeenCalledWith({
-        donorDetails: {
-          name: {
-            'given-name': user.firstName,
-            'family-name': user.lastName,
-          },
-          'donor-type': user.accountType,
-          'organization-name': user.organizationName,
-          email: user.email,
-          phone: user.primaryPhone,
-          mailingAddress: {
-            streetAddress: user.streetAddress,
-            locality: user.city,
-            region: user.state,
-            postalCode: user.zipCode,
-            country: user.countryCode,
-          }
-        }
-      });
       expect(onSuccess).toHaveBeenCalledWith(response)
     });
   });
@@ -1015,6 +981,36 @@ describe('signUpForm', function () {
         expect($ctrl.$log.error).toHaveBeenCalledWith('Error rendering Okta sign up widget.', error);
         done();
       });
+    });
+  });
+
+  describe('showVerificationCodeField()', () => {
+    const handleClick = jest.fn();
+    window.handleClick = handleClick;
+    beforeEach(() => {
+      handleClick.mockClear();
+    })
+
+    it('should call handleClick when button link is rendered', () => {
+      document.body.innerHTML = `
+        <div>
+          <button class="button-link enter-auth-code-instead-link" onclick="handleClick()">
+            Enter authentication code instead
+          </button>
+        </div>
+      `;
+
+      $ctrl.showVerificationCodeField()
+      expect(handleClick).toHaveBeenCalled();
+    });
+
+    it("shouldn't call handleClick if button link is not rendered", () => {
+      document.body.innerHTML = `
+        <div>Something else</div>
+      `;
+
+      $ctrl.showVerificationCodeField()
+      expect(handleClick).not.toHaveBeenCalled();
     });
   });
 
@@ -1309,6 +1305,67 @@ describe('signUpForm', function () {
         expect($ctrl.loadingDonorDetails).toEqual(false)
         done()
       })
+    })
+  });
+
+  describe('saveDonorDetails()', () => {
+    const emailFormUri = '/emails/crugive'
+    const signUpDonorDetails = {
+      name: {
+        'given-name': user.firstName,
+        'family-name': user.lastName
+      },
+      'donor-type': user.accountType,
+      email: user.email,
+      phone: user.primaryPhone,
+      mailingAddress: {
+        streetAddress: user.streetAddress,
+        locality: user.city,
+        region: user.state,
+        postalCode: '12345-678',
+        country: user.countryCode
+      }
+    }
+    beforeEach(() => {
+      $ctrl.$scope.firstName = user.firstName
+      $ctrl.$scope.lastName = user.lastName
+      $ctrl.$scope.email = user.email
+      $ctrl.$scope.accountType = user.accountType
+      $ctrl.$scope.streetAddress = user.streetAddress
+      $ctrl.$scope.city = user.city
+      $ctrl.$scope.state = user.state
+      $ctrl.$scope.zipCode = user.zipCode
+      $ctrl.$scope.countryCode = user.countryCode
+      $ctrl.$scope.primaryPhone = user.primaryPhone
+
+      jest.spyOn($ctrl.orderService, 'getDonorDetails').mockReturnValue(Observable.of({
+        'registration-state': 'NEW',
+        name: {
+          'given-name': 'Existing',
+          'family-name': 'Existing'
+        },
+        'donor-type': '',
+        email: 'existing.email@cru.org',
+        phone: '',
+        mailingAddress: {
+          streetAddress: '',
+          locality: '',
+          region: '',
+          postalCode: '',
+          country: 'CANADA'
+        },
+        emailFormUri
+      }))
+      jest.spyOn($ctrl.orderService, 'updateDonorDetails').mockImplementation(() => Observable.of({}))
+      jest.spyOn($ctrl.orderService, 'addEmail').mockImplementation(() => Observable.of({}))
+      jest.spyOn($ctrl, 'logIntoOkta').mockImplementation(() => Observable.of({}))
+    })
+
+    it("should update the user's data, updating email separately", () => {
+      $ctrl.saveDonorDetails()
+
+      expect($ctrl.orderService.updateDonorDetails).toHaveBeenCalledWith(expect.objectContaining(signUpDonorDetails))
+      expect($ctrl.orderService.addEmail).toHaveBeenCalledWith(signUpDonorDetails.email, emailFormUri)
     })
   });
 })

@@ -5,6 +5,10 @@ import pick from 'lodash/pick'
 import 'rxjs/add/operator/finally'
 import { map, catchError } from 'rxjs/operators'
 import { Observable } from 'rxjs/Observable'
+import merge from 'lodash/merge'
+import 'rxjs/add/observable/forkJoin'
+import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/switchMap'
 import OktaSignIn from '@okta/okta-signin-widget'
 import sessionService, { Roles } from 'common/services/session/session.service'
 import orderService from 'common/services/api/order.service'
@@ -52,6 +56,9 @@ class SignUpModalController {
 
   $onDestroy () {
     this.oktaSignInWidget?.remove()
+    if (angular.isDefined(this.getDonorDetailsSubscription)) {
+      this.getDonorDetailsSubscription.unsubscribe()
+    }
   }
 
   initializeVariables () {
@@ -391,24 +398,6 @@ class SignUpModalController {
   }
 
   postSubmit (response, onSuccess) {
-    const donorDetails = {
-      name: {
-        'given-name': this.$scope.firstName,
-        'family-name': this.$scope.lastName
-      },
-      'donor-type': this.$scope.accountType,
-      'organization-name': this.$scope.organizationName,
-      email: this.$scope.email,
-      phone: this.$scope.primaryPhone,
-      mailingAddress: {
-        streetAddress: this.$scope.streetAddress,
-        locality: this.$scope.city,
-        region: this.$scope.state,
-        postalCode: this.$scope.zipCode,
-        country: this.$scope.countryCode
-      }
-    }
-    this.$scope.$apply(() => this.onSignUp({ donorDetails }))
     onSuccess(response)
   }
 
@@ -430,25 +419,41 @@ class SignUpModalController {
       return
     }
 
+    // All steps
     this.updateSignUpButtonText()
     this.resetCurrentStepOnRegistrationComplete(context)
     this.redirectToSignInModalIfNeeded(context)
     this.injectErrorMessages()
     this.injectBackButton()
-    this.initializeFloatingLabels()
 
+    // Step 1: Identity
     if (this.loadingCountriesError && this.currentStep === 1) {
       this.injectCountryLoadError()
     }
+    // Step 2: Address
     if (this.loadingRegionsError && this.currentStep === 2) {
       this.injectRegionLoadError()
     }
+    // Step 3: Security
+    this.showVerificationCodeField()
+
+    // This needs to be last to ensure even the verification code field is styled correctly
+    this.initializeFloatingLabels()
   }
 
   ready () {
     this.$scope.$apply(() => {
       this.isLoading = false
     })
+  }
+
+  showVerificationCodeField () {
+    // The verification code field is only shown when the button link "Enter a verification code instead" is clicked.
+    // This makes the process of creating an account more streamlined as we remove that click.
+    const verificationCodeButtonLink = document.querySelector('.button-link.enter-auth-code-instead-link')
+    if (verificationCodeButtonLink) {
+      verificationCodeButtonLink.click();
+    }
   }
 
   updateSignUpButtonText () {
@@ -597,7 +602,15 @@ class SignUpModalController {
     this.oktaSignInWidget.remove()
     return this.oktaSignInWidget.renderEl(
       { el: '#osw-container' },
-      null,
+      (res) => {
+        // On sign up and email verification success, save the donor details
+        if (res.status === 'SUCCESS') {
+          this.saveDonorDetails()
+        } else {
+          // Handle the case where tokens are not available
+          console.error("Tokens not available in response", res);
+        }
+      },
       (error) => {
         const errorName = 'Error rendering Okta sign up widget.'
         console.error(errorName, error)
@@ -635,6 +648,52 @@ class SignUpModalController {
       .finally(() => {
         this.loadingDonorDetails = false
       })
+  }
+
+  saveDonorDetails () {
+    const signUpDonorDetails = {
+      name: {
+        'given-name': this.$scope.firstName,
+        'family-name': this.$scope.lastName
+      },
+      'donor-type': this.$scope.accountType,
+      'organization-name': this.$scope.organizationName,
+      email: this.$scope.email,
+      phone: this.$scope.primaryPhone,
+      mailingAddress: {
+        streetAddress: this.$scope.streetAddress,
+        streetAddressExtended:  this.$scope.streetAddressExtended,
+        internationalAddressLine3:  this.$scope.internationalAddressLine3,
+        internationalAddressLine4:  this.$scope.internationalAddressLine4,
+        locality: this.$scope.city,
+        region: this.$scope.state,
+        postalCode: this.$scope.zipCode,
+        country: this.$scope.countryCode
+      }
+    }
+
+    if (angular.isDefined(this.getDonorDetailsSubscription)) {
+      this.getDonorDetailsSubscription.unsubscribe()
+    }
+    this.getDonorDetailsSubscription = this.orderService.getDonorDetails().switchMap((donorDetails) => {
+      merge(donorDetails, signUpDonorDetails)
+      // Send each of the requests
+      return Observable.forkJoin([
+        this.orderService.updateDonorDetails(donorDetails),
+        this.orderService.addEmail(donorDetails.email, donorDetails.emailFormUri)
+      ]).map(() => donorDetails)
+    }).subscribe({
+      next: () => this.logIntoOkta(),
+      error: () => this.logIntoOkta()
+    })
+  }
+
+  logIntoOkta () {
+    this.sessionService.signIn(this.lastPurchaseId).subscribe(() => {
+      this.$document[0].body.dispatchEvent(
+        new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } })
+      )
+    })
   }
 }
 
