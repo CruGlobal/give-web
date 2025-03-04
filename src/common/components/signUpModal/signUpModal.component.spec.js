@@ -984,6 +984,36 @@ describe('signUpForm', function () {
     });
   });
 
+  describe('showVerificationCodeField()', () => {
+    const handleClick = jest.fn();
+    window.handleClick = handleClick;
+    beforeEach(() => {
+      handleClick.mockClear();
+    })
+
+    it('should call handleClick when button link is rendered', () => {
+      document.body.innerHTML = `
+        <div>
+          <button class="button-link enter-auth-code-instead-link" onclick="handleClick()">
+            Enter authentication code instead
+          </button>
+        </div>
+      `;
+
+      $ctrl.showVerificationCodeField()
+      expect(handleClick).toHaveBeenCalled();
+    });
+
+    it("shouldn't call handleClick if button link is not rendered", () => {
+      document.body.innerHTML = `
+        <div>Something else</div>
+      `;
+
+      $ctrl.showVerificationCodeField()
+      expect(handleClick).not.toHaveBeenCalled();
+    });
+  });
+
   describe('Injecting error messages', () => {
     const retryFieldSelector = '.cru-retry-button';
     const inputErrorFieldSelector = '.okta-form-input-error';
