@@ -1058,7 +1058,7 @@ describe('signUpForm', function () {
         const errorElement = field.parentNode.querySelector(inputErrorFieldSelector);
         expect(errorElement).not.toBeNull();
         expect(errorElement.getAttribute('role')).toBe('alert');
-        expect(errorElement.innerHTML).toContain(errorSummary);
+        expect(errorElement.innerText).toBe(errorSummary);
         expect(field.parentNode.classList).toContain('o-form-has-errors');
         // Remove the dot from the selector
         expect(errorElement.classList).toContain(inputErrorFieldSelector.slice(1));

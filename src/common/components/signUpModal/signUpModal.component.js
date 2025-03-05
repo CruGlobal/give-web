@@ -26,7 +26,14 @@ const signUpButtonText = 'Create Account'
 const nextButtonText = 'Continue'
 const backButtonId = 'backButton'
 const backButtonText = 'Back'
-const errorIconHtml = '<span class="icon icon-16 error-16-small" role="img" aria-label="Error"></span>'
+
+const createErrorIcon = () => {
+  const icon = document.createElement('span')
+  icon.className = 'icon icon-16 error-16-small'
+  icon.ariaLabel = 'Error'
+  icon.role = 'img'
+  return icon
+}
 
 class SignUpModalController {
   /* @ngInject */
@@ -482,13 +489,13 @@ class SignUpModalController {
       if (field) {
         // Only add an error message if it doesn't already exist
         const existingErrorParentElement = field.parentNode.querySelector('.okta-form-input-error')
-        const errorText = `${errorIconHtml} ${error.errorSummary}`
-        if (!existingErrorParentElement || existingErrorParentElement.innerHTML !== errorText) {
+        if (!existingErrorParentElement) {
           const errorElement = document.createElement('div')
           errorElement.classList.add('okta-form-input-error', 'o-form-input-error', 'o-form-explain')
           field.parentNode.classList.add('o-form-has-errors')
           errorElement.setAttribute('role', 'alert')
-          errorElement.innerHTML = errorText
+          errorElement.innerText = error.errorSummary
+          errorElement.prepend(createErrorIcon())
           field.parentNode.appendChild(errorElement)
         }
       }
@@ -518,10 +525,15 @@ class SignUpModalController {
     const errorElement = document.createElement('div')
     errorElement.classList.add('okta-form-input-error', 'o-form-input-error', 'o-form-explain', 'cru-error')
     errorElement.setAttribute('role', 'alert')
-    errorElement.innerHTML = `${errorIconHtml} ${errorMessage}`
+    // SECURITY: errorMessage is a trusted first-party string from this.translations
+    // innerHTML must not be set to an untrusted string
+    errorElement.innerHTML = errorMessage
+    errorElement.prepend(createErrorIcon())
 
     const retryButtonElement = document.createElement('a')
     retryButtonElement.classList.add('cru-retry-button')
+    // SECURITY: this.translations contains only trusted first-party strings
+    // innerHTML must not be set to an untrusted string
     retryButtonElement.innerHTML = this.translations.retry
 
     const field = document.querySelector(fieldSelector)
