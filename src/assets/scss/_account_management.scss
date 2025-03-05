@@ -49,14 +49,10 @@
     font-size: 1em;
   }
 
-	.payment-summary-link {
-		color: $colorGrayscale-black;
-		font-weight: normal;
-	}
-
-	.payment-icon {
-		padding-right: 10px;
-	}
+  .payment-summary-link {
+    color: $colorGrayscale-black;
+    font-weight: normal;
+  }
 
   .payment-nickname {
     font-weight: bold;
@@ -148,10 +144,11 @@
     }
   }
 
-	.payment-icon {
-		display: inline-block;
-		height: 1.4em;
-	}
+  .payment-icon {
+    display: inline-block;
+    height: 1.4em;
+    padding-right: 10px;
+  }
 
   .panel--buttons-column {
     @media screen and (max-width: 991px) {
