@@ -1,4 +1,5 @@
 import angular from 'angular'
+import 'angular-sanitize'
 import includes from 'lodash/includes'
 import assign from 'lodash/assign'
 import pick from 'lodash/pick'
@@ -26,14 +27,22 @@ const signUpButtonText = 'Create Account'
 const nextButtonText = 'Continue'
 const backButtonId = 'backButton'
 const backButtonText = 'Back'
-const errorIconHtml = '<span class="icon icon-16 error-16-small" role="img" aria-label="Error"></span>'
+
+const createErrorIcon = () => {
+  const icon = document.createElement('span')
+  icon.className = 'icon icon-16 error-16-small'
+  icon.ariaLabel = 'Error'
+  icon.role = 'img'
+  return icon
+}
 
 class SignUpModalController {
   /* @ngInject */
-  constructor ($log, $scope, $location, $translate, sessionService, cartService, orderService, envService, geographiesService) {
+  constructor ($log, $scope, $location, $sanitize, $translate, sessionService, cartService, orderService, envService, geographiesService) {
     this.$log = $log
     this.$scope = $scope
     this.$location = $location
+    this.$sanitize = $sanitize
     this.$translate = $translate
     this.sessionService = sessionService
     this.orderService = orderService
@@ -482,13 +491,13 @@ class SignUpModalController {
       if (field) {
         // Only add an error message if it doesn't already exist
         const existingErrorParentElement = field.parentNode.querySelector('.okta-form-input-error')
-        const errorText = `${errorIconHtml} ${error.errorSummary}`
-        if (!existingErrorParentElement || existingErrorParentElement.innerHTML !== errorText) {
+        if (!existingErrorParentElement) {
           const errorElement = document.createElement('div')
           errorElement.classList.add('okta-form-input-error', 'o-form-input-error', 'o-form-explain')
           field.parentNode.classList.add('o-form-has-errors')
           errorElement.setAttribute('role', 'alert')
-          errorElement.innerHTML = errorText
+          errorElement.innerText = error.errorSummary
+          errorElement.prepend(createErrorIcon())
           field.parentNode.appendChild(errorElement)
         }
       }
@@ -518,11 +527,12 @@ class SignUpModalController {
     const errorElement = document.createElement('div')
     errorElement.classList.add('okta-form-input-error', 'o-form-input-error', 'o-form-explain', 'cru-error')
     errorElement.setAttribute('role', 'alert')
-    errorElement.innerHTML = `${errorIconHtml} ${errorMessage}`
+    errorElement.innerHTML = this.$sanitize(errorMessage)
+    errorElement.prepend(createErrorIcon())
 
     const retryButtonElement = document.createElement('a')
     retryButtonElement.classList.add('cru-retry-button')
-    retryButtonElement.innerHTML = this.translations.retry
+    retryButtonElement.innerHTML = this.$sanitize(this.translations.retry)
 
     const field = document.querySelector(fieldSelector)
     field.classList.add('o-form-has-errors')
@@ -704,6 +714,7 @@ class SignUpModalController {
 
 export default angular
   .module(componentName, [
+    'ngSanitize',
     sessionService.name,
     orderService.name,
     cartService.name,
