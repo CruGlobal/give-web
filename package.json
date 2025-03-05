@@ -42,6 +42,7 @@
     "@babel/preset-react": "^7.25.9",
     "@babel/preset-typescript": "^7.25.9",
     "@babel/runtime": "^7.25.9",
+    "@stylistic/stylelint-plugin": "^3.1.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.5",
     "@testing-library/react-hooks": "^8.0.1",
@@ -68,6 +69,11 @@
     "sass-loader": "^10",
     "standard": "^16.0.4",
     "style-loader": "^1.0.0",
+    "stylelint": "^16.14.1",
+    "stylelint-config-idiomatic-order": "^10.0.0",
+    "stylelint-config-standard": "^37.0.0",
+    "stylelint-config-standard-scss": "^14.0.0",
+    "stylelint-declaration-strict-value": "^1.10.7",
     "typescript-eslint": "^0.0.1-alpha.0",
     "webpack": "^4.47.0",
     "webpack-bundle-analyzer": "^3.4.1",
@@ -84,7 +90,8 @@
     "test:log": "jest --silent=false",
     "lint": "standard",
     "lint:write": "standard --fix",
-    "lint:ts": "tsc"
+    "lint:ts": "tsc",
+    "lint:styles": "stylelint \"src/assets/scss/*.{css,scss}\" --quiet-deprecation-warnings"
   },
   "standard": {
     "env": {
