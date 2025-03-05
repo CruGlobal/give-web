@@ -14,6 +14,10 @@ export default {
     'stylelint-config-standard-scss',
     'stylelint-config-idiomatic-order'
   ],
+  ignoreFiles: [
+    'src/assets/crubrand/**',
+    'src/assets/cru-scss/**'
+  ],
   plugins: [
     'stylelint-declaration-strict-value',
     '@stylistic/stylelint-plugin'
@@ -72,6 +76,8 @@ export default {
         // Disables rules that may cause issues with specificity or project styling conventions.
         'no-invalid-position-at-import-rule': null,
         'no-descending-specificity': null,
+        // I would prefer that we keep the rule selector-class-pattern, but since this project has a lot of existing code that doesn't follow this rule, I'm disabling it for now.
+        // When we recreate this site, we should follow this rule.
         'selector-class-pattern': null,
         'scss/dollar-variable-pattern': null,
         'selector-id-pattern': null,
