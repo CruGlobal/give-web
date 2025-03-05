@@ -4,7 +4,6 @@ dist
 .DS_STORE
 coverage
 *.iml
-.vscode
 
 *.log
 *.back.*
