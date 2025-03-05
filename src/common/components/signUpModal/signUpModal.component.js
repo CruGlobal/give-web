@@ -496,7 +496,8 @@ class SignUpModalController {
           errorElement.classList.add('okta-form-input-error', 'o-form-input-error', 'o-form-explain')
           field.parentNode.classList.add('o-form-has-errors')
           errorElement.setAttribute('role', 'alert')
-          errorElement.innerText = error.errorSummary
+          const errorSummary = error.errorSummary
+          errorElement.textContent = Array.isArray(errorSummary) ? errorSummary.join(' ') : errorSummary
           errorElement.prepend(createErrorIcon())
           field.parentNode.appendChild(errorElement)
         }

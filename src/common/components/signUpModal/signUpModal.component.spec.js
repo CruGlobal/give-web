@@ -1066,6 +1066,20 @@ describe('signUpForm', function () {
         expect(errorElement.classList).toContain('o-form-explain');
       });
 
+      it('should inject error message summary array', () => {
+        const errorSummary = 'accountTypeError';
+        $ctrl.signUpErrors = [
+          {
+            property: 'accountType',
+            errorSummary: [errorSummary, errorSummary]
+          }
+        ]
+        $ctrl.injectErrorMessages()
+
+        const errorElement = document.querySelector(inputErrorFieldSelector);
+        expect(errorElement.textContent).toBe(`${errorSummary} ${errorSummary}`);
+      });
+
       it('should only add the error message passed as a prop', () => {
         $ctrl.signUpErrors = [
           {
