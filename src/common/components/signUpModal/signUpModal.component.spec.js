@@ -1249,7 +1249,7 @@ describe('signUpForm', function () {
       'donor-type': user.accountType,
       'organization-name': user.organizationName,
       email: user.email,
-      phone: user.primaryPhone,
+      'phone-number': user.primaryPhone,
       mailingAddress: {
         streetAddress: user.streetAddress,
         locality: user.city,
