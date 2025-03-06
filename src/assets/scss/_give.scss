@@ -5,15 +5,15 @@ $colorGrayscale-stone: #e7e7e7;
 $colorGrayscale-rock: #b9b9b9;
 $colorGrayscale-slate: #909b9c;
 $colorCru-border: #ddd;
+$data-font: "Source Sans Pro", "Helvetica Neue", helvetica, sans-serif;
 
-$data-font: "Source Sans Pro", "Helvetica Neue", Helvetica, sans-serif;
 .data-font {
   font-family: $data-font;
 }
 
 @media screen and (max-width: 750px) {
   .container {
-      width: auto;
+    width: auto;
   }
 }
 
@@ -58,8 +58,8 @@ $gutter: 30px;
 }
 
 html {
-  font-family: $data-font;
   height: 100%;
+  font-family: $data-font;
 }
 
 body {
@@ -71,12 +71,13 @@ body {
 }
 
 hr.vertical-divider {
-  background: #e9e9e9;
-  border: none;
   display: inline-block;
-  height: 100%;
-  margin: 0;
   width: 1px;
+  height: 100%;
+  border: none;
+  margin: 0;
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
+  background: #e9e9e9;
 }
 
 hr.horizontal-divider {
@@ -99,8 +100,8 @@ hr.horizontal-divider {
 }
 
 .panel-plain {
-  box-shadow: none;
   border: none;
+  box-shadow: none;
 }
 
 .panel-nomargin {
@@ -133,19 +134,20 @@ hr.horizontal-divider {
     }
 
     .section-description {
+      color: $colorCru-gray;
       font-size: 125%;
       font-weight: normal;
       line-height: 125%;
-      color: #666062;
     }
   }
 
 }
 
 .secondary-detail {
+  position: relative;
   max-width: 40%;
   max-height: 345px;
-  position: relative;
+
   & > img {
     max-height: 345px;
   }
@@ -157,92 +159,93 @@ hr.horizontal-divider {
 }
 
 .trigger {
-  background: none;
-  border: none;
   padding: 0;
-  line-height: 1em;
+  border: none;
+  background: none;
   font-weight: 600;
+  line-height: 1em;
 }
 
 .collapse-indicator {
-  &:after {
-    content: "\002B";
+  &::after {
     display: inline-block;
-    transition: all .25s;
-    transform: rotate(45deg);
-    transform-origin: 50% 50%;
     margin-top: 1px;
     margin-left: 1.5px;
+    content: "\002B";
+    transform: rotate(45deg);
+    transform-origin: 50% 50%;
+    transition: all 0.25s;
   }
+
   &.collapsed {
-    &:after {
+    &::after {
       transform: rotate(0deg);
     }
   }
 }
 
 .collapse-indicator-row {
-  .trigger:after {
-    content: "\002B";
+  .trigger::after {
     display: inline-block;
-    transition: all .25s;
-    transform: rotate(45deg);
-    transform-origin: 50% 50%;
-    font-size: 125%;
     margin-top: 1px;
     margin-left: 5.5px;
+    content: "\002B";
+    font-size: 125%;
+    transform: rotate(45deg);
+    transform-origin: 50% 50%;
+    transition: all 0.25s;
   }
+
   &.collapsed {
-    .trigger:after {
+    .trigger::after {
       transform: rotate(0deg);
     }
   }
 }
 
 .row {
-  &.vdivide [class*='col-']:not(:last-child):after {
-    background: #e0e0e0;
-    width: 1px;
-    content: "";
-    display: block;
+  &.vdivide [class*='col-']:not(:last-child)::after {
     position: absolute;
     top: 0;
-    bottom: 0;
     right: 0;
+    bottom: 0;
+    display: block;
+    width: 1px;
     min-height: 70px;
+    /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
+    background: #e0e0e0;
+    content: "";
   }
 
   @media (max-width: 991px) {
-    &.vdivide [class*='col-']:not(:last-child):after {
-      background: #e0e0e0;
-      width: 100%;
-      content: "";
-      display: block;
+    &.vdivide [class*='col-']:not(:last-child)::after {
       position: relative;
       top: 45px;
-      bottom: 0;
       right: 0;
+      bottom: 0;
+      display: block;
+      width: 100%;
       min-height: 1px;
+      /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
+      background: #e0e0e0;
+      content: "";
     }
   }
 
   @include respond-to(supertiny) {
-    &.vdivide [class*='col-']:not(:last-child):after {
+    &.vdivide [class*='col-']:not(:last-child)::after {
       top: 30px;
     }
   }
 
   &.row-eq-height {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
     display: flex;
   }
 }
 
 .panel-full-height {
-  margin-bottom: 0;
   height: 100%;
+  margin-bottom: 0;
 }
 
 .give-available-photos-container {
@@ -251,83 +254,94 @@ hr.horizontal-divider {
   .give-thumbs-container {
     $column-count: 3;
     $grid-gap: $gutter * 0.75;
+
     display: grid;
+    align-items: stretch;
+    justify-content: stretch;
+    gap: $grid-gap;
+    grid-auto-rows: minmax(90px, auto);
     grid-template-columns: repeat(
       $column-count,
       calc((100% - #{$grid-gap * ($column-count - 1)}) / #{$column-count})
     );
+
     @include respond-to(supertiny) {
       $column-count: $column-count - 1;
+
       grid-template-columns: repeat(
         $column-count,
         calc((100% - #{$grid-gap * ($column-count - 1)}) / #{$column-count})
       );
     }
-    grid-auto-rows: minmax(90px, auto);
-    gap: $grid-gap;
-    justify-content: stretch;
-    align-items: stretch;
   }
 
   h3,
   h5 {
     text-align: center;
   }
+
   .add-trigger {
-    background: #666062;
-    border-radius: 100px;
     position: absolute;
-    cursor: pointer;
-    right: 5px;
+    z-index: 1;
     top: 5px;
+    right: 5px;
     width: 30px;
     height: 30px;
-    line-height: 30px;
-    color: #fff;
+    border-radius: 100px;
+    background: $colorCru-gray;
+    color: $colorCru-white;
+    cursor: pointer;
     font-size: 20px;
+    line-height: 30px;
     text-align: center;
-    z-index: 1;
   }
+
   .cover-thumb {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     .no-cover {
-      color: $colorCru-gray;
       position: absolute;
       top: 50%;
       left: 0;
       width: 100%;
+      color: $colorCru-gray;
       transform: translateY(-50%);
     }
   }
+
   .cover-thumb.processing {
+    overflow: hidden;
     height: 98.25px;
     object-fit: contain;
     object-position: center;
-    overflow: hidden;
   }
+
   .cover-thumb.processing img {
-    opacity: 50%;
+    opacity: 0.5;
   }
+
   .cover-thumb-remove {
-    background: rgba(0, 0, 0, .5);
-    border-radius: 100px;
-    color: $colorCru-white;
-    width: 28px;
-    height: 28px;
-    line-height: 28px;
     position: absolute;
-    text-align: center;
-    transition: .25s all;
     top: 5px;
     right: 5px;
+    width: 28px;
+    height: 28px;
+    border-radius: 100px;
+    background: rgba(0, 0, 0, 0.5);
+    color: $colorCru-white;
+    line-height: 28px;
+    text-align: center;
+    transition: 0.25s all;
+
     &:hover {
       background: rgba(0, 0, 0, 1);
     }
   }
-  input[type=radio] {
+
+  input[type="radio"] {
     position: absolute;
     top: 0;
     left: 0;
@@ -343,19 +357,20 @@ hr.horizontal-divider {
 }
 
 .edit-trigger {
-  background: $colorCru-gray;
-  border-radius: 100px;
   position: absolute;
-  cursor: pointer;
-  right: 10px;
+  z-index: 1;
   top: 10px;
+  right: 10px;
   width: 45px;
   height: 45px;
-  line-height: 45px;
+  border-radius: 100px;
+  background: $colorCru-gray;
   color: $colorCru-white;
+  cursor: pointer;
   font-size: 24px;
+  line-height: 45px;
   text-align: center;
-  z-index: 1;
+
   &:hover {
     color: $colorCru-white;
   }
@@ -364,8 +379,8 @@ hr.horizontal-divider {
 @media screen and (max-width: $sm - 1) {
   .prod-edit-btns{
     &.text-right {
+      margin-top: $gutter * 0.25 - 4;
       text-align: left;
-      margin-top: $gutter*.25 - 4;
     }
     .btn {margin-top: 4px;}
   }
@@ -374,28 +389,29 @@ hr.horizontal-divider {
 .edit-trigger-text {
   position: static;
   display: block;
-  float: left;
-  margin-left: -44px;
   width: 30px;
   height: 30px;
+  margin-left: -44px;
+  float: left;
   font-size: 16px;
   line-height: 30px;
+
   &.inline {
-    margin: 0 $gutter*.5;
     display: inline-block;
+    margin: 0 $gutter * 0.5;
     float: none;
     vertical-align: middle;
   }
 }
 
 .signature-image {
-  max-height: 100px;
   max-width: 100%;
+  max-height: 100px;
 }
 
 .upload-drag-target {
-  border-radius: $gutter*.5;
   border: 2px dashed $colorCru-border;
+  border-radius: $gutter * 0.5;
 }
 
 .margin-bottom {
@@ -407,17 +423,19 @@ hr.horizontal-divider {
 }
 
 .well-plain {
-  background: none;
-  border: none;
-  box-shadow: none;
   padding: 30px;
+  border: none;
+  background: none;
+  box-shadow: none;
 }
 
 .border-right {
   border-right: 1px solid lighten($colorGrayscale-text, 60%);
+
   @include respond-to(small) {
     border: none;
   }
+
   @include respond-to(extrasmall) {
     border: none;
   }
@@ -427,43 +445,46 @@ hr.horizontal-divider {
 
 .border-bottom-small {
   @include respond-to(small) {
+    padding-bottom: 1.5em;
     border-bottom: 1px solid lighten($colorGrayscale-text, 60%);
     margin-bottom: 1.5em;
-    padding-bottom: 1.5em;
   }
+
   @include respond-to(extrasmall) {
+    padding-bottom: 1.5em;
     border-bottom: 1px solid lighten($colorGrayscale-text, 60%);
     margin-bottom: 1.5em;
-    padding-bottom: 1.5em;
   }
 
   @include clearfix;
 }
 
 .border-top-small {
+  padding-top: 1.5em;
   border-top: 1px solid lighten($colorGrayscale-text, 60%);
   margin-top: 1.5em;
-  padding-top: 1.5em;
 
   @include clearfix;
 }
 
 .title-margin {
   margin: 1.5em 0;
+
   @include respond-to(small) {
-    margin: .75em auto;
+    margin: 0.75em auto;
   }
+
   @include respond-to(extrasmall) {
-    margin: .75em auto;
+    margin: 0.75em auto;
   }
 }
 
 .sign-in-leadin {
+  max-width: 265px;
+  margin: 1em auto;
   font-size: 18px;
   line-height: 135%;
-  max-width: 265px;
   text-align: center;
-  margin: 1em auto;
 }
 
 .radio-method,
@@ -471,61 +492,69 @@ hr.horizontal-divider {
   label {
     font-weight: normal;
   }
+
   .expiring {
-    text-indent: 60px;
+    /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
+    color: red;
     font-size: 1em;
     line-height: 1em;
-    color: red;
+    text-indent: 60px;
   }
+
   img {
-    margin-right: $gutter*.5;
     display: inline-block;
+    margin-right: $gutter * 0.5;
     vertical-align: middle;
   }
+
   input[type="radio"] {
-    display: inline-block;
-    float: none;
-    margin: 0;
-    margin-right: $gutter*.5;
     position: static;
+    display: inline-block;
+    margin: 0;
+    margin-right: $gutter * 0.5;
+    float: none;
     vertical-align: 0%;
   }
 }
 
 .btn-xs,
 .btn-sm {
-  font-size: .85rem;
+  font-size: 0.85rem;
   font-weight: 700;
 }
 
 .table-payment-history {
   thead {
     th {
-      font-weight: 500;
       font-size: 16px;
+      font-weight: 500;
       text-transform: uppercase;
     }
   }
+
   tbody {
     td {
-      min-height: 75px;
       height: 75px;
+      min-height: 75px;
       vertical-align: middle !important;
+
       label {
         margin-bottom: 0;
       }
+
       .radio-method {
         label {
           float: left;
+
           strong {
             font-weight: 500;
           }
         }
       }
+
       &.status-pending {
+        /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
         color: red;
-      }
-      &.amount {
       }
     }
   }
@@ -537,45 +566,51 @@ hr.horizontal-divider {
 
 
 .modal-meta{
-  color: lighten($colorGrayscale-text, 40%);
-  margin-bottom: $gutter*.25;
   display: block;
+  margin-bottom: $gutter * 0.25;
+  color: lighten($colorGrayscale-text, 40%);
   line-height: 1.15em;
 }
 
 .repeating-row {
-	clear: both;
-	line-height: 1em;
-	&:before,
-	&:after {
-		content: "";
-		display: block;
-		clear: both;
-	}
-	.recipient-image {
-		max-width: 100px;
-	}
-	.recipient-name {
-		margin-bottom: $gutter*.25;
-    margin-top: $gutter*.15;
-	}
-	.checkbox-right {
-		text-align: right;
-		label {
-			text-align: right;
-			padding: 0;
-			font-weight: normal;
-		}
-		input[type=checkbox], input[type=radio] {
-			margin-left: $gutter*.25;
-		}
-	}
+  clear: both;
+  line-height: 1em;
+
+  &::before,
+  &::after {
+    display: block;
+    clear: both;
+    content: "";
+  }
+
+  .recipient-image {
+    max-width: 100px;
+  }
+
+  .recipient-name {
+    margin-top: $gutter * 0.15;
+    margin-bottom: $gutter * 0.25;
+  }
+
+  .checkbox-right {
+    text-align: right;
+
+    label {
+      padding: 0;
+      font-weight: normal;
+      text-align: right;
+    }
+
+    input[type="checkbox"], input[type="radio"] {
+      margin-left: $gutter * 0.25;
+    }
+  }
 }
 
 @media screen and (min-width: 550px ) and (max-width: 991px ) {
   .split-row {
     width: 100%;
-    margin-top: $gutter*0.5;
+    margin-top: $gutter * 0.5;
 
     .split-col-left, .split-col-right {
       width: 45%;
@@ -595,26 +630,29 @@ hr.horizontal-divider {
 
 .row-no-spacing {
   > [class*="col-"] {
-    padding-left: 0 !important;
     padding-right: 0 !important;
+    padding-left: 0 !important;
   }
 }
 
 .inline-form-group {
   margin-bottom: 0;
+
   label {
     display: block;
   }
+
   span.line-height {
     line-height: 44px;
   }
-  input[type=text],
-  input[type=number],
-  input[type=email],
-  input[type=password] {
+
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  input[type="password"] {
     display: inline-block;
     width: 175px;
-    margin-right: $gutter*.5;
+    margin-right: $gutter * 0.5;
   }
 }
 
@@ -632,15 +670,19 @@ img.full-width {
 
 .list-recurring {
   margin-bottom: 0;
+
   h4 {
     margin-bottom: 0;
   }
+
   li {
-    margin-bottom: .75em;
+    margin-bottom: 0.75em;
+
     &:last-child {
       margin-bottom: 0;
     }
   }
+
   .meta {
     font-size: 1em;
     line-height: 1.4em;
@@ -653,6 +695,7 @@ img.full-width {
 
 .screenContent {
   padding-top: 35px !important;
+
   &:focus {
     outline: none;
   }
@@ -671,8 +714,8 @@ img.full-width {
 
 .strike {
   display: block;
-  text-align: center;
   overflow: hidden;
+  text-align: center;
   white-space: nowrap;
 
   > span {
@@ -680,21 +723,21 @@ img.full-width {
     display: inline-block;
   }
 
-  > span:before, > span:after {
-    content: "";
+  > span::before, > span::after {
     position: absolute;
     top: 50%;
     width: 9999px;
     height: 1px;
     background: $colorGrayscale-rock;
+    content: "";
   }
 
-  > span:before {
+  > span::before {
     right: 100%;
     margin-right: 15px;
   }
 
-  > span:after {
+  > span::after {
     left: 100%;
     margin-left: 15px;
   }
@@ -706,18 +749,19 @@ img.full-width {
 
 .socialIcon {
   @media screen and (max-width: 640px) {
-    padding-left: $gutter*.35;
-    padding-right: $gutter*.35;
+    padding-right: $gutter * 0.35;
+    padding-left: $gutter * 0.35;
   }
 }
 
 .footer-seals {
   text-align: center;
+
   img, div {
-    vertical-align: top;
     display: inline-block;
     max-height: 70px;
-    margin: 0 $gutter*.5;
+    margin: 0 $gutter * 0.5;
+    vertical-align: top;
     &:focus {outline: none;}
   }
   > div {margin-top: 6px;}
@@ -728,9 +772,11 @@ img.full-width {
   .text-sm-left {
     text-align: left !important;
   }
+
   .text-sm-right {
     text-align: right !important;
   }
+
   .text-sm-center {
     text-align: center !important;
   }
@@ -738,8 +784,8 @@ img.full-width {
 
 .saved-payment-methods {
   .row {
-      label {
-        padding-left: 15px;
-      }
+    label {
+      padding-left: 15px;
+    }
   }
 }
