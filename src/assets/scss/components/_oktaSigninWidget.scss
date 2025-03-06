@@ -29,6 +29,10 @@ sign-up-modal {
   width: 100%;
   overflow: visible;
 
+  .beacon-container {
+    display: none;
+  }
+
   // ============== Container ============== //
 
   .o-form-content {
