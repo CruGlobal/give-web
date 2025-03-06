@@ -442,12 +442,21 @@ class SignUpModalController {
       return
     }
 
+    if (context.formName === 'enroll-authenticator') {
+      // Verification step page
+      this.$scope.$apply(() => {
+        this.currentStep = 3
+      })
+      this.showVerificationCodeField()
+    }
+
     // All steps
     this.updateSignUpButtonText()
     this.resetCurrentStepOnRegistrationComplete(context)
     this.redirectToSignInModalIfNeeded(context)
     this.injectErrorMessages()
     this.injectBackButton()
+    this.initializeFloatingLabels()
 
     // Step 1: Identity
     if (this.loadingCountriesError && this.currentStep === 1) {
@@ -457,11 +466,6 @@ class SignUpModalController {
     if (this.loadingRegionsError && this.currentStep === 2) {
       this.injectRegionLoadError()
     }
-    // Step 3: Security
-    this.showVerificationCodeField()
-
-    // This needs to be last to ensure even the verification code field is styled correctly
-    this.initializeFloatingLabels()
   }
 
   ready () {
