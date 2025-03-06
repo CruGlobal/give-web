@@ -422,6 +422,8 @@ class SignUpModalController {
     // Save errors to local variable to inject into the form
     // Since errors are cleared on each step change
     this.signUpErrors = error.xhr.responseJSON.errorCauses
+    // Wait for the Okta widget to create the error message box and set the sign up button text
+    // before augmenting the error message box and resetting the sign up button text
     this.$timeout(() => {
       this.updateSignUpButtonText()
       this.injectErrorMessages()
