@@ -445,12 +445,25 @@ class SignUpModalController {
       return
     }
 
+    if (context.formName === 'enroll-authenticator') {
+      // If the user has signed up but hasn't submitted the verification code yet and comes back to
+      // the sign up modal, Okta will skip the sign up form and take them directly to the verify
+      // email step. We detect that here and update the current step and click the "Enter a
+      // verification code instead" for them.
+      this.$scope.$apply(() => {
+        this.currentStep = 3
+      })
+      this.showVerificationCodeField()
+    }
+
     // All steps
     this.updateSignUpButtonText()
     this.resetCurrentStepOnRegistrationComplete(context)
     this.redirectToSignInModalIfNeeded(context)
     this.injectErrorMessages()
     this.injectBackButton()
+    // This needs to be after showVerificationCodeField to ensure even the verification code field is styled correctly
+    this.initializeFloatingLabels()
 
     // Step 1: Identity
     if (this.loadingCountriesError && this.currentStep === 1) {
@@ -460,11 +473,6 @@ class SignUpModalController {
     if (this.loadingRegionsError && this.currentStep === 2) {
       this.injectRegionLoadError()
     }
-    // Step 3: Security
-    this.showVerificationCodeField()
-
-    // This needs to be last to ensure even the verification code field is styled correctly
-    this.initializeFloatingLabels()
   }
 
   ready () {
