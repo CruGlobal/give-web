@@ -18,6 +18,8 @@
       on-state-change="$ctrl.onGiftConfigStateChange(state)"
       disable-session-restart="true"
       ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig"
+      hide-quarterly="$ctrl.hideQuarterly"
+      hide-annual="$ctrl.hideAnnual"
       use-v3="$ctrl.useV3">
     </product-config-form>
     <div ng-if="$ctrl.errorLoadingProductConfig" class="alert alert-danger" role="alert">
