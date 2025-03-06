@@ -171,13 +171,28 @@ sign-up-modal {
     }
 
     &:last-of-type {
-
-      // We don't include password as it's the only field on it's step and has the password requirements below it.
-      input[type=text]:not(.chzn-search input),
-      &:not([data-se="o-form-fieldset-credentials.passcode"]) .o-form-input-error,
-      .chzn-container a {
+      // Usually the last fieldset has rounded bottom borders
+      // ".chzn-container a" is for select boxes
+      input[type=text]:not(.chzn-search input), .o-form-input-error, .chzn-container a {
         border-bottom-left-radius: 6px;
         border-bottom-right-radius: 6px;
+      }
+
+      // However, if it is a password field with a password requirements sibling, the password
+      // requirements box gets the rounded border instead of the input or error message
+      &[data-se="o-form-fieldset-credentials.passcode"]:has(+ [data-se="password-authenticator--rules"]) {
+        input[type=text]:not(.chzn-search input), .o-form-input-error {
+          border-bottom-left-radius: unset;
+          border-bottom-right-radius: unset;
+        }
+      }
+
+      // Also, if the field has errors, the error box gets the rounded border instead of the input
+      &:has(.okta-form-input-error) {
+        input[type=text]:not(.chzn-search input) {
+          border-bottom-left-radius: unset;
+          border-bottom-right-radius: unset;
+        }
       }
     }
 
