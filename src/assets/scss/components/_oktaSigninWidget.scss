@@ -29,6 +29,14 @@ sign-up-modal {
   width: 100%;
   overflow: visible;
 
+  .clearfix {
+    &:after, &:before {
+      // Fix warning icon height
+      // This may be removed if https://github.com/okta/okta-signin-widget/pull/3801 is merged upstream
+      height: calc(100% + 2px);
+    }
+  }
+
   .beacon-container {
     display: none;
   }
