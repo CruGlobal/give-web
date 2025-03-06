@@ -314,6 +314,10 @@ class SignUpModalController {
   }
 
   preSubmit (postData, onSuccess) {
+    // Clear errors from previous steps
+    this.signUpErrors = []
+    this.clearInjectedErrorMessages()
+
     const step = this.currentStep
     const userProfile = postData.userProfile
     if (step === 1) {
@@ -402,8 +406,6 @@ class SignUpModalController {
   }
 
   submitFinalData (postData, onSuccess) {
-    // Clear errors from previous steps
-    this.signUpErrors = []
     // Add the user profile to the postData object
     // Okta widget handles the password
     postData.userProfile = {
@@ -499,6 +501,8 @@ class SignUpModalController {
   }
 
   injectErrorMessages (errors = this.signUpErrors) {
+    this.clearInjectedErrorMessages()
+
     if (!errors?.length) {
       return
     }
@@ -507,18 +511,16 @@ class SignUpModalController {
     errors.forEach(error => {
       const field = document.querySelector(`${inputFieldErrorSelectorPrefix}${error.property.replace(/\./g, '\\.')}`)
       if (field) {
-        // Only add an error message if it doesn't already exist
-        const existingErrorParentElement = field.parentNode.querySelector('.okta-form-input-error')
-        if (!existingErrorParentElement) {
-          const errorElement = document.createElement('div')
-          errorElement.classList.add('okta-form-input-error', 'o-form-input-error', 'o-form-explain')
-          field.parentNode.classList.add('o-form-has-errors')
-          errorElement.setAttribute('role', 'alert')
-          const errorSummary = error.errorSummary
-          errorElement.textContent = Array.isArray(errorSummary) ? errorSummary.join(' ') : errorSummary
-          errorElement.prepend(createErrorIcon())
-          field.parentNode.appendChild(errorElement)
-        }
+        const errorElement = document.createElement('div')
+        errorElement.classList.add('okta-form-input-error', 'o-form-input-error', 'o-form-explain')
+        errorElement.setAttribute('role', 'alert')
+
+        const errorSummary = error.errorSummary
+        errorElement.textContent = Array.isArray(errorSummary) ? errorSummary.join(' ') : errorSummary
+        errorElement.prepend(createErrorIcon())
+
+        field.parentNode.classList.add('o-form-has-errors')
+        field.parentNode.appendChild(errorElement)
       }
     })
 
@@ -547,6 +549,12 @@ class SignUpModalController {
     // $translate.instant to synchronously interpolate our fields into it
     errorMessage.textContent = this.$translate.instant('OKTA_SIGNUP_FIELDS_ERROR', { fields: errorFields.join(', ') })
     errorBox.append(errorMessage)
+  }
+
+  clearInjectedErrorMessages () {
+    document.querySelectorAll('.okta-form-input-error').forEach((node) => {
+      node.remove()
+    })
   }
 
   injectBackButton () {
