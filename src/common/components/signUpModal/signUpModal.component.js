@@ -1,5 +1,6 @@
 import angular from 'angular'
 import 'angular-sanitize'
+import 'angular-translate'
 import includes from 'lodash/includes'
 import assign from 'lodash/assign'
 import pick from 'lodash/pick'
@@ -38,11 +39,12 @@ const createErrorIcon = () => {
 
 class SignUpModalController {
   /* @ngInject */
-  constructor ($log, $scope, $location, $sanitize, $translate, sessionService, cartService, orderService, envService, geographiesService) {
+  constructor ($log, $scope, $location, $sanitize, $timeout, $translate, sessionService, cartService, orderService, envService, geographiesService) {
     this.$log = $log
     this.$scope = $scope
     this.$location = $location
     this.$sanitize = $sanitize
+    this.$timeout = $timeout
     this.$translate = $translate
     this.sessionService = sessionService
     this.orderService = orderService
@@ -102,7 +104,10 @@ class SignUpModalController {
       'CITY_ERROR',
       'SELECT_STATE_ERROR',
       'ZIP_CODE_ERROR',
-      'INVALID_US_ZIP_ERROR'
+      'INVALID_US_ZIP_ERROR',
+      'OKTA_SIGNUP_FIELDS_ERROR',
+      'OKTA_EMAIL_FIELD',
+      'OKTA_PASSWORD_FIELD'
     ]).then(translations => {
       this.translations = {
         giveAsIndividual: translations.GIVE_AS_INDIVIDUAL,
@@ -120,7 +125,10 @@ class SignUpModalController {
         cityError: translations.CITY_ERROR,
         selectStateError: translations.SELECT_STATE_ERROR,
         zipCodeError: translations.ZIP_CODE_ERROR,
-        invalidUSZipError: translations.INVALID_US_ZIP_ERROR
+        invalidUSZipError: translations.INVALID_US_ZIP_ERROR,
+        signupFieldsError: translations.OKTA_SIGNUP_FIELDS_ERROR,
+        emailField: translations.OKTA_EMAIL_FIELD,
+        passwordField: translations.OKTA_PASSWORD_FIELD
       }
     })
   }
@@ -415,6 +423,12 @@ class SignUpModalController {
     // Save errors to local variable to inject into the form
     // Since errors are cleared on each step change
     this.signUpErrors = error.xhr.responseJSON.errorCauses
+    // Wait for the Okta widget to create the error message box and set the sign up button text
+    // before augmenting the error message box and resetting the sign up button text
+    this.$timeout(() => {
+      this.updateSignUpButtonText()
+      this.injectErrorMessages()
+    })
   }
 
   afterRender (context) {
@@ -485,8 +499,12 @@ class SignUpModalController {
   }
 
   injectErrorMessages (errors = this.signUpErrors) {
+    if (!errors?.length) {
+      return
+    }
+
     // Inject error messages into the form since errors are cleared when switching steps/rerendering.
-    errors?.forEach(error => {
+    errors.forEach(error => {
       const field = document.querySelector(`${inputFieldErrorSelectorPrefix}${error.property.replace(/\./g, '\\.')}`)
       if (field) {
         // Only add an error message if it doesn't already exist
@@ -503,6 +521,32 @@ class SignUpModalController {
         }
       }
     })
+
+    // Augment the error message box to specify which fields had errors. Since the email and
+    // password fields are on step 1 and the submission happens on step 3, the error messages for
+    // those fields won't be visible to the user.
+    const errorBox = document.querySelector('.okta-form-infobox-error')
+    if (!errorBox) {
+      return
+    }
+
+    const errorFields = errors.map(error => {
+      if (error.property === 'userProfile.email') {
+        return this.translations.emailField
+      } else if (error.property === 'credentials.passcode') {
+        return this.translations.passwordField
+      }
+      return null
+    }).filter(Boolean)
+    if (!errorFields.length) {
+      return
+    }
+
+    const errorMessage = document.createElement('p')
+    // The OKTA_SIGNUP_FIELDS_ERROR translation key is already loaded, so we can use
+    // $translate.instant to synchronously interpolate our fields into it
+    errorMessage.textContent = this.$translate.instant('OKTA_SIGNUP_FIELDS_ERROR', { fields: errorFields.join(', ') })
+    errorBox.append(errorMessage)
   }
 
   injectBackButton () {
@@ -715,6 +759,7 @@ class SignUpModalController {
 
 export default angular
   .module(componentName, [
+    'pascalprecht.translate',
     'ngSanitize',
     sessionService.name,
     orderService.name,
