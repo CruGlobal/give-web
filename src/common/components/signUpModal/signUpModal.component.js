@@ -445,13 +445,14 @@ class SignUpModalController {
       return
     }
 
+    // Step 4: Email Verification
     if (context.formName === 'enroll-authenticator') {
       // If the user has signed up but hasn't submitted the verification code yet and comes back to
       // the sign up modal, Okta will skip the sign up form and take them directly to the verify
       // email step. We detect that here and update the current step and click the "Enter a
       // verification code instead" for them.
       this.$scope.$apply(() => {
-        this.currentStep = 3
+        this.currentStep = 4
       })
       this.showVerificationCodeField()
     }
@@ -489,9 +490,12 @@ class SignUpModalController {
   }
 
   updateSignUpButtonText () {
-    // Change the text of the sign up button to ensure it's clear what the user is doing
-    const signUpButton = angular.element(document.querySelector('.o-form-button-bar input.button.button-primary'))
-    signUpButton.attr('value', this.currentStep === 3 ? signUpButtonText : nextButtonText)
+    // Leave the default text on the verify step
+    if (this.currentStep !== 4) {
+      // Change the text of the sign up button to ensure it's clear what the user is doing
+      const signUpButton = angular.element(document.querySelector('.o-form-button-bar input.button.button-primary'))
+      signUpButton.attr('value', this.currentStep === 3 ? signUpButtonText : nextButtonText)
+    }
   }
 
   resetCurrentStepOnRegistrationComplete (context) {
@@ -535,6 +539,12 @@ class SignUpModalController {
     // Augment the error message box to specify which fields had errors. Since the email and
     // password fields are on step 1 and the submission happens on step 3, the error messages for
     // those fields won't be visible to the user.
+    if (this.currentStep === 4) {
+      // Skip the verification step because an invalid code comes back as "credentials.passcode" and
+      // to say that the password field was invalid would confuse the user
+      return
+    }
+
     const errorBox = document.querySelector('.okta-form-infobox-error')
     if (!errorBox) {
       return
@@ -566,8 +576,8 @@ class SignUpModalController {
   }
 
   injectBackButton () {
-    // Don't show back button on the first step
-    if (this.currentStep === 1) {
+    // Don't show back button on the first step or verify step
+    if (this.currentStep === 1 || this.currentStep === 4) {
       return
     }
     const buttonBar = document.querySelector('.o-form-button-bar')
