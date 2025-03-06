@@ -169,7 +169,7 @@ sign-up-modal {
 
       // We don't include password as it's the only field on it's step and has the password requirements below it.
       input[type=text]:not(.chzn-search input),
-      .o-form-input-error,
+      &:not([data-se="o-form-fieldset-credentials.passcode"]) .o-form-input-error,
       .chzn-container a {
         border-bottom-left-radius: 6px;
         border-bottom-right-radius: 6px;
