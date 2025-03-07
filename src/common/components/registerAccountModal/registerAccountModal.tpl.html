@@ -70,9 +70,10 @@
     ></sign-in-modal>
     <sign-up-modal
       ng-switch-when="sign-up"
-      on-sign-up="$ctrl.onSignUpSuccess(donorDetails)"
+      on-sign-up-error="$ctrl.onSignUpError(donorDetails)"
       on-sign-in="$ctrl.onSignIn()"
       is-inside-another-modal="true"
+      redirect-to-okta-for-login="$ctrl.redirectToOktaForLogin()"
     ></sign-up-modal>
     <div ng-switch-when="loading-donor" class="modal-body">
       <loading></loading>
