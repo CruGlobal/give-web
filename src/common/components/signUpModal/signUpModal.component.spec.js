@@ -25,9 +25,7 @@ describe('signUpForm', function () {
         $setSubmitted: jest.fn()
       },
     }
-    const scope = { $apply: jest.fn() }
-    scope.$apply.mockImplementation(() => {})
-    $ctrl = _$componentController_(module.name, { $scope: scope }, bindings)
+    $ctrl = _$componentController_(module.name, {}, bindings)
     // Prevent the actual Okta widget from being created in tests
     jest.spyOn($ctrl, 'setUpSignUpWidget').mockImplementation(() => {})
   }))
@@ -624,7 +622,6 @@ describe('signUpForm', function () {
 
       beforeEach(() => {
         jest.spyOn($ctrl, 'goToNextStep').mockImplementation(() => {});
-        jest.spyOn($ctrl.$scope, '$apply').mockImplementation((callback) => callback());
         jest.spyOn($ctrl, 'injectErrorMessages').mockImplementation(() => {});
         $ctrl.currentStep = 1;
         $ctrl.translations = {
@@ -690,7 +687,6 @@ describe('signUpForm', function () {
 
       beforeEach(() => {
         jest.spyOn($ctrl, 'goToNextStep').mockImplementation(() => {});
-        jest.spyOn($ctrl.$scope, '$apply').mockImplementation((callback) => callback());
         jest.spyOn($ctrl, 'injectErrorMessages').mockImplementation(() => {});
         $ctrl.currentStep = 2;
         $ctrl.translations = {
@@ -927,7 +923,6 @@ describe('signUpForm', function () {
 
     describe('redirectToSignInModalIfNeeded()', () => {
       beforeEach(() => {
-        jest.spyOn($ctrl.$scope, '$apply').mockImplementation((callback) => callback());
         jest.spyOn($ctrl, 'onSignIn').mockImplementation(() => {});
       });
       it('shows the login modal if the user navigates to the okta widget login form', () => {
