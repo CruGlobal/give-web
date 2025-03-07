@@ -47,6 +47,7 @@ class RegisterAccountModalController {
     this.scrollModalToTop = scrollModalToTop
     this.imgDomain = envService.read('imgDomain')
     this.newUser = sessionService.getRole() === Roles.public
+    this.$injector = angular.injector()
   }
 
   $onInit () {
@@ -74,6 +75,7 @@ class RegisterAccountModalController {
         this.stateChanged('sign-in')
       }
     })
+    this.cortexSignUpError = false
   }
 
   $onDestroy () {
@@ -87,9 +89,12 @@ class RegisterAccountModalController {
     }
   }
 
-  // Called after the user finishes creating a new Okta account
-  onSignUpSuccess (signUpDonorDetails) {
-    this.checkDonorDetails(signUpDonorDetails)
+  // Called if there was an error saving the Cortex sign up details.
+  onSignUpError (signUpDonorDetails) {
+    // Save the donor details so that they can be added to the contact info form, so the user can try again.
+    this.signUpDonorDetails = signUpDonorDetails
+    this.cortexSignUpError = true
+    this.stateChanged('contact-info')
   }
 
   // Called when the user requests to sign up from the sign in modal
@@ -113,6 +118,11 @@ class RegisterAccountModalController {
   }
 
   onContactInfoSuccess () {
+    // If a Cortex error occurred during sign up, redirect user to okta to continue the sign up process.
+    if (this.cortexSignUpError) {
+      this.redirectToOktaForLogin()
+      return
+    }
     // Success gathering contact info, Proceed to Step 4
     this.postDonorMatches()
   }
@@ -195,6 +205,19 @@ class RegisterAccountModalController {
     const modal = angular.element(document.getElementsByClassName('session-modal'))
     modal.removeClass('modal-sm modal-md modal-lg')
     modal.addClass(`modal-${size}`)
+  }
+
+  redirectToOktaForLogin () {
+    this.sessionService.signIn(this.lastPurchaseId).subscribe(() => {
+      const $injector = this.$injector
+      if (!$injector.has('sessionService')) {
+        $injector.loadNewModules(['sessionService'])
+      }
+
+      this.$document[0].body.dispatchEvent(
+        new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } })
+      )
+    })
   }
 }
 
