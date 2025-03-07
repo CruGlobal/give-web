@@ -312,6 +312,10 @@ class SignUpModalController {
   }
 
   preSubmit (postData, onSuccess) {
+    // Clear errors from previous steps
+    this.signUpErrors = []
+    this.clearInjectedErrorMessages()
+
     const step = this.currentStep
     const userProfile = postData.userProfile
     if (step === 1) {
@@ -400,9 +404,6 @@ class SignUpModalController {
   }
 
   submitFinalData (postData, onSuccess) {
-    // Clear errors from previous steps
-    this.signUpErrors = []
-    this.clearInjectedErrorMessages()
     // Add the user profile to the postData object
     // Okta widget handles the password
     postData.userProfile = {
