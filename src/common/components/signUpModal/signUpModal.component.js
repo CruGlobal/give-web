@@ -509,8 +509,12 @@ class SignUpModalController {
     }
   }
 
-  injectErrorMessages (errors = this.signUpErrors ?? []) {
+  injectErrorMessages (errors = this.signUpErrors) {
     this.clearInjectedErrorMessages()
+
+    if (!errors?.length) {
+      return
+    }
 
     // Inject error messages into the form since errors are cleared when switching steps/rerendering.
     errors.forEach(error => {
