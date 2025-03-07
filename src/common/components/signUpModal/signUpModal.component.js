@@ -456,6 +456,7 @@ class SignUpModalController {
     this.redirectToSignInModalIfNeeded(context)
     this.injectErrorMessages()
     this.injectBackButton()
+    // This needs to be after showVerificationCodeField to ensure even the verification code field is styled correctly
     this.initializeFloatingLabels()
 
     // Step 1: Identity
