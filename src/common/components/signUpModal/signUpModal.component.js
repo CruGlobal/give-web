@@ -442,8 +442,8 @@ class SignUpModalController {
       return
     }
 
+    // Step 4: Email Verification
     if (context.formName === 'enroll-authenticator') {
-      // Verification step page
       this.$scope.$apply(() => {
         this.currentStep = 4
       })
@@ -451,7 +451,6 @@ class SignUpModalController {
     }
 
     // All steps
-    this.injectBackButton()
     this.resetCurrentStepOnRegistrationComplete(context)
     this.redirectToSignInModalIfNeeded(context)
     this.injectErrorMessages()
