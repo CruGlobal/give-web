@@ -170,8 +170,7 @@ sign-up-modal {
 
     &:first-of-type {
 
-      input[type=text]:not(.chzn-search input),
-      input[type=password],
+      input,
       .chzn-container a {
         border-top-left-radius: 6px;
         border-top-right-radius: 6px;
@@ -181,7 +180,9 @@ sign-up-modal {
     &:last-of-type {
       // Usually the last fieldset has rounded bottom borders
       // ".chzn-container a" is for select boxes
-      input[type=text]:not(.chzn-search input), .o-form-input-error, .chzn-container a {
+      input,
+      .o-form-input-error,
+      .chzn-container a {
         border-bottom-left-radius: 6px;
         border-bottom-right-radius: 6px;
       }
@@ -189,18 +190,17 @@ sign-up-modal {
       // However, if it is a password field with a password requirements sibling, the password
       // requirements box gets the rounded border instead of the input or error message
       &[data-se="o-form-fieldset-credentials.passcode"]:has(+ [data-se="password-authenticator--rules"]) {
-        input[type=text]:not(.chzn-search input), .o-form-input-error {
+        input,
+        .o-form-input-error {
           border-bottom-left-radius: unset;
           border-bottom-right-radius: unset;
         }
       }
 
       // Also, if the field has errors, the error box gets the rounded border instead of the input
-      &:has(.okta-form-input-error) {
-        input[type=text]:not(.chzn-search input) {
-          border-bottom-left-radius: unset;
-          border-bottom-right-radius: unset;
-        }
+      &:has(.okta-form-input-error) input {
+        border-bottom-left-radius: unset;
+        border-bottom-right-radius: unset;
       }
     }
 
