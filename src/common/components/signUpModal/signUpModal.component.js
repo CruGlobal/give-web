@@ -456,6 +456,7 @@ class SignUpModalController {
     }
 
     // All steps
+    this.updateSignUpButtonText()
     this.resetCurrentStepOnRegistrationComplete(context)
     this.redirectToSignInModalIfNeeded(context)
     this.injectErrorMessages()
