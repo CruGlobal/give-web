@@ -4,6 +4,7 @@ import showErrors from 'common/filters/showErrors.filter'
 import sessionService from 'common/services/session/session.service'
 import sessionModalService from 'common/services/session/sessionModal.service'
 import orderService from 'common/services/api/order.service'
+import verificationService from 'common/services/api/verification.service'
 import template from './oktaAuthCallback.tpl.html'
 
 const componentName = 'oktaAuthCallback'
@@ -11,12 +12,13 @@ export const unknownErrorMessage = 'Failed to authenticate user when redirecting
 
 class OktaAuthCallbackController {
   /* @ngInject */
-  constructor ($log, $window, sessionService, sessionModalService, orderService) {
+  constructor ($log, $window, sessionService, sessionModalService, orderService, verificationService) {
     this.$log = $log
     this.$window = $window
     this.sessionService = sessionService
     this.sessionModalService = sessionModalService
     this.orderService = orderService
+    this.verificationService = verificationService
   }
 
   $onInit () {
@@ -26,6 +28,12 @@ class OktaAuthCallbackController {
         next: (data) => this.onSignInSuccess(data),
         error: (error) => this.onSignInFailure(error)
       })
+  }
+
+  $onDestroy () {
+    if (angular.isDefined(this.verificationServiceSubscription)) {
+      this.verificationServiceSubscription.unsubscribe()
+    }
   }
 
   initializeVariables () {
@@ -42,18 +50,75 @@ class OktaAuthCallbackController {
     this.orderService.getDonorDetails()
       .subscribe((data) => {
         const registrationState = data['registration-state']
-        if (registrationState === 'NEW' || registrationState === 'MATCHED') {
+        if (registrationState === 'NEW') {
           this.isLoading = false
-          const modal = registrationState === 'NEW'
-            ? this.sessionModalService.nonDismissibleRegisterAccount()
-            : this.sessionModalService.userMatch()
-          modal && modal.then(() => {
-            this.redirectToLocationPriorToLogin()
-          })
+          const isValid = this.areRequiredFieldsFilled(data)
+          if (isValid) {
+            this.postDonorMatches()
+          } else {
+            this.openContactInfoModalThenRedirect()
+          }
+        } else if (registrationState === 'MATCHED') {
+          this.isLoading = false
+          this.openUserMatchModalThenRedirect()
         } else {
           this.redirectToLocationPriorToLogin()
         }
       })
+  }
+
+  openUserMatchModalThenRedirect () {
+    this.sessionModalService.userMatch().then(() => {
+      this.redirectToLocationPriorToLogin()
+    })
+  }
+
+  openContactInfoModalThenRedirect () {
+    this.sessionModalService.nonDismissibleRegisterAccount().then(() => {
+      this.redirectToLocationPriorToLogin()
+    })
+  }
+
+  postDonorMatches () {
+    if (angular.isDefined(this.verificationServiceSubscription)) {
+      this.verificationServiceSubscription.unsubscribe()
+    }
+    this.verificationServiceSubscription = this.verificationService.postDonorMatches().subscribe({
+      next: () => this.openUserMatchModalThenRedirect(),
+      error: () => this.openContactInfoModalThenRedirect()
+    })
+  }
+
+  areRequiredFieldsFilled (donorDetails) {
+    const requiredFields = [
+      'name.given-name',
+      'name.family-name',
+      'email',
+      'donor-type',
+      'mailingAddress.country',
+      'mailingAddress.streetAddress'
+    ]
+
+    if (donorDetails['donor-type'] === 'Organization') {
+      requiredFields.push('organization-name')
+    }
+    if (donorDetails.mailingAddress.country === 'US') {
+      requiredFields.push(
+        'mailingAddress.locality',
+        'mailingAddress.region',
+        'mailingAddress.postalCode'
+      )
+    }
+
+    return requiredFields.every(field => {
+      // Split the field name into individual keys to handle nested objects.
+      // For example, 'mailingAddress.streetAddress' becomes ['mailingAddress', 'streetAddress'].
+      const keys = field.split('.')
+      // Check if each key's value returns a truthy value.
+      // If any property is falsy, the reduce function returns a falsy value,
+      // and the every method returns false.
+      return keys.reduce((obj, key) => obj && obj[key], donorDetails)
+    })
   }
 
   onSignInFailure (error) {
@@ -86,6 +151,7 @@ export default angular
     sessionService.name,
     sessionModalService.name,
     orderService.name,
+    verificationService.name,
     showErrors.name
   ])
   .component(componentName, {
