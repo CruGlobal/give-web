@@ -26,14 +26,22 @@ const signUpButtonText = 'Create Account'
 const nextButtonText = 'Continue'
 const backButtonId = 'backButton'
 const backButtonText = 'Back'
-const errorIconHtml = '<span class="icon icon-16 error-16-small" role="img" aria-label="Error"></span>'
+
+const createErrorIcon = () => {
+  const icon = document.createElement('span')
+  icon.className = 'icon icon-16 error-16-small'
+  icon.ariaLabel = 'Error'
+  icon.role = 'img'
+  return icon
+}
 
 class SignUpModalController {
   /* @ngInject */
-  constructor ($log, $scope, $location, $translate, sessionService, cartService, orderService, envService, geographiesService) {
+  constructor ($log, $scope, $location, $timeout, $translate, sessionService, cartService, orderService, envService, geographiesService) {
     this.$log = $log
     this.$scope = $scope
     this.$location = $location
+    this.$timeout = $timeout
     this.$translate = $translate
     this.sessionService = sessionService
     this.orderService = orderService
@@ -93,7 +101,10 @@ class SignUpModalController {
       'CITY_ERROR',
       'SELECT_STATE_ERROR',
       'ZIP_CODE_ERROR',
-      'INVALID_US_ZIP_ERROR'
+      'INVALID_US_ZIP_ERROR',
+      'OKTA_SIGNUP_FIELDS_ERROR',
+      'OKTA_EMAIL_FIELD',
+      'OKTA_PASSWORD_FIELD'
     ]).then(translations => {
       this.translations = {
         giveAsIndividual: translations.GIVE_AS_INDIVIDUAL,
@@ -111,7 +122,10 @@ class SignUpModalController {
         cityError: translations.CITY_ERROR,
         selectStateError: translations.SELECT_STATE_ERROR,
         zipCodeError: translations.ZIP_CODE_ERROR,
-        invalidUSZipError: translations.INVALID_US_ZIP_ERROR
+        invalidUSZipError: translations.INVALID_US_ZIP_ERROR,
+        signupFieldsError: translations.OKTA_SIGNUP_FIELDS_ERROR,
+        emailField: translations.OKTA_EMAIL_FIELD,
+        passwordField: translations.OKTA_PASSWORD_FIELD
       }
     })
   }
@@ -297,6 +311,10 @@ class SignUpModalController {
   }
 
   preSubmit (postData, onSuccess) {
+    // Clear errors from previous steps
+    this.signUpErrors = []
+    this.clearInjectedErrorMessages()
+
     const step = this.currentStep
     const userProfile = postData.userProfile
     if (step === 1) {
@@ -385,8 +403,6 @@ class SignUpModalController {
   }
 
   submitFinalData (postData, onSuccess) {
-    // Clear errors from previous steps
-    this.signUpErrors = []
     // Add the user profile to the postData object
     // Okta widget handles the password
     postData.userProfile = {
@@ -406,6 +422,12 @@ class SignUpModalController {
     // Save errors to local variable to inject into the form
     // Since errors are cleared on each step change
     this.signUpErrors = error.xhr.responseJSON.errorCauses
+    // Wait for the Okta widget to create the error message box and set the sign up button text
+    // before augmenting the error message box and resetting the sign up button text
+    this.$timeout(() => {
+      this.updateSignUpButtonText()
+      this.injectErrorMessages()
+    })
   }
 
   afterRender (context) {
@@ -420,12 +442,26 @@ class SignUpModalController {
       return
     }
 
+    // Step 4: Email Verification
+    if (context.formName === 'enroll-authenticator') {
+      // If the user has signed up but hasn't submitted the verification code yet and comes back to
+      // the sign up modal, Okta will skip the sign up form and take them directly to the verify
+      // email step. We detect that here and update the current step and click the "Enter a
+      // verification code instead" for them.
+      this.$scope.$apply(() => {
+        this.currentStep = 4
+      })
+      this.showVerificationCodeField()
+    }
+
     // All steps
     this.updateSignUpButtonText()
     this.resetCurrentStepOnRegistrationComplete(context)
     this.redirectToSignInModalIfNeeded(context)
     this.injectErrorMessages()
     this.injectBackButton()
+    // This needs to be after showVerificationCodeField to ensure even the verification code field is styled correctly
+    this.initializeFloatingLabels()
 
     // Step 1: Identity
     if (this.loadingCountriesError && this.currentStep === 1) {
@@ -435,11 +471,6 @@ class SignUpModalController {
     if (this.loadingRegionsError && this.currentStep === 2) {
       this.injectRegionLoadError()
     }
-    // Step 3: Security
-    this.showVerificationCodeField()
-
-    // This needs to be last to ensure even the verification code field is styled correctly
-    this.initializeFloatingLabels()
   }
 
   ready () {
@@ -456,9 +487,12 @@ class SignUpModalController {
   }
 
   updateSignUpButtonText () {
-    // Change the text of the sign up button to ensure it's clear what the user is doing
-    const signUpButton = angular.element(document.querySelector('.o-form-button-bar input.button.button-primary'))
-    signUpButton.attr('value', this.currentStep === 3 ? signUpButtonText : nextButtonText)
+    // Leave the default text on the verify step
+    if (this.currentStep !== 4) {
+      // Change the text of the sign up button to ensure it's clear what the user is doing
+      const signUpButton = angular.element(document.querySelector('.o-form-button-bar input.button.button-primary'))
+      signUpButton.attr('value', this.currentStep === 3 ? signUpButtonText : nextButtonText)
+    }
   }
 
   resetCurrentStepOnRegistrationComplete (context) {
@@ -476,28 +510,71 @@ class SignUpModalController {
   }
 
   injectErrorMessages (errors = this.signUpErrors) {
+    this.clearInjectedErrorMessages()
+
+    if (!errors?.length) {
+      return
+    }
+
     // Inject error messages into the form since errors are cleared when switching steps/rerendering.
-    errors?.forEach(error => {
+    errors.forEach(error => {
       const field = document.querySelector(`${inputFieldErrorSelectorPrefix}${error.property.replace(/\./g, '\\.')}`)
       if (field) {
-        // Only add an error message if it doesn't already exist
-        const existingErrorParentElement = field.parentNode.querySelector('.okta-form-input-error')
-        const errorText = `${errorIconHtml} ${error.errorSummary}`
-        if (!existingErrorParentElement || existingErrorParentElement.innerHTML !== errorText) {
-          const errorElement = document.createElement('div')
-          errorElement.classList.add('okta-form-input-error', 'o-form-input-error', 'o-form-explain')
-          field.parentNode.classList.add('o-form-has-errors')
-          errorElement.setAttribute('role', 'alert')
-          errorElement.innerHTML = errorText
-          field.parentNode.appendChild(errorElement)
-        }
+        const errorElement = document.createElement('div')
+        errorElement.classList.add('okta-form-input-error', 'o-form-input-error', 'o-form-explain')
+        errorElement.setAttribute('role', 'alert')
+
+        const errorSummary = error.errorSummary
+        errorElement.innerText = Array.isArray(errorSummary) ? errorSummary.join(' ') : errorSummary
+        errorElement.prepend(createErrorIcon())
+
+        field.parentNode.classList.add('o-form-has-errors')
+        field.parentNode.appendChild(errorElement)
       }
+    })
+
+    // Augment the error message box to specify which fields had errors. Since the email and
+    // password fields are on step 1 and the submission happens on step 3, the error messages for
+    // those fields won't be visible to the user.
+    if (this.currentStep === 4) {
+      // Skip the verification step because an invalid code comes back as "credentials.passcode" and
+      // to say that the password field was invalid would confuse the user
+      return
+    }
+
+    const errorBox = document.querySelector('.okta-form-infobox-error')
+    if (!errorBox) {
+      return
+    }
+
+    const errorFields = errors.map(error => {
+      if (error.property === 'userProfile.email') {
+        return this.translations.emailField
+      } else if (error.property === 'credentials.passcode') {
+        return this.translations.passwordField
+      }
+      return null
+    }).filter(Boolean)
+    if (!errorFields.length) {
+      return
+    }
+
+    const errorMessage = document.createElement('p')
+    // The OKTA_SIGNUP_FIELDS_ERROR translation key is already loaded, so we can use
+    // $translate.instant to synchronously interpolate out fields into it
+    errorMessage.innerText = this.$translate.instant('OKTA_SIGNUP_FIELDS_ERROR', { fields: errorFields.join(', ') })
+    errorBox.append(errorMessage)
+  }
+
+  clearInjectedErrorMessages () {
+    document.querySelectorAll('.okta-form-input-error').forEach((node) => {
+      node.remove()
     })
   }
 
   injectBackButton () {
-    // Don't show back button on the first step
-    if (this.currentStep === 1) {
+    // Don't show back button on the first step or verify step
+    if (this.currentStep === 1 || this.currentStep === 4) {
       return
     }
     const buttonBar = document.querySelector('.o-form-button-bar')
@@ -518,10 +595,15 @@ class SignUpModalController {
     const errorElement = document.createElement('div')
     errorElement.classList.add('okta-form-input-error', 'o-form-input-error', 'o-form-explain', 'cru-error')
     errorElement.setAttribute('role', 'alert')
-    errorElement.innerHTML = `${errorIconHtml} ${errorMessage}`
+    // SECURITY: errorMessage is a trusted first-party string from this.translations
+    // innerHTML must not be set to an untrusted string
+    errorElement.innerHTML = errorMessage
+    errorElement.prepend(createErrorIcon())
 
     const retryButtonElement = document.createElement('a')
     retryButtonElement.classList.add('cru-retry-button')
+    // SECURITY: this.translations contains only trusted first-party strings
+    // innerHTML must not be set to an untrusted string
     retryButtonElement.innerHTML = this.translations.retry
 
     const field = document.querySelector(fieldSelector)
@@ -704,6 +786,7 @@ class SignUpModalController {
 
 export default angular
   .module(componentName, [
+    'pascalprecht.translate',
     sessionService.name,
     orderService.name,
     cartService.name,

@@ -1058,12 +1058,26 @@ describe('signUpForm', function () {
         const errorElement = field.parentNode.querySelector(inputErrorFieldSelector);
         expect(errorElement).not.toBeNull();
         expect(errorElement.getAttribute('role')).toBe('alert');
-        expect(errorElement.innerHTML).toContain(errorSummary);
+        expect(errorElement.innerText).toBe(errorSummary);
         expect(field.parentNode.classList).toContain('o-form-has-errors');
         // Remove the dot from the selector
         expect(errorElement.classList).toContain(inputErrorFieldSelector.slice(1));
         expect(errorElement.classList).toContain('o-form-input-error');
         expect(errorElement.classList).toContain('o-form-explain');
+      });
+
+      it('should inject error message summary array', () => {
+        const errorSummary = 'accountTypeError';
+        $ctrl.signUpErrors = [
+          {
+            property: 'accountType',
+            errorSummary: [errorSummary, errorSummary]
+          }
+        ]
+        $ctrl.injectErrorMessages()
+
+        const errorElement = document.querySelector(inputErrorFieldSelector);
+        expect(errorElement.innerText).toBe(`${errorSummary} ${errorSummary}`);
       });
 
       it('should only add the error message passed as a prop', () => {
