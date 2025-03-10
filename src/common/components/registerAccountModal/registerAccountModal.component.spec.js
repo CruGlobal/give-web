@@ -18,7 +18,16 @@ describe('registerAccountModal', function () {
       modalTitle: '',
       onCancel: jest.fn(),
       onSuccess: jest.fn(),
-      setLoading: jest.fn()
+      setLoading: jest.fn(),
+      $document: [{
+        body: {
+          dispatchEvent: jest.fn()
+        }
+      }],
+      $injector: {
+        has: jest.fn(),
+        loadNewModules: jest.fn()
+      }
     }
     locals = {
       $element: [{ dataset: {} }],
@@ -32,6 +41,7 @@ describe('registerAccountModal', function () {
         getRole: jest.fn(),
         isOktaRedirecting: jest.fn(),
         removeOktaRedirectIndicator: jest.fn(),
+        signIn:  jest.fn(),
         sessionSubject: new BehaviorSubject({})
       },
       cartService: {
@@ -140,6 +150,35 @@ describe('registerAccountModal', function () {
     })
   })
 
+  describe('onSignUpError()', () => {
+    it('should save donor details and record that an error occurred', () => {
+      jest.spyOn($ctrl, 'stateChanged')
+      const donorDetails = {
+        name: {
+          'given-name': 'First',
+          'family-name': 'Last'
+        },
+        'donor-type': 'Household',
+        email: 'email',
+        mailingAddress: {
+          streetAddress: '123 First St',
+          locality: 'Orlando',
+          region: 'FL',
+          postalCode: '12345',
+          country: 'US'
+        }
+      }
+      expect($ctrl.signUpDonorDetails).toBe(undefined)
+      expect($ctrl.cortexSignUpError).toBe(undefined)
+
+      $ctrl.onSignUpError(donorDetails)
+
+      expect($ctrl.signUpDonorDetails).toBe(donorDetails)
+      expect($ctrl.cortexSignUpError).toBe(true)
+      expect($ctrl.stateChanged).toHaveBeenCalledWith('contact-info')
+    });
+  })
+
   describe('onIdentitySuccess()', () => {
     it('calls checkDonorDetails', () => {
       jest.spyOn($ctrl, 'checkDonorDetails').mockImplementation(() => {})
@@ -157,11 +196,22 @@ describe('registerAccountModal', function () {
   })
 
   describe('onContactInfoSuccess()', () => {
-    it('calls postDonorMatches', () => {
+    beforeEach(() => {
       jest.spyOn($ctrl, 'postDonorMatches').mockImplementation(() => {})
+      jest.spyOn($ctrl, 'redirectToOktaForLogin').mockImplementation(() => {})
+    })
+    it('calls postDonorMatches', () => {
       $ctrl.onContactInfoSuccess()
 
       expect($ctrl.postDonorMatches).toHaveBeenCalled()
+      expect($ctrl.redirectToOktaForLogin).not.toHaveBeenCalled()
+    })
+    it('calls redirectToOktaForLogin when registration error occurred.', () => {
+      $ctrl.cortexSignUpError = true
+      $ctrl.onContactInfoSuccess()
+
+      expect($ctrl.redirectToOktaForLogin).toHaveBeenCalled()
+      expect($ctrl.postDonorMatches).not.toHaveBeenCalled()
     })
   })
 
@@ -414,6 +464,36 @@ describe('registerAccountModal', function () {
 
       expect(modal.removeClass).toHaveBeenCalledWith('modal-sm modal-md modal-lg')
       expect(modal.addClass).toHaveBeenCalledWith('modal-sm')
+    })
+  })
+
+  describe('redirectToOktaForLogin', () => {
+    let dispatchEventSpy
+    beforeEach(() => {
+      jest.spyOn($ctrl.sessionService, 'signIn').mockReturnValue(Observable.of({}))
+      dispatchEventSpy = jest.spyOn($ctrl.$document[0].body, 'dispatchEvent')
+    })
+
+    it('should call sessionService.signIn and dispatch giveSignInSuccess event', () => {
+      expect($ctrl.sessionService.signIn).not.toHaveBeenCalled()
+
+      $ctrl.redirectToOktaForLogin()
+
+      expect($ctrl.sessionService.signIn).toHaveBeenCalledWith($ctrl.lastPurchaseId)
+      expect($ctrl.$injector.has).toHaveBeenCalledWith('sessionService')
+      expect($ctrl.$injector.loadNewModules).toHaveBeenCalledWith(['sessionService'])
+      expect(dispatchEventSpy).toHaveBeenCalledWith(expect.objectContaining({
+        type: 'giveSignInSuccess',
+        detail: { $injector: $ctrl.$injector }
+      }))
+    })
+
+    it('should not load new modules if sessionService is already available', () => {
+      $ctrl.$injector.has.mockReturnValue(true)
+
+      $ctrl.redirectToOktaForLogin()
+
+      expect($ctrl.$injector.loadNewModules).not.toHaveBeenCalled()
     })
   })
 })
