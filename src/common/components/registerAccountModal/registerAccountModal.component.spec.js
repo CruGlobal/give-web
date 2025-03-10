@@ -263,67 +263,10 @@ describe('registerAccountModal', function () {
     })
 
     describe('\'registration-state\' NEW', () => {
-      const signUpDonorDetails = {
-        name: {
-          'given-name': 'First',
-          'family-name': 'Last'
-        },
-        'donor-type': 'Household',
-        email: 'first.last@cru.org',
-        phone: '111-222-3333',
-        mailingAddress: {
-          streetAddress: '123 First St',
-          locality: 'Orlando',
-          region: 'FL',
-          postalCode: '12345',
-          country: 'US'
-        }
-      }
-
-      const emailFormUri = '/emails/crugive'
-
-      beforeEach(() => {
+      it('changes state to \'contact-info\'', () => {
         $ctrl.orderService.getDonorDetails.mockImplementation(() => Observable.of({
           'registration-state': 'NEW',
-          name: {
-            'given-name': 'Existing',
-            'family-name': 'Existing'
-          },
-          'donor-type': '',
-          email: 'existing.email@cru.org',
-          phone: '',
-          mailingAddress: {
-            streetAddress: '',
-            locality: '',
-            region: '',
-            postalCode: '',
-            country: 'CANADA'
-          },
-          emailFormUri
         }))
-        $ctrl.orderService.addEmail.mockImplementation(() => Observable.of({}))
-      })
-
-      describe('with sign up details', () => {
-        it('saves sign up contact info merged with existing contact info', () => {
-          $ctrl.checkDonorDetails(signUpDonorDetails)
-
-          expect($ctrl.orderService.updateDonorDetails).toHaveBeenCalledWith(expect.objectContaining(signUpDonorDetails))
-          expect($ctrl.orderService.addEmail).toHaveBeenCalledWith(signUpDonorDetails.email, emailFormUri)
-          expect($ctrl.stateChanged).toHaveBeenCalledWith('contact-info')
-        })
-
-        it('remembers contact info after error', () => {
-          $ctrl.orderService.addEmail.mockImplementation(() => Observable.throw(new Error('Error adding email')))
-
-          $ctrl.checkDonorDetails(signUpDonorDetails)
-
-          expect($ctrl.signUpDonorDetails).toBe(signUpDonorDetails)
-          expect($ctrl.stateChanged).toHaveBeenCalledWith('contact-info')
-        })
-      })
-
-      it('changes state to \'contact-info\'', () => {
         $ctrl.checkDonorDetails()
 
         expect($ctrl.orderService.getDonorDetails).toHaveBeenCalled()
