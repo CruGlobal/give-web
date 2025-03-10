@@ -19,7 +19,8 @@ describe('signUpForm', function () {
     $rootScope = _$rootScope_
     bindings = {
       onSignIn: jest.fn(),
-      onSignUp: jest.fn(),
+      onSignUpError: jest.fn(),
+      redirectToOktaForLogin: jest.fn(),
       signUpForm: {
         $valid: false,
         $setSubmitted: jest.fn()
@@ -344,13 +345,13 @@ describe('signUpForm', function () {
       it('should use saved data from $scope', () => {
         $ctrl.$scope.countryCode = 'UK';
         $ctrl.$scope.streetAddress = user.streetAddress;
-        $ctrl.$scope.streetAddressExtended = user.streetAddressExtended;
+        $ctrl.$scope.streetAddressExtended = 'Extended';
         $ctrl.$scope.internationalAddressLine3 = 'internationalAddressLine3';
         $ctrl.$scope.internationalAddressLine4 = 'internationalAddressLine4';
         $ctrl.$scope.city = user.city;
         $ctrl.$scope.state = user.state;
         $ctrl.$scope.zipCode = user.zipCode;
-        $ctrl.$scope.primaryPhone = user.primaryPhone;
+        $ctrl.$scope.primaryPhone = user['phone-number'];
 
         $ctrl.parseSchema(schema, onSuccess);
 
@@ -1316,10 +1317,14 @@ describe('signUpForm', function () {
         'family-name': user.lastName
       },
       'donor-type': user.accountType,
+      'organization-name': 'Organization Name',
       email: user.email,
-      'phone-number': user.primaryPhone,
+      'phone-number': "",
       mailingAddress: {
         streetAddress: user.streetAddress,
+        extendedAddress: 'extendedAddress',
+        intAddressLine3: 'intAddressLine3',
+        intAddressLine4: 'intAddressLine4',
         locality: user.city,
         region: user.state,
         postalCode: '12345-678',
@@ -1331,7 +1336,11 @@ describe('signUpForm', function () {
       $ctrl.$scope.lastName = user.lastName
       $ctrl.$scope.email = user.email
       $ctrl.$scope.accountType = user.accountType
+      $ctrl.$scope.organizationName = 'Organization Name'
       $ctrl.$scope.streetAddress = user.streetAddress
+      $ctrl.$scope.streetAddressExtended = 'extendedAddress'
+      $ctrl.$scope.internationalAddressLine3 = 'intAddressLine3'
+      $ctrl.$scope.internationalAddressLine4 = 'intAddressLine4'
       $ctrl.$scope.city = user.city
       $ctrl.$scope.state = user.state
       $ctrl.$scope.zipCode = user.zipCode
@@ -1356,16 +1365,28 @@ describe('signUpForm', function () {
         },
         emailFormUri
       }))
-      jest.spyOn($ctrl.orderService, 'updateDonorDetails').mockImplementation(() => Observable.of({}))
       jest.spyOn($ctrl.orderService, 'addEmail').mockImplementation(() => Observable.of({}))
-      jest.spyOn($ctrl, 'logIntoOkta').mockImplementation(() => Observable.of({}))
+      jest.spyOn($ctrl, 'redirectToOktaForLogin')
+      jest.spyOn($ctrl, 'onSignUpError')
     })
 
-    it("should update the user's data, updating email separately", () => {
+    it("should succeed updating the user's data, redirecting to Okta", () => {
+      jest.spyOn($ctrl.orderService, 'updateDonorDetails').mockImplementation(() => Observable.of({}))
+
       $ctrl.saveDonorDetails()
 
       expect($ctrl.orderService.updateDonorDetails).toHaveBeenCalledWith(expect.objectContaining(signUpDonorDetails))
       expect($ctrl.orderService.addEmail).toHaveBeenCalledWith(signUpDonorDetails.email, emailFormUri)
+      expect($ctrl.redirectToOktaForLogin).toHaveBeenCalled()
+      expect($ctrl.onSignUpError).not.toHaveBeenCalled()
+    })
+
+    it("should fail while updating the user's data, opening the contact info modal", () => {
+      jest.spyOn($ctrl.orderService, 'updateDonorDetails').mockImplementation(() => Observable.throw({}))
+      $ctrl.saveDonorDetails()
+
+      expect($ctrl.redirectToOktaForLogin).not.toHaveBeenCalled()
+      expect($ctrl.onSignUpError).toHaveBeenCalled()
     })
   });
 })
