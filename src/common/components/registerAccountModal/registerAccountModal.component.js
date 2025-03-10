@@ -13,14 +13,6 @@ import userMatchModal from 'common/components/userMatchModal/userMatchModal.comp
 import contactInfoModal from 'common/components/contactInfoModal/contactInfoModal.component'
 import failedVerificationModal from 'common/components/failedVerificationModal/failedVerificationModal.component'
 
-import { Observable } from 'rxjs/Observable'
-import 'rxjs/add/observable/forkJoin'
-import 'rxjs/add/observable/of'
-import 'rxjs/add/operator/do'
-import 'rxjs/add/operator/map'
-import 'rxjs/add/operator/switchMap'
-import merge from 'lodash/merge'
-
 const componentName = 'registerAccountModal'
 
 class RegisterAccountModalController {
@@ -133,7 +125,7 @@ class RegisterAccountModalController {
     this.onSuccess()
   }
 
-  checkDonorDetails (signUpDonorDetails) {
+  checkDonorDetails () {
     // Show loading state
     this.stateChanged('loading-donor')
 
@@ -141,27 +133,7 @@ class RegisterAccountModalController {
     if (angular.isDefined(this.getDonorDetailsSubscription)) {
       this.getDonorDetailsSubscription.unsubscribe()
     }
-    this.getDonorDetailsSubscription = this.orderService.getDonorDetails().switchMap((donorDetails) => {
-      if (signUpDonorDetails && donorDetails['registration-state'] === 'NEW') {
-        // Save the contact info from signup
-        merge(donorDetails, signUpDonorDetails)
-
-        // Send each of the requests and pass donorDetails to the next step after the requests complete
-        return Observable.forkJoin([
-          this.orderService.updateDonorDetails(donorDetails),
-          this.orderService.addEmail(donorDetails.email, donorDetails.emailFormUri)
-        ]).map(() => donorDetails).do({
-          error: () => {
-            // If there was an error, save the donor details from sign up so that they will be added
-            // to the contact info form. The error handler below will change the step to contact-info.
-            this.signUpDonorDetails = signUpDonorDetails
-          }
-        })
-      }
-
-      // Pass donorDetails to the next step
-      return Observable.of(donorDetails)
-    }).subscribe({
+    this.getDonorDetailsSubscription = this.orderService.getDonorDetails().subscribe({
       next: (donorDetails) => {
         // Workflow Complete if 'registration-state' is COMPLETED
         if (donorDetails['registration-state'] === 'COMPLETED') {
