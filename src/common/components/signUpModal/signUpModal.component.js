@@ -265,6 +265,9 @@ class SignUpModalController {
     this.loadingCountriesError = false
     return this.geographiesService.getCountries()
       .map((data) => {
+        // Order countries in alphabetical order
+        data.sort((a, b) => a['display-name'].localeCompare(b['display-name']))
+
         this.countriesData = data
         this.countryCodeOptions = {}
         data.forEach(country => {
