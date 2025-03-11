@@ -60,13 +60,17 @@ const sharedConfig = {
       ROLLBAR_ACCESS_TOKEN: JSON.stringify(process.env.ROLLBAR_ACCESS_TOKEN) || 'development-token',
       DATADOG_RUM_CLIENT_TOKEN: process.env.DATADOG_RUM_CLIENT_TOKEN || ''
     }),
-    new StyleLintPlugin({
-      configFile: path.resolve(__dirname, 'stylelint.config.mjs'),
-      context: 'src/assets/scss',
-      files: '**/*.(css|scss)',
-      failOnError: true,
-      quiet: false
-    }),
+    ...(isBuild
+      ? []
+      : [
+        new StyleLintPlugin({
+          configFile: path.resolve(__dirname, 'stylelint.config.mjs'),
+          context: 'src/assets/scss',
+          files: '**/*.(css|scss)',
+          failOnError: true,
+          quiet: false
+        }),
+      ]),
     // To strip all locales except “en”
     new MomentLocalesPlugin()
   ],
