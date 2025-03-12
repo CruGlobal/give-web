@@ -126,7 +126,7 @@
               <label class="mb0 hidden-xs hidden-sm">
                 <span class="invisible mb0"></span>
               </label>
-              <button type="button" class="btn btn-primary btn-block" ng-click="$ctrl.toggleSpouseDetails()">
+              <button type="button" class="btn btn-primary btn-block" ng-click="$ctrl.toggleSpouseDetails()" uib-tooltip="{{'By adding your spouse\'s name, we can ensure that both of your contributions are linked together, providing a clearer and more accurate record of your household\'s giving.' | translate}}">
                   <span ng-if="!$ctrl.showSpouseDetails">Add Spouse</span>
                   <span ng-if="$ctrl.showSpouseDetails">Remove Spouse</span>
               </button>
