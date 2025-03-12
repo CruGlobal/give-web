@@ -16,15 +16,30 @@ import failedVerificationModal from 'common/components/failedVerificationModal/f
 const componentName = 'registerAccountModal'
 
 class RegisterAccountModalController {
-  // Register Account Modal is a multi-step process.
+  // --------------------------------------
+  // Registration process.
+  // It's a multi-step process, handled by
+  // this component and sub-components.
+  // --------------------------------------
   // 1. Sign In/Up
-  //  1.1 Sign in or Sign Up
-  //  1.2 Verify Email
-  //  1.3 Sign In
+  //  1.1 Sign in - redirect to Okta
+  //  1.2 Sign Up - shown the sign up modal
   // 2. Fetch Donor Details
   // 3. Collect Contact Info
-  // 4. Post to Donor Matches
-  // 5. Complete User Match
+  // 4. Register for Okta account
+  //   4.1 Verify email via Okta
+  // 5. Register for Cortex/Give account
+  //   5.1 Upon success, redirect to Okta
+  //   5.2 Upon failure, shown the contact info modal for manual entry.
+  //     5.2.1 Upon success, redirect to Okta
+  // 6. User authenticates on Okta
+  //     (Redirect to allow user's credentials to be stored by browser.)
+  // 7. Upon returning to the site, we check the user's donor details.
+  //   7.1 If MATCHED, we show the user match modal.
+  //   7.2 if NEW, we determine if the user has already registered.
+  //     7.2.1 If registered, we run post donor matching and show the user match modal.
+  //     7.2.2 If not fully registered, we show the contact info modal and then run post donor matches.
+  // 8. Upon registration completion, we redirect the user back to their previous page
 
   /* @ngInject */
   constructor ($document, $element, $rootScope, $window, cartService, orderService, sessionService, verificationService, envService, gettext) {
