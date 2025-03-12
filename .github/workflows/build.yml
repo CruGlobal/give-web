@@ -1,4 +1,4 @@
-name: Build
+name: CI
 
 on:
   push: 
@@ -20,6 +20,7 @@ permissions:
 
 jobs:
   lint:
+    name: 🧹 Lint Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -39,6 +40,7 @@ jobs:
         run: yarn lint:styles
 
   test:
+    name: ✅ Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -58,8 +60,29 @@ jobs:
       
       - name: Upload Codecov Reports
         uses: codecov/codecov-action@v2 
-   
+
+  build:
+    name: 🏗️ Build app
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .tool-versions
+      
+      - name: Install Dependencies
+        run: yarn install --immutable --immutable-cache --ignore-optional
+      
+      - name: Build App
+        env:
+          S3_GIVE_DOMAIN: //${{ secrets.GIVE_WEB_HOSTNAME }}
+          ROLLBAR_ACCESS_TOKEN: ${{ secrets.ROLLBAR_ACCESS_TOKEN }}
+          DATADOG_RUM_CLIENT_TOKEN: ${{ secrets.DATADOG_RUM_CLIENT_TOKEN }}
+        run: yarn run build
+
+
   deploy:
+    name: 🚀 Deploy app
     runs-on: ubuntu-latest
     environment:
       name: ${{ (github.ref == 'refs/heads/master' && 'production') || 'staging' }}
