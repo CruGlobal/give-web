@@ -175,22 +175,26 @@ Use yarn for faster installs and to update the yarn lock file: https://yarnpkg.c
 
 ### Install & Run
 
-1. `yarn` or `npm install`
-2. `yarn start` or `npm start`
+1. `yarn`
+2. `yarn start`
 3. Browse to [`http://localhost:9000`](http://localhost:9000)
-Note: For session cookies to work correctly, add an entry to your hosts file for `localhost.cru.org` pointing to `127.0.0.1` and use [`http://localhost.cru.org:9000`](http://localhost.cru.org:9000) for development
+Note: For session cookies to work correctly, add the below entries to your hosts file, and use [`https://localhost.cru.org:9000`](https://localhost.cru.org:9000) for development
+```
+127.0.0.1    localhost.cru.org
+::1          localhost.cru.org
+```
 
 ### Development Tasks
 
-- `yarn run test` or `npm run test` to run karma tests
-- `yarn run lint` or `npm run lint` to run eslint
-- `yarn run build` or `npm run build` to generate minified output files. These files are output to `/dist`. `common.js` must be included before any of the other JS files.
-- `yarn run build:analyze` or `npm run build:analyze` to open a visualization of bundle sizes after building
+- `yarn test` to run Jest tests
+- `yarn lint` to run StandardJS linter
+- `yarn build` to generate minified output files. These files are output to `/dist`. `common.js` must be included before any of the other JS files.
+- `yarn build:analyze` to open a visualization of bundle sizes after building
 
 ### Adding dependencies
 
-- Use `yarn add <package-name>` or `npm install <package-name> --save` to install app dependencies
-- Use `yarn add <package-name> -dev` `npm install <package-name> --save-dev` to install tooling dependencies
+- Use `yarn add <package-name>` to install app dependencies
+- Use `yarn add <package-name> --dev` to install tooling dependencies
 
 ### Making queries to Cortex
 Use the `cortexApiService` which provides convenience methods for sending requests to Cortex. For more documentation see the [cortexApiService docs](docs/cortexApiService.md).
@@ -203,3 +207,5 @@ Replace `https://give-static.cru.org` with `https://give-stage-static.cru.org` t
 Travis auto-deploys master builds to a pre-prod s3 bucket.
 http://devtools.aws.cru.org:8080/view/Give%20Site/job/Give%20NG%20prod%20deploy/ copies
 to the live bucket, which backs CloudFront.
+
+GitHub actions auto-deploys master and staging builds to S3 buckets, which backs CloudFront.

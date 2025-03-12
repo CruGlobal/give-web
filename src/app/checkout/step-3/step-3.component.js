@@ -14,6 +14,7 @@ import desigSrcDirective from 'common/directives/desigSrc.directive'
 import { SignInEvent } from 'common/services/session/session.service'
 import { startDate } from 'common/services/giftHelpers/giftDates.service'
 import recaptchaComponent from 'common/components/Recaptcha/RecaptchaWrapper'
+import { datadogRum } from '@datadog/browser-rum'
 
 import template from './step-3.tpl.html'
 
@@ -37,6 +38,7 @@ class Step3Controller {
     this.startDate = startDate
     this.sessionStorage = $window.sessionStorage
     this.isBranded = envService.read('isBrandedCheckout')
+    this.datadogRum = datadogRum
 
     this.$scope.$on(SignInEvent, () => {
       this.$onInit()
@@ -135,6 +137,17 @@ class Step3Controller {
       }
       this.changeStep({ newStep: 'thankYou' })
     })
+  }
+
+  // Log error to Datadog in order to show up in Error Tracking (RUM)
+  logToDatadogRum (error) {
+    let errorMessage = `Error submitting purchase: ${JSON.stringify(error)}`
+    if (error?.data) {
+      if (error.data.includes('InvalidCVV2Exception')) {
+        errorMessage = 'Invalid CVV'
+      }
+    }
+    this.datadogRum.addError(new Error(errorMessage), { context: 'Checkout Submission', errorCode: error.status })
   }
 }
 

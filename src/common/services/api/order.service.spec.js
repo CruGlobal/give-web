@@ -869,13 +869,13 @@ describe('order service', () => {
       self.$httpBackend.flush()
     })
 
-    it('should send a request to finalize the purchase and with a CVV', (done) => {
+    it('should send a request to finalize the purchase with a CVV and cardBin', (done) => {
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?FollowLocation=true',
-        { 'security-code': '123', 'cover-cc-fees': false, 'radio-call-letters': null, 'tsys-device': '', 'recaptcha-token': null, 'recaptcha-action': null }
+        { 'security-code': '123', 'card-bin': '411111', 'cover-cc-fees': false, 'radio-call-letters': null, 'tsys-device': '', 'recaptcha-token': null, 'recaptcha-action': null }
       ).respond(200, purchaseResponse)
 
-      self.orderService.submit('123')
+      self.orderService.submit('123', '411111')
         .subscribe((data) => {
           expect(data).toEqual(purchaseResponse)
           done()
