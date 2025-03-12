@@ -527,70 +527,6 @@ hr.horizontal-divider {
   }
 }
 
-.custom-amount-button {
-  
-  display: flex;
-  flex-direction: row;
-  height: 50px;
-  border: 1px solid #ddd;
-
-  .input-prepend {
-    margin: 0;
-    min-width: 50px;
-    text-align: center;
-    align-content: center;
-    min-width: 50px;
-    aspect-ratio: 1 / 1;
-    background-color: #ddd;
-    cursor: default;
-  }
-
-  label {
-    all: unset;
-    width: 100%;
-    height: 100%;
-
-    input[type="radio"] {
-      position: absolute;
-      opacity: 0;
-    }
-
-    input[type="text"] {
-      width: 100%;
-      height: 100%;
-      padding: 0 7px;
-      border: none;
-      border-radius: 2px;
-      transition: all 0.3s ease;
-
-      &::placeholder {
-        color: $colorCru-gray;
-      }
-
-      &:focus {
-        border: 1px solid #3eb1c8;
-        outline: none;
-      }
-    }
-  }
-}
-
-/* Check for custom amount input */
-.custom-amount-button:has(input:checked) {
-  border: 1px solid #3a3a3a;
-  font-weight: 700;
-  color: #3a3a3a;
-}
-
-.custom-amount-button:has(input:checked) .input-prepend {
-  // @extend .button-common;
-  
-  min-width: 55px;
-  aspect-ratio: 1 / 1;
-  background-color: #3a3a3a;
-  color: #fff;
-  transition: all 0.3s ease;
-}
 /* Product Config Form Amounts End */
 
 .btn-xs,
@@ -606,83 +542,86 @@ hr.horizontal-divider {
 
   .help-block {
     padding: 10px;
-    color: #715927;
-    background-color: #f4d89d;
     border: 2px solid #f9b625;
     border-radius: 2px;
+    /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
+    background-color: #f4d89d;
+    /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
+    color: #715927;
   }
 
   input[type="radio"] {
     position: absolute;
-    opacity: 0;
     cursor: pointer;
+    opacity: 0;
   }
 
   label {
     display: flex;
     flex: 1;
-    cursor: pointer;
     margin: 0;
+    cursor: pointer;
   
     .amount-box {
-      margin: 0;
       min-width: 50px;
-      text-align: center;
       align-content: center;
-      aspect-ratio: 1 / 1;
-      background-color: #ddd;
-      color: inherit;
       border-radius: 2px 0 0 2px;
+      margin: 0;
+      aspect-ratio: 1 / 1;
+      background-color: $colorCru-border;
+      color: inherit;
+      text-align: center;
       transition: all 0.3s ease;
     }
 
     .amount-description {
       width: 100%;
-      margin: 0;
-      padding: 5px 10px;
       align-content: center;
-      background-color: #f0f0f0;
+      padding: 5px 10px;
+      margin: 0;
+      background-color: $colorGrayscale-pebble;
       font-weight: normal;
     }
   }
 
   input[type="radio"]:hover + label {
     .amount-description {
+      /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
       background-color: #e4e4e4;
     }
   }
+
   input[type="radio"]:focus + label {
     .amount-box {
       min-width: 55px;
-      color:#ddd;
-      background-color:#3a3a3a;
+      background-color:$colorText;
+      color:$colorCru-border;
     }
   }
+
   input[type="radio"]:checked + label {
     .amount-box {
       min-width: 55px;
-      color: #ddd;
-      background-color: #3a3a3a;
+      background-color: $colorText;
+      color: $colorCru-border;
     }
   }
 }
 
 .custom-amount-button {
-  
   display: flex;
-  flex-direction: row;
   height: 50px;
-  border: 1px solid #ddd;
+  flex-direction: row;
+  border: 1px solid $colorCru-border;
 
   .input-prepend {
-    margin: 0;
     min-width: 50px;
-    text-align: center;
     align-content: center;
-    min-width: 50px;
+    margin: 0;
     aspect-ratio: 1 / 1;
-    background-color: #ddd;
+    background-color: $colorCru-border;
     cursor: default;
+    text-align: center;
   }
 
   label {
@@ -717,16 +656,16 @@ hr.horizontal-divider {
 
 /* Check for custom amount input */
 .custom-amount-button:has(input:checked) {
-  border: 1px solid #3a3a3a;
+  border: 1px solid $colorText;
+  color: $colorText;
   font-weight: 700;
-  color: #3a3a3a;
 }
 
 .custom-amount-button:has(input:checked) .input-prepend {
   min-width: 55px;
   aspect-ratio: 1 / 1;
-  background-color: #3a3a3a;
-  color: #fff;
+  background-color: $colorText;
+  color: $colorCru-white;
   transition: all 0.3s ease;
 }
 

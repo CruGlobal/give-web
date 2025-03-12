@@ -223,12 +223,15 @@ label.btn.btn-default-form.active {
 .give-selection-reverse-order {
   display: flex;
   flex-direction: column;
+
   & > .panel.panel-default:nth-child(1) {
     order: 3;
   }
+
   & > .panel.panel-default:nth-child(2) {
     order: 1;
   }
+
   & > .panel.panel-default:nth-child(3) {
     order: 2;
   }

@@ -1,14 +1,14 @@
 
 .redirect-user-after-login {
   position: fixed;
-  width: 100%;
-  background: #ffffff;
   z-index: 2000;
-  height: 100%;
   top: 0;
   display: flex;
+  width: 100%;
+  height: 100%;
   align-items: center;
   justify-content: center;
+  background: $colorCru-white;
 
   > div {
     text-align: center;
@@ -19,8 +19,8 @@
   }
 
   .btn {
-    margin-top: 30px;
-    width: 150px;
     display: inline-block;
+    width: 150px;
+    margin-top: 30px;
   }
 }

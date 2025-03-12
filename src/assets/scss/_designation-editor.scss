@@ -3,14 +3,14 @@
     font-size: 20px;
     font-weight: 600;
     line-height: 1.2;
-    //border: #343a40 1px solid;
-    //margin: 1rem 0;
   }
+
   @media screen and (max-width: 767px) {
     p {
       font-size: 1.2rem;
     }
   }
+
   @media screen and (orientation: landscape) and (max-width: 767px) {
     p {
       font-size: 1.2rem;
