@@ -31,6 +31,7 @@ class Step1Controller {
     this.radioStationsService = radioStationsService
     this.sessionService = sessionService
     this.analyticsFactory = analyticsFactory
+    this.showSpouseDetails = false
   }
 
   $onInit () {
@@ -116,6 +117,10 @@ class Step1Controller {
         this.loadingDonorDetailsError = true
         this.$log.error('Error loading donorDetails.', error)
       })
+  }
+
+  toggleSpouseDetails() {
+    this.showSpouseDetails = !this.showSpouseDetails
   }
 
   loadRadioStations () {
