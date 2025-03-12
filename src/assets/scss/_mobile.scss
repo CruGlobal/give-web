@@ -6,7 +6,7 @@
 
 .panel-body {
   @include respond-to(extrasmall) {
-    padding: $gutter*.6666;
+    padding: $gutter * 0.6666;
   }
 }
 
@@ -17,8 +17,8 @@
 
 .container-margin {
   @media screen and (max-width: 1170px) {
+    padding-right: 15px;
     padding-left: 15px;
-    padding-right: 15px;    
   }
 }
 

@@ -11,6 +11,8 @@ branded-checkout{
   @import 'account_management';
   @import 'mobile';
 
+  background-color: $body-bg;
+  color: $text-color;
   font-family: $data-font;
   font-size: math.div($font-size-base, 16px) * 1em;
   line-height: $line-height-base;
