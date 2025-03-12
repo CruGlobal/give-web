@@ -27,11 +27,11 @@ class RegisterAccountModalController {
   // 5. Complete User Match
 
   /* @ngInject */
-  constructor ($element, $rootScope, $window, $document, cartService, orderService, sessionService, verificationService, envService, gettext) {
+  constructor ($document, $element, $rootScope, $window, cartService, orderService, sessionService, verificationService, envService, gettext) {
+    this.$document = $document
     this.element = $element[0]
     this.$rootScope = $rootScope
     this.$window = $window
-    this.$document = $document
     this.cartService = cartService
     this.orderService = orderService
     this.sessionService = sessionService
@@ -40,7 +40,6 @@ class RegisterAccountModalController {
     this.scrollModalToTop = scrollModalToTop
     this.imgDomain = envService.read('imgDomain')
     this.newUser = sessionService.getRole() === Roles.public
-    this.$injector = angular.injector()
   }
 
   $onInit () {
@@ -182,7 +181,7 @@ class RegisterAccountModalController {
 
   redirectToOktaForLogin () {
     this.sessionService.signIn(this.lastPurchaseId).subscribe(() => {
-      const $injector = this.$injector
+      const $injector = angular.injector()
       if (!$injector.has('sessionService')) {
         $injector.loadNewModules(['sessionService'])
       }
