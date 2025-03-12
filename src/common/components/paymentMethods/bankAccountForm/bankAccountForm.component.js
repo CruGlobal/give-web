@@ -27,6 +27,7 @@ class BankAccountController {
     this.bankPayment = {
       accountType: 'Checking'
     }
+    this.hideAgreement = true
   }
 
   $onInit () {
@@ -130,6 +131,13 @@ class BankAccountController {
         }
       })
     }
+  }
+
+  toggleAgreement ($event) {
+    if ($event) {
+      $event.stopPropagation()
+    }
+    this.hideAgreement = !this.hideAgreement
   }
 }
 
