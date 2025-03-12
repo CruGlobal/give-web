@@ -1,4 +1,4 @@
-name: Build
+name: CI
 
 on:
   push: 
@@ -20,6 +20,7 @@ permissions:
 
 jobs:
   lint:
+    name: 🧹 Lint Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -39,6 +40,7 @@ jobs:
         run: yarn lint:styles
 
   test:
+    name: ✅ Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -80,6 +82,7 @@ jobs:
 
 
   deploy:
+    name: 🚀 Deploy app
     runs-on: ubuntu-latest
     environment:
       name: ${{ (github.ref == 'refs/heads/master' && 'production') || 'staging' }}
