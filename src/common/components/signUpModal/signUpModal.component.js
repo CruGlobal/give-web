@@ -52,7 +52,6 @@ class SignUpModalController {
     this.geographiesService = geographiesService
     this.imgDomain = envService.read('imgDomain')
     this.publicCru = envService.read('publicCru')
-    this.$injector = angular.injector()
   }
 
   $onInit () {
@@ -748,9 +747,9 @@ class SignUpModalController {
       'phone-number': this.$scope.primaryPhone,
       mailingAddress: {
         streetAddress: this.$scope.streetAddress,
-        streetAddressExtended: this.$scope.streetAddressExtended,
-        internationalAddressLine3: this.$scope.internationalAddressLine3,
-        internationalAddressLine4: this.$scope.internationalAddressLine4,
+        extendedAddress: this.$scope.streetAddressExtended,
+        intAddressLine3: this.$scope.internationalAddressLine3,
+        intAddressLine4: this.$scope.internationalAddressLine4,
         locality: this.$scope.city,
         region: this.$scope.state,
         postalCode: this.$scope.zipCode,
@@ -769,21 +768,8 @@ class SignUpModalController {
         this.orderService.addEmail(donorDetails.email, donorDetails.emailFormUri)
       ]).map(() => donorDetails)
     }).subscribe({
-      next: () => this.logIntoOkta(),
-      error: () => this.logIntoOkta()
-    })
-  }
-
-  logIntoOkta () {
-    this.sessionService.signIn(this.lastPurchaseId).subscribe(() => {
-      const $injector = this.$injector
-      if (!$injector.has('sessionService')) {
-        $injector.loadNewModules(['sessionService'])
-      }
-
-      this.$document[0].body.dispatchEvent(
-        new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } })
-      )
+      next: () => this.redirectToOktaForLogin(),
+      error: (donorDetails) => this.onSignUpError({ donorDetails })
     })
   }
 }
@@ -801,12 +787,14 @@ export default angular
     controller: SignUpModalController,
     templateUrl: template,
     bindings: {
-      // Called with `donorDetails` after the user creates an account with Okta
-      onSignUp: '&',
+      // Called with `donorDetails` if there is an error while signing up to the Cortex DB
+      onSignUpError: '&',
       // Called when the user clicks back to sign in link
       onSignIn: '&',
       // Called with the user dismisses the modal via the close button
       onCancel: '&',
+      // Called when user successfully signs up and we redirect them to Okta to login
+      redirectToOktaForLogin: '&',
       isInsideAnotherModal: '='
     }
   })
