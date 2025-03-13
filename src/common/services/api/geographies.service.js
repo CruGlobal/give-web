@@ -23,7 +23,12 @@ class Geographies {
       cache: true
     })
       .map((data) => {
-        return data.countries
+        const countries = data.countries
+
+        // Order countries in alphabetical order
+        countries.sort((a, b) => a['display-name'].localeCompare(b['display-name']))
+
+        return countries
       })
   }
 
@@ -37,6 +42,10 @@ class Geographies {
     })
       .map(data => {
         const regions = data.regions
+
+        // Order regions in alphabetical order
+        regions.sort((a, b) => a['display-name'].localeCompare(b['display-name']))
+
         if (country && country.name === 'US') {
           return map(regions, region => {
             if (region.name === 'AA') {

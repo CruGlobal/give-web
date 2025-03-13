@@ -13,29 +13,37 @@ import userMatchModal from 'common/components/userMatchModal/userMatchModal.comp
 import contactInfoModal from 'common/components/contactInfoModal/contactInfoModal.component'
 import failedVerificationModal from 'common/components/failedVerificationModal/failedVerificationModal.component'
 
-import { Observable } from 'rxjs/Observable'
-import 'rxjs/add/observable/forkJoin'
-import 'rxjs/add/observable/of'
-import 'rxjs/add/operator/do'
-import 'rxjs/add/operator/map'
-import 'rxjs/add/operator/switchMap'
-import merge from 'lodash/merge'
-
 const componentName = 'registerAccountModal'
 
 class RegisterAccountModalController {
-  // Register Account Modal is a multi-step process.
+  // --------------------------------------
+  // Registration process.
+  // It's a multi-step process, handled by
+  // this component and sub-components.
+  // --------------------------------------
   // 1. Sign In/Up
-  //  1.1 Sign in or Sign Up
-  //  1.2 Verify Email
-  //  1.3 Sign In
+  //  1.1 Sign in - redirect to Okta
+  //  1.2 Sign Up - shown the sign up modal
   // 2. Fetch Donor Details
   // 3. Collect Contact Info
-  // 4. Post to Donor Matches
-  // 5. Complete User Match
+  // 4. Register for Okta account
+  //   4.1 Verify email via Okta
+  // 5. Register for Cortex/Give account
+  //   5.1 Upon success, redirect to Okta
+  //   5.2 Upon failure, shown the contact info modal for manual entry.
+  //     5.2.1 Upon success, redirect to Okta
+  // 6. User authenticates on Okta
+  //     (Redirect to allow user's credentials to be stored by browser.)
+  // 7. Upon returning to the site, we check the user's donor details.
+  //   7.1 If MATCHED, we show the user match modal.
+  //   7.2 if NEW, we determine if the user has already registered.
+  //     7.2.1 If registered, we run post donor matching and show the user match modal.
+  //     7.2.2 If not fully registered, we show the contact info modal and then run post donor matches.
+  // 8. Upon registration completion, we redirect the user back to their previous page
 
   /* @ngInject */
-  constructor ($element, $rootScope, $window, cartService, orderService, sessionService, verificationService, envService, gettext) {
+  constructor ($document, $element, $rootScope, $window, cartService, orderService, sessionService, verificationService, envService, gettext) {
+    this.$document = $document
     this.element = $element[0]
     this.$rootScope = $rootScope
     this.$window = $window
@@ -74,6 +82,7 @@ class RegisterAccountModalController {
         this.stateChanged('sign-in')
       }
     })
+    this.cortexSignUpError = false
   }
 
   $onDestroy () {
@@ -87,9 +96,12 @@ class RegisterAccountModalController {
     }
   }
 
-  // Called after the user finishes creating a new Okta account
-  onSignUpSuccess (signUpDonorDetails) {
-    this.checkDonorDetails(signUpDonorDetails)
+  // Called if there was an error saving the Cortex sign up details.
+  onSignUpError (signUpDonorDetails) {
+    // Save the donor details so that they can be added to the contact info form, so the user can try again.
+    this.signUpDonorDetails = signUpDonorDetails
+    this.cortexSignUpError = true
+    this.stateChanged('contact-info')
   }
 
   // Called when the user requests to sign up from the sign in modal
@@ -113,6 +125,11 @@ class RegisterAccountModalController {
   }
 
   onContactInfoSuccess () {
+    // If a Cortex error occurred during sign up, redirect user to okta to continue the sign up process.
+    if (this.cortexSignUpError) {
+      this.redirectToOktaForLogin()
+      return
+    }
     // Success gathering contact info, Proceed to Step 4
     this.postDonorMatches()
   }
@@ -122,7 +139,7 @@ class RegisterAccountModalController {
     this.onSuccess()
   }
 
-  checkDonorDetails (signUpDonorDetails) {
+  checkDonorDetails () {
     // Show loading state
     this.stateChanged('loading-donor')
 
@@ -130,27 +147,7 @@ class RegisterAccountModalController {
     if (angular.isDefined(this.getDonorDetailsSubscription)) {
       this.getDonorDetailsSubscription.unsubscribe()
     }
-    this.getDonorDetailsSubscription = this.orderService.getDonorDetails().switchMap((donorDetails) => {
-      if (signUpDonorDetails && donorDetails['registration-state'] === 'NEW') {
-        // Save the contact info from signup
-        merge(donorDetails, signUpDonorDetails)
-
-        // Send each of the requests and pass donorDetails to the next step after the requests complete
-        return Observable.forkJoin([
-          this.orderService.updateDonorDetails(donorDetails),
-          this.orderService.addEmail(donorDetails.email, donorDetails.emailFormUri)
-        ]).map(() => donorDetails).do({
-          error: () => {
-            // If there was an error, save the donor details from sign up so that they will be added
-            // to the contact info form. The error handler below will change the step to contact-info.
-            this.signUpDonorDetails = signUpDonorDetails
-          }
-        })
-      }
-
-      // Pass donorDetails to the next step
-      return Observable.of(donorDetails)
-    }).subscribe({
+    this.getDonorDetailsSubscription = this.orderService.getDonorDetails().subscribe({
       next: (donorDetails) => {
         // Workflow Complete if 'registration-state' is COMPLETED
         if (donorDetails['registration-state'] === 'COMPLETED') {
@@ -195,6 +192,15 @@ class RegisterAccountModalController {
     const modal = angular.element(document.getElementsByClassName('session-modal'))
     modal.removeClass('modal-sm modal-md modal-lg')
     modal.addClass(`modal-${size}`)
+  }
+
+  redirectToOktaForLogin () {
+    this.sessionService.signIn(this.lastPurchaseId).subscribe(() => {
+      const $injector = angular.injector()
+      this.$document[0].body.dispatchEvent(
+        new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } })
+      )
+    })
   }
 }
 

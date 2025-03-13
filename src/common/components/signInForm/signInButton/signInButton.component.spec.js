@@ -20,10 +20,6 @@ describe('signInButton', function () {
           dispatchEvent: jest.fn()
         }
       }],
-      $injector: {
-        has: jest.fn(),
-        loadNewModules: jest.fn()
-      }
     }
 
     const scope = { $apply: jest.fn() }
@@ -88,13 +84,10 @@ describe('signInButton', function () {
     it('adds the sessionService module', () => {
       deferred.resolve({})
       $rootScope.$digest()
-      bindings.$injector.has.mockImplementation(() => false)
-      bindings.$injector.loadNewModules.mockImplementation(() => {})
+      const $injector = { get: jest.fn() }
+      jest.spyOn(angular, 'injector').mockReturnValue($injector)
 
       expect(bindings.$document[0].body.dispatchEvent).toHaveBeenCalled();
-      const $injector = bindings.$injector
-
-      expect($injector.loadNewModules).toHaveBeenCalledWith(['sessionService'])
       expect(bindings.$document[0].body.dispatchEvent).toHaveBeenCalledWith(
         new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
     })

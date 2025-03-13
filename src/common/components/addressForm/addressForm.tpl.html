@@ -6,7 +6,7 @@
         <select class="form-control form-control-subtle"
                 name="addressCountry" required
                 ng-model="$ctrl.address.country"
-                ng-options="v.name as v['display-name'] for v in $ctrl.countries | orderBy:'\'display-name\''"
+                ng-options="v.name as v['display-name'] for v in $ctrl.countries"
                 ng-change="$ctrl.refreshRegions($ctrl.address.country)"
                 ng-disabled="$ctrl.addressDisabled">
         </select>
@@ -122,19 +122,19 @@
             <select class="form-control  form-control-subtle"
                     name="addressRegion" required
                     ng-model="$ctrl.address.region"
-                    ng-options="v.name as v['display-name'] for v in $ctrl.regions | orderBy:'\'display-name\''"
+                    ng-options="v.name as v['display-name'] for v in $ctrl.regions"
                     ng-disabled="$ctrl.addressDisabled">
             </select>
-          </label>
-          <div role="alert" ng-if="$ctrl.loadingRegionsError">
-            <div class="help-block">
-              <translate>{{'REGIONS_LOADING_ERROR'}}</translate>
-              <button id="retryButton2" type="button" class="btn btn-default btn-sm" ng-click="$ctrl.refreshRegions($ctrl.address.addressCountry, true)" translate>{{'RETRY'}}</button>
+            <div role="alert" ng-if="$ctrl.loadingRegionsError">
+              <div class="help-block">
+                <translate>{{'REGIONS_LOADING_ERROR'}}</translate>
+                <button id="retryButton2" type="button" class="btn btn-default btn-sm" ng-click="$ctrl.refreshRegions($ctrl.address.addressCountry, true)" translate>{{'RETRY'}}</button>
+              </div>
             </div>
-          </div>
-          <div role="alert" ng-messages="$ctrl.parentForm.addressRegion.$error" ng-if="($ctrl.parentForm.addressRegion | showErrors)">
-            <div class="help-block" ng-message="required" translate>{{'SELECT_STATE_ERROR'}}</div>
-          </div>
+            <div role="alert" ng-messages="$ctrl.parentForm.addressRegion.$error" ng-if="($ctrl.parentForm.addressRegion | showErrors)">
+              <div class="help-block" ng-message="required" translate>{{'SELECT_STATE_ERROR'}}</div>
+            </div>
+          </label>
         </div>
       </div>
       <div class="col-sm-6 col-md-3">
