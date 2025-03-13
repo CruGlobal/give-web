@@ -1,8 +1,9 @@
 .modal-dialog {
-  /* Center dialog on small screens. Bootstrap only applies this margin on screens wider than $screen-sm-min. */
-  margin-inline: auto;
   /* Center dialog vertically */
   align-content: center;
+
+  /* Center dialog on small screens. Bootstrap only applies this margin on screens wider than $screen-sm-min. */
+  margin-inline: auto;
 }
 
 .modal-content.give-modal-content {
@@ -41,11 +42,11 @@
 
     @media (min-width: 992px) {
       button.close {
-        background-image: url("/assets/img/close-icon.png");
-        width: 36px;
-        height: 36px;
         top: 0;
         right: -68px;
+        width: 36px;
+        height: 36px;
+        background-image: url("/assets/img/close-icon.png");
       }
     }
 

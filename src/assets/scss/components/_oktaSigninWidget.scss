@@ -1,7 +1,7 @@
 #okta-sign-in.main-container {
   border: none;
-  box-shadow: none;
   margin: 0;
+  box-shadow: none;
 
   .okta-sign-in-header {
     display: none;
@@ -18,7 +18,6 @@
 }
 
 sign-up-modal {
-
   .back-to-sign-in {
     margin-top: 20px;
   }
@@ -26,6 +25,7 @@ sign-up-modal {
 
 #okta-sign-in.auth-container {
   $okta-grey: #f5f5f5;
+
   width: 100%;
 
   // ============== Container ============== //
@@ -40,38 +40,40 @@ sign-up-modal {
   }
 
   .o-form-fieldset-container {
-    border: 1px solid $okta-grey;
-    border-radius: 7px;
     display: flex;
     flex-wrap: wrap;
+    border: 1px solid $okta-grey;
+    border-radius: 7px;
   }
 
   // ============== Errors ============== //
 
   .o-form-explain.o-form-input-error {
-    background: #ffe3e3;
-    padding-left: 20px;
     padding-top: 6px;
+    padding-left: 20px;
+    background: #ffe3e3;
   }
 
   // ============== Fields ============== //
 
-  .o-form-fieldset {
-    margin: 0;
-    position: relative;
-  }
-
   .o-form-label {
     @include transition(top 0.3s ease, font-size 0.3s ease);
-    padding: 0;
-    padding-left: 8px;
+
     position: absolute;
+    z-index: 20;
     top: 17px;
     width: auto;
-    z-index: 20;
+    padding: 0;
+    padding-left: 8px;
 
     @media (prefers-reduced-motion) {
       transition: none;
+    }
+    
+    label {
+      color: #9C9C9C;
+      font-size: 16px;
+      font-weight: 400;
     }
 
     &.active {
@@ -82,11 +84,6 @@ sign-up-modal {
       }
     }
 
-    label {
-      color: #9C9C9C;
-      font-size: 16px;
-      font-weight: 400;
-    }
 
     .o-form-explain {
       font-size: 12px;
@@ -102,6 +99,17 @@ sign-up-modal {
       }
     }
 
+    &>.chzn-single {
+      height: auto;
+      padding-top: 12px;
+      border: 1px solid transparent;
+      border-radius: 0;
+
+      div {
+        top: 6px;
+      }
+    }
+
     .chzn-container {
       &:focus-within {
         box-shadow: none;
@@ -109,17 +117,6 @@ sign-up-modal {
         &>.chzn-single {
           border-color: $colorCru-gold;
           box-shadow: none;
-        }
-      }
-
-      &>.chzn-single {
-        border: 1px solid transparent;
-        border-radius: 0;
-        height: auto;
-        padding-top: 12px;
-
-        div {
-          top: 6px;
         }
       }
     }
@@ -132,15 +129,16 @@ sign-up-modal {
   // override okta styles
   .focused-input,
   .link.help:focus,
-  input[type=radio]:focus+label,
-  input[type=text]:focus {
-
+  input[type="radio"]:focus+label,
+  input[type="text"]:focus {
     box-shadow: none
   }
 
   .o-form-fieldset {
-    border-top: 1px solid $okta-grey;
+    position: relative;
     width: 100%;
+    border-top: 1px solid $okta-grey;
+    margin: 0;
 
     &[data-se="o-form-fieldset-userProfile.state"],
     &[data-se="o-form-fieldset-userProfile.zipCode"] {
@@ -156,9 +154,8 @@ sign-up-modal {
     }
 
     &:first-of-type {
-
-      input[type=text]:not(.chzn-search input),
-      input[type=password],
+      input[type="text"]:not(.chzn-search input),
+      input[type="password"],
       .chzn-container a {
         border-top-left-radius: 6px;
         border-top-right-radius: 6px;
@@ -166,9 +163,8 @@ sign-up-modal {
     }
 
     &:last-of-type {
-
       // We don't include password as it's the only field on it's step and has the password requirements below it.
-      input[type=text]:not(.chzn-search input),
+      input[type="text"]:not(.chzn-search input),
       .o-form-input-error,
       .chzn-container a {
         border-bottom-left-radius: 6px;
@@ -190,40 +186,39 @@ sign-up-modal {
   }
 
   .o-form-input .o-form-control {
-    background: none;
+    height: auto;
     border: none;
     border-radius: 0;
-    height: auto;
+    background: none;
+
+    input[type="password"] {
+      height: auto;
+    }
 
     // Style input fields, but not input fields in dropdowns
-    input[type=text]:not(.chzn-search input),
-    input[type=password] {
-      -moz-appearance: none;
-      -webkit-appearance: none;
-      appearance: none;
-      border: 1px solid transparent;
-      padding-bottom: 12px;
+    input[type="text"]:not(.chzn-search input),
+    input[type="password"] {
       padding-top: 20px;
+      padding-bottom: 12px;
+      border: 1px solid transparent;
+      appearance: none;
 
       &:focus {
         border-color: $colorCru-gold;
         box-shadow: none;
       }
     }
-
-    input[type=password] {
-      height: auto;
-    }
   }
 
   // ============== Password rules ============== //
 
   section[data-se="password-authenticator--rules"] {
+    width: 100%;
+    padding: 10px;
     border-radius: 0 0 6px 6px;
     border-top: 1px solid $okta-grey;
-    padding: 10px;
-    width: 100%;
 
+    /* stylelint-disable-next-line selector-class-pattern */
     .password-authenticator--list {
       margin: 0;
     }
@@ -233,36 +228,40 @@ sign-up-modal {
 
   // cru back button
   .o-form-button-bar {
-    align-items: center;
     display: flex;
-    gap: 10px;
+    align-items: center;
     justify-content: space-between;
+    gap: 10px;
 
+    /* stylelint-disable-next-line selector-id-pattern */
     #backButton,
     .button.button-primary {
       padding-top: 7px;
       padding-bottom: 7px;
     }
 
+    /* stylelint-disable-next-line selector-id-pattern */
     #backButton {
-      color: $colorCru-gray !important;
-      background-color: $colorCru-white !important;
-      border-color: $colorCru-gray !important;
       width: 100%;
+      border-color: $colorCru-gray !important;
+      background-color: $colorCru-white !important;
+      color: $colorCru-gray !important;
 
       &:hover,
       &:focus,
       &:active {
-        color: $colorCru-white !important;
         background: $colorCru-gray !important;
+        color: $colorCru-white !important;
       }
     }
 
     .button.button-primary {
-      color: #3a3a3a;
       height: auto;
+      color: #3a3a3a;
 
+      /* stylelint-disable-next-line scss/at-extend-no-missing-placeholder */
       @extend .btn;
+      /* stylelint-disable-next-line scss/at-extend-no-missing-placeholder */
       @extend .btn-primary;
     }
   }
@@ -280,14 +279,18 @@ sign-up-modal {
 
 // ============== Okta overrides ============== //
 // select dropdown focus style
+/* stylelint-disable-next-line no-descending-specificity */
 .chzn-container:focus-within {
   box-shadow: none;
 }
 
 // select dropdown border radius style
+/* stylelint-disable-next-line no-descending-specificity */
 .chzn-container-single .chzn-single {
   border-radius: 0;
 }
+
+/* stylelint-disable-next-line no-descending-specificity, selector-id-pattern */
 #countryCodeInput_chzn.chzn-container-single .chzn-single {
   border-radius: 6px 6px 0 0;
 }

@@ -1,9 +1,9 @@
 sign-in-form {
   display: flex;
   flex-direction: column;
+  margin-top: 20px;
   gap: 20px;
   text-align: center;
-  margin-top: 20px;
 
   hr {
     width: 65%;
@@ -14,13 +14,20 @@ sign-in-form {
     font-size: 1.2rem;
   }
 
+  summary {
+    display: list-item;
+    order: -1; // Make both summaries appear before the descriptions
+    margin: 1rem 0;
+    cursor: pointer;
+  }
+
   .details-wrapper {
     display: flex;
     flex-wrap: wrap; // Keep the summaries on the first line and wrap the description to the next line
 
     details:first-of-type summary {
-      flex: 1; // Push the second summary to the right edge
       min-width: 150px; // Ensure that the summaries are wide enough that the description is forced to wrap to the next line
+      flex: 1; // Push the second summary to the right edge
     }
   }
 
@@ -31,13 +38,6 @@ sign-in-form {
     text-align: left;
   }
 
-  summary {
-    display: list-item;
-    order: -1; // Make both summaries appear before the descriptions
-    margin: 1rem 0;
-    cursor: pointer;
-  }
-
   > p {
     margin-bottom: 0;
   }
@@ -46,27 +46,30 @@ sign-in-form {
     $okta-brand: #007dc1;
 
     display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-    padding-block: 20px;
     width: 100%;
-    font-size: 1.2rem;
-    font-weight: bold;
-    background-color: white;
-    color: $okta-brand;
+    align-items: center;
+    justify-content: center;
     border: 2px solid $okta-brand;
     border-radius: 4px;
+    background-color: white;
+    color: $okta-brand;
+    font-size: 1.2rem;
+    font-weight: bold;
+    gap: 0.5rem;
+    padding-block: 20px;
 
     &:hover {
-      color: white;
-      background-color: $okta-brand;
       border-color: $okta-brand;
-    }
-    &:focus {
+      background-color: $okta-brand;
       color: white;
-      background-color: darken($okta-brand, 3%);
+    }
+
+    &:focus {
+      /* stylelint-disable-next-line scss/no-global-function-names */
       border-color: darken($okta-brand, 3%);
+      /* stylelint-disable-next-line scss/no-global-function-names */
+      background-color: darken($okta-brand, 3%);
+      color: white;
     }
   }
 
