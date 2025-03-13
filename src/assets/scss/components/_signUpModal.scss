@@ -2,18 +2,18 @@ sign-up-modal {
   position: relative;
 
   .signup-header {
-    text-align: center;
     padding-bottom: 1rem;
+    text-align: center;
   }
 
   .signup-steps {
-    width: 100%;
     display: flex;
-    justify-content: center;
+    width: 100%;
     align-items: center;
-    gap: 16px;
+    justify-content: center;
     padding-top: 16px;
     border-top: 2px solid #f5f5f5;
+    gap: 16px;
 
     .between-steps {
       img {
@@ -34,24 +34,25 @@ sign-up-modal {
   }
 
   .okta-signup-loading {
-    padding: 153px 0 153px;
+    padding: 153px 0;
   }
 
   form {
     margin-bottom: 40px;
   }
+
   .buttons {
     position: absolute;
-    width: 100%;
-    padding: 15px 30px;
     bottom: 0;
     left: 0;
-    background-color: #ffffff;
-    border-top: rgba(0, 0, 0, 0.15) 1px solid;
-    align-items: center;
     display: flex;
+    width: 100%;
     flex-direction: row-reverse;
+    align-items: center;
     justify-content: space-between;
+    padding: 15px 30px;
+    border-top: rgb(0 0 0 / 15%) 1px solid;
+    background-color: #fff;
 
     .back-to-sign-in {
       width: 150px;
@@ -67,22 +68,22 @@ sign-up-modal {
   }
 
   .sticky-buttons {
-    max-height: 560px;
-    overflow-y: auto;
     position: unset;
     height: calc(100vh - 170px);
+    max-height: 560px;
+    overflow-y: auto;
 
     // When inside another modal
     &:not(.modal-body) {
-      max-height: 520px;
       height: calc(100vh - 230px);
+      max-height: 520px;
 
       form {
         margin-bottom: 60px;
       }
 
       .buttons {
-        padding: 15px 0px 0;
+        padding: 15px 0 0;
       }
     }
   }
@@ -91,6 +92,7 @@ sign-up-modal {
   section[data-se="password-authenticator--rules"] {
     display: none;
   }
+
   div[data-se="o-form-fieldset-credentials.passcode"] ~ section[data-se="password-authenticator--rules"] {
     display: block;
   }

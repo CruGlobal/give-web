@@ -30,10 +30,10 @@ user-match-modal {
     }
 
     .step-label {
-      font-weight: bold;
       /* Subtract 32px to roughly center the text with the right edge of the progress bar */
       padding-left: calc(max(var(--progress) * 100% - 32px, 0px));
       margin-bottom: 30px;
+      font-weight: bold;
     }
   }
 

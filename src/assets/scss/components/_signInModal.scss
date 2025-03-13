@@ -13,7 +13,7 @@ sign-in-modal {
   sign-in-form {
     margin-top: 0;
 
-    @media (min-width: 768px) {
+    @media (width >= 768px) {
       hr {
         width: 100%;
       }
