@@ -26,7 +26,20 @@ sign-up-modal {
 #okta-sign-in.auth-container {
   $okta-grey: #f5f5f5;
 
+  overflow: visible;
   width: 100%;
+
+  .clearfix {
+    &::after, &::before {
+      // Fix warning icon height
+      // This may be removed if https://github.com/okta/okta-signin-widget/pull/3801 is merged upstream
+      height: calc(100% + 2px);
+    }
+  }
+
+  .beacon-container {
+    display: none;
+  }
 
   // ============== Container ============== //
 
@@ -140,6 +153,12 @@ sign-up-modal {
     border-top: 1px solid $okta-grey;
     margin: 0;
 
+    input:-webkit-autofill {
+      // Override Okta's webkit autofill styles
+      border-radius: unset;
+      box-shadow: unset;
+    }
+
     &[data-se="o-form-fieldset-userProfile.state"],
     &[data-se="o-form-fieldset-userProfile.zipCode"] {
       width: 50%;
@@ -154,8 +173,7 @@ sign-up-modal {
     }
 
     &:first-of-type {
-      input[type="text"]:not(.chzn-search input),
-      input[type="password"],
+      input,
       .chzn-container a {
         border-top-left-radius: 6px;
         border-top-right-radius: 6px;
@@ -163,12 +181,29 @@ sign-up-modal {
     }
 
     &:last-of-type {
-      // We don't include password as it's the only field on it's step and has the password requirements below it.
-      input[type="text"]:not(.chzn-search input),
+      // Usually the last fieldset has rounded bottom borders
+      // ".chzn-container a" is for select boxes
+      input,
       .o-form-input-error,
       .chzn-container a {
         border-bottom-left-radius: 6px;
         border-bottom-right-radius: 6px;
+      }
+
+      // Also, if the field has errors, the error box gets the rounded border instead of the input
+      &:has(.okta-form-input-error) input {
+        border-bottom-left-radius: unset;
+        border-bottom-right-radius: unset;
+      }
+
+      // However, if it is a password field with a password requirements sibling, the password
+      // requirements box gets the rounded border instead of the input or error message
+      &[data-se="o-form-fieldset-credentials.passcode"]:has(+ [data-se="password-authenticator--rules"]) {
+        input,
+        .o-form-input-error {
+          border-bottom-left-radius: unset;
+          border-bottom-right-radius: unset;
+        }
       }
     }
 

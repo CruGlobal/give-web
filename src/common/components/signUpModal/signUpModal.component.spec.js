@@ -13,21 +13,24 @@ import { customFields } from './signUpFormCustomFields'
 
 describe('signUpForm', function () {
   beforeEach(angular.mock.module(module.name))
-  let $ctrl, bindings, $rootScope
+  let $ctrl, bindings, $rootScope, $flushPendingTasks
 
-  beforeEach(inject(function (_$rootScope_,  _$componentController_) {
+  beforeEach(inject(function (_$rootScope_,  _$componentController_, _$flushPendingTasks_) {
     $rootScope = _$rootScope_
+    $flushPendingTasks = _$flushPendingTasks_
     bindings = {
       onSignIn: jest.fn(),
-      onSignUp: jest.fn(),
+      onSignUpError: jest.fn(),
+      redirectToOktaForLogin: jest.fn(),
       signUpForm: {
         $valid: false,
         $setSubmitted: jest.fn()
       },
     }
-    const scope = { $apply: jest.fn() }
-    scope.$apply.mockImplementation(() => {})
-    $ctrl = _$componentController_(module.name, { $scope: scope }, bindings)
+    $ctrl = _$componentController_(module.name, {}, bindings)
+    $ctrl.loadTranslations()
+    $flushPendingTasks()
+
     // Prevent the actual Okta widget from being created in tests
     jest.spyOn($ctrl, 'setUpSignUpWidget').mockImplementation(() => {})
   }))
@@ -344,13 +347,13 @@ describe('signUpForm', function () {
       it('should use saved data from $scope', () => {
         $ctrl.$scope.countryCode = 'UK';
         $ctrl.$scope.streetAddress = user.streetAddress;
-        $ctrl.$scope.streetAddressExtended = user.streetAddressExtended;
+        $ctrl.$scope.streetAddressExtended = 'Extended';
         $ctrl.$scope.internationalAddressLine3 = 'internationalAddressLine3';
         $ctrl.$scope.internationalAddressLine4 = 'internationalAddressLine4';
         $ctrl.$scope.city = user.city;
         $ctrl.$scope.state = user.state;
         $ctrl.$scope.zipCode = user.zipCode;
-        $ctrl.$scope.primaryPhone = user.primaryPhone;
+        $ctrl.$scope.primaryPhone = user['phone-number'];
 
         $ctrl.parseSchema(schema, onSuccess);
 
@@ -618,14 +621,28 @@ describe('signUpForm', function () {
   describe('preSubmit()', () => {
     const onSuccess = jest.fn();
 
+    beforeEach(() => {
+      jest.spyOn($ctrl, 'goToNextStep').mockImplementation(() => {});
+      jest.spyOn($ctrl, 'injectErrorMessages').mockImplementation(() => {});
+      jest.spyOn($ctrl, 'clearInjectedErrorMessages').mockImplementation(() => {});
+    })
+
+    it('clears sign up errors', () => {
+      $ctrl.signUpErrors = [
+        { property: 'accountType', errorSummary:  'accountTypeError' }
+      ]
+
+      $ctrl.preSubmit({}, onSuccess)
+
+      expect($ctrl.signUpErrors).toEqual([])
+      expect($ctrl.clearInjectedErrorMessages).toHaveBeenCalled()
+    })
+
     describe('saveStep1Data()', () => {
       let postData = {}
       const orgNameError = 'orgNameError';
 
       beforeEach(() => {
-        jest.spyOn($ctrl, 'goToNextStep').mockImplementation(() => {});
-        jest.spyOn($ctrl.$scope, '$apply').mockImplementation((callback) => callback());
-        jest.spyOn($ctrl, 'injectErrorMessages').mockImplementation(() => {});
         $ctrl.currentStep = 1;
         $ctrl.translations = {
           orgNameError,
@@ -689,9 +706,6 @@ describe('signUpForm', function () {
       const invalidUSZipError = 'invalidUSZipError';
 
       beforeEach(() => {
-        jest.spyOn($ctrl, 'goToNextStep').mockImplementation(() => {});
-        jest.spyOn($ctrl.$scope, '$apply').mockImplementation((callback) => callback());
-        jest.spyOn($ctrl, 'injectErrorMessages').mockImplementation(() => {});
         $ctrl.currentStep = 2;
         $ctrl.translations = {
           cityError: cityError,
@@ -873,43 +887,99 @@ describe('signUpForm', function () {
   });
 
   describe('Misc functions', () => {
-    it('afterError()', () => {
+    it('afterError() sets sign up errors and fixes sign up button text', () => {
+      const cause = { message: 'message', property: 'userProfile.email' }
       const error = {
         xhr: {
           responseJSON: {
-            errorCauses: [
-              {
-                message: 'message'
-              }
-            ]
+            errorCauses: [cause]
           }
         }
       }
       $ctrl.afterError(jest.fn(), error)
-      expect($ctrl.signUpErrors).toEqual([
-        {
-          message: 'message'
-        }
-      ])
+
+      expect($ctrl.signUpErrors).toEqual([cause])
+
+      // Simulate Okta changing the button text and adding the info box after the `afterError` completes
+      document.body.innerHTML = `
+        <div class="okta-form-infobox-error">
+          <p>There was an error</p>
+        </div>
+        <div class="o-form-button-bar">
+          <input class="button button-primary" value="Sign up">
+        <div>
+      `;
+
+      // Wait for $timeout
+      $flushPendingTasks()
+
+      expect(document.querySelector('.button-primary')).toHaveValue('Continue')
+      const errorText = document.querySelector('.okta-form-infobox-error').textContent
+      expect(errorText).toContain('There was an error')
+      expect(errorText).toContain('Please review the following fields: email.')
     });
 
-    it('afterRender()', () => {
-      jest.spyOn($ctrl, 'updateSignUpButtonText').mockImplementation(() => {});
-      jest.spyOn($ctrl, 'resetCurrentStepOnRegistrationComplete').mockImplementation(() => {});
-      jest.spyOn($ctrl, 'redirectToSignInModalIfNeeded').mockImplementation(() => {});
-      jest.spyOn($ctrl, 'injectErrorMessages').mockImplementation(() => {});
-      jest.spyOn($ctrl, 'injectBackButton').mockImplementation(() => {});
+    describe('afterRender()', () => {
+      beforeEach(() => {
+        jest.spyOn($ctrl, 'loadDonorDetails').mockReturnValue(Observable.of({}));
+        jest.spyOn($ctrl, 'updateSignUpButtonText').mockImplementation(() => {});
+        jest.spyOn($ctrl, 'resetCurrentStepOnRegistrationComplete').mockImplementation(() => {});
+        jest.spyOn($ctrl, 'redirectToSignInModalIfNeeded').mockImplementation(() => {});
+        jest.spyOn($ctrl, 'injectErrorMessages').mockImplementation(() => {});
+        jest.spyOn($ctrl, 'injectBackButton').mockImplementation(() => {});
+        jest.spyOn($ctrl, 'showVerificationCodeField').mockImplementation(() => {});
 
-      $ctrl.$onInit()
-      $ctrl.afterRender({ formName: 'enroll-profile' })
+        $ctrl.$onInit()
+      })
 
-      expect($ctrl.updateSignUpButtonText).toHaveBeenCalled()
-      expect($ctrl.resetCurrentStepOnRegistrationComplete).toHaveBeenCalled()
-      expect($ctrl.redirectToSignInModalIfNeeded).toHaveBeenCalled()
-      expect($ctrl.injectErrorMessages).toHaveBeenCalled()
-      expect($ctrl.injectBackButton).toHaveBeenCalled()
+      it('updates the form', () => {
+        $ctrl.afterRender({ formName: 'enroll-profile' })
+
+        expect($ctrl.updateSignUpButtonText).toHaveBeenCalled()
+        expect($ctrl.resetCurrentStepOnRegistrationComplete).toHaveBeenCalled()
+        expect($ctrl.redirectToSignInModalIfNeeded).toHaveBeenCalled()
+        expect($ctrl.injectErrorMessages).toHaveBeenCalled()
+        expect($ctrl.injectBackButton).toHaveBeenCalled()
+      })
+
+      it('moves to the email verification form', () => {
+        $ctrl.afterRender({ formName: 'enroll-authenticator' })
+
+        expect($ctrl.currentStep).toBe(4)
+        expect($ctrl.showVerificationCodeField).toHaveBeenCalled()
+      })
     });
 
+    describe('updateSignUpButtonText', () => {
+      beforeEach(() => {
+        document.body.innerHTML = `
+          <div class="o-form-button-bar">
+            <input class="button button-primary" value="Sign up">
+          <div>
+        `
+      })
+
+      it('updates the button text', () => {
+        $ctrl.currentStep = 1
+        $ctrl.updateSignUpButtonText()
+
+        expect(document.querySelector('.button-primary')).toHaveDisplayValue('Continue')
+      })
+
+      it('updates to different text on step 3', () => {
+        $ctrl.currentStep = 3
+        $ctrl.updateSignUpButtonText()
+
+        expect(document.querySelector('.button-primary')).toHaveDisplayValue('Create Account')
+      })
+
+      it('does nothing on step 4', () => {
+        $ctrl.currentStep = 4
+        $ctrl.updateSignUpButtonText()
+
+        expect(document.querySelector('.button-primary')).toHaveDisplayValue('Sign up')
+      })
+    })
 
     describe('resetCurrentStepOnRegistrationComplete()', () => {
       beforeEach(() => {
@@ -927,7 +997,6 @@ describe('signUpForm', function () {
 
     describe('redirectToSignInModalIfNeeded()', () => {
       beforeEach(() => {
-        jest.spyOn($ctrl.$scope, '$apply').mockImplementation((callback) => callback());
         jest.spyOn($ctrl, 'onSignIn').mockImplementation(() => {});
       });
       it('shows the login modal if the user navigates to the okta widget login form', () => {
@@ -1023,6 +1092,9 @@ describe('signUpForm', function () {
       const countryFieldClass = `${inputFieldErrorSelectorPrefix}userProfile.country`;
       beforeEach(() => {
         document.body.innerHTML = `
+          <div class="okta-form-infobox-error">
+            <p>There was an error</p>
+          </div>
           <div>
             <div class="o-form-input">
               <div class="${accountTypeFieldClass.slice(1)}"></div>
@@ -1064,6 +1136,35 @@ describe('signUpForm', function () {
         expect(errorElement.classList).toContain(inputErrorFieldSelector.slice(1));
         expect(errorElement.classList).toContain('o-form-input-error');
         expect(errorElement.classList).toContain('o-form-explain');
+      });
+
+      it('should inject error message summary array', () => {
+        const errorSummary = 'accountTypeError';
+        $ctrl.signUpErrors = [
+          {
+            property: 'accountType',
+            errorSummary: [errorSummary, errorSummary]
+          }
+        ]
+        $ctrl.injectErrorMessages()
+
+        const errorElement = document.querySelector(inputErrorFieldSelector);
+        expect(errorElement.textContent).toBe(`${errorSummary} ${errorSummary}`);
+      });
+
+      it('should sanitize error messages', () => {
+        const errorSummary = '<script>console.log("Hacked")</script>';
+        $ctrl.signUpErrors = [
+          {
+            property: 'accountType',
+            errorSummary
+          }
+        ]
+        $ctrl.injectErrorMessages()
+
+        const errorElement = document.querySelector(inputErrorFieldSelector);
+        expect(errorElement.innerHTML).not.toContain(errorSummary);
+        expect(errorElement.innerHTML).toContain('&lt;script&gt;');
       });
 
       it('should only add the error message passed as a prop', () => {
@@ -1110,6 +1211,46 @@ describe('signUpForm', function () {
         const accountTypeErrorElements = accountTypeField.parentNode.querySelectorAll(inputErrorFieldSelector);
         expect(accountTypeErrorElements.length).toEqual(1);
       });
+
+      describe('error box augmentation', () => {
+        let errorBox
+        beforeEach(() => {
+          $ctrl.signUpErrors = [
+            { message: 'Invalid field', property: 'userProfile.unknown' },
+            { message: 'Invalid first name', property: 'userProfile.firstName' },
+            { message: 'Invalid last name', property: 'userProfile.lastName' },
+            { message: 'Invalid email', property: 'userProfile.email' },
+            { message: 'Invalid password', property: 'credentials.passcode' },
+          ]
+
+          errorBox = document.querySelector('.okta-form-infobox-error')
+        })
+
+        afterEach(() => {
+          // Ensure that the text provided by Okta is not removed
+          expect(errorBox.textContent).toContain('There was an error')
+        })
+
+        it('notifies the user which fields had errors in the error box', () => {
+          $ctrl.injectErrorMessages()
+
+          expect(errorBox.textContent).toContain('Please review the following fields: first name, last name, email, password.')
+        })
+
+        it('is skipped on the verify step', () => {
+          $ctrl.currentStep = 4
+          $ctrl.injectErrorMessages()
+
+          expect(errorBox.textContent).not.toContain('Please review the following fields:')
+        })
+
+        it('is skipped when no whitelisted fields have errors', () => {
+          $ctrl.signUpErrors = [$ctrl.signUpErrors[0]]
+          $ctrl.injectErrorMessages()
+
+          expect(errorBox.textContent).not.toContain('Please review the following fields')
+        })
+      })
     });
 
     describe('load errors', () => {
@@ -1193,6 +1334,36 @@ describe('signUpForm', function () {
       });
     });
   });
+
+  describe('injectBackButton', () => {
+    beforeEach(() => {
+      document.body.innerHTML = `
+        <div class="o-form-button-bar">
+          <input class="button button-primary" value="Sign up">
+        <div>
+      `
+    })
+
+    it('adds back button', () => {
+      $ctrl.injectBackButton()
+
+      expect(document.querySelector('.btn-secondary')).toBeInTheDocument()
+    })
+
+    it('does not add back button on step 1', () => {
+      $ctrl.currentStep = 1
+      $ctrl.injectBackButton()
+
+      expect(document.querySelector('.btn-secondary')).not.toBeInTheDocument()
+    })
+
+    it('does not add back button on step 4', () => {
+      $ctrl.currentStep = 4
+      $ctrl.injectBackButton()
+
+      expect(document.querySelector('.btn-secondary')).not.toBeInTheDocument()
+    })
+  })
 
   describe('signIn()', () => {
     it('should authenticated and handle login', (done) => {
@@ -1316,10 +1487,14 @@ describe('signUpForm', function () {
         'family-name': user.lastName
       },
       'donor-type': user.accountType,
+      'organization-name': 'Organization Name',
       email: user.email,
-      'phone-number': user.primaryPhone,
+      'phone-number': "",
       mailingAddress: {
         streetAddress: user.streetAddress,
+        extendedAddress: 'extendedAddress',
+        intAddressLine3: 'intAddressLine3',
+        intAddressLine4: 'intAddressLine4',
         locality: user.city,
         region: user.state,
         postalCode: '12345-678',
@@ -1331,7 +1506,11 @@ describe('signUpForm', function () {
       $ctrl.$scope.lastName = user.lastName
       $ctrl.$scope.email = user.email
       $ctrl.$scope.accountType = user.accountType
+      $ctrl.$scope.organizationName = 'Organization Name'
       $ctrl.$scope.streetAddress = user.streetAddress
+      $ctrl.$scope.streetAddressExtended = 'extendedAddress'
+      $ctrl.$scope.internationalAddressLine3 = 'intAddressLine3'
+      $ctrl.$scope.internationalAddressLine4 = 'intAddressLine4'
       $ctrl.$scope.city = user.city
       $ctrl.$scope.state = user.state
       $ctrl.$scope.zipCode = user.zipCode
@@ -1356,16 +1535,28 @@ describe('signUpForm', function () {
         },
         emailFormUri
       }))
-      jest.spyOn($ctrl.orderService, 'updateDonorDetails').mockImplementation(() => Observable.of({}))
       jest.spyOn($ctrl.orderService, 'addEmail').mockImplementation(() => Observable.of({}))
-      jest.spyOn($ctrl, 'logIntoOkta').mockImplementation(() => Observable.of({}))
+      jest.spyOn($ctrl, 'redirectToOktaForLogin')
+      jest.spyOn($ctrl, 'onSignUpError')
     })
 
-    it("should update the user's data, updating email separately", () => {
+    it("should succeed updating the user's data, redirecting to Okta", () => {
+      jest.spyOn($ctrl.orderService, 'updateDonorDetails').mockImplementation(() => Observable.of({}))
+
       $ctrl.saveDonorDetails()
 
       expect($ctrl.orderService.updateDonorDetails).toHaveBeenCalledWith(expect.objectContaining(signUpDonorDetails))
       expect($ctrl.orderService.addEmail).toHaveBeenCalledWith(signUpDonorDetails.email, emailFormUri)
+      expect($ctrl.redirectToOktaForLogin).toHaveBeenCalled()
+      expect($ctrl.onSignUpError).not.toHaveBeenCalled()
+    })
+
+    it("should fail while updating the user's data, opening the contact info modal", () => {
+      jest.spyOn($ctrl.orderService, 'updateDonorDetails').mockImplementation(() => Observable.throw({}))
+      $ctrl.saveDonorDetails()
+
+      expect($ctrl.redirectToOktaForLogin).not.toHaveBeenCalled()
+      expect($ctrl.onSignUpError).toHaveBeenCalled()
     })
   });
 })

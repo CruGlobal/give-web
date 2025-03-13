@@ -4,12 +4,12 @@ export const user = {
   email: 'email',
   accountType: 'Household',
   streetAddress: 'streetAddress',
-  streetAddressExtended: 'streetAddressExtended',
+  extendedAddress: 'streetAddressExtended',
   city: 'city',
   state: 'state',
   zipCode: '11111',
   countryCode: 'US',
-  primaryPhone: 'primaryPhone',
+  'phone-number': 'primaryPhone',
   organizationName: 'organizationName'
 }
 

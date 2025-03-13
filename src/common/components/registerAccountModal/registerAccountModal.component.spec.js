@@ -18,7 +18,12 @@ describe('registerAccountModal', function () {
       modalTitle: '',
       onCancel: jest.fn(),
       onSuccess: jest.fn(),
-      setLoading: jest.fn()
+      setLoading: jest.fn(),
+      $document: [{
+        body: {
+          dispatchEvent: jest.fn()
+        }
+      }],
     }
     locals = {
       $element: [{ dataset: {} }],
@@ -32,6 +37,7 @@ describe('registerAccountModal', function () {
         getRole: jest.fn(),
         isOktaRedirecting: jest.fn(),
         removeOktaRedirectIndicator: jest.fn(),
+        signIn:  jest.fn(),
         sessionSubject: new BehaviorSubject({})
       },
       cartService: {
@@ -140,6 +146,35 @@ describe('registerAccountModal', function () {
     })
   })
 
+  describe('onSignUpError()', () => {
+    it('should save donor details and record that an error occurred', () => {
+      jest.spyOn($ctrl, 'stateChanged')
+      const donorDetails = {
+        name: {
+          'given-name': 'First',
+          'family-name': 'Last'
+        },
+        'donor-type': 'Household',
+        email: 'email',
+        mailingAddress: {
+          streetAddress: '123 First St',
+          locality: 'Orlando',
+          region: 'FL',
+          postalCode: '12345',
+          country: 'US'
+        }
+      }
+      expect($ctrl.signUpDonorDetails).toBe(undefined)
+      expect($ctrl.cortexSignUpError).toBe(undefined)
+
+      $ctrl.onSignUpError(donorDetails)
+
+      expect($ctrl.signUpDonorDetails).toBe(donorDetails)
+      expect($ctrl.cortexSignUpError).toBe(true)
+      expect($ctrl.stateChanged).toHaveBeenCalledWith('contact-info')
+    });
+  })
+
   describe('onIdentitySuccess()', () => {
     it('calls checkDonorDetails', () => {
       jest.spyOn($ctrl, 'checkDonorDetails').mockImplementation(() => {})
@@ -157,11 +192,22 @@ describe('registerAccountModal', function () {
   })
 
   describe('onContactInfoSuccess()', () => {
-    it('calls postDonorMatches', () => {
+    beforeEach(() => {
       jest.spyOn($ctrl, 'postDonorMatches').mockImplementation(() => {})
+      jest.spyOn($ctrl, 'redirectToOktaForLogin').mockImplementation(() => {})
+    })
+    it('calls postDonorMatches', () => {
       $ctrl.onContactInfoSuccess()
 
       expect($ctrl.postDonorMatches).toHaveBeenCalled()
+      expect($ctrl.redirectToOktaForLogin).not.toHaveBeenCalled()
+    })
+    it('calls redirectToOktaForLogin when registration error occurred.', () => {
+      $ctrl.cortexSignUpError = true
+      $ctrl.onContactInfoSuccess()
+
+      expect($ctrl.redirectToOktaForLogin).toHaveBeenCalled()
+      expect($ctrl.postDonorMatches).not.toHaveBeenCalled()
     })
   })
 
@@ -213,67 +259,10 @@ describe('registerAccountModal', function () {
     })
 
     describe('\'registration-state\' NEW', () => {
-      const signUpDonorDetails = {
-        name: {
-          'given-name': 'First',
-          'family-name': 'Last'
-        },
-        'donor-type': 'Household',
-        email: 'first.last@cru.org',
-        phone: '111-222-3333',
-        mailingAddress: {
-          streetAddress: '123 First St',
-          locality: 'Orlando',
-          region: 'FL',
-          postalCode: '12345',
-          country: 'US'
-        }
-      }
-
-      const emailFormUri = '/emails/crugive'
-
-      beforeEach(() => {
+      it('changes state to \'contact-info\'', () => {
         $ctrl.orderService.getDonorDetails.mockImplementation(() => Observable.of({
           'registration-state': 'NEW',
-          name: {
-            'given-name': 'Existing',
-            'family-name': 'Existing'
-          },
-          'donor-type': '',
-          email: 'existing.email@cru.org',
-          phone: '',
-          mailingAddress: {
-            streetAddress: '',
-            locality: '',
-            region: '',
-            postalCode: '',
-            country: 'CANADA'
-          },
-          emailFormUri
         }))
-        $ctrl.orderService.addEmail.mockImplementation(() => Observable.of({}))
-      })
-
-      describe('with sign up details', () => {
-        it('saves sign up contact info merged with existing contact info', () => {
-          $ctrl.checkDonorDetails(signUpDonorDetails)
-
-          expect($ctrl.orderService.updateDonorDetails).toHaveBeenCalledWith(expect.objectContaining(signUpDonorDetails))
-          expect($ctrl.orderService.addEmail).toHaveBeenCalledWith(signUpDonorDetails.email, emailFormUri)
-          expect($ctrl.stateChanged).toHaveBeenCalledWith('contact-info')
-        })
-
-        it('remembers contact info after error', () => {
-          $ctrl.orderService.addEmail.mockImplementation(() => Observable.throw(new Error('Error adding email')))
-
-          $ctrl.checkDonorDetails(signUpDonorDetails)
-
-          expect($ctrl.signUpDonorDetails).toBe(signUpDonorDetails)
-          expect($ctrl.stateChanged).toHaveBeenCalledWith('contact-info')
-        })
-      })
-
-      it('changes state to \'contact-info\'', () => {
         $ctrl.checkDonorDetails()
 
         expect($ctrl.orderService.getDonorDetails).toHaveBeenCalled()
@@ -414,6 +403,24 @@ describe('registerAccountModal', function () {
 
       expect(modal.removeClass).toHaveBeenCalledWith('modal-sm modal-md modal-lg')
       expect(modal.addClass).toHaveBeenCalledWith('modal-sm')
+    })
+  })
+
+  describe('redirectToOktaForLogin', () => {   
+    it('should call sessionService.signIn and dispatch giveSignInSuccess event', () => {
+      const $injector = { get: jest.fn() }
+      jest.spyOn(angular, 'injector').mockReturnValue($injector)
+      jest.spyOn($ctrl.sessionService, 'signIn').mockReturnValue(Observable.of({}))
+      const dispatchEventSpy = jest.spyOn($ctrl.$document[0].body, 'dispatchEvent')
+
+      expect($ctrl.sessionService.signIn).not.toHaveBeenCalled()
+      $ctrl.redirectToOktaForLogin()
+
+      expect($ctrl.sessionService.signIn).toHaveBeenCalledWith($ctrl.lastPurchaseId)
+      expect(dispatchEventSpy).toHaveBeenCalledWith(expect.objectContaining({
+        type: 'giveSignInSuccess',
+        detail: { $injector }
+      }))
     })
   })
 })
