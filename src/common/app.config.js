@@ -391,6 +391,8 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     OKTA_ERROR_WHILE_SAVING_EMAIL: 'There was an error saving your email address. Make sure it was entered correctly.',
     OKTA_ERROR_WHILE_SAVING_DATA: 'There was an error saving your contact info. Please try again or contact eGift@cru.org for assistance.',
     OKTA_SIGNUP_FIELDS_ERROR: 'Please review the following fields: {{fields}}.',
+    OKTA_FIRST_NAME_FIELD: 'first name',
+    OKTA_LAST_NAME_FIELD: 'last name',
     OKTA_EMAIL_FIELD: 'email',
     OKTA_PASSWORD_FIELD: 'password'
   })
@@ -612,6 +614,8 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     OKTA_ERROR_WHILE_SAVING_EMAIL: 'There was an error saving your email address. Make sure it was entered correctly.',
     OKTA_ERROR_WHILE_SAVING_DATA: 'There was an error saving your contact info. Please try again or contact eGift@cru.org for assistance.',
     OKTA_SIGNUP_FIELDS_ERROR: 'Please review the following fields: {{fields}}.',
+    OKTA_FIRST_NAME_FIELD: 'first name',
+    OKTA_LAST_NAME_FIELD: 'last name',
     OKTA_EMAIL_FIELD: 'email',
     OKTA_PASSWORD_FIELD: 'password'
   })

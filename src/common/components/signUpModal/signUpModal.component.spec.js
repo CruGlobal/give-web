@@ -1215,7 +1215,9 @@ describe('signUpForm', function () {
         let errorBox
         beforeEach(() => {
           $ctrl.signUpErrors = [
+            { message: 'Invalid field', property: 'userProfile.unknown' },
             { message: 'Invalid first name', property: 'userProfile.firstName' },
+            { message: 'Invalid last name', property: 'userProfile.lastName' },
             { message: 'Invalid email', property: 'userProfile.email' },
             { message: 'Invalid password', property: 'credentials.passcode' },
           ]
@@ -1231,7 +1233,7 @@ describe('signUpForm', function () {
         it('notifies the user which fields had errors in the error box', () => {
           $ctrl.injectErrorMessages()
 
-          expect(errorBox.textContent).toContain('Please review the following fields: email, password.')
+          expect(errorBox.textContent).toContain('Please review the following fields: first name, last name, email, password.')
         })
 
         it('is skipped on the verify step', () => {

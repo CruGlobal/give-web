@@ -106,6 +106,8 @@ class SignUpModalController {
       'ZIP_CODE_ERROR',
       'INVALID_US_ZIP_ERROR',
       'OKTA_SIGNUP_FIELDS_ERROR',
+      'OKTA_FIRST_NAME_FIELD',
+      'OKTA_LAST_NAME_FIELD',
       'OKTA_EMAIL_FIELD',
       'OKTA_PASSWORD_FIELD'
     ]).then(translations => {
@@ -127,6 +129,8 @@ class SignUpModalController {
         zipCodeError: translations.ZIP_CODE_ERROR,
         invalidUSZipError: translations.INVALID_US_ZIP_ERROR,
         signupFieldsError: translations.OKTA_SIGNUP_FIELDS_ERROR,
+        firstNameField: translations.OKTA_FIRST_NAME_FIELD,
+        lastNameField: translations.OKTA_LAST_NAME_FIELD,
         emailField: translations.OKTA_EMAIL_FIELD,
         passwordField: translations.OKTA_PASSWORD_FIELD
       }
@@ -299,9 +303,6 @@ class SignUpModalController {
 
     return this.geographiesService.getRegions(countryData).pipe(
       map((data) => {
-        // Order regions in alphabetical order
-        data.sort((a, b) => a['display-name'].localeCompare(b['display-name']))
-
         this.stateOptions = {}
         data.forEach(state => {
           this.stateOptions[state.name] = state['display-name']
@@ -554,7 +555,11 @@ class SignUpModalController {
     }
 
     const errorFields = errors.map(error => {
-      if (error.property === 'userProfile.email') {
+      if (error.property === 'userProfile.firstName') {
+        return this.translations.firstNameField
+      } else if (error.property === 'userProfile.lastName') {
+        return this.translations.lastNameField
+      } else if (error.property === 'userProfile.email') {
         return this.translations.emailField
       } else if (error.property === 'credentials.passcode') {
         return this.translations.passwordField
