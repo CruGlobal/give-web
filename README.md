@@ -172,7 +172,7 @@ Use yarn for faster installs and to update the yarn lock file: https://yarnpkg.c
 ### Install & Run
 
 1. `yarn`
-2. `yarn build` or `npm build` _(During the build we copy the latest assets from Okta sign-in-widget package to ensure the sign up form is styled, and shows icons.)_
+2. `yarn build` _(During the build we copy the latest assets from Okta sign-in-widget package to ensure the sign up form is styled, and shows icons.)_
 3. `yarn start`
 4. Browse to [`http://localhost:9000`](http://localhost:9000)
 Note: For session cookies to work correctly, add the below entries to your hosts file, and use [`https://localhost.cru.org:9000`](https://localhost.cru.org:9000) for development
