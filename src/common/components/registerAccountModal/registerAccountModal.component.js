@@ -197,10 +197,6 @@ class RegisterAccountModalController {
   redirectToOktaForLogin () {
     this.sessionService.signIn(this.lastPurchaseId).subscribe(() => {
       const $injector = angular.injector()
-      if (!$injector.has('sessionService')) {
-        $injector.loadNewModules(['sessionService'])
-      }
-
       this.$document[0].body.dispatchEvent(
         new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } })
       )

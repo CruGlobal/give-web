@@ -24,10 +24,6 @@ describe('registerAccountModal', function () {
           dispatchEvent: jest.fn()
         }
       }],
-      $injector: {
-        has: jest.fn(),
-        loadNewModules: jest.fn()
-      }
     }
     locals = {
       $element: [{ dataset: {} }],
@@ -410,33 +406,21 @@ describe('registerAccountModal', function () {
     })
   })
 
-  describe('redirectToOktaForLogin', () => {
-    let dispatchEventSpy
-    beforeEach(() => {
-      jest.spyOn($ctrl.sessionService, 'signIn').mockReturnValue(Observable.of({}))
-      dispatchEventSpy = jest.spyOn($ctrl.$document[0].body, 'dispatchEvent')
-    })
-
+  describe('redirectToOktaForLogin', () => {   
     it('should call sessionService.signIn and dispatch giveSignInSuccess event', () => {
-      expect($ctrl.sessionService.signIn).not.toHaveBeenCalled()
+      const $injector = { get: jest.fn() }
+      jest.spyOn(angular, 'injector').mockReturnValue($injector)
+      jest.spyOn($ctrl.sessionService, 'signIn').mockReturnValue(Observable.of({}))
+      const dispatchEventSpy = jest.spyOn($ctrl.$document[0].body, 'dispatchEvent')
 
+      expect($ctrl.sessionService.signIn).not.toHaveBeenCalled()
       $ctrl.redirectToOktaForLogin()
 
       expect($ctrl.sessionService.signIn).toHaveBeenCalledWith($ctrl.lastPurchaseId)
-      expect($ctrl.$injector.has).toHaveBeenCalledWith('sessionService')
-      expect($ctrl.$injector.loadNewModules).toHaveBeenCalledWith(['sessionService'])
       expect(dispatchEventSpy).toHaveBeenCalledWith(expect.objectContaining({
         type: 'giveSignInSuccess',
-        detail: { $injector: $ctrl.$injector }
+        detail: { $injector }
       }))
-    })
-
-    it('should not load new modules if sessionService is already available', () => {
-      $ctrl.$injector.has.mockReturnValue(true)
-
-      $ctrl.redirectToOktaForLogin()
-
-      expect($ctrl.$injector.loadNewModules).not.toHaveBeenCalled()
     })
   })
 })

@@ -13,7 +13,6 @@ class SignInButtonController {
     this.$rootScope = $rootScope
     this.$document = $document
     this.$timeout = $timeout
-    this.$injector = angular.injector()
     this.sessionService = sessionService
     this.gettext = gettext
     this.imgDomain = envService.read('imgDomain')
@@ -44,10 +43,7 @@ class SignInButtonController {
     this.watchSigningIn()
     this.sessionService.signIn(this.lastPurchaseId).subscribe(() => {
       this.isSigningIn = false
-      const $injector = this.$injector
-      if (!$injector.has('sessionService')) {
-        $injector.loadNewModules(['sessionService'])
-      }
+      const $injector = angular.injector()
       this.$document[0].body.dispatchEvent(
         new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } })
       )
