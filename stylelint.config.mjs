@@ -16,7 +16,8 @@ export default {
   ],
   ignoreFiles: [
     'src/assets/crubrand/**',
-    'src/assets/cru-scss/**'
+    'src/assets/cru-scss/**',
+    '**/okta-sign-in.min.css'
   ],
   plugins: [
     'stylelint-declaration-strict-value',
