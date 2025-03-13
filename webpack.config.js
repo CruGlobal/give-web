@@ -199,8 +199,7 @@ module.exports = (env = {}) => [
     },
     plugins: [
       new MiniCssExtractPlugin({
-        filename: 'chunks/[name].[contenthash].min.css',
-        disable: !isBuild
+        filename: 'chunks/[name].[contenthash].min.css'
       }),
       ...sharedConfig.plugins,
       new BundleAnalyzerPlugin({
@@ -244,8 +243,7 @@ module.exports = (env = {}) => [
     },
     plugins: [
       new MiniCssExtractPlugin({
-        filename: '[name].min.css',
-        disable: !isBuild
+        filename: '[name].min.css'
       }),
       ...sharedConfig.plugins,
       new BundleAnalyzerPlugin({
