@@ -3,18 +3,22 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+
     .badge {
       padding: 10px 13px;
       border-radius: 17px;
+
       &.active {
         background-color: #f8ae0c;
       }
     }
+
     .spanner {
       flex-grow: 3;
-      margin: 13px;
       border: 3px solid #777;
       border-radius: 3px;
+      margin: 13px;
+
       &.active {
         border-color: #f8ae0c;
       }
@@ -36,7 +40,7 @@
   }
 
   .jumbotron {
-    text-align: center;
     padding: 20px;
+    text-align: center;
   }
 }

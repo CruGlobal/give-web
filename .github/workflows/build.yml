@@ -1,4 +1,4 @@
-name: Build
+name: CI
 
 on:
   push: 
@@ -20,21 +20,27 @@ permissions:
 
 jobs:
   lint:
+    name: 🧹 Lint Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16.10.0
+          node-version-file: .tool-versions
       
       - name: Install Dependencies
-        run: yarn install --immutable --immutable-cache
+      # --ignore-optional is used to avoid installing optional dependencies like fsevents which is not supported on Linux
+        run: yarn install --immutable --immutable-cache --ignore-optional
       
-      - name: Lint Check
+      - name: Lint Check (JS)
         run: yarn lint
 
+      - name: Lint Check (SCSS)
+        run: yarn lint:styles
+
   test:
+    name: ✅ Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -42,20 +48,41 @@ jobs:
           # Help Codecov detect commit SHA
           fetch-depth: 2
       
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16.10.0
+          node-version-file: .tool-versions
       
       - name: Install Dependencies
-        run: yarn install --immutable --immutable-cache
+        run: yarn install --immutable --immutable-cache --ignore-optional
       
       - name: Run Tests
         run: yarn test:coverage
       
       - name: Upload Codecov Reports
         uses: codecov/codecov-action@v2 
-   
+
+  build:
+    name: 🏗️ Build app
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .tool-versions
+      
+      - name: Install Dependencies
+        run: yarn install --immutable --immutable-cache --ignore-optional
+      
+      - name: Build App
+        env:
+          S3_GIVE_DOMAIN: //${{ secrets.GIVE_WEB_HOSTNAME }}
+          ROLLBAR_ACCESS_TOKEN: ${{ secrets.ROLLBAR_ACCESS_TOKEN }}
+          DATADOG_RUM_CLIENT_TOKEN: ${{ secrets.DATADOG_RUM_CLIENT_TOKEN }}
+        run: yarn run build
+
+
   deploy:
+    name: 🚀 Deploy app
     runs-on: ubuntu-latest
     environment:
       name: ${{ (github.ref == 'refs/heads/master' && 'production') || 'staging' }}
@@ -64,12 +91,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16.10.0
+          node-version-file: .tool-versions
       
       - name: Install Dependencies
-        run: yarn install --immutable --immutable-cache
+        run: yarn install --immutable --immutable-cache --ignore-optional
       
       - name: Build App
         env:

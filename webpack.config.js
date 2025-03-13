@@ -7,6 +7,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const ManifestPlugin = require('webpack-manifest-plugin')
+const StyleLintPlugin = require('stylelint-webpack-plugin')
 
 const giveComponents = [
   'app/cart/cart.component.js',
@@ -92,6 +93,17 @@ const sharedConfig = {
       ROLLBAR_ACCESS_TOKEN: JSON.stringify(process.env.ROLLBAR_ACCESS_TOKEN) || 'development-token',
       DATADOG_RUM_CLIENT_TOKEN: process.env.DATADOG_RUM_CLIENT_TOKEN || ''
     }),
+    ...(isBuild
+      ? []
+      : [
+          new StyleLintPlugin({
+            configFile: path.resolve(__dirname, 'stylelint.config.mjs'),
+            context: 'src/assets/scss',
+            files: '**/*.(css|scss)',
+            failOnError: true,
+            quiet: false
+          })
+        ]),
     // To strip all locales except “en”
     new MomentLocalesPlugin()
   ],

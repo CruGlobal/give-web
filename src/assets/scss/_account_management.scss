@@ -1,178 +1,181 @@
 .this-is-a-link {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .panel-header {
-	padding: 15px ;
-	h4{
-		margin: 0;
-	}
+  padding: 15px;
+
+  h4{
+    margin: 0;
+  }
 }
 
 .light-font {
-	color: #666062;
+  color: $colorCru-gray;
 }
 
 .bold {
-	font-weight: bold;
-	margin: 0 5px;
+  margin: 0 5px;
+  font-weight: bold;
 }
 
 .icon {
   display: inline-block;
-  height: 20px;
   width: 20px;
+  height: 20px;
   margin: 0 10px;
 }
 
 .extra-margin-top {
-	margin-top: 25px;
+  margin-top: 25px;
 }
 
 .account-management {
-	.panel {
-		&.bg-danger {
-			border-color: $colorHighlight-danger;
-			background-color: #f2dede;
-		}
-	}
-	.panel.panel-with-gray-background, .panel .panel-heading {
-		background-color: #FAFAFA !important;
-		font-size: 1em;
-	}
+  .panel {
+    &.bg-danger {
+      border-color: $colorHighlight-danger;
+      /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
+      background-color: #f2dede;
+    }
+  }
 
-	.panel-body {
-		font-size: 1em;
-	}
+  .panel.panel-with-gray-background, .panel .panel-heading {
+    /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
+    background-color: #fafafa !important;
+    font-size: 1em;
+  }
 
-	.payment-summary-link {
-		color: $colorGrayscale-black;
-		font-weight: normal;
-	}
+  .panel-body {
+    font-size: 1em;
+  }
 
-	.payment-icon {
-		padding-right: 10px;
-	}
+  .payment-summary-link {
+    color: $colorGrayscale-black;
+    font-weight: normal;
+  }
 
-	.payment-nickname {
-		font-weight: bold;
-	}
+  .payment-nickname {
+    font-weight: bold;
+  }
 
-	.payment-expiration {
-		font-size: 0.8em;
-		font-weight: 500;
-		text-transform: uppercase;
-		color: $colorCru-gray;
-	}
+  .payment-expiration {
+    color: $colorCru-gray;
+    font-size: 0.8em;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
 
-	.payment-details-link {
-		color: $colorCru-blueDeep;
-		font-weight: bold;
-		font-size: 0.8em;
-	}
+  .payment-details-link {
+    color: $colorCru-blueDeep;
+    font-size: 0.8em;
+    font-weight: bold;
+  }
 
-	.section-title {
-		font-size: 0.8em;
-		font-weight: normal !important;
-		text-transform: uppercase;
-		color: $colorCru-gray;
-	}
+  .section-title {
+    color: $colorCru-gray;
+    font-size: 0.8em;
+    font-weight: normal !important;
+    text-transform: uppercase;
+  }
 
-	table {
-		&.borderless td, &.borderless th {
-			border: none;
-		}
+  table {
+    &.borderless td, &.borderless th {
+      border: none;
+    }
 
-		tbody tr td:first-child {
-			font-weight: 500;
-			color: $colorCru-blueDeep;
-		}
+    tbody tr td:first-child {
+      color: $colorCru-blueDeep;
+      font-weight: 500;
+    }
 
-		tbody tr td:last-child {
-			font-weight: 500;
-			color: $colorCru-blueDeep;
-		}
-	}
+    tbody tr td:last-child {
+      color: $colorCru-blueDeep;
+      font-weight: 500;
+    }
+  }
 
-	&.modal {
-		.form-group {
-			label {
-				font-size: 0.8em;
-				font-weight: normal !important;
-				text-transform: uppercase;
-				color: $colorCru-gray;
+  &.modal {
+    .form-group {
+      label {
+        color: $colorCru-gray;
+        font-size: 0.8em;
+        font-weight: normal !important;
+        text-transform: uppercase;
 
-				&.agreement {
-					text-transform: capitalize !important;
+        &.agreement {
+          text-transform: capitalize !important;
 
-					input {
-						font-size: 1.2em;
-						color: $colorText;
-					}
+          input {
+            color: $colorText;
+            font-size: 1.2em;
+          }
 
-					span {
-						padding-left: 10px;
-						color: $colorCru-gray;
-						text-transform: none;
-						font-size: 0.9em;
-					}
-				}
-			}
-		}
+          span {
+            padding-left: 10px;
+            color: $colorCru-gray;
+            font-size: 0.9em;
+            text-transform: none;
+          }
+        }
+      }
+    }
 
-		.agreement-text p {
-			font-size: 0.9em;
-		}
+    .agreement-text p {
+      font-size: 0.9em;
+    }
 
-		.user-profile {
-			h4.section-heading {
-				font-weight: bold;
-			}
+    .user-profile {
+      h4.section-heading {
+        font-weight: bold;
+      }
 
-			.section-title {
-				color: $colorCru-gray;
-			}
+      .section-title {
+        color: $colorCru-gray;
+      }
 
-			.gift-summary {
-				margin-bottom: 5px;
-			}
+      .gift-summary {
+        margin-bottom: 5px;
+      }
 
-			.start-date {
-				color: $colorCru-gray;
-				font-size: 0.9em;
-			}
-		}
-	}
+      .start-date {
+        color: $colorCru-gray;
+        font-size: 0.9em;
+      }
+    }
+  }
 
-	.payment-icon {
-		display: inline-block;
-		height: 1.4em;
-	}
+  .payment-icon {
+    display: inline-block;
+    height: 1.4em;
+    padding-right: 10px;
+  }
 
-	.panel--buttons-column {
-		@media screen and (max-width: 991px) {
-			margin-top: 29px;
-		}
-	}
+  .panel--buttons-column {
+    @media screen and (max-width: 991px) {
+      margin-top: 29px;
+    }
+  }
 
-	.panel--payment-info {
-		.col-sm-6 {
-			margin-top: 14.5px;
-			&:nth-child(1) {margin-top: 0;}
-			@media screen and (min-width: 992px) {
-				margin-top: 29px;
-			}
-			@media screen and (min-width: 550px) {
-				&:nth-child(2) {margin-top: 0;}
-			}
-		}
-	}
+  .panel--payment-info {
+    .col-sm-6 {
+      margin-top: 14.5px;
+      &:nth-child(1) {margin-top: 0;}
+
+      @media screen and (min-width: 992px) {
+        margin-top: 29px;
+      }
+
+      @media screen and (min-width: 550px) {
+        &:nth-child(2) {margin-top: 0;}
+      }
+    }
+  }
 }
 
 .confirm-billing-info {
-	margin-top: 14.5px;
+  margin-top: 14.5px;
 
-	p {
-		margin-bottom: 3.5px;
-	}
+  p {
+    margin-bottom: 3.5px;
+  }
 }

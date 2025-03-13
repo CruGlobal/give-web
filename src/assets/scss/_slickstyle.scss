@@ -1,70 +1,76 @@
 .slick-related-carousel {
-  margin-left: -15px;
   margin-right: -15px;
+  margin-left: -15px;
 }
 
 .slick-slide {
   .panel {
     margin-bottom: 0;
   }
+
   .u-linkClean {
     color: $colorCru-gray;
-    text-transform: uppercase;
-    font-size: .8em;
+    font-size: 0.8em;
     font-weight: 600;
+    text-transform: uppercase;
   }
-  .icon--readNext:after {
+
+  .icon--readNext::after {
     color: $colorCru-gray;
   }
+
   img {
     width: 100%;
   }
 }
 
 .slick-arrow {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
   width: 38px;
   height: 60px;
-  background: #fff;
-  background-image: none !important;
-  color: #555;
   border: 0;
-  opacity: 1 !important;
+  background: $colorCru-white;
+  background-image: none !important;
+  color: $list-group-link-color;
   line-height: 60px;
-  position: absolute;
-  vertical-align: middle;
-  top: 50%;
+  opacity: 1 !important;
   transform: translateY(-50%);
-  z-index: 1;
+  vertical-align: middle;
 
   &.slick-next {
     right: -15px;
     left: auto;
-    box-shadow: -3px 0 5px #ccc;
-    text-indent: -138px;
     overflow: hidden;
-    &:after {
-      content: "\f105";
-      font-family: "Font Awesome\ 5 Pro";
-      margin-left: 110px;
-      font-size: 38px;
-      margin-top: -1px;
+    box-shadow: -3px 0 5px $input-border;
+    text-indent: -138px;
+
+    &::after {
       display: inline-block;
+      margin-top: -1px;
+      margin-left: 110px;
+      content: "\f105";
+      font-family: fontawesome, "Font Awesome 5 Pro", sans-serif;
+      font-size: 38px;
       text-indent: 0; 
     }
   }
+
   &.slick-prev {
-    left: -15px;
     right: auto;
-    box-shadow: 3px 0 5px #ccc;
+    left: -15px;
     overflow: hidden;
+    box-shadow: 3px 0 5px $input-border;
     text-indent: -138px;
-    &:after {
-      content: "\f104";
-      font-family: "Font Awesome\ 5 Pro";
-      margin-left: 80px;
-      font-size: 38px;
-      margin-top: -1px;
+
+    &::after {
       display: inline-block;
+      margin-top: -1px;
+      margin-left: 80px;
+      content: "\f104";
+      font-family: fontawesome, "Font Awesome 5 Pro", sans-serif;
+      font-size: 38px;
       text-indent: 0;     
     }
   }
