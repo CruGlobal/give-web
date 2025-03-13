@@ -123,6 +123,7 @@ class Order {
 
   addCreditCardPayment (paymentInfo, saveOnProfile) {
     const cvv = paymentInfo.cvv
+    const cardBin = paymentInfo['card-bin']
     paymentInfo = omit(paymentInfo, 'cvv')
 
     const dataToSend = {}
@@ -149,6 +150,7 @@ class Order {
           followLocation: true
         }).do(creditCard => {
           this.storeCardSecurityCode(cvv, creditCard.self.uri)
+          this.storeCardBin(cardBin, creditCard.self.uri)
         })
       })
   }
@@ -216,6 +218,7 @@ class Order {
     })
       .do(() => {
         this.storeCardSecurityCode(cvv, paymentMethod.self.uri)
+        this.storeCardBin(null, paymentMethod.self.uri)
       })
   }
 
@@ -301,10 +304,10 @@ class Order {
       .map(entry => entry?.messageIds)
   }
 
-  submit (cvv) {
+  submit (cvv, cardBin) {
     return this.getPurchaseForm()
       .mergeMap((data) => {
-        const postData = cvv ? { 'security-code': cvv } : {}
+        const postData = cvv && cardBin ? { 'security-code': cvv, 'card-bin': cardBin } : {}
         postData['cover-cc-fees'] = !!this.retrieveCoverFeeDecision()
         postData['radio-call-letters'] = this.retrieveRadioStationCallLetters()
         postData['tsys-device'] = this.tsysService.getDevice()
@@ -322,6 +325,37 @@ class Order {
         this.sessionStorage.removeItem('recaptchaToken')
         this.sessionStorage.removeItem('recaptchaAction')
       })
+  }
+
+  retrieveCardBin () {
+    return this.sessionStorage.getItem('cardBin')
+  }
+
+  clearCardBins () {
+    this.sessionStorage.removeItem('cardBin')
+    this.sessionStorage.removeItem('storedBins')
+  }
+
+  retrieveCardBins () {
+    const storedBins = this.sessionStorage.getItem('storedBins')
+    return storedBins && angular.fromJson(storedBins) || {} /* eslint-disable-line no-mixed-operators */
+  }
+
+  storeCardBin (cardBin, uri) {
+    const storedBins = this.retrieveCardBins()
+    if (!cardBin) {
+      cardBin = storedBins[uri] // Try looking up previously stored cardBin by payment method uri
+    } else {
+      // Save new cardBin in list of stored cardBins
+      storedBins[uri] = cardBin
+      this.sessionStorage.setItem('storedBins', angular.toJson(storedBins))
+    }
+
+    if (cardBin) {
+      this.sessionStorage.setItem('cardBin', cardBin)
+    } else {
+      this.sessionStorage.removeItem('cardBin')
+    }
   }
 
   storeCardSecurityCode (cvv, uri) {

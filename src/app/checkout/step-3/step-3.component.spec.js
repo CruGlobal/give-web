@@ -8,7 +8,7 @@ import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.componen
 import { SignInEvent } from 'common/services/session/session.service'
 
 import module from './step-3.component'
-import { recaptchaFailedEvent, submitOrderEvent } from '../cart-summary/cart-summary.component'
+import { submitOrderEvent } from '../cart-summary/cart-summary.component'
 
 describe('checkout', () => {
   describe('step 3', () => {
@@ -22,6 +22,7 @@ describe('checkout', () => {
         }
       }
       self.storedCvv = null
+      self.storedCardBin = null
       self.coverFeeDecision = false
 
       self.controller = $componentController(module.name, {
@@ -38,9 +39,11 @@ describe('checkout', () => {
           checkErrors: () => Observable.of(['email-info']),
           submit: () => Observable.of('called submit'),
           retrieveCardSecurityCode: () => self.storedCvv,
+          retrieveCardBin: () => self.storedCardBin,
           retrieveLastPurchaseLink: () => Observable.of('purchaseLink'),
           retrieveCoverFeeDecision: () => self.coverFeeDecision,
           clearCardSecurityCodes: jest.fn(),
+          clearCardBins: jest.fn(),
           clearCoverFees: jest.fn()
         },
         profileService: {
@@ -381,16 +384,17 @@ describe('checkout', () => {
           expect(self.controller.$window.scrollTo).toHaveBeenCalledWith(0, 0)
         })
 
-        it('should submit the order with a CVV if paying with a credit card', () => {
+        it('should submit the order with a CVV and cardBin if paying with a credit card', () => {
           self.controller.creditCardPaymentDetails = {}
           self.controller.donorDetails = {
             'registration-state': 'MATCHED'
           }
           self.storedCvv = '1234'
+          self.storedCardBin = '411111'
           self.coverFeeDecision = true
           self.controller.submitOrder()
 
-          expect(self.controller.orderService.submit).toHaveBeenCalledWith('1234')
+          expect(self.controller.orderService.submit).toHaveBeenCalledWith(self.storedCvv, self.storedCardBin)
           expect(self.controller.analyticsFactory.purchase).toHaveBeenCalledWith(self.controller.donorDetails, self.controller.cartData, self.coverFeeDecision)
           expect(self.controller.orderService.clearCardSecurityCodes).toHaveBeenCalled()
           expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
@@ -398,16 +402,17 @@ describe('checkout', () => {
           expect(self.controller.sessionService.updateCheckoutSavedData).toHaveBeenCalled()
         })
 
-        it('should submit the order without a CVV if paying with an existing credit card or the cvv in session storage is missing', () => {
+        it('should submit the order without a CVV and cardBin if paying with an existing credit card or the cvv/cardBin in session storage is missing', () => {
           self.controller.donorDetails = {
             'registration-state': 'COMPLETED'
           }
           self.controller.creditCardPaymentDetails = {}
           self.storedCvv = undefined
+          self.storedCardBin = undefined
           self.coverFeeDecision = true
           self.controller.submitOrder()
 
-          expect(self.controller.orderService.submit).toHaveBeenCalledWith(undefined)
+          expect(self.controller.orderService.submit).toHaveBeenCalledWith(self.storedCvv, self.storedCardBin)
           expect(self.controller.analyticsFactory.purchase).toHaveBeenCalledWith(self.controller.donorDetails, self.controller.cartData, self.coverFeeDecision)
           expect(self.controller.orderService.clearCardSecurityCodes).toHaveBeenCalled()
           expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
@@ -419,9 +424,10 @@ describe('checkout', () => {
           self.controller.orderService.submit.mockImplementation(() => Observable.throw({ data: 'CardErrorException: Invalid Card Number: some details' }))
           self.controller.creditCardPaymentDetails = {}
           self.storedCvv = '1234'
+          self.storedCardBin = '411111'
           self.controller.submitOrder()
 
-          expect(self.controller.orderService.submit).toHaveBeenCalledWith('1234')
+          expect(self.controller.orderService.submit).toHaveBeenCalledWith(self.storedCvv, self.storedCardBin)
           expect(self.controller.analyticsFactory.purchase).not.toHaveBeenCalled()
           expect(self.controller.orderService.clearCardSecurityCodes).not.toHaveBeenCalled()
           expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'CardErrorException: Invalid Card Number: some details' }])
@@ -434,9 +440,10 @@ describe('checkout', () => {
           self.controller.orderService.submit.mockReturnValue(Observable.throw({ data: 'some error', config: { data: { 'security-code': '1234' } } }))
           self.controller.creditCardPaymentDetails = {}
           self.storedCvv = '1234'
+          self.storedCardBin = '411111'
           self.controller.submitOrder()
 
-          expect(self.controller.orderService.submit).toHaveBeenCalledWith('1234')
+          expect(self.controller.orderService.submit).toHaveBeenCalledWith(self.storedCvv, self.storedCardBin)
           expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'some error', config: { data: { 'security-code': 'XXXX' } } }])
         })
 
@@ -468,6 +475,41 @@ describe('checkout', () => {
         jest.spyOn(self.controller, 'submitOrder').mockImplementation(() => {})
         self.controller.$rootScope.$emit(submitOrderEvent)
         expect(self.controller.submitOrder).toHaveBeenCalled()
+      })
+    })
+
+    describe('logToDatadogRum', () => {
+      beforeEach(() => {
+        self.controller.datadogRum = {
+          addError: jest.fn()
+        }
+      })
+
+      it('should log a checkout error', () => {
+        const error = {
+          data: 'Server Error',
+          status: 500
+        }
+
+        self.controller.logToDatadogRum(error)
+        expect(self.controller.datadogRum.addError)
+          .toHaveBeenCalledWith(new Error(`Error submitting purchase: ${JSON.stringify(error)}`), { context: 'Checkout Submission', errorCode: error.status })
+      })
+
+      it('should log a checkout error without data', () => {
+        const error = 'Some error that is unstructured'
+        self.controller.logToDatadogRum(error)
+        expect(self.controller.datadogRum.addError)
+          .toHaveBeenCalledWith(new Error(`Error submitting purchase: ${JSON.stringify(error)}`), { context: 'Checkout Submission', errorCode: error.status })
+      })
+
+      it('should log InvalidCVV errors differently', () => {
+        const error = {
+          data: 'InvalidCVV2Exception: Invalid CVV',
+          status: 500
+        }
+        self.controller.logToDatadogRum(error)
+        expect(self.controller.datadogRum.addError).toHaveBeenCalledWith(new Error('Invalid CVV'), { context: 'Checkout Submission', errorCode: error.status })
       })
     })
   })
