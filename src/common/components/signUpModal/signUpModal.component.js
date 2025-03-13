@@ -566,7 +566,11 @@ class SignUpModalController {
       return
     }
 
+    // Remove the previous error fields
+    errorBox.querySelector('.error-fields')?.remove()
+
     const errorMessage = document.createElement('p')
+    errorMessage.className = 'error-fields'
     // The OKTA_SIGNUP_FIELDS_ERROR translation key is already loaded, so we can use
     // $translate.instant to synchronously interpolate our fields into it
     errorMessage.textContent = this.$translate.instant('OKTA_SIGNUP_FIELDS_ERROR', { fields: errorFields.join(', ') })
