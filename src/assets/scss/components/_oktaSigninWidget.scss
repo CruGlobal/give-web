@@ -82,7 +82,7 @@ sign-up-modal {
     @media (prefers-reduced-motion) {
       transition: none;
     }
-    
+
     label {
       color: #9C9C9C;
       font-size: 16px;
@@ -112,18 +112,18 @@ sign-up-modal {
       }
     }
 
-    &>.chzn-single {
-      height: auto;
-      padding-top: 12px;
-      border: 1px solid transparent;
-      border-radius: 0;
-
-      div {
-        top: 6px;
-      }
-    }
-
     .chzn-container {
+      &>.chzn-single {
+        height: auto;
+        padding-top: 12px;
+        border: 1px solid transparent;
+        border-radius: 0;
+
+        div {
+          top: 6px;
+        }
+      }
+
       &:focus-within {
         box-shadow: none;
 
