@@ -50,7 +50,7 @@ export const customFields = {
   streetAddressExtended: {
     name: 'userProfile.streetAddressExtended',
     type: 'text',
-    label: 'Street address line 2',
+    label: 'Address line 2',
     required: false,
     'label-top': true,
     multirowError: true,
