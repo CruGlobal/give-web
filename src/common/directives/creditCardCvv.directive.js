@@ -1,6 +1,5 @@
 import angular from 'angular'
 
-import './creditCardCvv.directive.scss'
 const directiveName = 'creditCardCvv'
 
 const template =

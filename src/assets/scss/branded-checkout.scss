@@ -10,6 +10,7 @@ branded-checkout{
   @import 'modal';
   @import 'account_management';
   @import 'mobile';
+  @import 'cvv';
 
   font-family: $data-font;
   font-size: math.div($font-size-base, 16px) * 1em;
