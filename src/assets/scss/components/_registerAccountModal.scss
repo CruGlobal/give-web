@@ -134,7 +134,7 @@ register-account-modal:has(sign-in-modal, sign-up-modal) {
 
     .okta-info {
       display: flex;
-      align-items: end;
+      align-items: center;
 
       /* Makes it easier to align the baseline of the text with the bottom of the image */
       line-height: 1em;
