@@ -1,7 +1,6 @@
 
 .existing-payment-method {
   .credit-card-cvv-container {
-    display: flex;
     margin: 8px 20px 8px 38px;
 
     .col-sm-4 {
@@ -10,24 +9,31 @@
     }
 
     .form-control {
+      display: inline-block;
+      width: auto;
       height: auto;
       line-height: 1.6;
     }
 
     .credit-card-cvv-label {
+      display: initial;
       margin-top: 9px;
       margin-right: 9px;
       font-size: 15px;
       font-weight: bold;
+      letter-spacing: normal;
       line-height: 1.2em;
+      text-transform: none;
       white-space: nowrap;
 
       &::after {
+        margin-left: 0;
         content: ':';
       }
     }
 
     .credit-card-cvv-help-block {
+      padding-left: 15px;
       margin-bottom: 0;
     }
   }
@@ -38,7 +44,6 @@
     display: block;
     margin-bottom: 4px;
     font-size: 14px;
-    font-weight: 500;
     letter-spacing: 1px;
     text-transform: uppercase;
 

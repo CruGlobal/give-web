@@ -10,7 +10,7 @@ branded-checkout{
   @import 'modal';
   @import 'account_management';
   @import 'mobile';
-  @import 'cvv';
+  @import 'directives/creditCardCvv';
 
   background-color: $body-bg;
   color: $text-color;
