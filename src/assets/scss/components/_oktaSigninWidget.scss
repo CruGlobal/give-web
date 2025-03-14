@@ -226,7 +226,8 @@ sign-up-modal {
     border-radius: 0;
     background: none;
 
-    input[type="password"] {
+    /* stylelint-disable-next-line no-descending-specificity */
+    input {
       height: auto;
     }
 
