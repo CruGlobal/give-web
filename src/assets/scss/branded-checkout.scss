@@ -10,14 +10,13 @@ branded-checkout{
   @import 'modal';
   @import 'account_management';
   @import 'mobile';
+  @import 'directives/creditCardCvv';
 
   background-color: $body-bg;
   color: $text-color;
   font-family: $data-font;
   font-size: math.div($font-size-base, 16px) * 1em;
   line-height: $line-height-base;
-  color: $text-color;
-  background-color: $body-bg;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   
   .row {
