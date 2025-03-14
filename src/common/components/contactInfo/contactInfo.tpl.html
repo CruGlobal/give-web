@@ -135,7 +135,7 @@
         </div>
       </div>
 
-      <div class="row" ng-if="$ctrl.donorDetails['donor-type'] === 'Household' && $ctrl.showSpouseDetails" >
+      <div class="row" ng-if="($ctrl.donorDetails['donor-type'] === 'Household' && !$ctrl.useV3) || ($ctrl.donorDetails['donor-type'] === 'Household' && $ctrl.useV3 && $ctrl.showSpouseDetails)" >
         <div ng-class="$ctrl.useV3 ? 'col-sm-6' : 'col-sm-4'">
           <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.spouseGivenName | showErrors)}">
             <label>
