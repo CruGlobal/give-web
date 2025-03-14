@@ -14,7 +14,7 @@
       <div class="col-sm-6">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.cardNumber | showErrors)}">
           <label>
-            <span translate>{{'CARD_NUM'}}</span>
+            <span translate>{{'CARD_NUM_FULL'}}</span>
             <input type="text"
                    name="cardNumber"
                    autocomplete="cc-number"
@@ -155,7 +155,9 @@
               <span ng-if="!$ctrl.paymentMethod" translate>{{'NEW_ADDRESS'}}</span>
               <span translate>{{'BILLING_ADDRESS'}}</span>
             </h4>
-            <address-form address="$ctrl.creditCardPayment.address" parent-form="$ctrl.creditCardPaymentForm"></address-form>
+            <address-form address="$ctrl.creditCardPayment.address"
+                          parent-form="$ctrl.creditCardPaymentForm"
+                          compact-address="$ctrl.brandedCheckoutItem"></address-form>
           </div>
         </div>
       </div>

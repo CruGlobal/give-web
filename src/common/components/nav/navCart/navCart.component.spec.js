@@ -4,7 +4,8 @@ import { Observable } from 'rxjs/Observable'
 import { Subject } from 'rxjs/Subject'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
-import module, { giftAddedEvent, cartUpdatedEvent } from './navCart.component'
+import module from './navCart.component'
+import { giftAddedEvent, cartUpdatedEvent } from 'common/lib/cartEvents'
 
 describe('navCart', () => {
   beforeEach(angular.mock.module(module.name))
