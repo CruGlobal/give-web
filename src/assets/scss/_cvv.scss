@@ -3,25 +3,30 @@
   .credit-card-cvv-container {
     display: flex;
     margin: 8px 20px 8px 38px;
+
     .col-sm-4 {
-      padding-left: 10px;
       padding-right: 0;
+      padding-left: 10px;
     }
+
     .form-control {
-      line-height: 1.6;
       height: auto;
+      line-height: 1.6;
     }
+
     .credit-card-cvv-label {
       margin-top: 9px;
       margin-right: 9px;
       font-size: 15px;
-      line-height: 1.2em;
       font-weight: bold;
+      line-height: 1.2em;
       white-space: nowrap;
+
       &::after {
         content: ':';
       }
     }
+
     .credit-card-cvv-help-block {
       margin-bottom: 0;
     }
@@ -30,19 +35,20 @@
 
 .give-modal-content, .branded-checkout {
   .credit-card-cvv-label:not(.existing-payment-method .credit-card-cvv-label) {
-    text-transform: uppercase;
-    font-weight: 500;
-    letter-spacing: 1px;
-    font-size: 14px;
     display: block;
     margin-bottom: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+
     &::after {
-      content: '*';
       display: inline-block;
+      margin-left: 6px;
+      content: '*';
+      font-family: fontawesome, "Font Awesome 5 Pro", sans-serif;
       font-size: 115%;
       line-height: 0;
-      font-family: "fontawesome", "Font Awesome 5 Pro";
-      margin-left: 6px;
     }
   }
 }
