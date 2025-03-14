@@ -1250,6 +1250,13 @@ describe('signUpForm', function () {
 
           expect(errorBox.textContent).not.toContain('Please review the following fields')
         })
+
+        it('only creates error messages once', () => {
+          $ctrl.injectErrorMessages()
+          $ctrl.injectErrorMessages()
+
+          expect(errorBox.textContent.match(/Please review the following fields/g)?.length).toBe(1)
+        })
       })
     });
 
