@@ -2,78 +2,40 @@
   <span ng-switch-when="generic" translate>
     An error has occurred. Please try again or contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
   </span>
-  <span ng-switch-when="mfa" translate>
-    Invalid Verification Code. Please try again.
-  </span>
   <span ng-switch-default>
     {{$ctrl.errorMessage | translate}}
   </span>
 </div>
-<form class="sign-in-form loading-overlay-parent" name="$ctrl.signInForm" ng-switch="$ctrl.signInState">
-  <div ng-switch-when="identity">
-    <div class="form-group">
-      <label for="username" translate>Email</label>
-      <input id="username"
-             name="username"
-             type="email"
-             class="form-control form-control-subtle"
-             placeholder="{{'Email'|translate}}"
-             autocomplete="off"
-             required
-             ng-disabled="$ctrl.isSigningIn"
-             ng-model="$ctrl.username">
-    </div>
-    <div class="form-group">
-      <label for="password" translate>Password</label>
-      <input id="password"
-             name="password"
-             type="password"
-             class="form-control form-control-subtle"
-             placeholder="{{'Password'|translate}}"
-             autocomplete="off"
-             required
-             ng-disabled="$ctrl.isSigningIn"
-             ng-model="$ctrl.password">
-    </div>
-  </div>
-  <div ng-switch-when="mfa">
-    <p translate>Enter a verification code from your Authenticator app to continue.</p>
-    <div class="form-group">
-      <label for="mfa_token" translate>Verification Code</label>
-      <input id="mfa_token"
-             name="mfa_token"
-             type="text"
-             minlength="6"
-             maxlength="8"
-             class="form-control form-control-subtle"
-             placeholder="{{'Code'|translate}}"
-             autocomplete="off"
-             autofocus
-             required
-             ng-disabled="$ctrl.isSigningIn"
-             ng-model="$ctrl.mfa_token">
-    </div>
-    <div class="form-group">
-      <label class="checkbox-inline">
-        <input id="trust_device"
-               name="trust_device"
-               type="checkbox"
-               ng-model="$ctrl.trust_device"
-               ng-disabled="$ctrl.isSigningIn"
-               translate> Don't ask for codes again on this device.
-      </label>
-    </div>
+<sign-in-button
+  on-success="$ctrl.onSuccess()"
+  on-failure="$ctrl.onFailure()"
+  last-purchase-id="$ctrl.lastPurchaseId"
+  error-message="$ctrl.errorMessage"
+></sign-in-button>
 
-  </div>
-  <button
-    type="submit"
-    id="signInButton"
-    class="btn btn-block btn-primary"
-    ng-click="$ctrl.signIn()"
-    ng-disabled="!$ctrl.signInForm.$valid || $ctrl.isSigningIn"
-    translate>Sign In
-  </button>
-  <loading type="overlay" ng-if="$ctrl.isSigningIn">
-    <translate>Signing you in...</translate>
-  </loading>
-</form>
+<p ng-if="!$ctrl.onSignInPage"><span translate>You will be taken to Okta,</span><br /><span translate>then back to this site.</span></p>
+<p ng-if="$ctrl.onSignInPage" translate>You will briefly be taken away from this site to login, then brought back right where you left off.</p>
+<hr />
+<p class="no-account" ng-if="!$ctrl.onSignInPage" translate>Don&rsquo;t have an account?</p>
+<button class="okta-signup-button" ng-if="!$ctrl.onSignInPage" ng-click="$ctrl.onSignUpWithOkta()">
+  <!-- Circular Okta aura inlined so that the color can be changed with CSS for the :hover and :focus states -->
+  <svg width="24" height="24" viewBox="0 0 16 16" aria-label="Okta logo">
+    <circle cx="8" cy="8" r="5.25" stroke="currentColor" stroke-width="3.5" fill="none" />
+  </svg>
+  <span translate>Sign up with Okta</span>
+</button>
+<div class="details-wrapper">
+  <details name="okta-help">
+    <summary translate>Need help?</summary>
+    <p><a ng-href="{{$ctrl.getOktaUrl()}}/signin/forgot-password" target="_blank" translate>Forgot your password?</a></p>
+    <p>
+      <span translate>Call</span> <a href="tel:+18882787233">(888) 278-7233</a> <span translate>opt. 1, then 1.</span><br />
+      <span translate>9:00 a.m. to 5:00 p.m. ET, Monday-Friday,</span><br />
+      <span translate>or email us at</span> <a href="mailto:eGift@cru.org">eGift@cru.org</a>.
+    </p>
+  </details>
+  <details name="okta-help">
+    <summary translate>What is Okta?</summary>
+    <p translate>Okta is a trusted 3rd party security tool used by Cru to protect your personal information associated with your donor account.</p>
+  </details>
+</div>

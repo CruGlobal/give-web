@@ -1,29 +1,49 @@
-<div class="col-xs-12">
-  <p translate>
-    Thanks for your gift!
-    If you register your account now, it will be even easier to give when you come back to support your favorite missionaries and projects.
-  </p>
-  <p><strong translate>Benefits of registering your account include:</strong></p>
-  <ul>
-    <li translate>Save time during checkout</li>
-    <li translate>Update your contact info</li>
-    <li translate>View your donation history</li>
-    <li translate>Manage your recurring gifts</li>
-    <li translate>Change your bank account or credit card information</li>
-  </ul>
-  <p>
-    <button type="button"
-            id="registerAccountButton"
-            class="btn btn-md btn-block btn-primary"
-            ng-click="$ctrl.registerAccount()"
-            translate>Register Your Account
-    </button>
+<div class="content">
+  <div class="col-xs-12">
+    <div class="border-bottom-small">
+      <h2 class="text-center">{{$ctrl.modalTitle}}</h2>
+    </div>
+  </div>
+  <div class="col-xs-12">
+    <p translate>
+      Thanks for your gift!
+      If you register your account now, it will be even easier to give when you come back to support your favorite missionaries and projects.
+    </p>
+    <p><strong translate>Benefits of registering your account include:</strong></p>
+    <ul>
+      <li translate>Save time during checkout</li>
+      <li translate>Update your contact info</li>
+      <li translate>View your donation history</li>
+      <li translate>Manage your recurring gifts</li>
+      <li translate>Change your bank account or credit card information</li>
+    </ul>
 
-    <button type="button"
-            id="notNowButton"
-            class="btn btn-md btn-block btn-default"
-            ng-click="$ctrl.onCancel()"
-            translate>Not Now
-    </button>
-  </p>
+    <div class="alert alert-danger" role="alert" ng-if="$ctrl.errorMessage" ng-switch="$ctrl.errorMessage">
+      <span ng-switch-when="generic" translate>
+        An error has occurred. Please try again or contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
+      </span>
+      <span ng-switch-default>
+        {{$ctrl.errorMessage | translate}}
+      </span>
+    </div>
+
+    <div class="row button-actions">
+      <div class="sign-up">
+        <button type="button"
+          id="registerAccountButton"
+          class="btn btn-primary"
+          ng-click="$ctrl.registerAccount()"
+          translate>Register Your Account
+        </button>
+      </div>
+      <div>
+        <button type="button"
+          id="notNowButton"
+          class="btn btn-md btn-block btn-default"
+          ng-click="$ctrl.onCancel()"
+          translate>Not Now
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

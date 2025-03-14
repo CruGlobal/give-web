@@ -1,3 +1,11 @@
+.modal-dialog {
+  /* Center dialog vertically */
+  align-content: center;
+
+  /* Center dialog on small screens. Bootstrap only applies this margin on screens wider than $screen-sm-min. */
+  margin-inline: auto;
+}
+
 .modal-content.give-modal-content {
   .hide-modal {
     display: none;
@@ -34,18 +42,11 @@
 
     @media (min-width: 992px) {
       button.close {
-        position: static;
+        top: 0;
+        right: -68px;
         width: 36px;
         height: 36px;
-        margin-top: -30px;
-        margin-right: -85px;
-        background: url("/assets/img/close-icon.png");
-        background-size: contain;
-        opacity: 1;
-
-        span {
-          display: none;
-        }
+        background-image: url("/assets/img/close-icon.png");
       }
     }
 
@@ -118,6 +119,8 @@ body{
   }
 }
 
+$modal-line-height: 1.425em;
+
 .modal-content {
   .form-group {
     label.radio {
@@ -128,7 +131,7 @@ body{
   }
 
   p {
-    line-height: 1.425em;
+    line-height: $modal-line-height;
   }
 }
 
