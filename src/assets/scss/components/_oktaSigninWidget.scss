@@ -119,6 +119,10 @@ sign-up-modal {
         border: 1px solid transparent;
         border-radius: 0;
 
+        span {
+          line-height: 36px;
+        }
+
         div {
           top: 6px;
         }
@@ -341,9 +345,4 @@ sign-up-modal {
   .chzn-drop {
     border-radius: 0 0 0 6px;
   }
-
-  .chzn-single span {
-    line-height: 36px;
-  }
 }
-
