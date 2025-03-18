@@ -194,6 +194,11 @@ sign-up-modal {
         border-bottom-left-radius: 0;
       }
 
+      /* stylelint-disable-next-line selector-class-pattern */
+      .o-form-input-name-userProfile\.zipCode ~ .o-form-input-error {
+        border-bottom-left-radius: 0;
+      }
+
       // Also, if the field has errors, the error box gets the rounded border instead of the input
       &:has(.okta-form-input-error) input {
         border-bottom-left-radius: unset;
@@ -335,15 +340,22 @@ sign-up-modal {
   border-radius: 6px 6px 0 0;
 }
 
-/* stylelint-disable-next-line no-descending-specificity, selector-id-pattern */
-#okta-sign-in.auth-container .o-form-select-fieldset #stateInput_chzn.chzn-container-single {
-  .chzn-single,
-  .chzn-drop {
+/* stylelint-disable-next-line no-duplicate-selectors */
+#okta-sign-in.auth-container .o-form-select-fieldset {
+  /* stylelint-disable-next-line selector-class-pattern, no-descending-specificity */
+  .o-form-input-name-userProfile\.state ~ .o-form-input-error {
     border-radius: 0 0 0 6px;
   }
+/* stylelint-disable-next-line selector-id-pattern */
+  #stateInput_chzn.chzn-container-single {
+    .chzn-single,
+    .chzn-drop {
+      border-radius: 0 0 0 6px;
+    }
 
-  .chzn-single span {
-    line-height: 36px;
+    .chzn-single span {
+      line-height: 36px;
+    }
   }
 }
 
