@@ -260,7 +260,7 @@ class SignUpModalController {
         ...customFields.zipCode,
         label: this.translations.zip,
         value: this.$scope.zipCode || this.donorDetails?.mailingAddress?.postalCode || ''
-      },
+      }
     ]
   }
 
@@ -363,7 +363,7 @@ class SignUpModalController {
       internationalAddressLine4: isUSAddress ? '' : userProfile.internationalAddressLine4,
       city: isUSAddress ? userProfile.city : '',
       state: isUSAddress ? userProfile.state : '',
-      zipCode: isUSAddress ? userProfile.zipCode : '',
+      zipCode: isUSAddress ? userProfile.zipCode : ''
     })
 
     const errors = []
@@ -410,7 +410,7 @@ class SignUpModalController {
     postData.userProfile = {
       firstName: this.$scope.firstName,
       lastName: this.$scope.lastName,
-      email: this.$scope.email,
+      email: this.$scope.email
     }
     onSuccess(postData)
   }
