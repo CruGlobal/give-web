@@ -169,9 +169,9 @@ class SignUpModalController {
 
   getSteps (schema) {
     return {
-      // Step 1: Name, email and account type
+      // Step 1: Name, email, account type and organization name (if applicable)
       1: this.getStep1Fields(schema),
-      // Step 2: Address, phone number and organization name (if applicable)
+      // Step 2: Address
       2: this.getStep2Fields(schema),
       // Step 3: Password (We don't save the password for security reasons.
       // Which is why it's the last step)
@@ -257,10 +257,6 @@ class SignUpModalController {
         label: this.translations.zip,
         value: this.$scope.zipCode || this.donorDetails?.mailingAddress?.postalCode || ''
       },
-      {
-        ...schema[3],
-        value: this.$scope.primaryPhone || this.donorDetails?.['phone-number'] || ''
-      }
     ]
   }
 
@@ -364,7 +360,6 @@ class SignUpModalController {
       city: isUSAddress ? userProfile.city : '',
       state: isUSAddress ? userProfile.state : '',
       zipCode: isUSAddress ? userProfile.zipCode : '',
-      primaryPhone: userProfile.primaryPhone
     })
 
     const errors = []
@@ -412,7 +407,6 @@ class SignUpModalController {
       firstName: this.$scope.firstName,
       lastName: this.$scope.lastName,
       email: this.$scope.email,
-      primaryPhone: this.$scope.primaryPhone
     }
     onSuccess(postData)
   }
@@ -724,7 +718,7 @@ class SignUpModalController {
       const checkoutSavedData = this.sessionService.session.checkoutSavedData
       if (checkoutSavedData) {
         donorData = assign(data, pick(checkoutSavedData, [
-          'name', 'email', 'mailingAddress', 'organization-name', 'phone-number'
+          'name', 'email', 'mailingAddress', 'organization-name'
         ]))
       }
       this.donorDetails = donorData
@@ -748,7 +742,6 @@ class SignUpModalController {
       'donor-type': this.$scope.accountType,
       'organization-name': this.$scope.organizationName,
       email: this.$scope.email,
-      'phone-number': this.$scope.primaryPhone,
       mailingAddress: {
         streetAddress: this.$scope.streetAddress,
         extendedAddress: this.$scope.streetAddressExtended,
