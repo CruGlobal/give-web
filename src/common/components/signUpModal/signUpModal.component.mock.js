@@ -14,24 +14,31 @@ export const user = {
 
 export const schema = [
   {
-    name: 'given-name',
+    name: 'userProfile.firstName',
     required: true,
     label: 'First Name',
     type: 'text',
     value: ''
   },
   {
-    name: 'family-name',
+    name: 'userProfile.lastName',
     required: true,
     label: 'Last Name',
     type: 'text',
     value: ''
   },
   {
-    name: 'email',
+    name: 'userProfile.email',
     required: true,
     label: 'Email Address',
     type: 'email',
+    value: ''
+  },
+  {
+    name: 'credentials.passcode',
+    required: true,
+    label: 'Password',
+    type: 'password',
     value: ''
   }
 ]
