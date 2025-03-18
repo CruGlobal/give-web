@@ -168,31 +168,35 @@ class SignUpModalController {
   }
 
   getSteps (schema) {
+    const passwordInput = schema.find(field => field.name === 'credentials.passcode')
     return {
-      // Step 1: Name, email and account type
+      // Step 1: Name, email, account type and organization name (if applicable)
       1: this.getStep1Fields(schema),
-      // Step 2: Address, phone number and organization name (if applicable)
+      // Step 2: Address
       2: this.getStep2Fields(schema),
       // Step 3: Password (We don't save the password for security reasons.
       // Which is why it's the last step)
-      3: [schema[4]]
+      3: [passwordInput]
     }
   }
 
   getStep1Fields (schema) {
+    const firstNameInput = schema.find(field => field.name === 'userProfile.firstName')
+    const lastNameInput = schema.find(field => field.name === 'userProfile.lastName')
+    const emailInput = schema.find(field => field.name === 'userProfile.email')
     // Retain the values entered by the user when navigating between steps.
     // Pre-populate the form fields with existing user details.
     return [
       {
-        ...schema[0],
+        ...firstNameInput,
         value: this.$scope.firstName || this.donorDetails?.name?.['given-name'] || this.sessionService.session.first_name || ''
       },
       {
-        ...schema[1],
+        ...lastNameInput,
         value: this.$scope.lastName || this.donorDetails?.name?.['family-name'] || this.sessionService.session.last_name || ''
       },
       {
-        ...schema[2],
+        ...emailInput,
         value: this.$scope.email || this.donorDetails?.email || this.sessionService.session.email || ''
       },
       {
@@ -257,10 +261,6 @@ class SignUpModalController {
         label: this.translations.zip,
         value: this.$scope.zipCode || this.donorDetails?.mailingAddress?.postalCode || ''
       },
-      {
-        ...schema[3],
-        value: this.$scope.primaryPhone || this.donorDetails?.['phone-number'] || ''
-      }
     ]
   }
 
@@ -364,7 +364,6 @@ class SignUpModalController {
       city: isUSAddress ? userProfile.city : '',
       state: isUSAddress ? userProfile.state : '',
       zipCode: isUSAddress ? userProfile.zipCode : '',
-      primaryPhone: userProfile.primaryPhone
     })
 
     const errors = []
@@ -412,7 +411,6 @@ class SignUpModalController {
       firstName: this.$scope.firstName,
       lastName: this.$scope.lastName,
       email: this.$scope.email,
-      primaryPhone: this.$scope.primaryPhone
     }
     onSuccess(postData)
   }
@@ -724,7 +722,7 @@ class SignUpModalController {
       const checkoutSavedData = this.sessionService.session.checkoutSavedData
       if (checkoutSavedData) {
         donorData = assign(data, pick(checkoutSavedData, [
-          'name', 'email', 'mailingAddress', 'organization-name', 'phone-number'
+          'name', 'email', 'mailingAddress', 'organization-name'
         ]))
       }
       this.donorDetails = donorData
@@ -748,7 +746,6 @@ class SignUpModalController {
       'donor-type': this.$scope.accountType,
       'organization-name': this.$scope.organizationName,
       email: this.$scope.email,
-      'phone-number': this.$scope.primaryPhone,
       mailingAddress: {
         streetAddress: this.$scope.streetAddress,
         extendedAddress: this.$scope.streetAddressExtended,

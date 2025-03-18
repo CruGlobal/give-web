@@ -101,6 +101,7 @@ export const customFields = {
     }
   },
   state: {
+    inputId: 'stateInput',
     name: 'userProfile.state',
     type: 'select',
     label: 'State',

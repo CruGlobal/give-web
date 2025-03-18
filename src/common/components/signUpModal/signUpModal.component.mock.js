@@ -9,7 +9,6 @@ export const user = {
   state: 'state',
   zipCode: '11111',
   countryCode: 'US',
-  'phone-number': 'primaryPhone',
   organizationName: 'organizationName'
 }
 

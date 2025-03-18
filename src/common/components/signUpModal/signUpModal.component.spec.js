@@ -277,7 +277,6 @@ describe('signUpForm', function () {
             postalCode: '',
             country: '',
           },
-          'phone-number': '',
           name: {
             'given-name': '',
             'family-name': ''
@@ -291,7 +290,6 @@ describe('signUpForm', function () {
           state: '',
           zipCode: '',
           countryCode: '',
-          primaryPhone: '',
         }
 
         defaultData = [
@@ -332,10 +330,6 @@ describe('signUpForm', function () {
             ...customFields.zipCode,
             value: ''
           },
-          {
-            ...customFields.primaryPhone,
-            value: ''
-          }
         ]
       });
 
@@ -353,7 +347,6 @@ describe('signUpForm', function () {
         $ctrl.$scope.city = user.city;
         $ctrl.$scope.state = user.state;
         $ctrl.$scope.zipCode = user.zipCode;
-        $ctrl.$scope.primaryPhone = user['phone-number'];
 
         $ctrl.parseSchema(schema, onSuccess);
 
@@ -390,10 +383,6 @@ describe('signUpForm', function () {
             ...defaultData[7],
             value: $ctrl.$scope.zipCode
           },
-          {
-            ...defaultData[8],
-            value: $ctrl.$scope.primaryPhone
-          }
         ])
       })
 
@@ -406,7 +395,6 @@ describe('signUpForm', function () {
         $ctrl.donorDetails.mailingAddress.locality = `${user.city} donor`;
         $ctrl.donorDetails.mailingAddress.region = `${user.state} donor`;
         $ctrl.donorDetails.mailingAddress.postalCode = `${user.zipCode} donor`;
-        $ctrl.donorDetails['phone-number'] = `${user.primaryPhone} donor`;
 
         $ctrl.parseSchema(schema, onSuccess);
 
@@ -443,10 +431,6 @@ describe('signUpForm', function () {
             ...defaultData[7],
             value: $ctrl.donorDetails.mailingAddress.postalCode
           },
-          {
-            ...defaultData[8],
-            value: $ctrl.donorDetails['phone-number']
-          }
         ])
       });
     });
@@ -727,12 +711,11 @@ describe('signUpForm', function () {
         afterEach(() => {
           expect($ctrl.$scope.streetAddress).toEqual(user.streetAddress);
           expect($ctrl.$scope.streetAddressExtended).toEqual(user.streetAddressExtended);
-          expect($ctrl.$scope.primaryPhone).toEqual(user.primaryPhone);
           expect($ctrl.goToNextStep).toHaveBeenCalled();
           expect(onSuccess).not.toHaveBeenCalled();
         });
 
-        it('should save a US address and phone number', () => {
+        it('should save a US address', () => {
           $ctrl.preSubmit(postData, onSuccess);
 
           expect($ctrl.$scope.city).toEqual(user.city);
@@ -743,7 +726,7 @@ describe('signUpForm', function () {
           expect($ctrl.$scope.internationalAddressLine4).toEqual('');
         });
 
-        it('should save a non-US address and phone number', () => {
+        it('should save a non-US address', () => {
           const internationalAddressLine3 = 'internationalAddressLine3';
           const internationalAddressLine4 = 'internationalAddressLine4';
           postData.userProfile.countryCode = 'UK';
@@ -860,7 +843,6 @@ describe('signUpForm', function () {
       $ctrl.$scope.state = user.state
       $ctrl.$scope.zipCode = user.zipCode
       $ctrl.$scope.countryCode = user.countryCode
-      $ctrl.$scope.primaryPhone = user.primaryPhone
       $ctrl.$scope.organizationName = user.organizationName
 
       $ctrl.preSubmit(postData, onSuccess);
@@ -870,7 +852,6 @@ describe('signUpForm', function () {
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email,
-          primaryPhone: user.primaryPhone,
         }
       });
     });
@@ -1427,7 +1408,6 @@ describe('signUpForm', function () {
       'donor-type': user.accountType,
       'organization-name': user.organizationName,
       email: user.email,
-      'phone-number': user.primaryPhone,
       mailingAddress: {
         streetAddress: user.streetAddress,
         locality: user.city,
@@ -1496,7 +1476,6 @@ describe('signUpForm', function () {
       'donor-type': user.accountType,
       'organization-name': 'Organization Name',
       email: user.email,
-      'phone-number': "",
       mailingAddress: {
         streetAddress: user.streetAddress,
         extendedAddress: 'extendedAddress',
@@ -1522,7 +1501,6 @@ describe('signUpForm', function () {
       $ctrl.$scope.state = user.state
       $ctrl.$scope.zipCode = user.zipCode
       $ctrl.$scope.countryCode = user.countryCode
-      $ctrl.$scope.primaryPhone = user.primaryPhone
 
       jest.spyOn($ctrl.orderService, 'getDonorDetails').mockReturnValue(Observable.of({
         'registration-state': 'NEW',
@@ -1532,7 +1510,6 @@ describe('signUpForm', function () {
         },
         'donor-type': '',
         email: 'existing.email@cru.org',
-        'phone-number': '',
         mailingAddress: {
           streetAddress: '',
           locality: '',

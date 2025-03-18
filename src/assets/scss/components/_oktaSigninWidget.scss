@@ -190,6 +190,10 @@ sign-up-modal {
         border-bottom-right-radius: 6px;
       }
 
+      input[name="userProfile.zipCode"] {
+        border-bottom-left-radius: 0;
+      }
+
       // Also, if the field has errors, the error box gets the rounded border instead of the input
       &:has(.okta-form-input-error) input {
         border-bottom-left-radius: unset;
@@ -330,3 +334,16 @@ sign-up-modal {
 #countryCodeInput_chzn.chzn-container-single .chzn-single {
   border-radius: 6px 6px 0 0;
 }
+
+/* stylelint-disable-next-line no-descending-specificity, selector-id-pattern */
+#okta-sign-in.auth-container .o-form-select-fieldset #stateInput_chzn.chzn-container-single {
+  .chzn-single,
+  .chzn-drop {
+    border-radius: 0 0 0 6px;
+  }
+
+  .chzn-single span {
+    line-height: 36px;
+  }
+}
+
