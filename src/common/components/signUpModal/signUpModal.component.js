@@ -168,6 +168,7 @@ class SignUpModalController {
   }
 
   getSteps (schema) {
+    const passwordInput = schema.find(field => field.name === 'credentials.passcode')
     return {
       // Step 1: Name, email, account type and organization name (if applicable)
       1: this.getStep1Fields(schema),
@@ -175,24 +176,27 @@ class SignUpModalController {
       2: this.getStep2Fields(schema),
       // Step 3: Password (We don't save the password for security reasons.
       // Which is why it's the last step)
-      3: [schema[4]]
+      3: [passwordInput]
     }
   }
 
   getStep1Fields (schema) {
+    const firstNameInput = schema.find(field => field.name === 'userProfile.firstName')
+    const lastNameInput = schema.find(field => field.name === 'userProfile.lastName')
+    const emailInput = schema.find(field => field.name === 'userProfile.email')
     // Retain the values entered by the user when navigating between steps.
     // Pre-populate the form fields with existing user details.
     return [
       {
-        ...schema[0],
+        ...firstNameInput,
         value: this.$scope.firstName || this.donorDetails?.name?.['given-name'] || this.sessionService.session.first_name || ''
       },
       {
-        ...schema[1],
+        ...lastNameInput,
         value: this.$scope.lastName || this.donorDetails?.name?.['family-name'] || this.sessionService.session.last_name || ''
       },
       {
-        ...schema[2],
+        ...emailInput,
         value: this.$scope.email || this.donorDetails?.email || this.sessionService.session.email || ''
       },
       {
