@@ -119,6 +119,10 @@ sign-up-modal {
         border: 1px solid transparent;
         border-radius: 0;
 
+        span {
+          line-height: 36px;
+        }
+
         div {
           top: 6px;
         }
@@ -343,18 +347,10 @@ sign-up-modal {
   border-radius: 6px 6px 0 0;
 }
 
-/* stylelint-disable-next-line no-duplicate-selectors */
-#okta-sign-in.auth-container .o-form-select-fieldset {
-/* stylelint-disable-next-line selector-id-pattern */
-  #stateInput_chzn.chzn-container-single {
-    .chzn-single,
-    .chzn-drop {
-      border-radius: 0 0 0 6px;
-    }
-
-    .chzn-single span {
-      line-height: 36px;
-    }
+/* stylelint-disable-next-line no-descending-specificity, selector-id-pattern */
+#okta-sign-in.auth-container .o-form-select-fieldset #stateInput_chzn.chzn-container-single {
+  .chzn-single,
+  .chzn-drop {
+    border-radius: 0 0 0 6px;
   }
 }
-
