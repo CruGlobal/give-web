@@ -168,8 +168,16 @@ sign-up-modal {
       width: 50%;
     }
 
+    &[data-se="o-form-fieldset-userProfile.state"] .o-form-input-error {
+      border-radius: 0 0 0 6px;
+    }
+
     &[data-se="o-form-fieldset-userProfile.zipCode"] {
       border-left: 1px solid $okta-grey;
+
+      div.o-form-input-error {
+        border-bottom-left-radius: 0;
+      }
     }
 
     &:first-child {
