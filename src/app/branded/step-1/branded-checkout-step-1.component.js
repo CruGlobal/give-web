@@ -307,8 +307,6 @@ export default angular
       premiumImageUrl: '<',
       itemConfig: '=',
       hideSpouseDetails: '<',
-      hideAnnual: '<',
-      hideQuarterly: '<',
       onSubmittingOrder: '&',
       onSubmitted: '&',
       useV3: '<',
