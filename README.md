@@ -219,6 +219,10 @@ Travis auto-deploys master builds to a pre-prod s3 bucket.
 http://devtools.aws.cru.org:8080/view/Give%20Site/job/Give%20NG%20prod%20deploy/ copies
 to the live bucket, which backs CloudFront.
 
+Travis auto-deploys master builds to a pre-prod s3 bucket.
+http://devtools.aws.cru.org:8080/view/Give%20Site/job/Give%20NG%20prod%20deploy/ copies
+to the live bucket, which backs CloudFront.
+
 GitHub actions auto-deploys master and staging builds to S3 buckets, which backs CloudFront.
 
 ## Okta sign-in widget
