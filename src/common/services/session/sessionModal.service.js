@@ -74,13 +74,9 @@ const SessionModalService = /* @ngInject */ function ($uibModal, $log, modalStat
       dismissAnalyticsEvent: 'ga-registration-exit'
     }).result,
     accountBenefits: (lastPurchaseId) => openModal('account-benefits', { resolve: { lastPurchaseId: () => lastPurchaseId }, size: 'sm' }).result,
-    registerAccount: () => openModal('register-account', {
-      backdrop: 'static',
-      keyboard: false
-    }).result,
-    nonDismissibleRegisterAccount: () => openModal('register-account', {
+    registerAccount: ({ dismissable = true } = {}) => openModal('register-account', {
       resolve: {
-        hideCloseButton: () => true
+        hideCloseButton: () => !dismissable
       },
       backdrop: 'static',
       keyboard: false

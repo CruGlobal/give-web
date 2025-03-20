@@ -74,7 +74,7 @@ class OktaAuthCallbackController {
   }
 
   openContactInfoModalThenRedirect () {
-    this.sessionModalService.nonDismissibleRegisterAccount().then(() => {
+    this.sessionModalService.registerAccount({ dismissable: false }).then(() => {
       this.redirectToLocationPriorToLogin()
     })
   }

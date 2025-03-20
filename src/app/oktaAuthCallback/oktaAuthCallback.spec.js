@@ -32,7 +32,7 @@ describe('oktaAuthCallback', function () {
     orderService = _orderService_
     verificationService = _verificationService_
     $ctrl = _$componentController_(module.name,
-      { 
+      {
         $log,
         $window: {
           location: '/okta-auth-callback.html',
@@ -44,7 +44,7 @@ describe('oktaAuthCallback', function () {
       }
     )
   }))
-  
+
   it('to be defined', function () {
     expect($ctrl).toBeDefined()
   })
@@ -71,7 +71,7 @@ describe('oktaAuthCallback', function () {
     })
   })
 
-  
+
   describe('onSignInFailure()', () => {
     it('should log error message', () => {
       jest.spyOn($log, 'error').mockImplementation(() => {})
@@ -148,14 +148,14 @@ describe('oktaAuthCallback', function () {
     beforeEach(inject((_$q_, _$rootScope_) => {
       deferred = _$q_.defer()
       $rootScope = _$rootScope_
-      jest.spyOn($ctrl.sessionModalService, 'nonDismissibleRegisterAccount').mockReturnValue(deferred.promise)
+      jest.spyOn($ctrl.sessionModalService, 'registerAccount').mockReturnValue(deferred.promise)
       jest.spyOn($ctrl, 'redirectToLocationPriorToLogin')
     }));
 
     it('should open contact info modal and upon completing redirect to the previous page', () => {
       $ctrl.openContactInfoModalThenRedirect()
 
-      expect($ctrl.sessionModalService.nonDismissibleRegisterAccount).toHaveBeenCalled()
+      expect($ctrl.sessionModalService.registerAccount).toHaveBeenCalledWith({ dismissable: false })
 
       deferred.resolve()
       $rootScope.$digest()
@@ -347,7 +347,7 @@ describe('oktaAuthCallback', function () {
   });
 
 
-  
+
 
   describe('onSignInSuccess', () => {
     let deferred, $rootScope
@@ -357,7 +357,7 @@ describe('oktaAuthCallback', function () {
       jest.spyOn($ctrl, 'openUserMatchModalThenRedirect').mockImplementation(() => Observable.of({}))
       jest.spyOn($ctrl, 'openContactInfoModalThenRedirect').mockImplementation(() => Observable.of({}))
       jest.spyOn($ctrl, 'postDonorMatches').mockImplementation(() => Observable.of({}))
-      jest.spyOn($ctrl.sessionModalService, 'nonDismissibleRegisterAccount').mockReturnValue(deferred.promise)
+      jest.spyOn($ctrl.sessionModalService, 'registerAccount').mockReturnValue(deferred.promise)
       jest.spyOn($ctrl.sessionModalService, 'userMatch').mockReturnValue(deferred.promise)
       jest.spyOn($ctrl, 'redirectToLocationPriorToLogin')
     }))
