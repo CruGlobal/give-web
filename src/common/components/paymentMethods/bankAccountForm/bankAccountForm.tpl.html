@@ -125,9 +125,11 @@
           </div>
         </div>
 
-        <div class="panel panel-default" ng-hide="$ctrl.hideAgreement">
-          <div class="panel-body">
-            <p translate>{{'BANK_AGREEMENT_MESSAGE'}}</p>
+        <div class="bank-agreement" ng-class="{'on': !$ctrl.hideAgreement}">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <p translate>{{'BANK_AGREEMENT_MESSAGE'}}</p>
+            </div>
           </div>
         </div>
 
