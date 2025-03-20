@@ -63,6 +63,7 @@ const SessionModalService = /* @ngInject */ function ($uibModal, $log, modalStat
       resolve: {
         lastPurchaseId: () => lastPurchaseId
       },
+      backdrop: 'static',
       keyboard: false,
       openAnalyticsEvent: 'ga-sign-in',
       dismissAnalyticsEvent: 'ga-sign-in-exit'
