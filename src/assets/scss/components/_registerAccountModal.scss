@@ -145,8 +145,12 @@ register-account-modal:has(sign-in-modal, sign-up-modal) {
         img {
           /* Override global Bootstrap image styles */
           display: unset;
-          height: 1rem;
+          height: 0.75rem;
         }
+      }
+
+      span {
+        vertical-align: middle;
       }
     }
 
