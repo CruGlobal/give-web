@@ -62,7 +62,7 @@
         &::after {
           background: $colorCru-gold;
           color: $colorCru-white;
-        }        
+        }
       }
 
       .step-digit {
@@ -153,7 +153,7 @@
     text-transform: none;
   }
 
-  .radio-inline + .radio-inline, 
+  .radio-inline + .radio-inline,
   .checkbox-inline + .checkbox-inline {
     @include respond-to(medium) {
       // margin-left: 0;
@@ -230,6 +230,17 @@
     h4{
       padding-top: 20px;
     }
+  }
+}
+
+.bank-agreement {
+  overflow: hidden;
+  height: 100%;
+  max-height: 0;
+  transition: 0.5s all;
+
+  &.on {
+    max-height: 600px;
   }
 }
 
