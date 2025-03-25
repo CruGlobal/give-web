@@ -134,39 +134,17 @@ register-account-modal:has(sign-in-modal, sign-up-modal) {
 
     .okta-info {
       display: flex;
-      align-items: center;
+      align-items: end;
+      gap: 1ch;
 
       /* Makes it easier to align the baseline of the text with the bottom of the image */
       line-height: 1em;
-
-      &.mobile {
-        gap: 1ch;
-
-        img {
-          /* Override global Bootstrap image styles */
-          display: unset;
-          height: 0.75rem;
-        }
-      }
-
-      span {
-        vertical-align: middle;
-      }
-    }
-
-    .benefits .okta-info {
-      text-align: center;
-
-      p {
-        flex: 1;
-
-        /* Override ".modal-content p" styles */
-        line-height: unset;
-      }
-
+      
       img {
-        height: 1.5rem;
-      }
+        /* Override global Bootstrap image styles */
+        display: unset;
+        height: 1rem;
+      }   
     }
   }
 
