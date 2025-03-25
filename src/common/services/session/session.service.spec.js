@@ -210,7 +210,7 @@ describe('session service', function () {
         $httpBackend.flush()
       })
 
-      it('should revoke all tokens & run redirect to Okta to sign out', done => {
+      it('should revoke all tokens & redirect to Okta to sign out', done => {
         sessionService
           .signOut(true)
           .subscribe(() => {
