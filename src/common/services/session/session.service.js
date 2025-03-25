@@ -203,12 +203,8 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         $window.sessionStorage.setItem(locationOnLogin, $window.location.href)
       }
 
-      return authClient.signOut({
-        postLogoutRedirectUri: redirectHome ? null : `${envService.read('oktaReferrer')}/sign-out.html`
-      }).catch(() => {
-        // If Okta sign out fails, redirect to Okta sign out page
-        $window.location.href = `${envService.read('oktaUrl')}/login/signout?fromURI=${envService.read('oktaReferrer')}`
-      })
+      // Don't use authClient.signOut() as it doesn't redirect back to the Give site.
+      $window.location.href = `${envService.read('oktaUrl')}/login/signout?fromURI=${envService.read('oktaReferrer')}/sign-out.html`
     }
 
     return Observable.from($http({

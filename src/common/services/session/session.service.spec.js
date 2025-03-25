@@ -200,42 +200,23 @@ describe('session service', function () {
           .respond(200, {})
       })
 
-      it('makes a DELETE request to Cortex & sets postLogoutRedirectUri', done => {
+      it('makes a DELETE request to Cortex & redirects to Okta to sign out', done => {
         sessionService
           .signOut(false)
-          .subscribe((response) => {
-            expect(response.data).toEqual({})
-            expect(sessionService.authClient.signOut).toHaveBeenCalledWith({
-              postLogoutRedirectUri: `https://localhost.cru.org:9000/sign-out.html`
-            })
+          .subscribe(() => {
+            expect($window.location.href).toEqual(`${envService.read('oktaUrl')}/login/signout?fromURI=${envService.read('oktaReferrer')}/sign-out.html`)
             done()
           }, done)
         $httpBackend.flush()
       })
 
-      it('should revoke all tokens & run signOut returning the user home', done => {
+      it('should revoke all tokens & redirect to Okta to sign out', done => {
         sessionService
           .signOut(true)
           .subscribe(() => {
             expect(sessionService.authClient.revokeAccessToken).toHaveBeenCalled()
             expect(sessionService.authClient.revokeRefreshToken).toHaveBeenCalled()
-            expect(sessionService.authClient.signOut).toHaveBeenCalledWith({
-              postLogoutRedirectUri: null
-            })
-            done()
-          }, done)
-        $httpBackend.flush()
-      })
-
-      it('should still sign user out if error during signout', done => {
-        sessionService.authClient.signOut.mockRejectedValue()
-
-        sessionService
-          .signOut()
-          .subscribe(() => {
-            expect(sessionService.authClient.revokeAccessToken).toHaveBeenCalled()
-            expect(sessionService.authClient.revokeRefreshToken).toHaveBeenCalled()
-            expect(sessionService.authClient.signOut).toHaveBeenCalled()
+            expect($window.location.href).toEqual(`${envService.read('oktaUrl')}/login/signout?fromURI=${envService.read('oktaReferrer')}/sign-out.html`)
             done()
           }, done)
         $httpBackend.flush()
@@ -263,18 +244,6 @@ describe('session service', function () {
           .signOut(false)
           .subscribe(() => {
             expect($window.sessionStorage.getItem(forcedUserToLogout)).toEqual('true')
-            done()
-          }, done)
-        $httpBackend.flush()
-      })
-
-      it('should redirect the user to okta if all else fails', done => {
-        sessionService.authClient.signOut.mockRejectedValue()
-
-        sessionService
-          .signOut()
-          .subscribe(() => {
-            expect($window.location.href).toEqual(`${envService.read('oktaUrl')}/login/signout?fromURI=${envService.read('oktaReferrer')}`)
             done()
           }, done)
         $httpBackend.flush()
