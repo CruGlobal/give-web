@@ -200,7 +200,7 @@ describe('session service', function () {
           .respond(200, {})
       })
 
-      it('makes a DELETE request to Cortex & sets postLogoutRedirectUri', done => {
+      it('makes a DELETE request to Cortex & redirects to Okta to sign out', done => {
         sessionService
           .signOut(false)
           .subscribe(() => {
@@ -210,7 +210,7 @@ describe('session service', function () {
         $httpBackend.flush()
       })
 
-      it('should revoke all tokens & run signOut returning the user home', done => {
+      it('should revoke all tokens & run redirect to Okta to sign out', done => {
         sessionService
           .signOut(true)
           .subscribe(() => {
