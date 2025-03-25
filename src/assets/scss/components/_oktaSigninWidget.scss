@@ -49,6 +49,8 @@ sign-up-modal {
   }
 
   &.main-container {
+    // Fix to prevent Okta hiding form - EP-2583
+    display: block !important;    
     box-shadow: none;
   }
 
