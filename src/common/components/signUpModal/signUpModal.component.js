@@ -66,7 +66,11 @@ class SignUpModalController {
   }
 
   $onDestroy () {
-    this.oktaSignInWidget?.remove()
+    if (this.oktaSignInWidget) {
+      this.oktaSignInWidget.remove()
+      // Unsubscribe all event listeners
+      this.oktaSignInWidget.off()
+    }
     if (angular.isDefined(this.getDonorDetailsSubscription)) {
       this.getDonorDetailsSubscription.unsubscribe()
     }
