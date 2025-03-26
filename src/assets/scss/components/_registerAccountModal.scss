@@ -7,6 +7,11 @@ register-account-modal:has(sign-up-modal) {
   }
 }
 
+.modal-dialog:has(register-account-modal) {
+  /* Center dialog vertically */
+  align-content: center;
+}
+
 .modal-dialog:has(register-account-modal sign-in-modal, register-account-modal sign-up-modal) {
   width: calc(min(100vw, 400px) - 20px);
 

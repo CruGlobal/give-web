@@ -1,7 +1,4 @@
 .modal-dialog {
-  /* Center dialog vertically */
-  align-content: center;
-
   /* Center dialog on small screens. Bootstrap only applies this margin on screens wider than $screen-sm-min. */
   margin-inline: auto;
 }
@@ -166,7 +163,7 @@ $modal-line-height: 1.425em;
 }
 
 #addNewPaymentModal{
-  background-color: rgba(138, 138, 138, 0.9); 
+  background-color: rgba(138, 138, 138, 0.9);
 
   .light-font{
     /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */

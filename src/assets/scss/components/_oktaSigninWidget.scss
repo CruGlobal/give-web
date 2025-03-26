@@ -168,15 +168,24 @@ sign-up-modal {
       width: 50%;
     }
 
-    &[data-se="o-form-fieldset-userProfile.state"] .o-form-input-error {
-      border-radius: 0 0 0 6px;
-    }
+    &[data-se="o-form-fieldset-userProfile.state"] {
+      // Remove the rounded border from the state dropdown and error message right border because
+      // they are next to the ZIP code
+      /* stylelint-disable-next-line no-descending-specificity */
+      .chzn-single,
+      .chzn-drop,
+      .o-form-input-error {
+        border-radius: 0 0 0 6px;
+      }
 
-    &[data-se="o-form-fieldset-userProfile.zipCode"] {
-      border-left: 1px solid $okta-grey;
-
-      div.o-form-input-error {
-        border-bottom-left-radius: 0;
+      // If the state dropdown or ZIP code has an error message, remove the border rounding from the
+      // dropdown because the rounding goes to the error message
+      &:has(.okta-form-input-error),
+      &:has(+ [data-se="o-form-fieldset-userProfile.zipCode"] .o-form-input-error) {
+        .chzn-single,
+        .chzn-drop {
+          border-radius: 0;
+        }
       }
     }
 
@@ -202,10 +211,6 @@ sign-up-modal {
         border-bottom-right-radius: 6px;
       }
 
-      input[name="userProfile.zipCode"] {
-        border-bottom-left-radius: 0;
-      }
-
       // Also, if the field has errors, the error box gets the rounded border instead of the input
       &:has(.okta-form-input-error) input {
         border-bottom-left-radius: unset;
@@ -220,6 +225,20 @@ sign-up-modal {
           border-bottom-left-radius: unset;
           border-bottom-right-radius: unset;
         }
+      }
+    }
+
+    // If the state has an error, but not the zip code, remove the rounded border from the zip code input
+    &[data-se="o-form-fieldset-userProfile.state"]:has(.o-form-input-error) + [data-se="o-form-fieldset-userProfile.zipCode"] input {
+      border-radius: 0;
+    }
+
+    &[data-se="o-form-fieldset-userProfile.zipCode"] {
+      border-left: 1px solid $okta-grey;
+
+      /* stylelint-disable-next-line no-descending-specificity */
+      input, .o-form-input-error {
+        border-bottom-left-radius: 0;
       }
     }
 
@@ -345,12 +364,4 @@ sign-up-modal {
 /* stylelint-disable-next-line no-descending-specificity, selector-id-pattern */
 #countryCodeInput_chzn.chzn-container-single .chzn-single {
   border-radius: 6px 6px 0 0;
-}
-
-/* stylelint-disable-next-line no-descending-specificity, selector-id-pattern */
-#okta-sign-in.auth-container .o-form-select-fieldset #stateInput_chzn.chzn-container-single {
-  .chzn-single,
-  .chzn-drop {
-    border-radius: 0 0 0 6px;
-  }
 }
