@@ -1,26 +1,10 @@
-<div class="col-md-12 col-xs-12">
-  <div class="form-group" ng-if="$ctrl.lastPurchaseId && !$ctrl.identified">
-    <h4 class="text-center" translate>If you don&apos;t have a Cru username, you can create one now</h4>
-    <a id="createAccountLink" href="" ng-click="$ctrl.onStateChange({state: 'sign-up'})" class="btn btn-block btn-primary" translate>Create a Username &amp; Password</a>
-    <hr class="horizontal-divider"/>
-    <h4 class="text-center" translate>If you already have a Cru username, use it to sign in so we can link it to your giving</h4>
-  </div>
-  <p ng-if="$ctrl.identified && $ctrl.sessionService.session.first_name && $ctrl.sessionService.session.last_name" class="text-center">
-    <strong>Welcome back, {{$ctrl.sessionService.session.first_name}} {{$ctrl.sessionService.session.last_name}}!</strong>
-  </p>
-  <sign-in-form on-success="$ctrl.onSuccess()" last-purchase-id="$ctrl.lastPurchaseId"></sign-in-form>
-  <p class="text-center" ng-class="{'mt mb0': $ctrl.identified}">
-    <span translate>Forgot your password?</span>
-    <a id="forgotPasswordLink" href="" ng-click="$ctrl.onStateChange({state: 'forgot-password'})" translate>Reset It</a>
-  </p>
-  <p class="text-center" ng-if="$ctrl.identified">
-    <span>Not {{$ctrl.sessionService.session.first_name}} {{$ctrl.sessionService.session.last_name}}?</span>
-    <a id="signOutLink" href="" ng-click="$ctrl.signOut()" translate>Sign Out</a>
-  </p>
-  <div class="form-group" ng-if="!$ctrl.identified && !$ctrl.lastPurchaseId">
-    <p class="text-center strike">
-      <span translate>Don't have an account?</span>
-    </p>
-    <a id="signUpLink" href="" ng-click="$ctrl.onStateChange({state: 'sign-up'})" class="btn btn-block btn-default" translate>Sign Up</a>
+<div class="modal-body">
+  <div class="content">
+    <sign-in-form
+      on-success="$ctrl.onSuccess()"
+      on-failure="$ctrl.onFailure()"
+      last-purchase-id="$ctrl.lastPurchaseId"
+      on-sign-up-with-okta="$ctrl.onSignUp()"
+    />
   </div>
 </div>
