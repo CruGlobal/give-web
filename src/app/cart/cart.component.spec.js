@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
 
-import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
+import { cartUpdatedEvent } from 'common/lib/cartEvents'
 
 describe('cart', () => {
   beforeEach(angular.mock.module(module.name))
