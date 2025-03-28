@@ -1,13 +1,24 @@
 <div class="screenContent">
-  <div class="redirect-user-after-login" ng-if="$ctrl.showRedirectingLoadingIcon">
-    <div>
-      <loading>
-        <p><translate>Successfully logged out.</translate></p>
-        <p><translate>Redirecting to your previous page...</translate></p>
-      </loading>
-      <button id="closeButtonTop" type="button" ng-click="$ctrl.closeRedirectingLoading()" class="btn btn-block btn-secondary" aria-label="{{'Close' | translate}}">
-        Close <span aria-hidden="true">×</span>
-      </button>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-xs-12">
+        <div class="panel">
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-xs-12">
+                <h3 class="text-center">
+                  <p translate>Successfully signed out.</p>
+                </h3>
+                <br/>
+                <loading inline="true" class="center">
+                  <span translate ng-if="!$ctrl.redirectToPreviousLocation">Redirecting to the homepage...</span>
+                  <span translate ng-if="$ctrl.redirectToPreviousLocation">Redirecting to your previous page...</span>
+                </loading>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -13,6 +13,7 @@ class SignOutController {
   }
 
   $onInit () {
+    this.redirectToPreviousLocation = false
     if (this.sessionService.getRole() !== Roles.public) {
       this.redirectToHomepage()
     } else {
@@ -25,19 +26,14 @@ class SignOutController {
   }
 
   redirectToLocationPriorToSignOut () {
-    this.showRedirectingLoadingIcon = true
     const locationToReturnUser = this.sessionService.getStoredLocation()
     if (locationToReturnUser) {
+      this.redirectToPreviousLocation = true
       this.sessionService.removeStoredLocation()
       this.$window.location.href = locationToReturnUser
     } else {
       this.redirectToHomepage()
     }
-  }
-
-  closeRedirectingLoading () {
-    this.showRedirectingLoadingIcon = false
-    this.redirectToHomepage()
   }
 }
 
