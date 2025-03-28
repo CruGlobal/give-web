@@ -65,27 +65,27 @@ describe('signOut', function () {
   describe('redirectToLocationPriorToSignOut()', () => {
     beforeEach(() => {
       jest.spyOn($ctrl, 'redirectToHomepage')
-      jest.spyOn($ctrl.sessionService, 'removeLocationOnLogin')
+      jest.spyOn($ctrl.sessionService, 'removeStoredLocation')
     })
 
-    it('redirects to prior page if getLocationOnLogin() returns value', () => {
+    it('redirects to prior page if getStoredLocation() returns value', () => {
       const priorLocation = 'https://give-stage2.cru.org/search-results.html'
-      jest.spyOn($ctrl.sessionService, 'getLocationOnLogin').mockReturnValue(priorLocation)
+      jest.spyOn($ctrl.sessionService, 'getStoredLocation').mockReturnValue(priorLocation)
       $ctrl.showRedirectingLoadingIcon = false
       $ctrl.redirectToLocationPriorToSignOut()
       expect($ctrl.showRedirectingLoadingIcon).toEqual(true)
-      expect($ctrl.sessionService.getLocationOnLogin).toHaveBeenCalled()
-      expect($ctrl.sessionService.removeLocationOnLogin).toHaveBeenCalled()
+      expect($ctrl.sessionService.getStoredLocation).toHaveBeenCalled()
+      expect($ctrl.sessionService.removeStoredLocation).toHaveBeenCalled()
       expect($ctrl.$window.location.href).toEqual(priorLocation)
     })
 
-    it('redirects to home page if getLocationOnLogin() returns no value', () => {
-      jest.spyOn($ctrl.sessionService, 'getLocationOnLogin').mockReturnValue(undefined)
+    it('redirects to home page if getStoredLocation() returns no value', () => {
+      jest.spyOn($ctrl.sessionService, 'getStoredLocation').mockReturnValue(undefined)
       $ctrl.showRedirectingLoadingIcon = false
       $ctrl.redirectToLocationPriorToSignOut()
       expect($ctrl.showRedirectingLoadingIcon).toEqual(true)
-      expect($ctrl.sessionService.getLocationOnLogin).toHaveBeenCalled()
-      expect($ctrl.sessionService.removeLocationOnLogin).not.toHaveBeenCalled()
+      expect($ctrl.sessionService.getStoredLocation).toHaveBeenCalled()
+      expect($ctrl.sessionService.removeStoredLocation).not.toHaveBeenCalled()
       expect($ctrl.$window.location.href).toEqual('/')
     })
   })
