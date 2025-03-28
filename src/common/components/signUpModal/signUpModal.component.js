@@ -742,6 +742,7 @@ class SignUpModalController {
   }
 
   saveDonorDetails () {
+    this.isLoading = true
     const signUpDonorDetails = {
       name: {
         'given-name': this.$scope.firstName,
