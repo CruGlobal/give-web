@@ -31,6 +31,5 @@
 @import 'mobile';
 @import 'nav-cart';
 @import 'carousel';
-
-// TODO: Remove this manual import when we figure out why styles imported in components are not being added to the page
-@import '../../app/designationEditor/designationEditor';
+@import './app/app';
+@import './components/components';

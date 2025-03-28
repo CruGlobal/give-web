@@ -6,8 +6,6 @@ import forEach from 'lodash/forEach'
 import map from 'lodash/map'
 import compact from 'lodash/compact'
 
-import './newsletterModal.scss'
-
 const controllerName = 'newsletterModal'
 const addressPropertyMap = {
   country: 'country',
