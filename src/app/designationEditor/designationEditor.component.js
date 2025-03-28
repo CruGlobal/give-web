@@ -32,8 +32,6 @@ import websiteModalTemplate from './websiteModal/websiteModal.tpl.html'
 
 import desigImgSrcDirective from 'common/directives/desigImgSrc.directive'
 
-import './designationEditor.scss'
-
 const componentName = 'designationEditor'
 
 class DesignationEditorController {

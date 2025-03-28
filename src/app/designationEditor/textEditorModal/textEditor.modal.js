@@ -3,8 +3,6 @@ import 'textangularjs'
 import 'textangularjs/dist/textAngular-sanitize'
 import 'textangularjs/dist/textAngular.css'
 
-import './textEditor.scss'
-
 const controllerName = 'textEditorCtrl'
 
 class ModalInstanceCtrl {
