@@ -99,9 +99,9 @@ describe('oktaAuthCallback', function () {
   describe('redirectToLocationPriorToLogin()', () => {
     it('should update the message to the user', () => {
       $ctrl.$onInit()
-      expect($ctrl.noticeToUser).toEqual('Authenticating...')
+      expect($ctrl.isReadyToRedirect).toEqual(false)
       $ctrl.redirectToLocationPriorToLogin()
-      expect($ctrl.noticeToUser).toEqual('Redirecting to prior location...')
+      expect($ctrl.isReadyToRedirect).toEqual(true)
     })
 
     it('should redirect the user to prior page', () => {

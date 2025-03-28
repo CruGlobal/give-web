@@ -37,7 +37,7 @@ class OktaAuthCallbackController {
   }
 
   initializeVariables () {
-    this.noticeToUser = 'Authenticating...'
+    this.isReadyToRedirect = false
     this.isLoading = true
     this.errorMessage = ''
   }
@@ -129,7 +129,7 @@ class OktaAuthCallbackController {
   }
 
   redirectToLocationPriorToLogin () {
-    this.noticeToUser = 'Redirecting to prior location...'
+    this.isReadyToRedirect = true
     this.isLoading = true
     const previousLocation = this.sessionService.getStoredLocation()
     if (previousLocation) {
