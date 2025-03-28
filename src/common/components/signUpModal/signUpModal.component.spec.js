@@ -1522,13 +1522,21 @@ describe('signUpForm', function () {
       jest.spyOn($ctrl.orderService, 'addEmail').mockImplementation(() => Observable.of({}))
       jest.spyOn($ctrl, 'redirectToOktaForLogin')
       jest.spyOn($ctrl, 'onSignUpError')
+
+      $ctrl.oktaSignInWidget = {
+        remove: jest.fn(),
+        renderEl: jest.fn(),
+        off: jest.fn()
+      }
     })
 
     it("should succeed updating the user's data, redirecting to Okta", () => {
       jest.spyOn($ctrl.orderService, 'updateDonorDetails').mockImplementation(() => Observable.of({}))
+      $ctrl.isLoading = false
 
       $ctrl.saveDonorDetails()
 
+      expect($ctrl.isLoading).toEqual(true)
       expect($ctrl.orderService.updateDonorDetails).toHaveBeenCalledWith(expect.objectContaining(signUpDonorDetails))
       expect($ctrl.orderService.addEmail).toHaveBeenCalledWith(signUpDonorDetails.email, emailFormUri)
       expect($ctrl.redirectToOktaForLogin).toHaveBeenCalled()
