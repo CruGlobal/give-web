@@ -31,7 +31,7 @@ class SignInButtonController {
       error => {
         this.errorMessage = 'generic'
         this.$log.error('Failed to redirect from Okta', error)
-        this.sessionService.removeLocationOnLogin()
+        this.sessionService.removeStoredLocation()
         this.onFailure()
       }
       )
@@ -61,7 +61,7 @@ class SignInButtonController {
         this.$log.error('Sign In Error', error)
         this.errorMessage = 'generic'
       }
-      this.sessionService.removeLocationOnLogin()
+      this.sessionService.removeStoredLocation()
       this.onFailure()
     })
   }

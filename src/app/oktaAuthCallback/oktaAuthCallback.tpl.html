@@ -10,7 +10,8 @@
                   <div>
                     <loading></loading>
                     <br/>
-                    <p translate>{{$ctrl.noticeToUser}}</p>
+                    <span ng-if="!$ctrl.isReadyToRedirect" translate>Authenticating...</span>
+                    <span ng-if="$ctrl.isReadyToRedirect" translate>Redirecting to prior location...</span>
                   </div>
                 </h3>
               </div>

@@ -742,6 +742,8 @@ class SignUpModalController {
   }
 
   saveDonorDetails () {
+    this.isLoading = true
+    this.oktaSignInWidget.remove()
     const signUpDonorDetails = {
       name: {
         'given-name': this.$scope.firstName,
