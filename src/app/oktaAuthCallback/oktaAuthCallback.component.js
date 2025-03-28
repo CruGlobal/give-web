@@ -124,16 +124,16 @@ class OktaAuthCallbackController {
   onSignInFailure (error) {
     const errorMessage = error || unknownErrorMessage
     this.$log.error(errorMessage)
-    this.sessionService.removeLocationOnLogin()
+    this.sessionService.removeStoredLocation()
     this.errorMessage = errorMessage
   }
 
   redirectToLocationPriorToLogin () {
     this.noticeToUser = 'Redirecting to prior location...'
     this.isLoading = true
-    const previousLocation = this.sessionService.getLocationOnLogin()
+    const previousLocation = this.sessionService.getStoredLocation()
     if (previousLocation) {
-      this.sessionService.removeLocationOnLogin()
+      this.sessionService.removeStoredLocation()
       this.$window.location = previousLocation
     } else {
       this.$window.location = `/checkout.html${window.location.search}`
