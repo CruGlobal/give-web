@@ -14,6 +14,7 @@ class SignOutController {
 
   $onInit () {
     if (this.sessionService.getRole() !== Roles.public) {
+      this.redirectToPreviousLocation = false
       this.redirectToHomepage()
     } else {
       this.redirectToLocationPriorToSignOut()
@@ -25,7 +26,7 @@ class SignOutController {
   }
 
   redirectToLocationPriorToSignOut () {
-    this.showRedirectingLoadingIcon = true
+    this.redirectToPreviousLocation = true
     const locationToReturnUser = this.sessionService.getStoredLocation()
     if (locationToReturnUser) {
       this.sessionService.removeStoredLocation()
@@ -33,11 +34,6 @@ class SignOutController {
     } else {
       this.redirectToHomepage()
     }
-  }
-
-  closeRedirectingLoading () {
-    this.showRedirectingLoadingIcon = false
-    this.redirectToHomepage()
   }
 }
 
