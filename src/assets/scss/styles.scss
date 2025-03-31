@@ -32,3 +32,6 @@
 @import 'nav-cart';
 @import 'carousel';
 @import 'directives/creditCardCvv';
+
+// TODO: Remove this manual import when we figure out why styles imported in components are not being added to the page
+@import '../../app/designationEditor/designationEditor';
