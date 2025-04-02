@@ -7,7 +7,7 @@ import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
 
 import module, { brandedCoverFeeCheckedEvent } from './productConfigForm.component'
-import { giftAddedEvent, cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
+import { giftAddedEvent, cartUpdatedEvent } from 'common/lib/cartEvents'
 import { giveGiftParams } from '../giveGiftParams'
 import { brandedCheckoutAmountUpdatedEvent } from '../../../common/components/paymentMethods/coverFees/coverFees.component'
 
@@ -371,8 +371,14 @@ describe('product config form component', function () {
     it('orders frequency by name', () => {
       expect($ctrl.frequencyOrder({ name: 'NA' })).toEqual(0)
       expect($ctrl.frequencyOrder({ name: 'MON' })).toEqual(1)
-      expect($ctrl.frequencyOrder({ name: 'QUARTERLY' })).toEqual(2)
-      expect($ctrl.frequencyOrder({ name: 'ANNUAL' })).toEqual(3)
+      if (!$ctrl.hideQuarterly) {
+        expect($ctrl.frequencyOrder({ name: 'QUARTERLY' })).toEqual(2)
+      }
+      if ($ctrl.hideAnnual === true && !$ctrl.hideQuarterly) {
+        expect($ctrl.frequencyOrder({ name: 'ANNUAL' })).toEqual(3)
+      } else if ($ctrl.hideAnnual === true) {
+        expect($ctrl.frequencyOrder({ name: 'ANNUAL' })).toEqual(2)
+      }
     })
   })
 
