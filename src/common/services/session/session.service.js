@@ -29,7 +29,7 @@ export const Sessions = {
   profile: 'cru-profile'
 }
 
-export const storedLocation = 'storedLocation'
+export const redirectLocation = 'redirectLocation'
 export const locationSearchOnLogin = 'locationSearchOnLogin'
 export const checkoutSavedDataCookieName = 'checkoutSavedData'
 export const forcedUserToLogout = 'forcedUserToLogout'
@@ -83,13 +83,13 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     getRole: currentRole,
     getOktaUrl: getOktaUrl,
     handleOktaRedirect: handleOktaRedirect,
-    getStoredLocation: getStoredLocation,
+    getRedirectLocation: getRedirectLocation,
     isOktaRedirecting: isOktaRedirecting,
     oktaIsUserAuthenticated: oktaIsUserAuthenticated,
     updateCurrentProfile: updateCurrentProfile,
     updateCheckoutSavedData: updateCheckoutSavedData,
     removeOktaRedirectIndicator: removeOktaRedirectIndicator,
-    removeStoredLocation: removeStoredLocation,
+    clearRedirectLocation: clearRedirectLocation,
     signIn: signIn,
     signOut: signOut,
     signOutWithoutRedirectToOkta: signOutWithoutRedirectToOkta
@@ -200,7 +200,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       if (!redirectHome) {
         $window.sessionStorage.setItem(forcedUserToLogout, true)
         // Save location we need to redirect the user back to
-        $window.sessionStorage.setItem(storedLocation, $window.location.href)
+        $window.sessionStorage.setItem(redirectLocation, $window.location.href)
       }
 
       // Don't use authClient.signOut() as it doesn't redirect back to the Give site.
@@ -276,11 +276,11 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     return envService.read('oktaUrl')
   }
 
-  function removeStoredLocation () {
-    $window.sessionStorage.removeItem(storedLocation)
+  function clearRedirectLocation () {
+    $window.sessionStorage.removeItem(redirectLocation)
   }
-  function getStoredLocation () {
-    return $window.sessionStorage.getItem(storedLocation)
+  function getRedirectLocation () {
+    return $window.sessionStorage.getItem(redirectLocation)
   }
   function setRedirectingOnLogin () {
     if (['/sign-in.html'].indexOf($location.path()) + 1) {
@@ -288,7 +288,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       $window.sessionStorage.setItem(locationSearchOnLogin, $window.location.search)
     } else {
       // Save location we need to redirect the user back to
-      $window.sessionStorage.setItem(storedLocation, $window.location.href)
+      $window.sessionStorage.setItem(redirectLocation, $window.location.href)
     }
   }
 

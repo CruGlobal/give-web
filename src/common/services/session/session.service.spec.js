@@ -1,6 +1,6 @@
 import angular from 'angular'
 import 'angular-mocks'
-import module, { Roles, Sessions, SignOutEvent, SignInEvent, checkoutSavedDataCookieName, storedLocation, locationSearchOnLogin, forcedUserToLogout } from './session.service'
+import module, { Roles, Sessions, SignOutEvent, SignInEvent, checkoutSavedDataCookieName, redirectLocation, locationSearchOnLogin, forcedUserToLogout } from './session.service'
 import { cortexRole } from 'common/services/session/fixtures/cortex-role'
 import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
@@ -259,7 +259,7 @@ describe('session service', function () {
   describe('signIn() & handleOktaRedirect()', () => {
     beforeEach(() => {
       $window.sessionStorage.removeItem(locationSearchOnLogin)
-      $window.sessionStorage.removeItem(storedLocation)
+      $window.sessionStorage.removeItem(redirectLocation)
     })
 
     it('should return SignInEvent broadcast when not authenticated', done => {
@@ -403,7 +403,7 @@ describe('session service', function () {
         sessionService.handleOktaRedirect().subscribe(() => {
           expect(sessionService.authClient.token.getWithRedirect).toHaveBeenCalled()
           expect($window.sessionStorage.getItem(locationSearchOnLogin)).toEqual('?ga=111111&query=test&anotherQuery=00000')
-          expect($window.sessionStorage.getItem(storedLocation)).toEqual(null)
+          expect($window.sessionStorage.getItem(redirectLocation)).toEqual(null)
           done()
         })
       })
@@ -415,7 +415,7 @@ describe('session service', function () {
         sessionService.handleOktaRedirect().subscribe(() => {
           expect(sessionService.authClient.token.getWithRedirect).toHaveBeenCalled()
           expect($window.sessionStorage.getItem(locationSearchOnLogin)).toEqual(null)
-          expect($window.sessionStorage.getItem(storedLocation)).toEqual('https://URL.org?utm_source=text')
+          expect($window.sessionStorage.getItem(redirectLocation)).toEqual('https://URL.org?utm_source=text')
           done()
         })
       })
