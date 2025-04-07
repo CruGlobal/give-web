@@ -1522,6 +1522,11 @@ describe('signUpForm', function () {
       jest.spyOn($ctrl.orderService, 'addEmail').mockImplementation(() => Observable.of({}))
       jest.spyOn($ctrl, 'redirectToOktaForLogin')
       jest.spyOn($ctrl, 'onSignUpError')
+
+      $ctrl.oktaSignInWidget = {
+        remove: jest.fn(),
+        renderEl: jest.fn()
+      }
     })
 
     it("should succeed updating the user's data, redirecting to Okta", () => {
