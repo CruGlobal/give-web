@@ -1,4 +1,7 @@
 import angular from 'angular'
+
+import './loading.scss'
+
 import template from './loading.tpl.html'
 
 const componentName = 'loading'
