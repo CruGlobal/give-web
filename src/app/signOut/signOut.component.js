@@ -13,7 +13,7 @@ class SignOutController {
 
 export default angular
   .module(componentName, [
-    commonModule.name,
+    commonModule.name
   ])
   .component(componentName, {
     controller: SignOutController,
