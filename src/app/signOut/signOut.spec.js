@@ -1,9 +1,6 @@
 import angular from 'angular'
 import 'angular-mocks'
 import module from './signOut.component'
-import { Observable } from 'rxjs/Observable'
-import 'rxjs/add/observable/of'
-import 'rxjs/add/observable/throw'
 
 describe('signOut', function () {
   beforeEach(angular.mock.module(module.name))
@@ -65,38 +62,27 @@ describe('signOut', function () {
   describe('redirectToLocationPriorToSignOut()', () => {
     beforeEach(() => {
       jest.spyOn($ctrl, 'redirectToHomepage')
-      jest.spyOn($ctrl.sessionService, 'removeLocationOnLogin')
+      jest.spyOn($ctrl.sessionService, 'getRedirectLocation')
+      jest.spyOn($ctrl.sessionService, 'clearRedirectLocation')
     })
 
-    it('redirects to prior page if getLocationOnLogin() returns value', () => {
+    it('redirects to prior page if getRedirectLocation() returns value', () => {
       const priorLocation = 'https://give-stage2.cru.org/search-results.html'
-      jest.spyOn($ctrl.sessionService, 'getLocationOnLogin').mockReturnValue(priorLocation)
-      $ctrl.showRedirectingLoadingIcon = false
+      $ctrl.sessionService.getRedirectLocation.mockReturnValue(priorLocation)
       $ctrl.redirectToLocationPriorToSignOut()
-      expect($ctrl.showRedirectingLoadingIcon).toEqual(true)
-      expect($ctrl.sessionService.getLocationOnLogin).toHaveBeenCalled()
-      expect($ctrl.sessionService.removeLocationOnLogin).toHaveBeenCalled()
+      expect($ctrl.redirectToPreviousLocation).toEqual(true)
+      expect($ctrl.sessionService.getRedirectLocation).toHaveBeenCalled()
+      expect($ctrl.sessionService.clearRedirectLocation).toHaveBeenCalled()
       expect($ctrl.$window.location.href).toEqual(priorLocation)
     })
 
-    it('redirects to home page if getLocationOnLogin() returns no value', () => {
-      jest.spyOn($ctrl.sessionService, 'getLocationOnLogin').mockReturnValue(undefined)
-      $ctrl.showRedirectingLoadingIcon = false
+    it('redirects to home page if getRedirectLocation() returns no value', () => {
+      $ctrl.sessionService.getRedirectLocation.mockReturnValue(undefined)
       $ctrl.redirectToLocationPriorToSignOut()
-      expect($ctrl.showRedirectingLoadingIcon).toEqual(true)
-      expect($ctrl.sessionService.getLocationOnLogin).toHaveBeenCalled()
-      expect($ctrl.sessionService.removeLocationOnLogin).not.toHaveBeenCalled()
+      expect($ctrl.redirectToPreviousLocation).not.toEqual(true)
+      expect($ctrl.sessionService.getRedirectLocation).toHaveBeenCalled()
+      expect($ctrl.sessionService.clearRedirectLocation).not.toHaveBeenCalled()
       expect($ctrl.$window.location.href).toEqual('/')
-    })
-  })
-
-  describe('closeRedirectingLoading()', () => {
-    it('should run redirectToHomepage()', () => {
-      jest.spyOn($ctrl, 'redirectToHomepage')
-      $ctrl.showRedirectingLoadingIcon = true
-      $ctrl.closeRedirectingLoading()
-      expect($ctrl.showRedirectingLoadingIcon).toEqual(false)
-      expect($ctrl.redirectToHomepage).toHaveBeenCalled()
     })
   })
 })

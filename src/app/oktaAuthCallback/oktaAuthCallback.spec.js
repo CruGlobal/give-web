@@ -79,18 +79,18 @@ describe('oktaAuthCallback', function () {
       expect($log.error).toHaveBeenCalledWith('error')
     })
 
-    it('should call removeLocationOnLogin()', () => {
-      jest.spyOn($ctrl.sessionService, 'removeLocationOnLogin')
+    it('should call clearRedirectLocation()', () => {
+      jest.spyOn($ctrl.sessionService, 'clearRedirectLocation')
       $ctrl.onSignInFailure('error')
-      expect($ctrl.sessionService.removeLocationOnLogin).toHaveBeenCalled()
+      expect($ctrl.sessionService.clearRedirectLocation).toHaveBeenCalled()
     })
 
-    it('should call removeLocationOnLogin()', () => {
+    it('should call clearRedirectLocation()', () => {
       $ctrl.onSignInFailure('error')
       expect($ctrl.errorMessage).toEqual('error')
     })
 
-    it('should call removeLocationOnLogin()', () => {
+    it('should call clearRedirectLocation()', () => {
       $ctrl.onSignInFailure(undefined)
       expect($ctrl.errorMessage).toEqual(unknownErrorMessage)
     })
@@ -99,27 +99,27 @@ describe('oktaAuthCallback', function () {
   describe('redirectToLocationPriorToLogin()', () => {
     it('should update the message to the user', () => {
       $ctrl.$onInit()
-      expect($ctrl.noticeToUser).toEqual('Authenticating...')
+      expect($ctrl.isReadyToRedirect).toEqual(false)
       $ctrl.redirectToLocationPriorToLogin()
-      expect($ctrl.noticeToUser).toEqual('Redirecting to prior location...')
+      expect($ctrl.isReadyToRedirect).toEqual(true)
     })
 
     it('should redirect the user to prior page', () => {
-      jest.spyOn($ctrl.sessionService, 'removeLocationOnLogin')
-      jest.spyOn($ctrl.sessionService, 'getLocationOnLogin').mockReturnValue('https://give-stage2.cru.org/search-results.html')
+      jest.spyOn($ctrl.sessionService, 'clearRedirectLocation')
+      jest.spyOn($ctrl.sessionService, 'getRedirectLocation').mockReturnValue('https://give-stage2.cru.org/search-results.html')
       expect($ctrl.$window.location).toEqual('/okta-auth-callback.html')
       $ctrl.redirectToLocationPriorToLogin()
       expect($ctrl.$window.location).toEqual('https://give-stage2.cru.org/search-results.html')
-      expect($ctrl.sessionService.removeLocationOnLogin).toHaveBeenCalled()
+      expect($ctrl.sessionService.clearRedirectLocation).toHaveBeenCalled()
     })
 
     it('should redirect the user to checkout by default', () => {
-      jest.spyOn($ctrl.sessionService, 'removeLocationOnLogin')
-      jest.spyOn($ctrl.sessionService, 'getLocationOnLogin').mockReturnValue(undefined)
+      jest.spyOn($ctrl.sessionService, 'clearRedirectLocation')
+      jest.spyOn($ctrl.sessionService, 'getRedirectLocation').mockReturnValue(undefined)
       expect($ctrl.$window.location).toEqual('/okta-auth-callback.html')
       $ctrl.redirectToLocationPriorToLogin()
       expect($ctrl.$window.location).toEqual('/checkout.html')
-      expect($ctrl.sessionService.removeLocationOnLogin).not.toHaveBeenCalled()
+      expect($ctrl.sessionService.clearRedirectLocation).not.toHaveBeenCalled()
     })
   })
 
