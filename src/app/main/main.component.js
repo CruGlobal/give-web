@@ -15,6 +15,7 @@ import yourGivingComponent from '../profile/yourGiving/yourGiving.component'
 import profileComponent from '../profile/profile.component'
 import brandedCheckoutComponent from '../branded/branded-checkout.component'
 import oktaAuthCallbackComponent from '../oktaAuthCallback/oktaAuthCallback.component'
+import signOutComponent from '../signOut/signOut.component'
 import paymentMethodsComponent from '../profile/payment-methods/payment-methods.component'
 import receiptsComponent from '../profile/receipts/receipts.component'
 
@@ -47,6 +48,10 @@ const routingConfig = /* @ngInject */ function ($stateProvider, $locationProvide
     .state('sign-in', {
       url: '/sign-in.html',
       template: '<sign-in></sign-in>'
+    })
+    .state('sign-out', {
+      url: '/sign-out.html',
+      template: '<sign-out></sign-out>'
     })
     .state('checkout', {
       url: '/checkout.html',
@@ -109,6 +114,7 @@ export default angular
     receiptsComponent.name,
     brandedCheckoutComponent.name,
     oktaAuthCallbackComponent.name,
+    signOutComponent.name,
     sessionService.name,
     'ui.router'
   ])
