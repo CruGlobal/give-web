@@ -468,7 +468,7 @@ class SignUpModalController {
         this.isLoading = true
         this.currentStep = 5
       })
-      this.skipOptionalMFAOptions()
+      this.skipOptionalMFAEnrollment()
     }
 
     // All steps
@@ -503,11 +503,17 @@ class SignUpModalController {
     verificationCodeButtonLink?.click()
   }
 
-  skipOptionalMFAOptions () {
-    // As Okta enforces the MFA screen to be shown during sign up, we need to skip it to streamline the process.
-    // The user can setup MFA at a later date in their account settings.
-    const skipMFAButton = document.querySelector('.authenticator-enroll-list-container .button.skip-all')
-    skipMFAButton?.click()
+  skipOptionalMFAEnrollment () {
+    // Hide MFA options while we wait for the redirect to happen.
+    // The loading icon will be shown, so the user will know something is happening.
+    const mfaOptions = document.querySelector('.select-authenticator-enroll')
+    if (mfaOptions) {
+      mfaOptions.style.display = 'none'
+      // As Okta enforces the MFA screen to be shown during sign up, we need to skip it to streamline the process.
+      // The user can setup MFA at a later date in their account settings.
+      const skipMFAButton = mfaOptions.querySelector('.button.skip-all')
+      skipMFAButton?.click()
+    }
   }
 
   updateSignUpButtonText () {
