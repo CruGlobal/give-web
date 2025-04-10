@@ -33,11 +33,7 @@ const brandedComponents = [
   'assets/scss/branded-checkout.scss'
 ]
 
-// Okta sign-in widget assets files
-const oktaSignInLabelsDestinations = [
-  'dist/assets/okta-sign-in/labels',
-  'src/assets/okta-sign-in/labels'
-]
+// Okta sign-in widget font files
 const oktaSignInFontDestinations = [
   'dist/assets/okta-sign-in/font/[name].[ext]',
   'src/assets/okta-sign-in/font/[name].[ext]'
