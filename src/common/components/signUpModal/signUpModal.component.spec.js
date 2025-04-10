@@ -909,6 +909,7 @@ describe('signUpForm', function () {
         jest.spyOn($ctrl, 'injectErrorMessages').mockImplementation(() => {});
         jest.spyOn($ctrl, 'injectBackButton').mockImplementation(() => {});
         jest.spyOn($ctrl, 'showVerificationCodeField').mockImplementation(() => {});
+        jest.spyOn($ctrl, 'skipOptionalMFAEnrollment').mockImplementation(() => {});
 
         $ctrl.$onInit()
       })
@@ -928,6 +929,14 @@ describe('signUpForm', function () {
 
         expect($ctrl.currentStep).toBe(4)
         expect($ctrl.showVerificationCodeField).toHaveBeenCalled()
+      })
+
+      it('shows the loading screen and skips the MFA enroll', () => {
+        $ctrl.afterRender({ formName: 'select-authenticator-enroll' })
+
+        expect($ctrl.currentStep).toBe(5)
+        expect($ctrl.isLoading).toBeTruthy()
+        expect($ctrl.skipOptionalMFAEnrollment).toHaveBeenCalled()
       })
     });
 
@@ -1034,33 +1043,59 @@ describe('signUpForm', function () {
     });
   });
 
-  describe('showVerificationCodeField()', () => {
+  describe('AfterRender JS Triggers', () => {
     const handleClick = jest.fn();
     window.handleClick = handleClick;
     beforeEach(() => {
       handleClick.mockClear();
     })
 
-    it('should call handleClick when button link is rendered', () => {
-      document.body.innerHTML = `
-        <div>
-          <button class="button-link enter-auth-code-instead-link" onclick="handleClick()">
-            Enter authentication code instead
-          </button>
-        </div>
-      `;
+    describe('showVerificationCodeField()', () => {
+      it('should call handleClick when button link is rendered', () => {
+        document.body.innerHTML = `
+          <div>
+            <button class="button-link enter-auth-code-instead-link" onclick="handleClick()">
+              Enter authentication code instead
+            </button>
+          </div>
+        `;
 
-      $ctrl.showVerificationCodeField()
-      expect(handleClick).toHaveBeenCalled();
+        $ctrl.showVerificationCodeField()
+        expect(handleClick).toHaveBeenCalled();
+      });
+
+      it("shouldn't call handleClick if button link is not rendered", () => {
+        document.body.innerHTML = `
+          <div>Something else</div>
+        `;
+
+        $ctrl.showVerificationCodeField()
+        expect(handleClick).not.toHaveBeenCalled();
+      });
     });
 
-    it("shouldn't call handleClick if button link is not rendered", () => {
-      document.body.innerHTML = `
-        <div>Something else</div>
-      `;
+    describe('skipOptionalMFAEnrollment()', () => {
+      it('should call handleClick when button link is rendered', () => {
+        document.body.innerHTML = `
+          <div class="select-authenticator-enroll">
+            <a class="button skip-all" onclick="handleClick()">
+              Continue
+            </a>
+          </div>
+        `;
 
-      $ctrl.showVerificationCodeField()
-      expect(handleClick).not.toHaveBeenCalled();
+        $ctrl.skipOptionalMFAEnrollment()
+        expect(handleClick).toHaveBeenCalled();
+      });
+
+      it("shouldn't call handleClick if button link is not rendered", () => {
+        document.body.innerHTML = `
+          <div>Something else</div>
+        `;
+
+        $ctrl.skipOptionalMFAEnrollment()
+        expect(handleClick).not.toHaveBeenCalled();
+      });
     });
   });
 
@@ -1525,7 +1560,8 @@ describe('signUpForm', function () {
 
       $ctrl.oktaSignInWidget = {
         remove: jest.fn(),
-        renderEl: jest.fn()
+        renderEl: jest.fn(),
+        off: jest.fn()
       }
     })
 

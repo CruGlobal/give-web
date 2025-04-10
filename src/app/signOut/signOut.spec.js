@@ -62,27 +62,26 @@ describe('signOut', function () {
   describe('redirectToLocationPriorToSignOut()', () => {
     beforeEach(() => {
       jest.spyOn($ctrl, 'redirectToHomepage')
-      jest.spyOn($ctrl.sessionService, 'removeStoredLocation')
+      jest.spyOn($ctrl.sessionService, 'getRedirectLocation')
+      jest.spyOn($ctrl.sessionService, 'clearRedirectLocation')
     })
 
-    it('redirects to prior page if getStoredLocation() returns value', () => {
+    it('redirects to prior page if getRedirectLocation() returns value', () => {
       const priorLocation = 'https://give-stage2.cru.org/search-results.html'
-      jest.spyOn($ctrl.sessionService, 'getStoredLocation').mockReturnValue(priorLocation)
-      $ctrl.redirectToPreviousLocation = false
+      $ctrl.sessionService.getRedirectLocation.mockReturnValue(priorLocation)
       $ctrl.redirectToLocationPriorToSignOut()
       expect($ctrl.redirectToPreviousLocation).toEqual(true)
-      expect($ctrl.sessionService.getStoredLocation).toHaveBeenCalled()
-      expect($ctrl.sessionService.removeStoredLocation).toHaveBeenCalled()
+      expect($ctrl.sessionService.getRedirectLocation).toHaveBeenCalled()
+      expect($ctrl.sessionService.clearRedirectLocation).toHaveBeenCalled()
       expect($ctrl.$window.location.href).toEqual(priorLocation)
     })
 
-    it('redirects to home page if getStoredLocation() returns no value', () => {
-      jest.spyOn($ctrl.sessionService, 'getStoredLocation').mockReturnValue(undefined)
-      $ctrl.redirectToPreviousLocation = false
+    it('redirects to home page if getRedirectLocation() returns no value', () => {
+      $ctrl.sessionService.getRedirectLocation.mockReturnValue(undefined)
       $ctrl.redirectToLocationPriorToSignOut()
-      expect($ctrl.redirectToPreviousLocation).toEqual(true)
-      expect($ctrl.sessionService.getStoredLocation).toHaveBeenCalled()
-      expect($ctrl.sessionService.removeStoredLocation).not.toHaveBeenCalled()
+      expect($ctrl.redirectToPreviousLocation).not.toEqual(true)
+      expect($ctrl.sessionService.getRedirectLocation).toHaveBeenCalled()
+      expect($ctrl.sessionService.clearRedirectLocation).not.toHaveBeenCalled()
       expect($ctrl.$window.location.href).toEqual('/')
     })
   })

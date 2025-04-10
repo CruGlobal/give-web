@@ -38,7 +38,6 @@ class OktaAuthCallbackController {
 
   initializeVariables () {
     this.isReadyToRedirect = false
-    this.isLoading = true
     this.errorMessage = ''
   }
 
@@ -51,7 +50,6 @@ class OktaAuthCallbackController {
       .subscribe((data) => {
         const registrationState = data['registration-state']
         if (registrationState === 'NEW') {
-          this.isLoading = false
           const isValid = this.areRequiredFieldsFilled(data)
           if (isValid) {
             this.postDonorMatches()
@@ -59,7 +57,6 @@ class OktaAuthCallbackController {
             this.openContactInfoModalThenRedirect()
           }
         } else if (registrationState === 'MATCHED') {
-          this.isLoading = false
           this.openUserMatchModalThenRedirect()
         } else {
           this.redirectToLocationPriorToLogin()
@@ -124,16 +121,15 @@ class OktaAuthCallbackController {
   onSignInFailure (error) {
     const errorMessage = error || unknownErrorMessage
     this.$log.error(errorMessage)
-    this.sessionService.removeStoredLocation()
+    this.sessionService.clearRedirectLocation()
     this.errorMessage = errorMessage
   }
 
   redirectToLocationPriorToLogin () {
     this.isReadyToRedirect = true
-    this.isLoading = true
-    const previousLocation = this.sessionService.getStoredLocation()
+    const previousLocation = this.sessionService.getRedirectLocation()
     if (previousLocation) {
-      this.sessionService.removeStoredLocation()
+      this.sessionService.clearRedirectLocation()
       this.$window.location = previousLocation
     } else {
       this.$window.location = `/checkout.html${window.location.search}`
