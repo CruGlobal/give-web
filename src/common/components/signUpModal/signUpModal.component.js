@@ -459,6 +459,18 @@ class SignUpModalController {
       this.showVerificationCodeField()
     }
 
+    // Step 5: Optional MFA setup
+    if (context.formName === 'select-authenticator-enroll') {
+      // As Okta enforces the MFA screen to be shown during sign up, we need to skip it.
+      // This step does not have good UX as it's long, causing users to scroll to see the continue button.
+      // We are okay with skipping this step as users can set up MFA later.
+      this.$scope.$apply(() => {
+        this.isLoading = true
+        this.currentStep = 5
+      })
+      this.skipOptionalMFAEnrollment()
+    }
+
     // All steps
     this.updateSignUpButtonText()
     this.resetCurrentStepOnRegistrationComplete(context)
@@ -489,6 +501,19 @@ class SignUpModalController {
     // This makes the process of creating an account more streamlined as we remove that click.
     const verificationCodeButtonLink = document.querySelector('.button-link.enter-auth-code-instead-link')
     verificationCodeButtonLink?.click()
+  }
+
+  skipOptionalMFAEnrollment () {
+    // Hide MFA options while we wait for the redirect to happen.
+    // The loading icon will be shown, so the user will know something is happening.
+    const mfaOptions = document.querySelector('.select-authenticator-enroll')
+    if (mfaOptions) {
+      mfaOptions.style.display = 'none'
+      // As Okta enforces the MFA screen to be shown during sign up, we need to skip it to streamline the process.
+      // The user can setup MFA at a later date in their account settings.
+      const skipMFAButton = mfaOptions.querySelector('.button.skip-all')
+      skipMFAButton?.click()
+    }
   }
 
   updateSignUpButtonText () {
