@@ -146,6 +146,7 @@ label.btn.btn-default-form.active {
 .modal {
   display: none;
   overflow: hidden;
+  overflow-y: scroll;
   position: fixed;
   right: 0;
   bottom: 0;
