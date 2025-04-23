@@ -26,11 +26,6 @@ describe('sessionModalController', function () {
         },
         close: jest.fn(),
         dismiss: jest.fn(),
-        $document: [{
-          body: {
-            dispatchEvent: jest.fn()
-          }
-        }],
         $injector: {
           has: jest.fn(),
           loadNewModules: jest.fn()
