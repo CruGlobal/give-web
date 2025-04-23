@@ -39,7 +39,7 @@ export const SignInEvent = 'SessionSignedIn'
 export const SignOutEvent = 'SessionSignedOut'
 export const LoginOktaOnlyEvent = 'loginAsOktaOnlyUser'
 
-const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout, $window, $location, envService) {
+const session = /* @ngInject */ function ($cookies, $document, $rootScope, $http, $timeout, $window, $location, envService) {
   const session = {}
   const sessionSubject = new BehaviorSubject(session)
   let sessionTimeout
@@ -129,6 +129,11 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         })
         .subscribe({
           next: response => {
+            const $injector = angular.injector()
+            $document[0].body.dispatchEvent(
+              new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } })
+            )
+
             const data = response ? response.data : response
             observer.next(data)
             observer.complete()

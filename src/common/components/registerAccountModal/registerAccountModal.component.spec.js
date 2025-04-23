@@ -19,11 +19,6 @@ describe('registerAccountModal', function () {
       onCancel: jest.fn(),
       onSuccess: jest.fn(),
       setLoading: jest.fn(),
-      $document: [{
-        body: {
-          dispatchEvent: jest.fn()
-        }
-      }],
     }
     locals = {
       $element: [{ dataset: {} }],
@@ -406,21 +401,11 @@ describe('registerAccountModal', function () {
     })
   })
 
-  describe('redirectToOktaForLogin', () => {   
-    it('should call sessionService.signIn and dispatch giveSignInSuccess event', () => {
-      const $injector = { get: jest.fn() }
-      jest.spyOn(angular, 'injector').mockReturnValue($injector)
+  describe('redirectToOktaForLogin', () => {
+    it('should call sessionService.signIn', () => {
       jest.spyOn($ctrl.sessionService, 'signIn').mockReturnValue(Observable.of({}))
-      const dispatchEventSpy = jest.spyOn($ctrl.$document[0].body, 'dispatchEvent')
-
-      expect($ctrl.sessionService.signIn).not.toHaveBeenCalled()
       $ctrl.redirectToOktaForLogin()
-
       expect($ctrl.sessionService.signIn).toHaveBeenCalledWith($ctrl.lastPurchaseId)
-      expect(dispatchEventSpy).toHaveBeenCalledWith(expect.objectContaining({
-        type: 'giveSignInSuccess',
-        detail: { $injector }
-      }))
     })
   })
 })
