@@ -18,11 +18,6 @@ describe('signInForm', function () {
     bindings = {
       onSuccess: jest.fn(),
       onFailure: jest.fn(),
-      $document: [{
-        body: {
-          dispatchEvent: jest.fn()
-        }
-      }],
       $injector: {
         has: jest.fn(),
         loadNewModules: jest.fn()
