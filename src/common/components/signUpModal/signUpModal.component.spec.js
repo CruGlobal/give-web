@@ -21,7 +21,6 @@ describe('signUpForm', function () {
     bindings = {
       onSignIn: jest.fn(),
       onSignUpError: jest.fn(),
-      redirectToOktaForLogin: jest.fn(),
       signUpForm: {
         $valid: false,
         $setSubmitted: jest.fn()
@@ -33,6 +32,8 @@ describe('signUpForm', function () {
 
     // Prevent the actual Okta widget from being created in tests
     jest.spyOn($ctrl, 'setUpSignUpWidget').mockImplementation(() => {})
+
+    jest.spyOn($ctrl.sessionService, 'signIn').mockReturnValue(Observable.of({}))
   }))
 
   it('to be defined', function () {
@@ -1586,4 +1587,11 @@ describe('signUpForm', function () {
       expect($ctrl.onSignUpError).toHaveBeenCalled()
     })
   });
+
+  describe('redirectToOktaForLogin', () => {
+    it('should call sessionService.signIn', () => {
+      $ctrl.redirectToOktaForLogin()
+      expect($ctrl.sessionService.signIn).toHaveBeenCalledWith($ctrl.lastPurchaseId)
+    })
+  })
 })

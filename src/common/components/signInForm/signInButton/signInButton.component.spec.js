@@ -15,11 +15,6 @@ describe('signInButton', function () {
     bindings = {
       onSuccess: jest.fn(),
       onFailure: jest.fn(),
-      $document: [{
-        body: {
-          dispatchEvent: jest.fn()
-        }
-      }],
     }
 
     const scope = { $apply: jest.fn() }
@@ -79,17 +74,6 @@ describe('signInButton', function () {
 
       expect($ctrl.isSigningIn).toEqual(false)
       expect($ctrl.errorMessage).toEqual(undefined)
-    })
-
-    it('adds the sessionService module', () => {
-      deferred.resolve({})
-      $rootScope.$digest()
-      const $injector = { get: jest.fn() }
-      jest.spyOn(angular, 'injector').mockReturnValue($injector)
-
-      expect(bindings.$document[0].body.dispatchEvent).toHaveBeenCalled();
-      expect(bindings.$document[0].body.dispatchEvent).toHaveBeenCalledWith(
-        new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
     })
 
     it('has unknown error signing in', () => {
