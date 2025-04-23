@@ -118,6 +118,7 @@ export default angular
     receiptsComponent.name,
     brandedCheckoutComponent.name,
     oktaAuthCallbackComponent.name,
+    signOutComponent.name,
     sessionService.name,
     sessionModalService.name,
     'ui.router'
