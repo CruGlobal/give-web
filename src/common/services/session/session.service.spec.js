@@ -1,6 +1,6 @@
 import angular from 'angular'
 import 'angular-mocks'
-import module, { Roles, Sessions, SignOutEvent, SignInEvent, checkoutSavedDataCookieName, redirectLocation, locationSearchOnLogin, forcedUserToLogout } from './session.service'
+import module, { Roles, Sessions, SignOutEvent, SignInEvent, BodySignInEvent, checkoutSavedDataCookieName, redirectLocation, locationSearchOnLogin, forcedUserToLogout } from './session.service'
 import { cortexRole } from 'common/services/session/fixtures/cortex-role'
 import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
@@ -303,7 +303,7 @@ describe('session service', function () {
       })
     });
 
-    it('should trigger giveSignInSuccess event', done => {
+    it('should trigger BodySignInEvent event', done => {
       $httpBackend.expectPOST('https://give-stage2.cru.org/okta/login').respond(200, 'success')
 
       jest.spyOn(sessionService.authClient, 'isAuthenticated').mockReturnValueOnce($q.resolve(true))
@@ -317,11 +317,11 @@ describe('session service', function () {
       jest.spyOn(angular, 'injector').mockReturnValue($injector)
 
       const giveSignInSuccessCallback = jest.fn()
-      window.document.body.addEventListener('giveSignInSuccess', giveSignInSuccessCallback, { once: true })
+      window.document.body.addEventListener(BodySignInEvent, giveSignInSuccessCallback, { once: true })
 
       sessionService.signIn().subscribe(() => {
         expect(giveSignInSuccessCallback).toHaveBeenCalledWith(expect.objectContaining({
-          type: 'giveSignInSuccess',
+          type: BodySignInEvent,
           detail: { $injector }
         }))
 
