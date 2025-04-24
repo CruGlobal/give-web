@@ -8,7 +8,6 @@ import registerAccountModal from 'common/components/registerAccountModal/registe
 import analyticsFactory from 'app/analytics/analytics.factory'
 
 import { scrollModalToTop } from 'common/services/modalState.service'
-import { LoginOktaOnlyEvent } from 'common/services/session/session.service'
 
 import template from './sessionModal.tpl.html'
 
@@ -28,9 +27,6 @@ class SessionModalController {
   }
 
   $onInit () {
-    this.$rootScope.$on(LoginOktaOnlyEvent, (_, state) => {
-      this.stateChanged(state)
-    })
     this.stateChanged(this.resolve.state)
     this.hideCloseButton = this.resolve.hideCloseButton
     this.lastPurchaseId = this.resolve.lastPurchaseId

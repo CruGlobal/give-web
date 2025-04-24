@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/from'
 import 'rxjs/add/observable/throw'
-import { Roles, LoginOktaOnlyEvent } from 'common/services/session/session.service'
+import { Roles } from 'common/services/session/session.service'
 
 describe('registerAccountModal', function () {
   beforeEach(angular.mock.module(module.name))
@@ -63,8 +63,6 @@ describe('registerAccountModal', function () {
     it('should get donor details', () => {
       $ctrl.$onInit()
       expect($ctrl.checkDonorDetails).not.toHaveBeenCalled()
-      $rootScope.$broadcast(LoginOktaOnlyEvent)
-      expect($ctrl.checkDonorDetails).toHaveBeenCalled()
     })
 
     it('should load donor details initially and reload when session changes', () => {
@@ -406,7 +404,7 @@ describe('registerAccountModal', function () {
     })
   })
 
-  describe('redirectToOktaForLogin', () => {   
+  describe('redirectToOktaForLogin', () => {
     it('should call sessionService.signIn and dispatch giveSignInSuccess event', () => {
       const $injector = { get: jest.fn() }
       jest.spyOn(angular, 'injector').mockReturnValue($injector)
