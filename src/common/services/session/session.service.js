@@ -37,7 +37,6 @@ export const cookieDomain = '.cru.org'
 
 export const SignInEvent = 'SessionSignedIn'
 export const SignOutEvent = 'SessionSignedOut'
-export const LoginOktaOnlyEvent = 'loginAsOktaOnlyUser'
 
 const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout, $window, $location, envService) {
   const session = {}
