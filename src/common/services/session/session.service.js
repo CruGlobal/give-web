@@ -35,10 +35,14 @@ export const checkoutSavedDataCookieName = 'checkoutSavedData'
 export const forcedUserToLogout = 'forcedUserToLogout'
 export const cookieDomain = '.cru.org'
 
+// AngularJS event broadcasted when the user signs in
 export const SignInEvent = 'SessionSignedIn'
+// AngularJS event broadcasted when the user signs in
 export const SignOutEvent = 'SessionSignedOut'
+// DOM event triggered on document.body when the user signs in
+export const BodySignInEvent = 'giveSignInSuccess'
 
-const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout, $window, $location, envService) {
+const session = /* @ngInject */ function ($cookies, $document, $rootScope, $http, $timeout, $window, $location, envService) {
   const session = {}
   const sessionSubject = new BehaviorSubject(session)
   let sessionTimeout
@@ -128,6 +132,11 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         })
         .subscribe({
           next: response => {
+            const $injector = angular.injector()
+            $document[0].body.dispatchEvent(
+              new window.CustomEvent(BodySignInEvent, { bubbles: true, detail: { $injector } })
+            )
+
             const data = response ? response.data : response
             observer.next(data)
             observer.complete()

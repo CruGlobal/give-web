@@ -66,7 +66,7 @@
       on-sign-up-error="$ctrl.onSignUpError(donorDetails)"
       on-sign-in="$ctrl.onSignIn()"
       is-inside-another-modal="true"
-      redirect-to-okta-for-login="$ctrl.redirectToOktaForLogin()"
+      last-purchase-id="$ctrl.lastPurchaseId"
     ></sign-up-modal>
     <div ng-switch-when="loading-donor" class="modal-body">
       <loading></loading>

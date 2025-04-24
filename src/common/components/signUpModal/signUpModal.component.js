@@ -806,6 +806,10 @@ class SignUpModalController {
       error: (donorDetails) => this.onSignUpError({ donorDetails })
     })
   }
+
+  redirectToOktaForLogin () {
+    this.sessionService.signIn(this.lastPurchaseId).subscribe(() => {})
+  }
 }
 
 export default angular
@@ -827,8 +831,7 @@ export default angular
       onSignIn: '&',
       // Called with the user dismisses the modal via the close button
       onCancel: '&',
-      // Called when user successfully signs up and we redirect them to Okta to login
-      redirectToOktaForLogin: '&',
+      lastPurchaseId: '<',
       isInsideAnotherModal: '='
     }
   })
