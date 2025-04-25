@@ -3,7 +3,7 @@ import template from './registerAccountModal.tpl.html'
 
 import cartService from 'common/services/api/cart.service'
 import orderService from 'common/services/api/order.service'
-import sessionService, { Roles, LoginOktaOnlyEvent } from 'common/services/session/session.service'
+import sessionService, { Roles } from 'common/services/session/session.service'
 import verificationService from 'common/services/api/verification.service'
 import { scrollModalToTop } from 'common/services/modalState.service'
 
@@ -58,10 +58,6 @@ class RegisterAccountModalController {
   }
 
   $onInit () {
-    this.$rootScope.$on(LoginOktaOnlyEvent, () => {
-      this.checkDonorDetails()
-    })
-
     // Ensure loading icon isn't rendered on screen.
     this.sessionService.removeOktaRedirectIndicator()
 

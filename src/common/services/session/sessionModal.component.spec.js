@@ -1,7 +1,6 @@
 import angular from 'angular'
 import 'angular-mocks'
 import module from './sessionModal.component'
-import { LoginOktaOnlyEvent } from './session.service'
 
 describe('sessionModalController', function () {
   beforeEach(angular.mock.module(module.name))
@@ -45,14 +44,6 @@ describe('sessionModalController', function () {
 
       expect($ctrl.state).toEqual('sign-in')
       expect($ctrl.lastPurchaseId).toEqual('<some id>')
-    })
-
-    it('should stateChanged on LoginOktaOnlyEvent', () => {
-      expect($ctrl.isLoading).toEqual(false)
-      $ctrl.$onInit()
-      expect($ctrl.state).toEqual('sign-in')
-      $rootScope.$broadcast(LoginOktaOnlyEvent, 'register-account')
-      expect($ctrl.state).toEqual('register-account')
     })
   })
 
