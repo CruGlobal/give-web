@@ -60,8 +60,6 @@ class BrandedCheckoutController {
       console.error(err)
     })
     this.$translate.use(this.language || 'en')
-
-    this.itemConfig = {}
     this.checkoutService.initializeRecaptcha()
   }
 

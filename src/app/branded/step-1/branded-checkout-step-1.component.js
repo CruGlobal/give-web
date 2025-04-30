@@ -39,7 +39,6 @@ class BrandedCheckoutStep1Controller {
   }
 
   initItemConfig () {
-    this.defaultItemConfig = angular.copy(this.itemConfig)
 
     this.itemConfig = {}
     this.itemConfig.CAMPAIGN_CODE = this.campaignCode
@@ -70,11 +69,10 @@ class BrandedCheckoutStep1Controller {
     this.itemConfig.RECURRING_DAY_OF_MONTH = this.day
     this.itemConfig.frequency = this.frequency
 
-    this.premiumSelected = false
+    this.premiumSelected = !!this.premiumCode
 
-    if (this.defaultItemConfig && this.defaultItemConfig.PREMIUM_CODE) {
-      this.itemConfig.PREMIUM_CODE = this.defaultItemConfig.PREMIUM_CODE
-      this.premiumSelected = true
+    if (this.premiumCode) {
+      this.itemConfig.PREMIUM_CODE = this.premiumCode
     }
   }
 

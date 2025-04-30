@@ -176,6 +176,6 @@ export default angular
       submittingOrder: '<',
       radioStationName: '<',
       premiumName: '<',
-      brandedCheckoutItem: '<'
+      premiumCode: '<'
     }
   })
