@@ -32,7 +32,6 @@ class BrandedCheckoutStep1Controller {
   }
 
   initItemConfig () {
-
     this.itemConfig = {}
     this.itemConfig.CAMPAIGN_CODE = this.campaignCode
     if (this.itemConfig.CAMPAIGN_CODE &&
