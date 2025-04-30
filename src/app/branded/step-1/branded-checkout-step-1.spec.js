@@ -86,7 +86,7 @@ describe('branded checkout step 1', () => {
     })
 
     it('should persist premium-code in item config', () => {
-      $ctrl.itemConfig = { PREMIUM_CODE: '112233' }
+      $ctrl.premiumCode = '112233'
       $ctrl.initItemConfig()
       expect($ctrl.itemConfig.PREMIUM_CODE).toEqual('112233')
     })
