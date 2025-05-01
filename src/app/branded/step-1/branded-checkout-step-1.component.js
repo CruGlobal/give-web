@@ -32,6 +32,7 @@ class BrandedCheckoutStep1Controller {
   }
 
   initItemConfig () {
+    const persistingPremiumCode = this.itemConfig?.PREMIUM_CODE || null 
     this.itemConfig = {}
     this.itemConfig.CAMPAIGN_CODE = this.campaignCode
     if (this.itemConfig.CAMPAIGN_CODE &&
@@ -61,10 +62,12 @@ class BrandedCheckoutStep1Controller {
     this.itemConfig.RECURRING_DAY_OF_MONTH = this.day
     this.itemConfig.frequency = this.frequency
 
-    this.premiumSelected = !!this.premiumCode
+    // by default, set the premium to not be selected.
+    this.premiumSelected = false
 
-    if (this.premiumCode) {
+    if (persistingPremiumCode) {
       this.itemConfig.PREMIUM_CODE = this.premiumCode
+      this.premiumSelected = true
     }
   }
 
