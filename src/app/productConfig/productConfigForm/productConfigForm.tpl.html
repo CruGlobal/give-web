@@ -54,7 +54,7 @@
   </div>
 
   <div ng-if="!$ctrl.loading && !$ctrl.errorLoading && !$ctrl.showGivingLinks">
-    <div ng-class="{'give-selection-reverse-order': ($ctrl.useV3 === 'true')}">
+    <div ng-class="{'give-selection-reverse-order': $ctrl.useV3}">
       <div class="panel panel-default panel-plain mt suggested-gift-amounts">
 
           <div ng-if="$ctrl.errorChangingFrequency" class="alert alert-danger" role="alert">
@@ -79,7 +79,7 @@
         <div class="panel-body pt0">
 
           <div ng-if="$ctrl.useSuggestedAmounts">
-            <div ng-if="$ctrl.useV3 === 'true'">
+            <div ng-if="$ctrl.useV3">
               <fieldset aria-label="Suggested Gift Amounts. Tab for Custom Amount">
                 <div class="button-group">
                   <div ng-repeat="suggested in $ctrl.suggestedAmounts | orderBy:'order'">
@@ -131,7 +131,7 @@
                 </div>
               </fieldset>
             </div>
-            <div ng-if="$ctrl.useV3 !== 'true'">
+            <div ng-if="$ctrl.useV3">
               <div class="radio radio-custom-amount"
                   ng-repeat="suggested in $ctrl.suggestedAmounts | orderBy:'order'">
                 <label>

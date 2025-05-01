@@ -17,7 +17,7 @@
           next="$ctrl.next()"
           on-payment-failed="$ctrl.onPaymentFailed($event.donorDetails)"
           radio-station-api-url="$ctrl.radioStationApiUrl"
-          use-v3="$ctrl.useV3"
+          use-v3="$ctrl.useV3 === 'true'"
           hide-quarterly="$ctrl.hideQuarterly"
           hide-annual="$ctrl.hideAnnual">
         </branded-checkout-step-1>

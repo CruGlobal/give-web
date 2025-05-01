@@ -161,7 +161,7 @@ class BrandedCheckoutStep1Controller {
   checkSuccessfulSubmission () {
     if (every(this.submission, 'completed')) {
       if (every(this.submission, { error: false })) {
-        if (this.useV3 === 'true') {
+        if (this.useV3) {
           this.submitOrderInternal()
         } else {
           this.next()
