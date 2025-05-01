@@ -1,6 +1,6 @@
 import angular from 'angular'
 import 'angular-mocks'
-import module, { Roles, Sessions, SignOutEvent, SignInEvent, checkoutSavedDataCookieName, redirectLocation, locationSearchOnLogin, forcedUserToLogout } from './session.service'
+import module, { Roles, Sessions, SignOutEvent, SignInEvent, BodySignInEvent, checkoutSavedDataCookieName, redirectLocation, locationSearchOnLogin, forcedUserToLogout } from './session.service'
 import { cortexRole } from 'common/services/session/fixtures/cortex-role'
 import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
@@ -33,12 +33,13 @@ describe('session service', function () {
   }))
 
   beforeEach(angular.mock.module(module.name))
-  let sessionService, $httpBackend, $cookies, $rootScope, $verifyNoPendingTasks, $window, $location, envService
+  let sessionService, $httpBackend, $cookies, $q, $rootScope, $verifyNoPendingTasks, $window, $location, envService
 
-  beforeEach(inject(function (_sessionService_, _$httpBackend_, _$cookies_, _$rootScope_, _$verifyNoPendingTasks_, _$window_, _$location_, _envService_) {
+  beforeEach(inject(function (_sessionService_, _$httpBackend_, _$cookies_, _$q_, _$rootScope_, _$verifyNoPendingTasks_, _$window_, _$location_, _envService_) {
     sessionService = _sessionService_
     $httpBackend = _$httpBackend_
     $cookies = _$cookies_
+    $q = _$q_
     $rootScope = _$rootScope_
     $verifyNoPendingTasks = _$verifyNoPendingTasks_
     $window = _$window_
@@ -301,6 +302,35 @@ describe('session service', function () {
         })
       })
     });
+
+    it('should trigger BodySignInEvent event', done => {
+      $httpBackend.expectPOST('https://give-stage2.cru.org/okta/login').respond(200, 'success')
+
+      jest.spyOn(sessionService.authClient, 'isAuthenticated').mockReturnValueOnce($q.resolve(true))
+      jest.spyOn(sessionService.authClient.tokenManager, 'getTokens').mockReturnValueOnce($q.resolve({
+        accessToken: {
+          accessToken: 'accessToken'
+        }
+      }))
+
+      const $injector = {}
+      jest.spyOn(angular, 'injector').mockReturnValue($injector)
+
+      const giveSignInSuccessCallback = jest.fn()
+      window.document.body.addEventListener(BodySignInEvent, giveSignInSuccessCallback, { once: true })
+
+      sessionService.signIn().subscribe(() => {
+        expect(giveSignInSuccessCallback).toHaveBeenCalledWith(expect.objectContaining({
+          type: BodySignInEvent,
+          detail: { $injector }
+        }))
+
+        done()
+      }, done)
+
+      $rootScope.$apply() // call $q .then handlers
+      $httpBackend.flush()
+    })
 
     it('should handle a failed login', done => {
       jest.spyOn(sessionService.authClient, 'isAuthenticated').mockResolvedValueOnce(false)

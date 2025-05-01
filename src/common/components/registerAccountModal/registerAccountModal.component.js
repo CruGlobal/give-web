@@ -42,8 +42,7 @@ class RegisterAccountModalController {
   // 8. Upon registration completion, we redirect the user back to their previous page
 
   /* @ngInject */
-  constructor ($document, $element, $rootScope, $window, cartService, orderService, sessionService, verificationService, envService, gettext) {
-    this.$document = $document
+  constructor ($element, $rootScope, $window, cartService, orderService, sessionService, verificationService, envService, gettext) {
     this.element = $element[0]
     this.$rootScope = $rootScope
     this.$window = $window
@@ -126,6 +125,7 @@ class RegisterAccountModalController {
       this.redirectToOktaForLogin()
       return
     }
+
     // Success gathering contact info, Proceed to Step 4
     this.postDonorMatches()
   }
@@ -191,12 +191,7 @@ class RegisterAccountModalController {
   }
 
   redirectToOktaForLogin () {
-    this.sessionService.signIn(this.lastPurchaseId).subscribe(() => {
-      const $injector = angular.injector()
-      this.$document[0].body.dispatchEvent(
-        new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } })
-      )
-    })
+    this.sessionService.signIn(this.lastPurchaseId).subscribe(() => {})
   }
 }
 

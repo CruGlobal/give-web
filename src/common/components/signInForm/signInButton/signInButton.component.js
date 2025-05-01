@@ -7,11 +7,10 @@ const componentName = 'signInButton'
 
 class SignInButtonController {
   /* @ngInject */
-  constructor ($log, $rootScope, $scope, $document, $timeout, sessionService, gettext, envService) {
+  constructor ($log, $rootScope, $scope, $timeout, sessionService, gettext, envService) {
     this.$log = $log
     this.$scope = $scope
     this.$rootScope = $rootScope
-    this.$document = $document
     this.$timeout = $timeout
     this.sessionService = sessionService
     this.gettext = gettext
@@ -43,10 +42,6 @@ class SignInButtonController {
     this.watchSigningIn()
     this.sessionService.signIn(this.lastPurchaseId).subscribe(() => {
       this.isSigningIn = false
-      const $injector = angular.injector()
-      this.$document[0].body.dispatchEvent(
-        new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } })
-      )
       // Don't call this.onSuccess() here, because we redirect the user to Okta
     }, error => {
       this.isSigningIn = false

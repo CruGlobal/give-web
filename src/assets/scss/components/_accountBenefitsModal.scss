@@ -1,9 +1,9 @@
 account-benefits-modal {
-  display: inline-block;
-  padding: 20px;
+  display: block;
+  padding: 35px;
 
   .button-actions {
-    margin: 20px 0;
+    margin: 0;
   }
 
   .sign-in {
@@ -11,7 +11,6 @@ account-benefits-modal {
       margin: 0;
     }
   }
-
 
   .sign-up {
     margin-bottom: 10px;
@@ -35,5 +34,3 @@ account-benefits-modal {
     text-align: center;
   }
 }
-
-
