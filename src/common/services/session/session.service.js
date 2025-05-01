@@ -123,10 +123,10 @@ const session = /* @ngInject */ function ($cookies, $document, $rootScope, $http
     }
   }
 
-  function signIn (lastPurchaseId) {
+  function signIn (lastPurchaseId, emailAddress) {
     session.isOktaRedirecting = true
     return new Observable(observer => {
-      internalSignIn(lastPurchaseId)
+      internalSignIn(lastPurchaseId, emailAddress)
         .finally(() => {
           $rootScope.$broadcast(SignInEvent)
         })
@@ -148,13 +148,13 @@ const session = /* @ngInject */ function ($cookies, $document, $rootScope, $http
     })
   }
 
-  function internalSignIn (lastPurchaseId) {
+  function internalSignIn (lastPurchaseId, emailAddress) {
     return new Observable(observer => {
       authClient.isAuthenticated()
         .then(isAuthenticated => {
           if (!isAuthenticated) {
             setRedirectingOnLogin()
-            return authClient.token.getWithRedirect()
+            return authClient.token.getWithRedirect(emailAddress ? { loginHint: emailAddress } : undefined)
           }
           return authClient.tokenManager.getTokens()
         })
