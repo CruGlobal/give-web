@@ -32,7 +32,7 @@ class BrandedCheckoutStep1Controller {
   }
 
   initItemConfig () {
-    const persistingPremiumCode = this.itemConfig?.PREMIUM_CODE || null 
+    const persistingPremiumCode = this.itemConfig?.PREMIUM_CODE || null
     this.itemConfig = {}
     this.itemConfig.CAMPAIGN_CODE = this.campaignCode
     if (this.itemConfig.CAMPAIGN_CODE &&
