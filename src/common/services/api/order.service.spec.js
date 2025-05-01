@@ -1305,7 +1305,7 @@ describe('order service', () => {
       
               expect(mockController.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
               done()
-            })
+            }, done)
       })
 
       it('should handle an error submitting an order with a bank account', (done) => {
@@ -1336,7 +1336,7 @@ describe('order service', () => {
           expect(self.orderService.clearCardSecurityCodes).toHaveBeenCalled()
           expect(mockController.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
           done()
-        })
+        }, done)
       })
 
       it('should submit the order without a CVV if paying with an existing credit card or the cvv in session storage is missing', (done) => {
