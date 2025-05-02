@@ -82,6 +82,7 @@ class Step2Controller {
 
   onPaymentFormStateChange ($event) {
     this.paymentFormState = $event.state
+
     if ($event.state === 'loading' && $event.payload) {
       const paymentType = $event.payload.creditCard ? $event.payload.creditCard['card-type'] : $event.payload.bankAccount ? $event.payload.bankAccount['account-type'] : 'Unknown'
       const request = $event.update
@@ -113,6 +114,8 @@ class Step2Controller {
       this.changeStep({ newStep: 'review' })
       this.onStateChange({ state: 'submitted' })
       this.paymentFormState = 'success'
+    } else if ($event.state === 'submitted' && this.selectedPaymentMethod?.['card-type']) {
+      this.orderService.storeCardSecurityCode(this.selectedPaymentMethod.cvv, this.selectedPaymentMethod.self.uri)
     } else if ($event.state === 'unsubmitted') {
       this.onStateChange({ state: 'unsubmitted' })
     } else if ($event.state === 'error') {
@@ -120,7 +123,10 @@ class Step2Controller {
     }
   }
 
-  getContinueDisabled () {
+  isContinueDisabled () {
+    if (this.selectedPaymentMethod?.['card-type'] && !this.isCvvValid) {
+      return true
+    }
     if (this.loadingPaymentMethods) {
       return true
     }
@@ -132,6 +138,10 @@ class Step2Controller {
       return true
     }
     return false
+  }
+
+  enableContinue (isCvvValid) {
+    this.isCvvValid = isCvvValid
   }
 }
 

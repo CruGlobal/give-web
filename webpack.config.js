@@ -22,7 +22,8 @@ const giveComponents = [
   'app/profile/payment-methods/payment-methods.component.js',
   'app/designationEditor/designationEditor.component.js',
   'app/newsletterSubscription/newsletterSubscription.component.js',
-  'app/oktaAuthCallback/oktaAuthCallback.component.js'
+  'app/oktaAuthCallback/oktaAuthCallback.component.js',
+  'app/signOut/signOut.component.js'
 ]
 
 const giveCss = ['assets/scss/styles.scss']
@@ -60,13 +61,17 @@ const sharedConfig = {
       ROLLBAR_ACCESS_TOKEN: JSON.stringify(process.env.ROLLBAR_ACCESS_TOKEN) || 'development-token',
       DATADOG_RUM_CLIENT_TOKEN: process.env.DATADOG_RUM_CLIENT_TOKEN || ''
     }),
-    new StyleLintPlugin({
-      configFile: path.resolve(__dirname, 'stylelint.config.mjs'),
-      context: 'src/assets/scss',
-      files: '**/*.(css|scss)',
-      failOnError: true,
-      quiet: false
-    }),
+    ...(isBuild
+      ? []
+      : [
+          new StyleLintPlugin({
+            configFile: path.resolve(__dirname, 'stylelint.config.mjs'),
+            context: 'src/assets/scss',
+            files: '**/*.(css|scss)',
+            failOnError: true,
+            quiet: false
+          })
+        ]),
     // To strip all locales except “en”
     new MomentLocalesPlugin()
   ],
@@ -194,13 +199,9 @@ module.exports = (env = {}) => [
       path: path.resolve(__dirname, 'dist')
     },
     plugins: [
-      ...(!isBuild
-        ? [
-            new MiniCssExtractPlugin({
-              filename: 'chunks/[name].[contenthash].min.css'
-            })
-          ]
-        : []),
+      new MiniCssExtractPlugin({
+        filename: 'chunks/[name].[contenthash].min.css'
+      }),
       ...sharedConfig.plugins,
       new BundleAnalyzerPlugin({
         analyzerMode: env.analyze ? 'static' : 'disabled'
@@ -242,13 +243,9 @@ module.exports = (env = {}) => [
       'branded-checkout': brandedComponents
     },
     plugins: [
-      ...(!isBuild
-        ? [
-            new MiniCssExtractPlugin({
-              filename: '[name].min.css'
-            })
-          ]
-        : []),
+      new MiniCssExtractPlugin({
+        filename: '[name].min.css'
+      }),
       ...sharedConfig.plugins,
       new BundleAnalyzerPlugin({
         analyzerMode: env.analyze ? 'static' : 'disabled'
