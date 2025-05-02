@@ -127,5 +127,18 @@ export const customFields = {
     showWhen: {
       'userProfile.countryCode': 'US'
     }
-  }
+  },
+  repeatPasscode: {
+    name: 'passcodeVerification.repeatPasscode',
+    type: 'password',
+    label: 'Repeat password',
+    required: true,
+    secret: true,
+    'label-top': true,
+    multirowError: true,
+    'data-se': 'o-form-fieldset-passcodeVerification.repeatPasscode',
+    "params": {
+          "showPasswordToggle": true
+     }
+  },
 }
