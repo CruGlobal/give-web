@@ -61,6 +61,7 @@ Add the following code to your page where appropriate. See the [Branded checkout
     radio-station-api-url="https://api.domain.com/getStations"
     hide-annual="true"
     hide-quarterly="true">
+    use-v3="true">
 </branded-checkout>
 
 <script src="https://give-static.cru.org/branded-checkout.v2.js"></script>
@@ -134,6 +135,7 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
 - `radio-station-api-url` - Provides a URL path for fetching a list of radio stations in the donor's vicinity.  If you plan to use this feature, contact Cru's Digital Products and Services (DPS) department ([help@cru.org](mailto:help@cru.org)) to have your URL domain whitelisted to interact with our API - *Optional*
 - `hide-annual` - Hides the annual frequency option. If you don't want this feature, do not add this attribute at all. - *Optional*
 - `hide-quarterly` - Hides the quarterly frequency option. If you don't want this feature, do not add this attribute at all. - *Optional*
+- `use-v3` - Version 3 removes the review page from the checkout flow and makes UX improvements on the form. - *Optional*
 
 
 #### Server-side configuration for a new branded checkout domain
@@ -205,8 +207,3 @@ Replace `https://give-static.cru.org` with `https://give-stage-static.cru.org` t
 
 ### Deployments
 
-Travis auto-deploys master builds to a pre-prod s3 bucket.
-http://devtools.aws.cru.org:8080/view/Give%20Site/job/Give%20NG%20prod%20deploy/ copies
-to the live bucket, which backs CloudFront.
-
-GitHub actions auto-deploys master and staging builds to S3 buckets, which backs CloudFront.
