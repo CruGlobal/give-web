@@ -224,7 +224,7 @@ class SignUpModalController {
     ]
   }
 
-  getStep2Fields (schema) {
+  getStep2Fields () {
     // Retain the values entered by the user when navigating between steps.
     // Pre-populate the form fields with existing user details.
     return [
