@@ -85,7 +85,7 @@ describe('branded checkout step 1', () => {
       expect($ctrl.itemConfig.CAMPAIGN_CODE).toEqual('')
     })
 
-    it('should persist premium-code in item config', () => {
+    it('should set PREMIUM_CODE and premiumSelected by default if there is a premiumCode', () => {
       $ctrl.premiumCode = '112233'
       $ctrl.initItemConfig()
       expect($ctrl.itemConfig.PREMIUM_CODE).toEqual('112233')
@@ -95,7 +95,25 @@ describe('branded checkout step 1', () => {
     it('should not set premium-code if there is not one', () => {
       $ctrl.initItemConfig()
       expect($ctrl.itemConfig.PREMIUM_CODE).toEqual(undefined)
+      expect($ctrl.premiumSelected).toEqual(undefined)
+    })
+
+    it('should persist premiumSelected as false', () => {
+      $ctrl.premiumCode = '112233'
+      $ctrl.itemConfig = {}
+      $ctrl.itemConfig.PREMIUM_CODE = undefined
+      $ctrl.initItemConfig()
+      expect($ctrl.itemConfig.PREMIUM_CODE).toEqual(undefined)
       expect($ctrl.premiumSelected).toEqual(false)
+    })
+
+    it('should persist premiumSelected as true', () => {
+      $ctrl.premiumCode = '112233'
+      $ctrl.itemConfig = {}
+      $ctrl.itemConfig.PREMIUM_CODE = $ctrl.premiumCode
+      $ctrl.initItemConfig()
+      expect($ctrl.itemConfig.PREMIUM_CODE).toEqual($ctrl.premiumCode)
+      expect($ctrl.premiumSelected).toEqual(true)
     })
   })
 

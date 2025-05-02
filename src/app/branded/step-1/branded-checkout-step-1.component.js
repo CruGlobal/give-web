@@ -39,7 +39,13 @@ class BrandedCheckoutStep1Controller {
   }
 
   initItemConfig () {
-    const persistingPremiumCode = this.itemConfig?.PREMIUM_CODE || null
+    // if itemConfig is defined, this means that the user clicked
+    // "Change" on the review page. We can set the premiumSelected
+    // and return so that itemConfig is not re-initialized.
+    if (this.itemConfig) {
+      this.premiumSelected = !!this.itemConfig.PREMIUM_CODE
+      return
+    }
     this.itemConfig = {}
     this.itemConfig.CAMPAIGN_CODE = this.campaignCode
     if (this.itemConfig.CAMPAIGN_CODE &&
@@ -69,10 +75,7 @@ class BrandedCheckoutStep1Controller {
     this.itemConfig.RECURRING_DAY_OF_MONTH = this.day
     this.itemConfig.frequency = this.frequency
 
-    // by default, set the premium to not be selected.
-    this.premiumSelected = false
-
-    if (persistingPremiumCode) {
+    if (this.premiumCode) {
       this.itemConfig.PREMIUM_CODE = this.premiumCode
       this.premiumSelected = true
     }
