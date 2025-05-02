@@ -4,36 +4,41 @@ import module, { submitOrderEvent } from './cart-summary.component'
 
 describe('checkout', function () {
   describe('cart summary', function () {
+    let $rootScope, $scope, $componentController, controller
+
     beforeEach(angular.mock.module(module.name))
-    const self = {}
-    const componentInstance = {}
 
-    beforeEach(inject(function ($rootScope, $componentController) {
-      const $scope = $rootScope.$new()
-      componentInstance.$rootScope = $rootScope.$new()
+    beforeEach(inject(function (_$rootScope_, _$componentController_) {
+      $rootScope = _$rootScope_
+      $scope = $rootScope.$new()
+      $componentController = _$componentController_
 
-      self.controller = $componentController(module.name, {
-        $scope: $scope
-      })
+      controller = $componentController(module.name, { $scope })
     }))
 
-    it('to be defined', function () {
-      expect(self.controller).toBeDefined()
+    it('should be defined', function () {
+      expect(controller).toBeDefined()
     })
 
     describe('buildCartUrl', () => {
       it('should get the url from the cart service', () => {
-        jest.spyOn(self.controller.cartService, 'buildCartUrl')
-        self.controller.buildCartUrl()
-        expect(self.controller.cartService.buildCartUrl).toHaveBeenCalled()
+        jest.spyOn(controller.cartService, 'buildCartUrl')
+        controller.buildCartUrl()
+        expect(controller.cartService.buildCartUrl).toHaveBeenCalled()
       })
     })
 
     describe('onSubmit', () => {
-      it('should emit an event', () => {
-        jest.spyOn(self.controller.$rootScope, '$emit').mockImplementation(() => {})
-        self.controller.onSubmit()
-        expect(self.controller.$rootScope.$emit).toHaveBeenCalledWith(submitOrderEvent)
+      it('should trigger the submitOrderEvent listener', () => {
+        const listenerSpy = jest.fn()
+
+        const deregister = $rootScope.$on(submitOrderEvent, listenerSpy)
+
+        controller.onSubmit()
+        $rootScope.$digest()
+
+        expect(listenerSpy).toHaveBeenCalled()
+        deregister()
       })
     })
   })
