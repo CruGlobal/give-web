@@ -174,16 +174,16 @@ class SignUpModalController {
   }
 
   getSteps (schema) {
-    const passwordInput = schema.find(field => field.name === 'credentials.passcode')
+    const passcodeInput = schema.find(field => field.name === 'credentials.passcode')
     return {
       // Step 1: Name, email, account type and organization name (if applicable)
       1: this.getStep1Fields(schema),
       // Step 2: Address
-      2: this.getStep2Fields(schema),
+      2: this.getStep2Fields(),
       // Step 3: Password (We don't save the password for security reasons.
       // Which is why it's the last step)
       3: [
-        passwordInput,
+        passcodeInput,
         customFields.repeatPasscode
       ]
     }
