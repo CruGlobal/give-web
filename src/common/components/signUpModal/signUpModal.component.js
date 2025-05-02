@@ -808,7 +808,7 @@ class SignUpModalController {
   }
 
   redirectToOktaForLogin () {
-    this.sessionService.signIn(this.lastPurchaseId).subscribe(() => {})
+    this.sessionService.signIn(this.lastPurchaseId, this.$scope.email).subscribe(() => {})
   }
 }
 

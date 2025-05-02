@@ -267,13 +267,16 @@ describe('session service', function () {
       jest.spyOn($rootScope, '$broadcast')
       jest.spyOn(sessionService.authClient, 'isAuthenticated').mockResolvedValueOnce(false)
       jest.spyOn(sessionService.authClient.token, 'getWithRedirect').mockResolvedValue(undefined)
-
-      sessionService.signIn('lastPurchaseId-SignInEvent').subscribe();
+      const loginHint = 'test@cru.org';
+      sessionService.signIn('lastPurchaseId-SignInEvent', loginHint).subscribe();
 
       // Observable.finally is fired after the test, this defers until it's called.
       // eslint-disable-next-line angular/timeout-service
       setTimeout(() => {
         expect($rootScope.$broadcast).toHaveBeenCalledWith(SignInEvent)
+        expect(sessionService.authClient.token.getWithRedirect).toHaveBeenCalledWith({
+          loginHint
+        })
         done()
       })
     })

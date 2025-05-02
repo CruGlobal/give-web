@@ -1590,8 +1590,9 @@ describe('signUpForm', function () {
 
   describe('redirectToOktaForLogin', () => {
     it('should call sessionService.signIn', () => {
+      $ctrl.$scope.email = user.email
       $ctrl.redirectToOktaForLogin()
-      expect($ctrl.sessionService.signIn).toHaveBeenCalledWith($ctrl.lastPurchaseId)
+      expect($ctrl.sessionService.signIn).toHaveBeenCalledWith($ctrl.lastPurchaseId, user.email)
     })
   })
 })
