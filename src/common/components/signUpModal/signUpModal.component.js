@@ -428,7 +428,7 @@ class SignUpModalController {
 
     // Add the user profile to the postData object
     // Okta widget handles the password
-    delete postData.passcodeVerification;
+    delete postData.passcodeVerification
     postData.userProfile = {
       firstName: this.$scope.firstName,
       lastName: this.$scope.lastName,

@@ -137,8 +137,8 @@ export const customFields = {
     'label-top': true,
     multirowError: true,
     'data-se': 'o-form-fieldset-passcodeVerification.repeatPasscode',
-    "params": {
-          "showPasswordToggle": true
-     }
-  },
+    params: {
+      showPasswordToggle: true
+    }
+  }
 }
