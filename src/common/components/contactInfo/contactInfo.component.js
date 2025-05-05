@@ -121,6 +121,12 @@ class Step1Controller {
   }
 
   toggleSpouseDetails () {
+    if (this.showSpouseDetails) {
+      this.donorDetails['spouse-name'] = {
+        'given-name': null,
+        'family-name': null
+      }
+    }
     this.showSpouseDetails = !this.showSpouseDetails
   }
 
