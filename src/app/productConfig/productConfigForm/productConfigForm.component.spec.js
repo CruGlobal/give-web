@@ -378,7 +378,7 @@ describe('product config form component', function () {
       expect($ctrl.frequencyOrder({ name: 'QUARTERLY' })).toEqual(2) 
     })
 
-    it('does not have frequency order when quarterly is hidden', () => {
+    it('changes frequency order when quarterly is hidden', () => {
       $ctrl.hideQuarterly = true
       expect($ctrl.frequencyOrder({ name: 'NA' })).toEqual(0)
     })
