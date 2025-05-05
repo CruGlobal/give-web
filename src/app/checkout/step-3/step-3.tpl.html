@@ -111,6 +111,22 @@
     </div>
   </div>
 
+  <div class="mb" ng-if="$ctrl.premiumCode">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <translate>{{'CHOOSE_RESOURCE'}}</translate>
+        <button id="changePremiumButton" class="btn btn-default btn-panel-head pull-right" ng-click="$ctrl.changeStep({newStep: 'premium'})" translate>{{'CHANGE'}}</button>
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-12">
+            {{$ctrl.premiumName}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="mb">
     <div class="panel panel-default">
       <div id="step3-header" class="panel-heading">
