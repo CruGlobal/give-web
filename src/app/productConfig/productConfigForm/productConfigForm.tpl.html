@@ -80,7 +80,7 @@
 
           <div ng-if="$ctrl.useSuggestedAmounts">
             <div ng-if="$ctrl.useV3">
-              <fieldset aria-label="Suggested Gift Amounts. Tab for Custom Amount">
+              <fieldset aria-label="{{'SUGGESTED_AMOUNT_HELP' | translate}}">
                 <div class="button-group">
                   <div ng-repeat="suggested in $ctrl.suggestedAmounts | orderBy:'order'">
                     <input
