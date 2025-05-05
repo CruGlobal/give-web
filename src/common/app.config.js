@@ -358,7 +358,9 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     RADIO_STATION_SELECT_ERROR: 'There was an error selecting a radio station.',
     PREFERRED_RADIO_STATION: 'Preferred Radio Station: ',
     SPOUSE_DETAILS_TOOLTIP: 'By adding your spouse\'s name, we can ensure that both of your contributions are linked together, providing a clearer and more accurate record of your household\'s giving.',
-    SECURE: 'Secure'
+    SECURE: 'Secure',
+    ADD_SPOUSE: 'Add Spouse',
+    REMOVE_SPOUSE: 'Remove',
   })
 
   $translateProvider.translations('es', {
@@ -571,7 +573,9 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     RADIO_STATION_SELECT_ERROR: 'There was an error selecting a radio station.',
     PREFERRED_RADIO_STATION: 'Preferred Radio Station: ',
     SPOUSE_DETAILS_TOOLTIP: 'By adding your spouse\'s name, we can ensure that both of your contributions are linked together, providing a clearer and more accurate record of your household\'s giving.',
-    SECURE: 'Secure'
+    SECURE: 'Secure',
+    ADD_SPOUSE: 'Add Spouse',
+    REMOVE_SPOUSE: 'Remove',
   })
   $translateProvider.preferredLanguage('en')
 }
