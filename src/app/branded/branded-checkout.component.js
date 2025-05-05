@@ -59,7 +59,6 @@ class BrandedCheckoutController {
       console.error(err)
     })
     this.$translate.use(this.language || 'en')
-
     this.checkoutService.initializeRecaptcha()
   }
 
@@ -178,6 +177,9 @@ export default angular
       frequency: '@',
       day: '@',
       apiUrl: '@',
+      premiumCode: '@',
+      premiumName: '@',
+      premiumImageUrl: '@',
       radioStationApiUrl: '@',
       donorDetailsVariable: '@donorDetails',
       defaultPaymentType: '@',

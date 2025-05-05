@@ -43,6 +43,40 @@
       </checkout-step-2>
     </div>
   </div>
+  <div class="panel" ng-if="$ctrl.premiumCode">
+    <div class="panel-body">
+      <h3 class="panel-name" translate>{{'CHOOSE_RESOURCE'}}</h3>
+      <div class="row text-left">
+        <div class="col-sm-3">
+          <div class="row">
+            <label class="radio-inline">
+              <input
+                type="radio"
+                name="premiumSelect"
+                ng-model="$ctrl.premiumSelected"
+                ng-value="true"
+                ng-change="$ctrl.onSelectPremiumOption()">
+              {{$ctrl.premiumName}}
+            </label>
+          </div>
+          <div class="row">
+            <label class="radio-inline">
+              <input
+                type="radio"
+                name="premiumSelect"
+                ng-model="$ctrl.premiumSelected"
+                ng-value="false"
+                ng-change="$ctrl.onSelectPremiumOption()">
+              <translate>{{'NO_THANK_YOU'}}</translate>
+            </label>
+          </div>
+        </div>
+        <div ng-if="$ctrl.premiumImageUrl" class="col-sm-4">
+          <img class="premium-thumbnail" ng-src="{{$ctrl.premiumImageUrl}}" />
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="panel">
     <div class="panel-body text-right">
       <button class="btn btn-primary"

@@ -32,6 +32,13 @@ class BrandedCheckoutStep1Controller {
   }
 
   initItemConfig () {
+    // if itemConfig is defined, this means that the user clicked
+    // "Change" on the review page. We can set the premiumSelected
+    // and return so that itemConfig is not re-initialized.
+    if (this.itemConfig) {
+      this.premiumSelected = !!this.itemConfig.PREMIUM_CODE
+      return
+    }
     this.itemConfig = {}
     this.itemConfig.CAMPAIGN_CODE = this.campaignCode
     if (this.itemConfig.CAMPAIGN_CODE &&
@@ -60,6 +67,11 @@ class BrandedCheckoutStep1Controller {
     }
     this.itemConfig.RECURRING_DAY_OF_MONTH = this.day
     this.itemConfig.frequency = this.frequency
+
+    if (this.premiumCode) {
+      this.itemConfig.PREMIUM_CODE = this.premiumCode
+      this.premiumSelected = true
+    }
   }
 
   initCart () {
@@ -151,6 +163,14 @@ class BrandedCheckoutStep1Controller {
     }
   }
 
+  onSelectPremiumOption () {
+    if (this.premiumSelected) {
+      this.itemConfig.PREMIUM_CODE = this.premiumCode
+    } else {
+      this.itemConfig.PREMIUM_CODE = undefined
+    }
+  }
+
   checkSuccessfulSubmission () {
     if (every(this.submission, 'completed')) {
       if (every(this.submission, { error: false })) {
@@ -187,6 +207,10 @@ export default angular
       showCoverFees: '<',
       next: '&',
       onPaymentFailed: '&',
-      radioStationApiUrl: '<'
+      radioStationApiUrl: '<',
+      premiumCode: '<',
+      premiumName: '<',
+      premiumImageUrl: '<',
+      itemConfig: '='
     }
   })

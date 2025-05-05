@@ -16,12 +16,18 @@
           show-cover-fees="$ctrl.showCoverFees"
           next="$ctrl.next()"
           on-payment-failed="$ctrl.onPaymentFailed($event.donorDetails)"
-          radio-station-api-url="$ctrl.radioStationApiUrl">
+          radio-station-api-url="$ctrl.radioStationApiUrl"
+          premium-code="$ctrl.premiumCode"
+          premium-name="$ctrl.premiumName"
+          premium-image-url="$ctrl.premiumImageUrl"
+          item-config="$ctrl.itemConfig">
         </branded-checkout-step-1>
         <branded-checkout-step-2
           ng-if="$ctrl.checkoutStep === 'review'"
           next="$ctrl.next()"
-          previous="$ctrl.previous(newStep)">
+          previous="$ctrl.previous(newStep)"
+          premium-name="$ctrl.premiumName"
+          item-config="$ctrl.itemConfig">
         </branded-checkout-step-2>
         <thank-you-summary
           ng-if="$ctrl.checkoutStep === 'thankYou'"
