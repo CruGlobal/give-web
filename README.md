@@ -60,7 +60,7 @@ Add the following code to your page where appropriate. See the [Branded checkout
     on-order-failed="$event.$window.onOrderFailed($event.donorDetails)"
     radio-station-api-url="https://api.domain.com/getStations"
     hide-annual="true"
-    hide-quarterly="true">
+    hide-quarterly="true"
     use-v3="true">
 </branded-checkout>
 
