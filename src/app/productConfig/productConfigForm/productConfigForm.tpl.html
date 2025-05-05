@@ -131,7 +131,7 @@
                 </div>
               </fieldset>
             </div>
-            <div ng-if="$ctrl.useV3">
+            <div ng-if="!$ctrl.useV3">
               <div class="radio radio-custom-amount"
                   ng-repeat="suggested in $ctrl.suggestedAmounts | orderBy:'order'">
                 <label>
