@@ -580,7 +580,7 @@ hr.horizontal-divider {
     .amount-box {
       min-width: 55px;
       background-color: $colorGrayscale-charcoal;
-      color: $colorGrayscale-rock;
+      color: $colorCru-white;
     }
   }
 
@@ -588,7 +588,7 @@ hr.horizontal-divider {
     .amount-box {
       min-width: 55px;
       background-color: $colorGrayscale-charcoal;
-      color: $colorGrayscale-rock;
+      color: $colorCru-white;
     }
   }
 }
@@ -640,13 +640,13 @@ hr.horizontal-divider {
 }
 
 /* Check for custom amount input */
-.custom-amount-button:has(input:checked) {
+.custom-amount-button:has(input:checked), .custom-amount-button:has(input:focus) {
   border: 1px solid $colorGrayscale-charcoal;
   color: $colorGrayscale-charcoal;
-  font-weight: 700;
+  font-weight: 500;
 }
 
-.custom-amount-button:has(input:checked) .input-prepend {
+.custom-amount-button:has(input:checked) .input-prepend, .custom-amount-button:has(input:focus) .input-prepend {
   min-width: 55px;
   aspect-ratio: 1 / 1;
   background-color: $colorGrayscale-charcoal;
