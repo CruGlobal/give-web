@@ -156,7 +156,7 @@
                           placeholder="{{'OTHER_PLACEHOLDER' | translate}}" />
                   </label>
                   <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error"
-                      ng-focus="$ctrl.customInputActive = true"
+                      ng-if="($ctrl.itemConfigForm.amount | showErrors)"
                     <div class="help-block" ng-message="pattern" translate>{{'VALID_DOLLAR_AMOUNT_ERROR'}}</div>
                     <div class="help-block" ng-message="required" translate>{{'AMOUNT_EMPTY_ERROR'}}</div>
                     <div class="help-block" ng-message="minimum" translate translate-values="{currencyLimit: (1 | currency)}">{{'AMOUNT_MIN_ERROR'}}</div>
@@ -191,7 +191,7 @@
                         ng-model="$ctrl.customAmount"
                         aria-label="{{'CUSTOM_AMOUNT' | translate}}"
                         ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
-                        ng-focus="$ctrl.customInputActive = true;"
+                        ng-focus="$ctrl.customInputActive = true"
                         placeholder="{{'Other' | translate}}"
                         required />
                 </div>
