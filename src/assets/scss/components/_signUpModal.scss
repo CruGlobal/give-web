@@ -35,6 +35,10 @@ sign-up-modal {
 
   .okta-signup-loading {
     padding: 153px 0;
+
+    .loading-message {
+      padding-bottom: 0.5rem;
+    }
   }
 
   form {
