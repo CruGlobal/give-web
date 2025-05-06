@@ -361,7 +361,8 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     SECURE: 'Secure',
     ADD_SPOUSE: 'Add Spouse',
     REMOVE_SPOUSE: 'Remove',
-    SUGGESTED_AMOUNT_HELP: 'Suggested Gift Amounts. Tab for Custom Amount'
+    SUGGESTED_AMOUNT_HELP: 'Suggested Gift Amounts. Tab for Custom Amount',
+    SUGGESTED_AMOUNT: 'Suggested Amount'
   })
 
   $translateProvider.translations('es', {
@@ -577,7 +578,8 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     SECURE: 'Secure',
     ADD_SPOUSE: 'Add Spouse',
     REMOVE_SPOUSE: 'Remove',
-    SUGGESTED_AMOUNT_HELP: 'Suggested Gift Amounts. Tab for Custom Amount'
+    SUGGESTED_AMOUNT_HELP: 'Suggested Gift Amounts. Tab for Custom Amount',
+    SUGGESTED_AMOUNT: 'Suggested Amount'
   })
   $translateProvider.preferredLanguage('en')
 }

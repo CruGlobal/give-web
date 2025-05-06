@@ -98,7 +98,7 @@
                 <div class="input-prepend">
                   <span class="input-prepend-text">$</span>
                 </div>
-                <label for="ca">
+                <label for="customAmount">
                   <input
                     name="suggestedAmount"
                     type="radio"
@@ -109,7 +109,7 @@
                     type="text"
                     id="customAmount"
                     step="1"
-                    tabindex="-1"
+                    aria-label="{{'CUSTOM_AMOUNT' | translate}}"
                     ng-model="$ctrl.customAmount"
                     ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
                     ng-focus="$ctrl.customInputActive = true;"
@@ -127,7 +127,7 @@
                   <div class="help-block" ng-message="maximum" translate translate-values="{currencyLimit: (10000000 | currency)}">{{'AMOUNT_MAX_ERROR'}}</div>
               </div>
             </fieldset>
-            <div ng-if="!$ctrl.useV3">
+            <div ng-if="$ctrl.useV3">
               <div class="radio radio-custom-amount"
                   ng-repeat="suggested in $ctrl.suggestedAmounts | orderBy:'order'">
                 <label>
@@ -148,7 +148,7 @@
                           name="amount"
                           type="text"
                           step="1"
-                          tabindex="-1"
+                          aria-label="{{'CUSTOM_AMOUNT' | translate}}"
                           ng-model="$ctrl.customAmount"
                           ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
                           ng-focus="$ctrl.customInputActive = true;"
@@ -189,9 +189,9 @@
                         step="1"
                         ng-required="$ctrl.customInputActive"
                         ng-model="$ctrl.customAmount"
+                        aria-label="{{'CUSTOM_AMOUNT' | translate}}"
                         ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
                         ng-focus="$ctrl.customInputActive = true;"
-                        tabindex="-1"
                         placeholder="{{'Other' | translate}}"
                         required />
                 </div>
