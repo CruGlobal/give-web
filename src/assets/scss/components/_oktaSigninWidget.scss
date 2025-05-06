@@ -120,11 +120,26 @@ sign-up-modal {
         border-radius: 0;
 
         span {
+          // Make the selected item color match the color of text inputs
+          color: #1d1d21;
           line-height: 36px;
         }
 
         div {
           top: 6px;
+        }
+
+        b {
+          // Make the down arrow match the color of the other text inputs
+          // The mask-* styles essentially duplicate the background-* styles that Okta applies to
+          // render the sprite. We use Okta's sprite to keep the same shape via a mask but apply
+          // an overridden color to that shape.
+          background-color: #1d1d21;
+          background-position: 0 12px;
+          mask-image: url("../img/ui/forms/chosen-sprite@2x.png");
+          mask-position: 0 6px;
+          mask-repeat: no-repeat;
+          mask-size: 52px 37px;
         }
       }
 
@@ -359,6 +374,19 @@ sign-up-modal {
 /* stylelint-disable-next-line no-descending-specificity */
 .chzn-container-single .chzn-single {
   border-radius: 0;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+.chzn-container-active.chzn-with-drop .chzn-single div b {
+  // Make the down arrow match the color of the other text inputs. These styles are like the ones
+  // inside #okta-sign-in.auth-container, but are for open dropdowns because the Okta widget moves
+  // open dropdowns out of the widget and directly nested under <body>.
+  background-color: #1d1d21;
+  background-position: -18px 2px;
+  mask-image: url("../img/ui/forms/chosen-sprite@2x.png");
+  mask-position: -17px 7px;
+  mask-repeat: no-repeat;
+  mask-size: 52px 37px;
 }
 
 /* stylelint-disable-next-line no-descending-specificity, selector-id-pattern */
