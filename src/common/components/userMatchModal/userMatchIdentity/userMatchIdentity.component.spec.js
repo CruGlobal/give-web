@@ -9,7 +9,7 @@ describe('userMatchIdentity', function () {
   beforeEach(inject(function (_$componentController_) {
     bindings = {
       contacts: ['a', 'b'],
-      onSelectContact: jest.fn(),
+      onSubmit: jest.fn(),
       identityForm: { $valid: false },
       contact: {}
     }
@@ -21,11 +21,30 @@ describe('userMatchIdentity', function () {
     expect($ctrl.hasError).toEqual(false)
   })
 
+  describe('$onChanges', () => {
+    it('submits the form when submitted changes to true', () => {
+      $ctrl.$onChanges({
+        submitted: { currentValue: true }
+      })
+
+      expect($ctrl.onSubmit).toHaveBeenCalled()
+    })
+
+    it('does nothing when the when submitted changes to false', () => {
+      $ctrl.$onChanges({
+        submitted: { currentValue: false }
+      })
+
+      expect($ctrl.onSubmit).not.toHaveBeenCalled()
+    })
+  })
+
   describe('selectContact()', () => {
     describe('invalid form', () => {
       it('set hasError', () => {
         $ctrl.selectContact()
 
+        expect($ctrl.onSubmit).toHaveBeenCalledWith({ success: false })
         expect($ctrl.hasError).toEqual(true)
       })
     })
@@ -39,7 +58,7 @@ describe('userMatchIdentity', function () {
         it('sends selects \'that-is-not-me\' contact', () => {
           $ctrl.selectContact()
 
-          expect($ctrl.onSelectContact).toHaveBeenCalledWith({ contact: undefined })
+          expect($ctrl.onSubmit).toHaveBeenCalledWith({ success: true, contact: undefined })
         })
       })
 
@@ -48,7 +67,7 @@ describe('userMatchIdentity', function () {
           $ctrl.contact = 'a'
           $ctrl.selectContact()
 
-          expect($ctrl.onSelectContact).toHaveBeenCalledWith({ contact: 'a' })
+          expect($ctrl.onSubmit).toHaveBeenCalledWith({ success: true, contact: 'a' })
         })
       })
     })
