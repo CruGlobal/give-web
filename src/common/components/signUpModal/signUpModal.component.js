@@ -18,7 +18,6 @@ import template from './signUpModal.tpl.html'
 import cartService from 'common/services/api/cart.service'
 import geographiesService from 'common/services/api/geographies.service'
 import { customFields } from './signUpFormCustomFields'
-require('assets/okta-sign-in/css/okta-sign-in.min.css')
 
 export const countryFieldSelector = '.o-form-fieldset[data-se="o-form-fieldset-userProfile.countryCode"]'
 export const regionFieldSelector = '.o-form-fieldset[data-se="o-form-fieldset-userProfile.state"]'
