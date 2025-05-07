@@ -394,7 +394,8 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     OKTA_FIRST_NAME_FIELD: 'first name',
     OKTA_LAST_NAME_FIELD: 'last name',
     OKTA_EMAIL_FIELD: 'email',
-    OKTA_PASSWORD_FIELD: 'password'
+    OKTA_PASSWORD_FIELD: 'password',
+    PASSWORD_DOES_NOT_MATCH: 'Passwords do not match. Please try again.'
   })
 
   $translateProvider.translations('es', {
@@ -617,7 +618,8 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     OKTA_FIRST_NAME_FIELD: 'first name',
     OKTA_LAST_NAME_FIELD: 'last name',
     OKTA_EMAIL_FIELD: 'email',
-    OKTA_PASSWORD_FIELD: 'password'
+    OKTA_PASSWORD_FIELD: 'password',
+    PASSWORD_DOES_NOT_MATCH: 'Passwords do not match. Please try again.'
   })
   $translateProvider.preferredLanguage('en')
 }

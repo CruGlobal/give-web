@@ -832,28 +832,74 @@ describe('signUpForm', function () {
     });
 
 
-    it('submitFinalData()', () => {
-      const postData = {};
-      $ctrl.currentStep = 3;
-      $ctrl.$scope.firstName = user.firstName
-      $ctrl.$scope.lastName = user.lastName
-      $ctrl.$scope.email = user.email
-      $ctrl.$scope.accountType = user.accountType
-      $ctrl.$scope.streetAddress = user.streetAddress
-      $ctrl.$scope.city = user.city
-      $ctrl.$scope.state = user.state
-      $ctrl.$scope.zipCode = user.zipCode
-      $ctrl.$scope.countryCode = user.countryCode
-      $ctrl.$scope.organizationName = user.organizationName
-
-      $ctrl.preSubmit(postData, onSuccess);
-
-      expect(onSuccess).toHaveBeenCalledWith({
-        userProfile: {
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
+    describe('submitFinalData()', () => {
+      it('should error when passwords are not the same', () => {
+        const postData = {
+          credentials: {
+            passcode: 'passcode',
+          },
+          passcodeVerification: {
+            repeatPasscode: 'differentPassword'
+          }
+        };
+        $ctrl.currentStep = 3;
+        $ctrl.$scope.firstName = user.firstName
+        $ctrl.$scope.lastName = user.lastName
+        $ctrl.$scope.email = user.email
+        $ctrl.$scope.accountType = user.accountType
+        $ctrl.$scope.streetAddress = user.streetAddress
+        $ctrl.$scope.city = user.city
+        $ctrl.$scope.state = user.state
+        $ctrl.$scope.zipCode = user.zipCode
+        $ctrl.$scope.countryCode = user.countryCode
+        $ctrl.$scope.organizationName = user.organizationName
+        $ctrl.translations = {
+          passwordDoesNotMatch: 'Passwords do not match. Please try again.',
         }
+  
+        $ctrl.preSubmit(postData, onSuccess);
+
+        expect(onSuccess).not.toHaveBeenCalled();
+        expect($ctrl.injectErrorMessages).toHaveBeenCalledWith([
+          {
+            errorSummary: $ctrl.translations.passwordDoesNotMatch,
+            property: 'passcodeVerification.repeatPasscode'
+          }
+        ])
+      });
+
+      it('should call onSuccess when passwords are the same', () => {
+        const postData = {
+          credentials: {
+            passcode: 'passcode',
+          },
+          passcodeVerification: {
+            repeatPasscode: 'passcode'
+          }
+        };
+        $ctrl.currentStep = 3;
+        $ctrl.$scope.firstName = user.firstName
+        $ctrl.$scope.lastName = user.lastName
+        $ctrl.$scope.email = user.email
+        $ctrl.$scope.accountType = user.accountType
+        $ctrl.$scope.streetAddress = user.streetAddress
+        $ctrl.$scope.city = user.city
+        $ctrl.$scope.state = user.state
+        $ctrl.$scope.zipCode = user.zipCode
+        $ctrl.$scope.countryCode = user.countryCode
+        $ctrl.$scope.organizationName = user.organizationName
+
+        $ctrl.preSubmit(postData, onSuccess);
+
+        expect(onSuccess).toHaveBeenCalledWith({
+          credentials: postData.credentials,
+          userProfile: {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+          }
+        });
+        expect($ctrl.injectErrorMessages).not.toHaveBeenCalled();
       });
     });
   });

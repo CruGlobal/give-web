@@ -111,7 +111,8 @@ class SignUpModalController {
       'OKTA_FIRST_NAME_FIELD',
       'OKTA_LAST_NAME_FIELD',
       'OKTA_EMAIL_FIELD',
-      'OKTA_PASSWORD_FIELD'
+      'OKTA_PASSWORD_FIELD',
+      'PASSWORD_DOES_NOT_MATCH'
     ]).then(translations => {
       this.translations = {
         giveAsIndividual: translations.GIVE_AS_INDIVIDUAL,
@@ -134,7 +135,8 @@ class SignUpModalController {
         firstNameField: translations.OKTA_FIRST_NAME_FIELD,
         lastNameField: translations.OKTA_LAST_NAME_FIELD,
         emailField: translations.OKTA_EMAIL_FIELD,
-        passwordField: translations.OKTA_PASSWORD_FIELD
+        passwordField: translations.OKTA_PASSWORD_FIELD,
+        passwordDoesNotMatch: translations.PASSWORD_DOES_NOT_MATCH
       }
     })
   }
@@ -171,15 +173,18 @@ class SignUpModalController {
   }
 
   getSteps (schema) {
-    const passwordInput = schema.find(field => field.name === 'credentials.passcode')
+    const passcodeInput = schema.find(field => field.name === 'credentials.passcode')
     return {
       // Step 1: Name, email, account type and organization name (if applicable)
       1: this.getStep1Fields(schema),
       // Step 2: Address
-      2: this.getStep2Fields(schema),
+      2: this.getStep2Fields(),
       // Step 3: Password (We don't save the password for security reasons.
       // Which is why it's the last step)
-      3: [passwordInput]
+      3: [
+        passcodeInput,
+        customFields.repeatPasscode
+      ]
     }
   }
 
@@ -218,7 +223,7 @@ class SignUpModalController {
     ]
   }
 
-  getStep2Fields (schema) {
+  getStep2Fields () {
     // Retain the values entered by the user when navigating between steps.
     // Pre-populate the form fields with existing user details.
     return [
@@ -408,8 +413,21 @@ class SignUpModalController {
   }
 
   submitFinalData (postData, onSuccess) {
+    const errors = []
+    if (postData.credentials.passcode !== postData.passcodeVerification.repeatPasscode) {
+      errors.push({
+        errorSummary: this.translations.passwordDoesNotMatch,
+        property: 'passcodeVerification.repeatPasscode'
+      })
+    }
+    if (errors.length) {
+      this.injectErrorMessages(errors)
+      return
+    }
+
     // Add the user profile to the postData object
     // Okta widget handles the password
+    delete postData.passcodeVerification
     postData.userProfile = {
       firstName: this.$scope.firstName,
       lastName: this.$scope.lastName,
