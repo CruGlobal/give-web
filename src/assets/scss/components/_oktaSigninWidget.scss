@@ -137,7 +137,7 @@ sign-up-modal {
           // render the sprite. We use Okta's sprite to keep the same shape via a mask but apply
           // an overridden color to that shape.
           background-color: #1d1d21;
-          background-position: 0 12px;
+          background-image: none !important;
           mask-image: url("../img/ui/forms/chosen-sprite@2x.png");
           mask-position: 0 6px;
           mask-repeat: no-repeat;
@@ -384,7 +384,7 @@ sign-up-modal {
   // inside #okta-sign-in.auth-container, but are for open dropdowns because the Okta widget moves
   // open dropdowns out of the widget and directly nested under <body>.
   background-color: #1d1d21;
-  background-position: -18px 2px;
+  background-image: none !important;
   mask-image: url("../img/ui/forms/chosen-sprite@2x.png");
   mask-position: -17px 7px;
   mask-repeat: no-repeat;
