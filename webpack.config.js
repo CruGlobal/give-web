@@ -68,7 +68,6 @@ const sharedConfig = {
             configFile: path.resolve(__dirname, 'stylelint.config.mjs'),
             context: 'src/assets/scss',
             files: '**/*.(css|scss)',
-            failOnError: true,
             quiet: false
           })
         ]),
