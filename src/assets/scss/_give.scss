@@ -584,6 +584,12 @@ hr.horizontal-divider {
     }
   }
 
+  input[type="radio"]:focus.active + label {
+    border: 1px solid #3eb1c8;
+    border-radius: 3px 0 0 3px;
+    
+  }
+
   input[type="radio"]:checked + label {
     .amount-box {
       min-width: 55px;
@@ -624,7 +630,6 @@ hr.horizontal-divider {
       height: 100%;
       padding: 0 7px;
       border: none;
-      border-radius: 2px;
       transition: all 0.3s ease;
 
       &::placeholder {
