@@ -5,7 +5,7 @@ import concat from 'lodash/concat'
 import step1SelectRecentRecipients from './step1/selectRecentRecipients.component'
 import step1SearchRecipients from './step1/searchRecipients.component'
 import step2EnterAmounts from './step2/enterAmounts.component'
-import { giftAddedEvent } from 'common/components/nav/navCart/navCart.component'
+import { giftAddedEvent } from 'common/lib/cartEvents'
 
 import RecurringGiftModel from 'common/models/recurringGift.model'
 

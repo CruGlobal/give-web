@@ -12,8 +12,9 @@ export const submitOrderEvent = 'submitOrderEvent'
 
 class CartSummaryController {
   /* @ngInject */
-  constructor (cartService, $scope) {
+  constructor (cartService, $scope, $rootScope) {
     this.$scope = $scope
+    this.$rootScope = $rootScope
     this.cartService = cartService
   }
 
@@ -21,8 +22,8 @@ class CartSummaryController {
     return this.cartService.buildCartUrl()
   }
 
-  onSubmit (componentInstance) {
-    componentInstance.$rootScope.$emit(submitOrderEvent)
+  onSubmit () {
+    this.$rootScope.$emit(submitOrderEvent)
   }
 }
 
