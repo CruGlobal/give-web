@@ -362,7 +362,7 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     ADD_SPOUSE: 'Add Spouse',
     REMOVE_SPOUSE: 'Remove',
     SUGGESTED_AMOUNT_HELP: 'Suggested Gift Amounts. Tab for Custom Amount',
-    SUGGESTED_AMOUNT: 'Suggested Amount'
+    CUSTOM_AMOUNT: 'Custom Amount'
   })
 
   $translateProvider.translations('es', {
