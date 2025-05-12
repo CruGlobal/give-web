@@ -59,6 +59,7 @@
       on-sign-up="$ctrl.onSignUp()"
       on-success="$ctrl.onIdentitySuccess()"
       on-failure="$ctrl.onIdentityFailure()"
+      on-reset-password="$ctrl.onResetPassword()"
       is-inside-another-modal="true"
     ></sign-in-modal>
     <sign-up-modal
@@ -68,6 +69,12 @@
       is-inside-another-modal="true"
       last-purchase-id="$ctrl.lastPurchaseId"
     ></sign-up-modal>
+    <reset-password-modal
+      ng-switch-when="reset-password"
+      on-sign-in="$ctrl.onSignIn()"
+      is-inside-another-modal="true"
+      last-purchase-id="$ctrl.lastPurchaseId"
+    ></reset-password-modal>
     <div ng-switch-when="loading-donor" class="modal-body">
       <loading></loading>
     </div>
