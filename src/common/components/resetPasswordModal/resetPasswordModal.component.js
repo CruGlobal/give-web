@@ -146,7 +146,7 @@ class ResetPasswordModalController {
       assets: {
         baseUrl: '/assets/okta-sign-in/'
       },
-      flow: 'resetPassword',
+      flow: 'resetPassword'
     })
 
     this.signIn()
