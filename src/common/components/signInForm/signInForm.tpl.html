@@ -15,6 +15,9 @@
 
 <p ng-if="!$ctrl.onSignInPage"><span translate>You will be taken to Okta,</span><br /><span translate>then back to this site.</span></p>
 <p ng-if="$ctrl.onSignInPage" translate>You will briefly be taken away from this site to login, then brought back right where you left off.</p>
+<p>
+  <a class="reset-password" ng-click="$ctrl.onResetPassword()" href="javascript:void(0)" translate>Forgot Password</a>
+</p>
 <hr />
 <p class="no-account" ng-if="!$ctrl.onSignInPage" translate>Don&rsquo;t have an account?</p>
 <button class="okta-signup-button" ng-if="!$ctrl.onSignInPage" ng-click="$ctrl.onSignUpWithOkta()">
