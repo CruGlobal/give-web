@@ -38,6 +38,8 @@ export default angular
       // Called when the user clicks the create account link
       onSignUp: '&',
       onSuccess: '&',
-      onFailure: '&'
+      onFailure: '&',
+      onResetPassword: '&',
+      isInsideAnotherModal: '='
     }
   })
