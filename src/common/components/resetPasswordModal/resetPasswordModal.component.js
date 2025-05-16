@@ -194,6 +194,7 @@ class ResetPasswordModalController {
     this.$scope.$apply(() => {
       this.currentStep = step
     })
+    
 
     // Step 1 of the MFA
     if (context.formName === 'authenticator-verification-data') {
@@ -231,6 +232,13 @@ class ResetPasswordModalController {
     this.$scope.$apply(() => {
       this.isLoading = false
     })
+  }
+
+  sendVerificationEmail () {
+    // This step requires the user to click a button to confirm they want an email
+    // This adds a step in the experience, so we do the click for the user.
+    const verificationCodeButtonLink = document.querySelector('.authenticator-verification-data--okta_email input.button[type="submit"]')
+    verificationCodeButtonLink?.click()
   }
 
   showVerificationCodeField () {
