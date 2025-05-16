@@ -184,7 +184,7 @@ class ResetPasswordModalController {
   }
 
   afterRender (context) {
-    let step = this.currentStep;
+    let step = this.currentStep
 
     switch (context.formName) {
       case 'identify':
@@ -211,7 +211,6 @@ class ResetPasswordModalController {
     this.$scope.$apply(() => {
       this.currentStep = step
     })
-    
 
     // Step 1 of the MFA
     if (context.formName === 'authenticator-verification-data') {
@@ -263,7 +262,6 @@ class ResetPasswordModalController {
     const verificationCodeButtonLink = document.querySelector('.button-link.enter-auth-code-instead-link')
     verificationCodeButtonLink?.click()
   }
-
 
   injectErrorMessages (errors = this.signUpErrors) {
     this.clearInjectedErrorMessages()
