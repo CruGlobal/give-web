@@ -37,6 +37,7 @@ export default angular
     bindings: {
       onSuccess: '&',
       onFailure: '&',
+      onResetPassword: '&',
       lastPurchaseId: '<',
       // Optional if on-sign-in-page is true
       onSignUpWithOkta: '&?',
