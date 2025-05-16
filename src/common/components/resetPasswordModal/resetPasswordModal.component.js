@@ -167,6 +167,47 @@ class ResetPasswordModalController {
   }
 
   afterRender (context) {
+    let step = this.currentStep
+
+    switch (context.formName) {
+      case 'identify':
+        step = 1
+        break
+      case 'select-authenticator-authenticate':
+        step = 2
+        break
+      case 'authenticator-verification-data':
+        // The step to choose the authenticator to authenticate with
+        step = 3
+        break
+      case 'challenge-authenticator':
+        // "google_otp"
+        // "okta_verify"
+        step = 4
+        break
+      case 'reset-authenticator':
+        step = 5
+        break
+    }
+
+    this.$scope.$apply(() => {
+      this.currentStep = step
+    })
+
+    // Step 1 of the MFA
+    if (context.formName === 'authenticator-verification-data') {
+      if (context.authenticatorKey === 'okta_email') {
+        this.sendVerificationEmail()
+      }
+    }
+
+    // Step 2 of the MFA
+    if (context.formName === 'challenge-authenticator') {
+      if (context.authenticatorKey === 'okta_email') {
+        this.showVerificationCodeField()
+      }
+    }
+
     // Handle inactivity error
     // The Okta widget has an issue where if the page is idle for a period of time,
     // the Okta interaction session will expire, causing the widget to show an error "You have been logged out due to inactivity..."
@@ -196,13 +237,6 @@ class ResetPasswordModalController {
     // This makes the process of creating an account more streamlined as we remove that click.
     const verificationCodeButtonLink = document.querySelector('.button-link.enter-auth-code-instead-link')
     verificationCodeButtonLink?.click()
-  }
-
-  resetCurrentStepOnRegistrationComplete (context) {
-    // Stop tracking the current step after registration is complete
-    if (context.controller === 'registration-complete') {
-      this.currentStep = null
-    }
   }
 
   injectErrorMessages (errors = this.signUpErrors) {
