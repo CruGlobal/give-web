@@ -21,8 +21,6 @@ export const countryFieldSelector = '.o-form-fieldset[data-se="o-form-fieldset-u
 export const regionFieldSelector = '.o-form-fieldset[data-se="o-form-fieldset-userProfile.state"]'
 export const inputFieldErrorSelectorPrefix = '.o-form-input-name-'
 const componentName = 'resetPasswordModal'
-const signUpButtonText = 'Create Account'
-const nextButtonText = 'Continue'
 const backButtonId = 'backButton'
 const backButtonText = 'Back'
 
@@ -35,6 +33,23 @@ const createErrorIcon = () => {
 }
 
 class ResetPasswordModalController {
+  // --------------------------------------
+  // Reset Password process.
+  // It's a multi-step process, handled by this component.
+  // --------------------------------------
+  // Step 1: Identify (email)
+  // Step 2: Select authenticator
+  //    2.1: This shows a list of authenticators to choose from.
+  //    2.2: Even if you haven't set them up. There is no way around this.
+  //    2.3: If the user selects phone, they will also be prompted to authenticate with another option.
+  // Step 3: Authenticator verification data
+  //    3.1: You will only see this page for okta_email.
+  // Step 4: Challenge authenticator
+  // Step 5: Reset authenticator
+  // Step 6: Reset password
+  // Step 7: Upon a success password reset, the user will be logged in and redirected to their previous page
+  // -------------------------------------- //
+
   /* @ngInject */
   constructor ($log, $scope, $location, $sanitize, $timeout, $translate, sessionService, cartService, orderService, envService, geographiesService) {
     this.$log = $log
@@ -156,112 +171,6 @@ class ResetPasswordModalController {
     this.oktaSignInWidget.on('afterError', this.afterError.bind(this))
   }
 
-  preSubmit (postData, onSuccess) {
-    // Clear errors from previous steps
-    this.signUpErrors = []
-    this.clearInjectedErrorMessages()
-
-    const step = this.currentStep
-    const userProfile = postData.userProfile
-    if (step === 1) {
-      this.saveStep1Data(userProfile, postData)
-    } else if (step === 2) {
-      this.saveStep2Data(userProfile)
-    } else if (step === 3) {
-      this.submitFinalData(postData, onSuccess)
-    }
-  }
-
-  saveStep1Data (userProfile, postData) {
-    const isOrganization = postData.accountType === 'Organization'
-    Object.assign(this.$scope, {
-      firstName: userProfile.firstName,
-      lastName: userProfile.lastName,
-      email: userProfile.email,
-      accountType: postData.accountType,
-      organizationName: isOrganization ? postData.organizationName : ''
-    })
-
-    const errors = []
-    if (isOrganization && !this.$scope.organizationName) {
-      errors.push({
-        errorSummary: this.translations.orgNameError,
-        property: 'organizationName'
-      })
-    }
-    if (errors.length) {
-      this.injectErrorMessages(errors)
-    } else {
-      this.$scope.$apply(() => this.goToNextStep())
-    }
-  }
-
-  saveStep2Data (userProfile) {
-    const isUSAddress = userProfile.countryCode === 'US'
-    Object.assign(this.$scope, {
-      countryCode: userProfile.countryCode,
-      streetAddress: userProfile.streetAddress,
-      streetAddressExtended: userProfile.streetAddressExtended,
-      internationalAddressLine3: isUSAddress ? '' : userProfile.internationalAddressLine3,
-      internationalAddressLine4: isUSAddress ? '' : userProfile.internationalAddressLine4,
-      city: isUSAddress ? userProfile.city : '',
-      state: isUSAddress ? userProfile.state : '',
-      zipCode: isUSAddress ? userProfile.zipCode : ''
-    })
-
-    const errors = []
-    if (isUSAddress) {
-      if (!this.$scope.city) {
-        errors.push({
-          errorSummary: this.translations.cityError,
-          property: 'userProfile.city'
-        })
-      }
-      if (!this.$scope.state) {
-        errors.push({
-          errorSummary: this.translations.selectStateError,
-          property: 'userProfile.state'
-        })
-      }
-      if (!this.$scope.zipCode) {
-        errors.push({
-          errorSummary: this.translations.zipCodeError,
-          property: 'userProfile.zipCode'
-        })
-      } else {
-        const zipCodeRegex = /^\d{5}(?:[-\s]\d{4})?$/
-        if (!zipCodeRegex.test(this.$scope.zipCode)) {
-          errors.push({
-            errorSummary: this.translations.invalidUSZipError,
-            property: 'userProfile.zipCode'
-          })
-        }
-      }
-    }
-
-    if (errors.length) {
-      this.injectErrorMessages(errors)
-      return
-    }
-
-    this.$scope.$apply(() => this.goToNextStep())
-  }
-
-  submitFinalData (postData, onSuccess) {
-    // Add the user profile to the postData object
-    // Okta widget handles the password
-    postData.userProfile = {
-      firstName: this.$scope.firstName,
-      lastName: this.$scope.lastName,
-      email: this.$scope.email
-    }
-    onSuccess(postData)
-  }
-
-  postSubmit (response, onSuccess) {
-    onSuccess(response)
-  }
-
   afterError (_, error) {
     // Save errors to local variable to inject into the form
     // Since errors are cleared on each step change
@@ -275,6 +184,48 @@ class ResetPasswordModalController {
   }
 
   afterRender (context) {
+    let step = this.currentStep
+
+    switch (context.formName) {
+      case 'identify':
+        step = 1
+        this.injectBackButton()
+        break
+      case 'select-authenticator-authenticate':
+        step = 2
+        break
+      case 'authenticator-verification-data':
+        // The step to choose the authenticator to authenticate with
+        step = 3
+        break
+      case 'challenge-authenticator':
+        // "google_otp"
+        // "okta_verify"
+        step = 4
+        break
+      case 'reset-authenticator':
+        step = 5
+        break
+    }
+
+    this.$scope.$apply(() => {
+      this.currentStep = step
+    })
+
+    // Step 1 of the MFA
+    if (context.formName === 'authenticator-verification-data') {
+      if (context.authenticatorKey === 'okta_email') {
+        this.sendVerificationEmail()
+      }
+    }
+
+    // Step 2 of the MFA
+    if (context.formName === 'challenge-authenticator') {
+      if (context.authenticatorKey === 'okta_email') {
+        this.showVerificationCodeField()
+      }
+    }
+
     // Handle inactivity error
     // The Okta widget has an issue where if the page is idle for a period of time,
     // the Okta interaction session will expire, causing the widget to show an error "You have been logged out due to inactivity..."
@@ -286,46 +237,10 @@ class ResetPasswordModalController {
       return
     }
 
-    // Step 4: Email Verification
-    if (context.formName === 'enroll-authenticator') {
-      // If the user has signed up but hasn't submitted the verification code yet and comes back to
-      // the sign up modal, Okta will skip the sign up form and take them directly to the verify
-      // email step. We detect that here and update the current step and click the "Enter a
-      // verification code instead" for them.
-      this.$scope.$apply(() => {
-        this.currentStep = 4
-      })
-      this.showVerificationCodeField()
-    }
-
-    // Step 5: Optional MFA setup
-    if (context.formName === 'select-authenticator-enroll') {
-      // As Okta enforces the MFA screen to be shown during sign up, we need to skip it.
-      // This step does not have good UX as it's long, causing users to scroll to see the continue button.
-      // We are okay with skipping this step as users can set up MFA later.
-      this.$scope.$apply(() => {
-        this.isLoading = true
-        this.currentStep = 5
-      })
-      this.skipOptionalMFAEnrollment()
-    }
-
     // All steps
-    this.updateSignUpButtonText()
-    this.resetCurrentStepOnRegistrationComplete(context)
     this.injectErrorMessages()
-    this.injectBackButton()
     // This needs to be after showVerificationCodeField to ensure even the verification code field is styled correctly
     this.initializeFloatingLabels()
-
-    // Step 1: Identity
-    if (this.loadingCountriesError && this.currentStep === 1) {
-      this.injectCountryLoadError()
-    }
-    // Step 2: Address
-    if (this.loadingRegionsError && this.currentStep === 2) {
-      this.injectRegionLoadError()
-    }
   }
 
   ready () {
@@ -334,40 +249,18 @@ class ResetPasswordModalController {
     })
   }
 
+  sendVerificationEmail () {
+    // This step requires the user to click a button to confirm they want an email
+    // This adds a step in the experience, so we do the click for the user.
+    const verificationCodeButtonLink = document.querySelector('.authenticator-verification-data--okta_email input.button[type="submit"]')
+    verificationCodeButtonLink?.click()
+  }
+
   showVerificationCodeField () {
     // The verification code field is only shown when the button link "Enter a verification code instead" is clicked.
     // This makes the process of creating an account more streamlined as we remove that click.
     const verificationCodeButtonLink = document.querySelector('.button-link.enter-auth-code-instead-link')
     verificationCodeButtonLink?.click()
-  }
-
-  skipOptionalMFAEnrollment () {
-    // Hide MFA options while we wait for the redirect to happen.
-    // The loading icon will be shown, so the user will know something is happening.
-    const mfaOptions = document.querySelector('.select-authenticator-enroll')
-    if (mfaOptions) {
-      mfaOptions.style.display = 'none'
-      // As Okta enforces the MFA screen to be shown during sign up, we need to skip it to streamline the process.
-      // The user can setup MFA at a later date in their account settings.
-      const skipMFAButton = mfaOptions.querySelector('.button.skip-all')
-      skipMFAButton?.click()
-    }
-  }
-
-  updateSignUpButtonText () {
-    // Leave the default text on the verify step
-    if (this.currentStep !== 4) {
-      // Change the text of the sign up button to ensure it's clear what the user is doing
-      const signUpButton = angular.element(document.querySelector('.o-form-button-bar input.button.button-primary'))
-      signUpButton.attr('value', this.currentStep === 3 ? signUpButtonText : nextButtonText)
-    }
-  }
-
-  resetCurrentStepOnRegistrationComplete (context) {
-    // Stop tracking the current step after registration is complete
-    if (context.controller === 'registration-complete') {
-      this.currentStep = null
-    }
   }
 
   injectErrorMessages (errors = this.signUpErrors) {
@@ -435,17 +328,7 @@ class ResetPasswordModalController {
     errorBox.append(errorMessage)
   }
 
-  clearInjectedErrorMessages () {
-    document.querySelectorAll('.okta-form-input-error').forEach((node) => {
-      node.remove()
-    })
-  }
-
   injectBackButton () {
-    // Don't show back button on the first step or verify step
-    if (this.currentStep === 1 || this.currentStep === 4) {
-      return
-    }
     const buttonBar = document.querySelector('.o-form-button-bar')
     // Ensure the button is only added once
     if (buttonBar && !buttonBar.querySelector(`#${backButtonId}`)) {
@@ -453,49 +336,16 @@ class ResetPasswordModalController {
       // Add click behavior to go back a step
       backButton.on('click', (e) => {
         e.preventDefault()
-        this.$scope.$apply(() => this.goToPreviousStep())
+        this.$scope.$apply(() => this.onSignIn())
       })
       // Prepend the Back button before the "Next" button
       angular.element(buttonBar).prepend(backButton)
     }
   }
 
-  injectLoadError ({ fieldSelector, errorMessage, retryCallback }) {
-    const errorElement = document.createElement('div')
-    errorElement.classList.add('okta-form-input-error', 'o-form-input-error', 'o-form-explain', 'cru-error')
-    errorElement.setAttribute('role', 'alert')
-    errorElement.innerHTML = this.$sanitize(errorMessage)
-    errorElement.prepend(createErrorIcon())
-
-    const retryButtonElement = document.createElement('a')
-    retryButtonElement.classList.add('cru-retry-button')
-    retryButtonElement.innerHTML = this.$sanitize(this.translations.retry)
-
-    const field = document.querySelector(fieldSelector)
-    field.classList.add('o-form-has-errors')
-    field.appendChild(errorElement)
-    field.appendChild(retryButtonElement)
-
-    retryButtonElement.addEventListener('click', () => {
-      retryCallback().finally(() => {
-        this.reRenderWidget()
-      }).subscribe()
-    })
-  }
-
-  injectCountryLoadError () {
-    this.injectLoadError({
-      fieldSelector: countryFieldSelector,
-      errorMessage: this.translations.countryListError,
-      retryCallback: () => this.loadCountries({ initial: false })
-    })
-  }
-
-  injectRegionLoadError () {
-    this.injectLoadError({
-      fieldSelector: regionFieldSelector,
-      errorMessage: this.translations.regionsLoadingError,
-      retryCallback: () => this.refreshRegions(this.$scope.countryCode, true)
+  clearInjectedErrorMessages () {
+    document.querySelectorAll('.okta-form-input-error').forEach((node) => {
+      node.remove()
     })
   }
 
@@ -530,16 +380,6 @@ class ResetPasswordModalController {
         }
       }, { signal: controller.signal })
     })
-  }
-
-  goToNextStep () {
-    this.currentStep++
-    this.reRenderWidget()
-  }
-
-  goToPreviousStep () {
-    this.currentStep = Math.max(this.currentStep - 1, 1)
-    this.reRenderWidget()
   }
 
   reRenderWidget () {
