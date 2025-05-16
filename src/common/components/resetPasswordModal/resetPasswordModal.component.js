@@ -192,15 +192,16 @@ class ResetPasswordModalController {
         this.injectBackButton()
         break
       case 'select-authenticator-authenticate':
+        // okta_email | google_otp | okta_verify | phone_number
         step = 2
         break
       case 'authenticator-verification-data':
-        // The step to choose the authenticator to authenticate with
+        // okta_email | phone_number
         step = 3
+        this.triggerNotificationClick()
         break
       case 'challenge-authenticator':
-        // "google_otp"
-        // "okta_verify"
+        // okta_email | google_otp | okta_verify | phone_number
         step = 4
         break
       case 'reset-authenticator':
@@ -213,14 +214,6 @@ class ResetPasswordModalController {
     })
     
 
-    // Step 1 of the MFA
-    if (context.formName === 'authenticator-verification-data') {
-      if (context.authenticatorKey === 'okta_email') {
-        this.sendVerificationEmail()
-      }
-    }
-
-    // Step 2 of the MFA
     if (context.formName === 'challenge-authenticator') {
       if (context.authenticatorKey === 'okta_email') {
         this.showVerificationCodeField()
@@ -250,10 +243,13 @@ class ResetPasswordModalController {
     })
   }
 
-  sendVerificationEmail () {
-    // This step requires the user to click a button to confirm they want an email
-    // This adds a step in the experience, so we do the click for the user.
-    const verificationCodeButtonLink = document.querySelector('.authenticator-verification-data--okta_email input.button[type="submit"]')
+  triggerNotificationClick () {
+    // This step requires the user to click a button to trigger the notification to be sent to their email or phone.
+    // We remove this step by clicking the button for the user.
+    const verificationCodeButtonLink = document.querySelector(`
+      .authenticator-verification-data--okta_email input.button[type="submit"],
+      .authenticator-verification-data--phone_number input.button[type="submit"]
+    `)
     verificationCodeButtonLink?.click()
   }
 
