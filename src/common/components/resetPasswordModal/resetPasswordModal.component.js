@@ -167,6 +167,28 @@ class ResetPasswordModalController {
   }
 
   afterRender (context) {
+    let step = this.currentStep;
+
+    switch (context.formName) {
+      case 'identify':
+        step = 1
+        break
+      case 'select-authenticator-authenticate':
+        step = 2
+        break
+      case 'authenticator-verification-data':
+        // The step to choose the authenticator to authenticate with
+        step = 3
+        break
+      case 'challenge-authenticator':
+        // "google_otp"
+        // "okta_verify"
+        step = 4
+        break
+      case 'reset-authenticator':
+        step = 5
+        break
+    }
     // Handle inactivity error
     // The Okta widget has an issue where if the page is idle for a period of time,
     // the Okta interaction session will expire, causing the widget to show an error "You have been logged out due to inactivity..."
