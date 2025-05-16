@@ -33,6 +33,23 @@ const createErrorIcon = () => {
 }
 
 class ResetPasswordModalController {
+  // --------------------------------------
+  // Reset Password process.
+  // It's a multi-step process, handled by this component.
+  // --------------------------------------
+  // Step 1: Identify (email)
+  // Step 2: Select authenticator
+  //    2.1: This shows a list of authenticators to choose from.
+  //    2.2: Even if you haven't set them up. There is no way around this.
+  //    2.3: If the user selects phone, they will also be prompted to authenticate with another option.
+  // Step 3: Authenticator verification data
+  //    3.1: You will only see this page for okta_email.
+  // Step 4: Challenge authenticator
+  // Step 5: Reset authenticator
+  // Step 6: Reset password
+  // Step 7: Upon a success password reset, the user will be logged in and redirected to their previous page
+  // -------------------------------------- //
+
   /* @ngInject */
   constructor ($log, $scope, $location, $sanitize, $timeout, $translate, sessionService, cartService, orderService, envService, geographiesService) {
     this.$log = $log
