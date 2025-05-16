@@ -190,6 +190,11 @@ class ResetPasswordModalController {
         step = 5
         break
     }
+
+    this.$scope.$apply(() => {
+      this.currentStep = step
+    })
+    
     // Handle inactivity error
     // The Okta widget has an issue where if the page is idle for a period of time,
     // the Okta interaction session will expire, causing the widget to show an error "You have been logged out due to inactivity..."
