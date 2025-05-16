@@ -195,6 +195,21 @@ class ResetPasswordModalController {
       this.currentStep = step
     })
     
+
+    // Step 1 of the MFA
+    if (context.formName === 'authenticator-verification-data') {
+      if (context.authenticatorKey === 'okta_email') {
+        this.sendVerificationEmail()
+      }
+    }
+
+    // Step 2 of the MFA
+    if (context.formName === 'challenge-authenticator') {
+      if (context.authenticatorKey === 'okta_email') {
+        this.showVerificationCodeField()
+      }
+    }
+
     // Handle inactivity error
     // The Okta widget has an issue where if the page is idle for a period of time,
     // the Okta interaction session will expire, causing the widget to show an error "You have been logged out due to inactivity..."
@@ -217,6 +232,13 @@ class ResetPasswordModalController {
     this.$scope.$apply(() => {
       this.isLoading = false
     })
+  }
+
+  sendVerificationEmail () {
+    // This step requires the user to click a button to confirm they want an email
+    // This adds a step in the experience, so we do the click for the user.
+    const verificationCodeButtonLink = document.querySelector('.authenticator-verification-data--okta_email input.button[type="submit"]')
+    verificationCodeButtonLink?.click()
   }
 
   showVerificationCodeField () {
