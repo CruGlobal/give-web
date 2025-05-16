@@ -1,4 +1,4 @@
-register-account-modal:has(sign-up-modal) {
+register-account-modal:has(sign-up-modal, reset-password-modal) {
   display: block;
   line-height: 1.2em;
 
@@ -12,7 +12,7 @@ register-account-modal:has(sign-up-modal) {
   align-content: center;
 }
 
-.modal-dialog:has(register-account-modal sign-in-modal, register-account-modal sign-up-modal) {
+.modal-dialog:has(register-account-modal sign-in-modal, register-account-modal sign-up-modal, register-account-modal reset-password-modal) {
   width: calc(min(100vw, 400px) - 20px);
 
   @media (min-width: $screen-md-min) {
@@ -22,7 +22,7 @@ register-account-modal:has(sign-up-modal) {
   }
 }
 
-.modal-content:has(register-account-modal sign-in-modal, register-account-modal sign-up-modal) {
+.modal-content:has(register-account-modal sign-in-modal, register-account-modal sign-up-modal, register-account-modal reset-password-modal) {
   /* Override .modal-content Bootstrap styles */
   border: unset;
   border-radius: unset;
@@ -31,7 +31,7 @@ register-account-modal:has(sign-up-modal) {
   @include box-shadow(none);
 }
 
-register-account-modal:has(sign-in-modal, sign-up-modal) {
+register-account-modal:has(sign-in-modal, sign-up-modal, reset-password-modal) {
   @media (min-width: $screen-md-min) {
     .user-state {
       display: flex;

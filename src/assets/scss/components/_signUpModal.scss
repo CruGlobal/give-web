@@ -87,7 +87,9 @@ sign-up-modal, reset-password-modal {
       }
     }
   }
+}
 
+sign-up-modal {
   // Hide password requirements unless on the password step
   section[data-se="password-authenticator--rules"] {
     display: none;
