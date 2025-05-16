@@ -55,7 +55,7 @@ sign-up-modal, reset-password-modal {
     align-items: center;
     justify-content: space-between;
     padding: 15px 30px;
-    border-top: rgb(0, 0, 0, 0.15) 1px solid;
+    border-top: rgb(0 0 0 / 15%) 1px solid;
     background-color: $colorCru-white;
 
     .back-to-sign-in {
@@ -91,28 +91,9 @@ sign-up-modal, reset-password-modal {
       }
     }
   }
+}
 
-  .okta-url {
-    $okta-border-color: #b3b3b3;
-
-    padding: 0.5rem;
-    border: 1px solid $okta-border-color;
-    border-radius: 4px;
-    background-color: $colorCru-background;
-    font-family: monospace;
-  }
-
-  .welcome-message {
-    .redirect-loading {
-      padding: 40px 0;
-    }
-
-    h4 strong {
-      display: block;
-      margin-top: 7px;
-    }
-  }
-
+sign-up-modal {
   // Hide password requirements unless on the password step
   section[data-se="password-authenticator--rules"] {
     display: none;
