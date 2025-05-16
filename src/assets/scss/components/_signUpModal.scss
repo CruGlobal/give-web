@@ -2,7 +2,8 @@ sign-up-modal, reset-password-modal {
   position: relative;
 
   .signup-header {
-    padding-bottom: 1rem;
+    padding-bottom: 30px;
+    border-bottom: 2px solid #f5f5f5;
     text-align: center;
   }
 
@@ -12,7 +13,6 @@ sign-up-modal, reset-password-modal {
     align-items: center;
     justify-content: center;
     padding-top: 16px;
-    border-top: 2px solid #f5f5f5;
     gap: 16px;
 
     .between-steps {
