@@ -172,6 +172,7 @@ class ResetPasswordModalController {
     switch (context.formName) {
       case 'identify':
         step = 1
+        this.injectBackButton()
         break
       case 'select-authenticator-authenticate':
         step = 2
@@ -305,10 +306,6 @@ class ResetPasswordModalController {
   }
 
   injectBackButton () {
-    // Don't show back button on the first step or verify step
-    if (this.currentStep === 1 || this.currentStep === 4) {
-      return
-    }
     const buttonBar = document.querySelector('.o-form-button-bar')
     // Ensure the button is only added once
     if (buttonBar && !buttonBar.querySelector(`#${backButtonId}`)) {
@@ -316,7 +313,7 @@ class ResetPasswordModalController {
       // Add click behavior to go back a step
       backButton.on('click', (e) => {
         e.preventDefault()
-        this.$scope.$apply(() => this.goToPreviousStep())
+        this.$scope.$apply(() => this.onSignIn())
       })
       // Prepend the Back button before the "Next" button
       angular.element(buttonBar).prepend(backButton)
