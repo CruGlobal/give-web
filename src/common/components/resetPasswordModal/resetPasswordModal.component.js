@@ -222,7 +222,6 @@ class ResetPasswordModalController {
     }
 
     // All steps
-    this.resetCurrentStepOnRegistrationComplete(context)
     this.injectErrorMessages()
     // This needs to be after showVerificationCodeField to ensure even the verification code field is styled correctly
     this.initializeFloatingLabels()
