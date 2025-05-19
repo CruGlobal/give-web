@@ -1,0 +1,48 @@
+user-match-modal {
+  display: block;
+
+  .modal-body {
+    padding: 20px;
+  }
+
+  .modal-footer > div {
+    // Treat the buttons as children of the footer even when they are nested inside a div
+    display: contents;
+  }
+
+  h4 {
+    font-weight: bold;
+    text-align: center;
+  }
+
+  input {
+    accent-color: $colorCru-gold;
+  }
+
+  label {
+    display: block;
+  }
+
+  .activate-progress {
+    progress {
+      width: 100%;
+      accent-color: $colorCru-gold;
+    }
+
+    .step-label {
+      /* Subtract 32px to roughly center the text with the right edge of the progress bar */
+      padding-left: calc(max(var(--progress) * 100% - 32px, 0px));
+      margin-bottom: 30px;
+      font-weight: bold;
+    }
+  }
+
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+
+    .btn.back {
+      margin-right: 20px;
+    }
+  }
+}
