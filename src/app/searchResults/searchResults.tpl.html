@@ -113,7 +113,10 @@
                     </ul>
                   </section>
 
-                  <div ng-repeat-start="(k,hits) in hits | orderBy:$ctrl.featuredGroupBy:(facet === 'featured' && $ctrl.featuredGroupBy === 'startMonth') | groupBy:$ctrl.featuredGroupBy">
+                  <div ng-repeat-start="(k, hits) in (facet === 'featured' 
+                    ? (hits | orderBy:$ctrl.featuredGroupBy:($ctrl.featuredGroupBy === 'startMonth') 
+                      | groupBy:$ctrl.featuredGroupBy) 
+                    : { '': hits })">
                     <h4 class="is-results-divider" ng-if="facet === 'featured' && $ctrl.featuredGroupBy === 'startMonth'">
                       {{k | date:'LLLL yyyy'}}
                     </h4>
