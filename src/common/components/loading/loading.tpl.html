@@ -1,6 +1,7 @@
 <div ng-class="{
         'loading-centered': $ctrl.type === 'centered' || $ctrl.type === 'overlay',
-        'loading-overlay': $ctrl.type === 'overlay'
+        'loading-overlay': $ctrl.type === 'overlay',
+        'icon-first': $ctrl.iconFirst === 'true',
       }">
   <div>
     <span ng-class="{ 'mr-' : $ctrl.inline === 'true', 'center-block' : $ctrl.inline !== 'true'  }">

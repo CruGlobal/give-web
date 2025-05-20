@@ -36,6 +36,7 @@ class LoadingController {
   constructor () {
     this.type = 'block'
     this.inline = false
+    this.iconFirst = false
   }
 }
 
@@ -46,7 +47,8 @@ export default angular
     templateUrl: template,
     bindings: {
       type: '@',
-      inline: '@'
+      inline: '@',
+      iconFirst: '@'
     },
     transclude: true
   })
