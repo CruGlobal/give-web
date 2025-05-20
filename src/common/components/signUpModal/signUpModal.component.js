@@ -18,6 +18,7 @@ import template from './signUpModal.tpl.html'
 import cartService from 'common/services/api/cart.service'
 import geographiesService from 'common/services/api/geographies.service'
 import { customFields } from './signUpFormCustomFields'
+import { initializeFloatingLabels, injectBackButton, showVerificationCodeField } from '../../lib/oktaSignInWidgetHelper/oktaSignInWidgetHelper'
 
 export const countryFieldSelector = '.o-form-fieldset[data-se="o-form-fieldset-userProfile.countryCode"]'
 export const regionFieldSelector = '.o-form-fieldset[data-se="o-form-fieldset-userProfile.state"]'
@@ -459,7 +460,7 @@ class SignUpModalController {
       this.$scope.$apply(() => {
         this.currentStep = 4
       })
-      this.showVerificationCodeField()
+      showVerificationCodeField()
     }
 
     // Step 5: Optional MFA setup
@@ -480,9 +481,19 @@ class SignUpModalController {
     this.resetCurrentStepOnRegistrationComplete(context)
     this.redirectToSignInModalIfNeeded(context)
     this.injectErrorMessages()
-    this.injectBackButton()
+
+    // Don't show back button on the first step or verify step
+    if (this.currentStep !== 1 && this.currentStep !== 4) {
+      injectBackButton({
+        $scope: this.$scope,
+        functionCallback: this.goToPreviousStep.bind(this),
+        backButtonId,
+        backButtonText
+      })
+    }
+
     // This needs to be after showVerificationCodeField to ensure even the verification code field is styled correctly
-    this.initializeFloatingLabels()
+    initializeFloatingLabels(this.floatingLabelAbortControllers)
 
     // Step 1: Identity
     if (this.loadingCountriesError && this.currentStep === 1) {
@@ -498,13 +509,6 @@ class SignUpModalController {
     this.$scope.$apply(() => {
       this.isLoading = false
     })
-  }
-
-  showVerificationCodeField () {
-    // The verification code field is only shown when the button link "Enter a verification code instead" is clicked.
-    // This makes the process of creating an account more streamlined as we remove that click.
-    const verificationCodeButtonLink = document.querySelector('.button-link.enter-auth-code-instead-link')
-    verificationCodeButtonLink?.click()
   }
 
   skipOptionalMFAEnrollment () {
@@ -631,25 +635,6 @@ class SignUpModalController {
     })
   }
 
-  injectBackButton () {
-    // Don't show back button on the first step or verify step
-    if (this.currentStep === 1 || this.currentStep === 4) {
-      return
-    }
-    const buttonBar = document.querySelector('.o-form-button-bar')
-    // Ensure the button is only added once
-    if (buttonBar && !buttonBar.querySelector(`#${backButtonId}`)) {
-      const backButton = angular.element(`<button id="${backButtonId}" class="btn btn-secondary" type="button">${backButtonText}</button>`)
-      // Add click behavior to go back a step
-      backButton.on('click', (e) => {
-        e.preventDefault()
-        this.$scope.$apply(() => this.goToPreviousStep())
-      })
-      // Prepend the Back button before the "Next" button
-      angular.element(buttonBar).prepend(backButton)
-    }
-  }
-
   injectLoadError ({ fieldSelector, errorMessage, retryCallback }) {
     const errorElement = document.createElement('div')
     errorElement.classList.add('okta-form-input-error', 'o-form-input-error', 'o-form-explain', 'cru-error')
@@ -686,39 +671,6 @@ class SignUpModalController {
       fieldSelector: regionFieldSelector,
       errorMessage: this.translations.regionsLoadingError,
       retryCallback: () => this.refreshRegions(this.$scope.countryCode, true)
-    })
-  }
-
-  initializeFloatingLabels () {
-    // As the Label and Input fields are not directly related in the DOM, we need to manually
-    // add the active class to the label when the input is focused or has a value.
-
-    // Remove any existing listeners before adding new ones
-    this.floatingLabelAbortControllers.forEach(controller => controller.abort())
-    this.floatingLabelAbortControllers = []
-
-    document.querySelectorAll('.o-form-content input[type="text"], .o-form-content input[type="password"]')?.forEach(input => {
-      const label = input.labels[0]?.parentNode
-      if (!label) {
-        return
-      }
-      // if the input already has a value, mark the label as active
-      if (input.value.trim() !== '') {
-        label.classList.add('active')
-      }
-      // Create and save the controller so we can later remove the listeners.
-      const controller = new AbortController()
-      this.floatingLabelAbortControllers.push(controller)
-
-      input.addEventListener('focus', () => {
-        label.classList.add('active')
-      }, { signal: controller.signal })
-      input.addEventListener('blur', () => {
-        // When the input loses focus, check its value.
-        if (input.value.trim() === '') {
-          label.classList.remove('active')
-        }
-      }, { signal: controller.signal })
     })
   }
 
