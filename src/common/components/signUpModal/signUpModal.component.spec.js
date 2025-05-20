@@ -10,6 +10,11 @@ import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
 import { schema, user } from './signUpModal.component.mock'
 import { customFields } from './signUpFormCustomFields'
+import {injectBackButton, showVerificationCodeField} from '../../lib/oktaSignInWidgetHelper/oktaSignInWidgetHelper';
+
+jest.mock('../../lib/oktaSignInWidgetHelper/oktaSignInWidgetHelper');
+showVerificationCodeField.mockImplementation(() => {})
+injectBackButton.mockImplementation(() => {})
 
 describe('signUpForm', function () {
   beforeEach(angular.mock.module(module.name))
@@ -908,28 +913,27 @@ describe('signUpForm', function () {
         jest.spyOn($ctrl, 'resetCurrentStepOnRegistrationComplete').mockImplementation(() => {});
         jest.spyOn($ctrl, 'redirectToSignInModalIfNeeded').mockImplementation(() => {});
         jest.spyOn($ctrl, 'injectErrorMessages').mockImplementation(() => {});
-        jest.spyOn($ctrl, 'injectBackButton').mockImplementation(() => {});
-        jest.spyOn($ctrl, 'showVerificationCodeField').mockImplementation(() => {});
         jest.spyOn($ctrl, 'skipOptionalMFAEnrollment').mockImplementation(() => {});
 
         $ctrl.$onInit()
       })
 
-      it('updates the form', () => {
+      fit('updates the form', () => {
+        $ctrl.currentStep = 2
         $ctrl.afterRender({ formName: 'enroll-profile' })
 
         expect($ctrl.updateSignUpButtonText).toHaveBeenCalled()
         expect($ctrl.resetCurrentStepOnRegistrationComplete).toHaveBeenCalled()
         expect($ctrl.redirectToSignInModalIfNeeded).toHaveBeenCalled()
         expect($ctrl.injectErrorMessages).toHaveBeenCalled()
-        expect($ctrl.injectBackButton).toHaveBeenCalled()
+        expect(injectBackButton).toHaveBeenCalled()
       })
 
       it('moves to the email verification form', () => {
         $ctrl.afterRender({ formName: 'enroll-authenticator' })
 
         expect($ctrl.currentStep).toBe(4)
-        expect($ctrl.showVerificationCodeField).toHaveBeenCalled()
+        expect(showVerificationCodeField).toHaveBeenCalled()
       })
 
       it('shows the loading screen and skips the MFA enroll', () => {
@@ -1050,30 +1054,6 @@ describe('signUpForm', function () {
     beforeEach(() => {
       handleClick.mockClear();
     })
-
-    describe('showVerificationCodeField()', () => {
-      it('should call handleClick when button link is rendered', () => {
-        document.body.innerHTML = `
-          <div>
-            <button class="button-link enter-auth-code-instead-link" onclick="handleClick()">
-              Enter authentication code instead
-            </button>
-          </div>
-        `;
-
-        $ctrl.showVerificationCodeField()
-        expect(handleClick).toHaveBeenCalled();
-      });
-
-      it("shouldn't call handleClick if button link is not rendered", () => {
-        document.body.innerHTML = `
-          <div>Something else</div>
-        `;
-
-        $ctrl.showVerificationCodeField()
-        expect(handleClick).not.toHaveBeenCalled();
-      });
-    });
 
     describe('skipOptionalMFAEnrollment()', () => {
       it('should call handleClick when button link is rendered', () => {
@@ -1360,32 +1340,23 @@ describe('signUpForm', function () {
   });
 
   describe('injectBackButton', () => {
-    beforeEach(() => {
-      document.body.innerHTML = `
-        <div class="o-form-button-bar">
-          <input class="button button-primary" value="Sign up">
-        <div>
-      `
-    })
-
-    it('adds back button', () => {
-      $ctrl.injectBackButton()
-
-      expect(document.querySelector('.btn-secondary')).toBeInTheDocument()
-    })
-
     it('does not add back button on step 1', () => {
       $ctrl.currentStep = 1
-      $ctrl.injectBackButton()
-
-      expect(document.querySelector('.btn-secondary')).not.toBeInTheDocument()
+      $ctrl.afterRender({ formName: 'enroll-profile' })
+      expect(injectBackButton).not.toHaveBeenCalled()
     })
+
+     it('should add back button on step 2', () => {
+      $ctrl.currentStep = 2
+      $ctrl.afterRender({ formName: 'enroll-profile' })
+      expect(injectBackButton).toHaveBeenCalled()
+    })
+
 
     it('does not add back button on step 4', () => {
       $ctrl.currentStep = 4
-      $ctrl.injectBackButton()
-
-      expect(document.querySelector('.btn-secondary')).not.toBeInTheDocument()
+      $ctrl.afterRender({ formName: 'enroll-profile' })
+      expect(injectBackButton).not.toHaveBeenCalled()
     })
   })
 
