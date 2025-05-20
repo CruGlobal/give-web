@@ -9,6 +9,7 @@ import { scrollModalToTop } from 'common/services/modalState.service'
 
 import signInModal from 'common/components/signInModal/signInModal.component'
 import signUpModal from 'common/components/signUpModal/signUpModal.component'
+import resetPasswordModal from 'common/components/resetPasswordModal/resetPasswordModal.component'
 import userMatchModal from 'common/components/userMatchModal/userMatchModal.component'
 import contactInfoModal from 'common/components/contactInfoModal/contactInfoModal.component'
 import failedVerificationModal from 'common/components/failedVerificationModal/failedVerificationModal.component'
@@ -108,6 +109,10 @@ class RegisterAccountModalController {
     this.stateChanged('sign-in')
   }
 
+  onResetPassword () {
+    this.stateChanged('reset-password')
+  }
+
   onIdentitySuccess () {
     this.sessionService.removeOktaRedirectIndicator()
 
@@ -203,6 +208,7 @@ export default angular
     sessionService.name,
     signInModal.name,
     signUpModal.name,
+    resetPasswordModal.name,
     userMatchModal.name,
     failedVerificationModal.name,
     verificationService.name
