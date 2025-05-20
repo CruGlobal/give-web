@@ -494,7 +494,6 @@ export default angular
     bindings: {
       // Called when the user clicks back to sign in link
       onSignIn: '&',
-      lastPurchaseId: '<',
       isInsideAnotherModal: '='
     }
   })
