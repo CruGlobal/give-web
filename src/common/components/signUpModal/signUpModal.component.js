@@ -88,6 +88,7 @@ class SignUpModalController {
     this.stateOptions = {}
     this.selectedCountry = {}
     this.floatingLabelAbortControllers = []
+    this.redirectToOktaCountdown = 10
   }
 
   loadTranslations () {
@@ -465,6 +466,7 @@ class SignUpModalController {
       // This step does not have good UX as it's long, causing users to scroll to see the continue button.
       // We are okay with skipping this step as users can set up MFA later.
       this.$scope.$apply(() => {
+        // Start countdown to redirect to Okta
         this.isLoading = true
         this.currentStep = 5
       })
