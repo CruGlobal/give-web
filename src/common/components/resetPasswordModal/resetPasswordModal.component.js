@@ -17,20 +17,9 @@ import template from './resetPasswordModal.tpl.html'
 import cartService from 'common/services/api/cart.service'
 import geographiesService from 'common/services/api/geographies.service'
 
-export const countryFieldSelector = '.o-form-fieldset[data-se="o-form-fieldset-userProfile.countryCode"]'
-export const regionFieldSelector = '.o-form-fieldset[data-se="o-form-fieldset-userProfile.state"]'
-export const inputFieldErrorSelectorPrefix = '.o-form-input-name-'
 const componentName = 'resetPasswordModal'
 const backButtonId = 'backButton'
 const backButtonText = 'Back'
-
-const createErrorIcon = () => {
-  const icon = document.createElement('span')
-  icon.className = 'icon icon-16 error-16-small'
-  icon.ariaLabel = 'Error'
-  icon.role = 'img'
-  return icon
-}
 
 class ResetPasswordModalController {
   // --------------------------------------
@@ -67,15 +56,8 @@ class ResetPasswordModalController {
   }
 
   $onInit () {
-    // unsure
-    if (includes([Roles.identified, Roles.registered], this.sessionService.getRole())) {
-      this.onSignIn()
-    }
     this.initializeVariables()
-    this.loadTranslations()
-    this.loadDonorDetails().finally(() => {
-      this.setUpSignUpWidget()
-    }).subscribe()
+    this.setUpSignUpWidget()
   }
 
   $onDestroy () {
@@ -84,74 +66,14 @@ class ResetPasswordModalController {
       // Unsubscribe all event listeners
       this.oktaSignInWidget.off()
     }
-    if (angular.isDefined(this.getDonorDetailsSubscription)) {
-      this.getDonorDetailsSubscription.unsubscribe()
-    }
   }
 
   initializeVariables () {
     this.isLoading = true
     this.currentStep = 1
-    this.donorDetails = {}
-    this.translations = {}
-    this.signUpErrors = []
-    this.submitting = false
-    this.countryCodeOptions = {}
-    this.countriesData = []
-    this.stateOptions = {}
-    this.selectedCountry = {}
     this.floatingLabelAbortControllers = []
   }
-
-  loadTranslations () {
-    this.$translate([
-      'GIVE_AS_INDIVIDUAL',
-      'GIVE_AS_ORGANIZATION',
-      'ORGANIZATION_NAME',
-      'COUNTRY',
-      'ADDRESS',
-      'CITY',
-      'STATE',
-      'ZIP',
-      'COUNTRY_LIST_ERROR',
-      'REGIONS_LOADING_ERROR',
-      'RETRY',
-      'ORG_NAME_ERROR',
-      'CITY_ERROR',
-      'SELECT_STATE_ERROR',
-      'ZIP_CODE_ERROR',
-      'INVALID_US_ZIP_ERROR',
-      'OKTA_SIGNUP_FIELDS_ERROR',
-      'OKTA_FIRST_NAME_FIELD',
-      'OKTA_LAST_NAME_FIELD',
-      'OKTA_EMAIL_FIELD',
-      'OKTA_PASSWORD_FIELD'
-    ]).then(translations => {
-      this.translations = {
-        giveAsIndividual: translations.GIVE_AS_INDIVIDUAL,
-        giveAsOrganization: translations.GIVE_AS_ORGANIZATION,
-        organizationName: translations.ORGANIZATION_NAME,
-        country: translations.COUNTRY,
-        address: translations.ADDRESS,
-        city: translations.CITY,
-        state: translations.STATE,
-        zip: translations.ZIP,
-        countryListError: translations.COUNTRY_LIST_ERROR,
-        regionsLoadingError: translations.REGIONS_LOADING_ERROR,
-        retry: translations.RETRY,
-        orgNameError: translations.ORG_NAME_ERROR,
-        cityError: translations.CITY_ERROR,
-        selectStateError: translations.SELECT_STATE_ERROR,
-        zipCodeError: translations.ZIP_CODE_ERROR,
-        invalidUSZipError: translations.INVALID_US_ZIP_ERROR,
-        signupFieldsError: translations.OKTA_SIGNUP_FIELDS_ERROR,
-        firstNameField: translations.OKTA_FIRST_NAME_FIELD,
-        lastNameField: translations.OKTA_LAST_NAME_FIELD,
-        emailField: translations.OKTA_EMAIL_FIELD,
-        passwordField: translations.OKTA_PASSWORD_FIELD
-      }
-    })
-  }
+  
 
   setUpSignUpWidget () {
     this.currentStep = 1
@@ -168,19 +90,6 @@ class ResetPasswordModalController {
 
     this.oktaSignInWidget.on('ready', this.ready.bind(this))
     this.oktaSignInWidget.on('afterRender', this.afterRender.bind(this))
-    this.oktaSignInWidget.on('afterError', this.afterError.bind(this))
-  }
-
-  afterError (_, error) {
-    // Save errors to local variable to inject into the form
-    // Since errors are cleared on each step change
-    this.signUpErrors = error.xhr.responseJSON.errorCauses
-    // Wait for the Okta widget to create the error message box and set the sign up button text
-    // before augmenting the error message box and resetting the sign up button text
-    this.$timeout(() => {
-      this.updateSignUpButtonText()
-      this.injectErrorMessages()
-    })
   }
 
   afterRender (context) {
@@ -385,18 +294,9 @@ class ResetPasswordModalController {
     this.oktaSignInWidget.remove()
     return this.oktaSignInWidget.renderEl(
       { el: '#osw-container' },
-      (res) => {
-        // On sign up and email verification success, save the donor details
-        if (res.status === 'SUCCESS') {
-          this.saveDonorDetails()
-        } else {
-          // Handle the case where tokens are not available
-          const errorName = 'Okta Sign up: Tokens not available in response'
-          this.$log.error(errorName)
-        }
-      },
+      null,
       (error) => {
-        const errorName = 'Okta Sign up: Error rendering Okta sign up widget.'
+        const errorName = 'Okta Forgot Password: Error rendering Okta widget.'
         console.error(errorName, error)
         this.$log.error(errorName, error)
       }
@@ -411,72 +311,6 @@ class ResetPasswordModalController {
     }).catch(error => {
       this.$log.error('Okta Sign up: Error showing Okta sign in widget.', error)
     })
-  }
-
-  loadDonorDetails () {
-    return this.orderService.getDonorDetails().map((data) => {
-      let donorData = data
-      const checkoutSavedData = this.sessionService.session.checkoutSavedData
-      if (checkoutSavedData) {
-        donorData = assign(data, pick(checkoutSavedData, [
-          'name', 'email', 'mailingAddress', 'organization-name'
-        ]))
-      }
-      this.donorDetails = donorData
-      return donorData
-    })
-      .catch(error => {
-        this.$log.error('Okta Sign up: Error loading donorDetails.', error)
-        return Observable.throw(error)
-      })
-      .finally(() => {
-        this.loadingDonorDetails = false
-      })
-  }
-
-  saveDonorDetails () {
-    this.isLoading = true
-    this.oktaSignInWidget.remove()
-    this.oktaSignInWidget.off()
-
-    const signUpDonorDetails = {
-      name: {
-        'given-name': this.$scope.firstName,
-        'family-name': this.$scope.lastName
-      },
-      'donor-type': this.$scope.accountType,
-      'organization-name': this.$scope.organizationName,
-      email: this.$scope.email,
-      mailingAddress: {
-        streetAddress: this.$scope.streetAddress,
-        extendedAddress: this.$scope.streetAddressExtended,
-        intAddressLine3: this.$scope.internationalAddressLine3,
-        intAddressLine4: this.$scope.internationalAddressLine4,
-        locality: this.$scope.city,
-        region: this.$scope.state,
-        postalCode: this.$scope.zipCode,
-        country: this.$scope.countryCode
-      }
-    }
-
-    if (angular.isDefined(this.getDonorDetailsSubscription)) {
-      this.getDonorDetailsSubscription.unsubscribe()
-    }
-    this.getDonorDetailsSubscription = this.orderService.getDonorDetails().switchMap((donorDetails) => {
-      merge(donorDetails, signUpDonorDetails)
-      // Send each of the requests
-      return Observable.forkJoin([
-        this.orderService.updateDonorDetails(donorDetails),
-        this.orderService.addEmail(donorDetails.email, donorDetails.emailFormUri)
-      ]).map(() => donorDetails)
-    }).subscribe({
-      next: () => this.redirectToOktaForLogin(),
-      error: (donorDetails) => this.onSignUpError({ donorDetails })
-    })
-  }
-
-  redirectToOktaForLogin () {
-    this.sessionService.signIn(this.lastPurchaseId, this.$scope.email).subscribe(() => {})
   }
 }
 
@@ -495,7 +329,6 @@ export default angular
     bindings: {
       // Called when the user clicks back to sign in link
       onSignIn: '&',
-      lastPurchaseId: '<',
       isInsideAnotherModal: '='
     }
   })
