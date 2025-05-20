@@ -92,6 +92,17 @@ sign-up-modal {
     }
   }
 
+  .welcome-message {
+    .redirect-loading {
+      padding: 40px 0;
+    }
+
+    h4 strong {
+      display: block;
+      margin-top: 7px;
+    }
+  }
+
   // Hide password requirements unless on the password step
   section[data-se="password-authenticator--rules"] {
     display: none;
