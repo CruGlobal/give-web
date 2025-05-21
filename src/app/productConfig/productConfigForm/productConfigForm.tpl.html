@@ -127,7 +127,7 @@
                   <div class="help-block" ng-message="maximum" translate translate-values="{currencyLimit: (10000000 | currency)}">{{'AMOUNT_MAX_ERROR'}}</div>
               </div>
             </fieldset>
-            <div ng-if="$ctrl.useV3">
+            <div ng-if="!$ctrl.useV3">
               <div class="radio radio-custom-amount"
                   ng-repeat="suggested in $ctrl.suggestedAmounts | orderBy:'order'">
                 <label>
