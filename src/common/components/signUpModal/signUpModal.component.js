@@ -38,9 +38,10 @@ const createErrorIcon = () => {
 
 class SignUpModalController {
   /* @ngInject */
-  constructor ($log, $scope, $location, $sanitize, $timeout, $translate, sessionService, cartService, orderService, envService, geographiesService) {
+  constructor ($log, $scope, $interval, $location, $sanitize, $timeout, $translate, sessionService, cartService, orderService, envService, geographiesService) {
     this.$log = $log
     this.$scope = $scope
+    this.$interval = $interval
     this.$location = $location
     this.$sanitize = $sanitize
     this.$timeout = $timeout
@@ -73,6 +74,9 @@ class SignUpModalController {
     if (angular.isDefined(this.getDonorDetailsSubscription)) {
       this.getDonorDetailsSubscription.unsubscribe()
     }
+    if (angular.isDefined(this.oktaRedirectInterval)) {
+      this.$interval.cancel(this.oktaRedirectInterval)
+    }
   }
 
   initializeVariables () {
@@ -87,7 +91,6 @@ class SignUpModalController {
     this.stateOptions = {}
     this.selectedCountry = {}
     this.floatingLabelAbortControllers = []
-    this.redirectToOktaCountdown = 10
   }
 
   loadTranslations () {
@@ -468,8 +471,8 @@ class SignUpModalController {
         // Start countdown to redirect to Okta
         this.isLoading = true
         this.currentStep = 5
+        this.skipOptionalMFAEnrollment()
       })
-      this.skipOptionalMFAEnrollment()
     }
 
     // All steps
@@ -509,12 +512,29 @@ class SignUpModalController {
     // The loading icon will be shown, so the user will know something is happening.
     const mfaOptions = document.querySelector('.select-authenticator-enroll')
     if (mfaOptions) {
+      // Hide the options immediately and wait 10 seconds or for the user to click continue
       mfaOptions.style.display = 'none'
-      // As Okta enforces the MFA screen to be shown during sign up, we need to skip it to streamline the process.
-      // The user can setup MFA at a later date in their account settings.
-      const skipMFAButton = mfaOptions.querySelector('.button.skip-all')
-      skipMFAButton?.click()
+
+      this.oktaRedirectCountdown = 10
+      this.oktaRedirectInterval = this.$interval(() => {
+        --this.oktaRedirectCountdown
+        if (this.oktaRedirectCountdown === 0) {
+          this.completeRegistration()
+        }
+      }, 1000, 10)
     }
+  }
+
+  completeRegistration () {
+    // As Okta enforces the MFA screen to be shown during sign up, we need to skip it to streamline the process.
+    // The user can setup MFA at a later date in their account settings.
+    const skipMFAButton = document.querySelector('.select-authenticator-enroll .button.skip-all')
+    skipMFAButton?.click()
+
+    // Stop the redirect countdown
+    this.$interval.cancel(this.oktaRedirectInterval)
+    this.oktaRedirectInterval = undefined
+    this.oktaRedirectCountdown = 0
   }
 
   updateSignUpButtonText () {
