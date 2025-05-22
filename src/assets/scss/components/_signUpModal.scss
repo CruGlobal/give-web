@@ -92,6 +92,14 @@ sign-up-modal {
     }
   }
 
+  .okta-url {
+    padding: 0.5rem;
+    border: 1px solid #b3b3b3;
+    border-radius: 4px;
+    background-color: #f5f5f5;
+    font-family: monospace;
+  }
+
   .welcome-message {
     .redirect-loading {
       padding: 40px 0;
