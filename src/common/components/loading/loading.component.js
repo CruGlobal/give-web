@@ -47,8 +47,8 @@ export default angular
     templateUrl: template,
     bindings: {
       type: '@',
-      inline: '@',
-      iconFirst: '@'
+      inline: '<',
+      iconFirst: '<'
     },
     transclude: true
   })
