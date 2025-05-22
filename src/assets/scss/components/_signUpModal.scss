@@ -35,6 +35,10 @@ sign-up-modal, reset-password-modal {
 
   .okta-signup-loading {
     padding: 153px 0;
+
+    .loading-message {
+      padding-bottom: 0.5rem;
+    }
   }
 
   form {
@@ -87,9 +91,26 @@ sign-up-modal, reset-password-modal {
       }
     }
   }
-}
 
-sign-up-modal {
+  .okta-url {
+    padding: 0.5rem;
+    border: 1px solid #b3b3b3;
+    border-radius: 4px;
+    background-color: #f5f5f5;
+    font-family: monospace;
+  }
+
+  .welcome-message {
+    .redirect-loading {
+      padding: 40px 0;
+    }
+
+    h4 strong {
+      display: block;
+      margin-top: 7px;
+    }
+  }
+
   // Hide password requirements unless on the password step
   section[data-se="password-authenticator--rules"] {
     display: none;

@@ -88,3 +88,12 @@ loading {
 .loading-overlay-parent{
   position: relative;
 }
+
+.icon-first > div {
+  display: flex;
+  width: 100%;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: start;
+  gap: 20px;
+}
