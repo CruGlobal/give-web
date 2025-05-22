@@ -1075,7 +1075,7 @@ describe('signUpForm', function () {
       });
     });
 
-    describe.only('skipOptionalMFAEnrollment()', () => {
+    describe('skipOptionalMFAEnrollment()', () => {
       beforeEach(() => {
         document.body.innerHTML = `
           <div class="select-authenticator-enroll">
