@@ -24,8 +24,6 @@ sign-up-modal {
 }
 
 #okta-sign-in.auth-container {
-  $okta-grey: #f5f5f5;
-
   overflow: visible;
   width: 100%;
 
@@ -55,16 +53,18 @@ sign-up-modal {
   .o-form-fieldset-container {
     display: flex;
     flex-wrap: wrap;
-    border: 1px solid $okta-grey;
+    border: 1px solid $colorCru-background;
     border-radius: 7px;
   }
 
   // ============== Errors ============== //
 
   .o-form-explain.o-form-input-error {
+    $okta-error-background: #ffe3e3;
+
     padding-top: 6px;
     padding-left: 20px;
-    background: #ffe3e3;
+    background: $okta-error-background;
   }
 
   // ============== Fields ============== //
@@ -84,7 +84,9 @@ sign-up-modal {
     }
 
     label {
-      color: #9C9C9C;
+      $ota-form-label-color: #9c9c9c;
+
+      color: $ota-form-label-color;
       font-size: 16px;
       font-weight: 400;
     }
@@ -154,7 +156,7 @@ sign-up-modal {
   .o-form-fieldset {
     position: relative;
     width: 100%;
-    border-top: 1px solid $okta-grey;
+    border-top: 1px solid $colorCru-background;
     margin: 0;
 
     input:-webkit-autofill {
@@ -234,7 +236,7 @@ sign-up-modal {
     }
 
     &[data-se="o-form-fieldset-userProfile.zipCode"] {
-      border-left: 1px solid $okta-grey;
+      border-left: 1px solid $colorCru-background;
 
       /* stylelint-disable-next-line no-descending-specificity */
       input, .o-form-input-error {
@@ -287,7 +289,7 @@ sign-up-modal {
     width: 100%;
     padding: 10px;
     border-radius: 0 0 6px 6px;
-    border-top: 1px solid $okta-grey;
+    border-top: 1px solid $colorCru-background;
 
     /* stylelint-disable-next-line selector-class-pattern */
     .password-authenticator--list {
@@ -328,7 +330,7 @@ sign-up-modal {
 
     .button.button-primary {
       height: auto;
-      color: #3a3a3a;
+      color: $color-text;
 
       /* stylelint-disable-next-line scss/at-extend-no-missing-placeholder */
       @extend .btn;

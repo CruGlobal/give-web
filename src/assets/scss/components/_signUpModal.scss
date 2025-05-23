@@ -27,7 +27,7 @@ sign-up-modal {
         opacity: 1;
 
         &.semi-transparent {
-          opacity: .5;
+          opacity: 0.5;
         }
       }
     }
@@ -55,8 +55,8 @@ sign-up-modal {
     align-items: center;
     justify-content: space-between;
     padding: 15px 30px;
-    border-top: rgb(0 0 0 / 15%) 1px solid;
-    background-color: #fff;
+    border-top: rgb(0, 0, 0, 0.15) 1px solid;
+    background-color: $colorCru-white;
 
     .back-to-sign-in {
       width: 150px;
@@ -93,10 +93,12 @@ sign-up-modal {
   }
 
   .okta-url {
+    $okta-border-color: #b3b3b3;
+
     padding: 0.5rem;
-    border: 1px solid #b3b3b3;
+    border: 1px solid $okta-border-color;
     border-radius: 4px;
-    background-color: #f5f5f5;
+    background-color: $colorCru-background;
     font-family: monospace;
   }
 
