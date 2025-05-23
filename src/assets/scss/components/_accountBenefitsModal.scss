@@ -16,7 +16,7 @@ account-benefits-modal {
     margin-bottom: 10px;
     text-align: center;
 
-    @media (width <=550px) {
+    @media (max-width: 550px) {
       margin-top: 10px;
     }
 
