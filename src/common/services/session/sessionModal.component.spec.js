@@ -69,15 +69,6 @@ describe('sessionModalController', function () {
     })
   })
 
-  describe('$ctrl.onAccountBenefitsSuccess', () => {
-    it('should move to register-account page and remove Okta Indicator', () => {
-      jest.spyOn($ctrl.sessionService, 'removeOktaRedirectIndicator').mockImplementation(() => {})
-      $ctrl.onAccountBenefitsSuccess()
-      expect($ctrl.sessionService.removeOktaRedirectIndicator).toHaveBeenCalled()
-      expect($ctrl.state).toEqual('register-account')
-    })
-  })
-
   describe('$ctrl.onFailure', () => {
     it('should dismiss modal with \'error\'', () => {
       jest.spyOn($ctrl.sessionService, 'removeOktaRedirectIndicator').mockImplementation(() => {})

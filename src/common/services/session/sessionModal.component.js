@@ -3,7 +3,6 @@ import angular from 'angular'
 import signUpModal from 'common/components/signUpModal/signUpModal.component'
 import userMatchModal from 'common/components/userMatchModal/userMatchModal.component'
 import contactInfoModal from 'common/components/contactInfoModal/contactInfoModal.component'
-import accountBenefitsModal from 'common/components/accountBenefitsModal/accountBenefitsModal.component'
 import registerAccountModal from 'common/components/registerAccountModal/registerAccountModal.component'
 import analyticsFactory from 'app/analytics/analytics.factory'
 
@@ -47,11 +46,6 @@ class SessionModalController {
     this.close()
   }
 
-  onAccountBenefitsSuccess () {
-    this.sessionService.removeOktaRedirectIndicator()
-    this.stateChanged('register-account')
-  }
-
   onFailure () {
     this.sessionService.removeOktaRedirectIndicator()
     this.dismiss({ $value: 'error' })
@@ -72,7 +66,6 @@ export default angular
     signUpModal.name,
     userMatchModal.name,
     contactInfoModal.name,
-    accountBenefitsModal.name,
     registerAccountModal.name,
     analyticsFactory.name
   ])

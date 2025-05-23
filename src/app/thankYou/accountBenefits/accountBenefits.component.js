@@ -26,12 +26,12 @@ class AccountBenefitsController {
       // Show account benefits if registration state is NEW or MATCHED
       if (changes.donorDetails.currentValue['registration-state'] !== 'COMPLETED') {
         this.isVisible = true
-        this.openAccountBenefitsModal()
+        this.openModal()
       }
     }
   }
 
-  openAccountBenefitsModal () {
+  openModal () {
     const lastPurchaseId = this.getLastPurchaseId()
     if (!lastPurchaseId) {
       return
@@ -39,16 +39,12 @@ class AccountBenefitsController {
 
     this.sessionService.oktaIsUserAuthenticated().subscribe((isAuthenticated) => {
       const registrationState = this.donorDetails['registration-state']
-      if (isAuthenticated && registrationState === 'NEW') {
-        return this.sessionModalService.registerAccount(lastPurchaseId).then(() => {
-          this.isVisible = false
-        }, angular.noop)
-      } else if (isAuthenticated && registrationState === 'MATCHED') {
+      if (isAuthenticated && registrationState === 'MATCHED') {
         return this.sessionModalService.userMatch(lastPurchaseId).then(() => {
           this.isVisible = false
         }, angular.noop)
       } else {
-        return this.sessionModalService.accountBenefits(lastPurchaseId).then(() => {
+        return this.sessionModalService.registerAccount(lastPurchaseId).then(() => {
           this.isVisible = false
         }, angular.noop)
       }

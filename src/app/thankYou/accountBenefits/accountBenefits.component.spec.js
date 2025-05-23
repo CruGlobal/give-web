@@ -36,31 +36,30 @@ describe('thank you', function () {
 
     describe('$onChanges', () => {
       beforeEach(() => {
-        jest.spyOn($ctrl, 'openAccountBenefitsModal').mockImplementation(() => {})
+        jest.spyOn($ctrl, 'openModal').mockImplementation(() => {})
       })
 
       it('is visible when registration-state is \'MATCHED\'', () => {
         $ctrl.$onChanges({ donorDetails: { currentValue: { 'registration-state': 'MATCHED' } } })
 
         expect($ctrl.isVisible).toEqual(true)
-        expect($ctrl.openAccountBenefitsModal).toHaveBeenCalled()
+        expect($ctrl.openModal).toHaveBeenCalled()
       })
 
       it('is not visible when registration-state is \'COMPLETED\'', () => {
         $ctrl.$onChanges({ donorDetails: { currentValue: { 'registration-state': 'COMPLETED' } } })
 
         expect($ctrl.isVisible).toEqual(false)
-        expect($ctrl.openAccountBenefitsModal).not.toHaveBeenCalled()
+        expect($ctrl.openModal).not.toHaveBeenCalled()
       })
     })
 
-    describe('openAccountBenefitsModal', () => {
+    describe('openModal', () => {
       let deferred, $rootScope, userMatch
       beforeEach(inject((_$q_, _$rootScope_) => {
         deferred = _$q_.defer()
         userMatch = _$q_.defer()
         $rootScope = _$rootScope_
-        jest.spyOn($ctrl.sessionModalService, 'accountBenefits').mockReturnValue(deferred.promise)
         jest.spyOn($ctrl.sessionModalService, 'registerAccount').mockReturnValue(deferred.promise)
         jest.spyOn($ctrl.sessionModalService, 'userMatch').mockReturnValue(deferred.promise)
         jest.spyOn($ctrl.sessionService, 'oktaIsUserAuthenticated').mockReturnValue(Observable.from([false]))
@@ -70,7 +69,7 @@ describe('thank you', function () {
       it('shows userMatch modal to users who are authenticated but need to complete donor matching', (done) => {
         $ctrl.sessionService.oktaIsUserAuthenticated.mockReturnValue(Observable.from([true]))
         $ctrl.donorDetails = { 'registration-state': 'MATCHED' }
-        $ctrl.openAccountBenefitsModal()
+        $ctrl.openModal()
 
         expect($ctrl.sessionModalService.userMatch).toHaveBeenCalledWith(lastPurchaseId)
         deferred.resolve()
@@ -82,7 +81,7 @@ describe('thank you', function () {
       it('shows registerAccount modal to users who are authenticated but need to register for a donor account', () => {
         $ctrl.sessionService.oktaIsUserAuthenticated.mockReturnValue(Observable.from([true]))
         $ctrl.donorDetails = { 'registration-state': 'NEW' }
-        $ctrl.openAccountBenefitsModal()
+        $ctrl.openModal()
 
         expect($ctrl.sessionModalService.registerAccount).toHaveBeenCalledWith(lastPurchaseId)
         deferred.resolve()
@@ -90,12 +89,12 @@ describe('thank you', function () {
         expect($ctrl.isVisible).toEqual(false)
       })
 
-      it('shows accountBenefits modal to users who aren\'t authenticated', () => {
+      it('shows registerAccount modal to users who aren\'t authenticated', () => {
         $ctrl.sessionService.oktaIsUserAuthenticated.mockReturnValue(Observable.from([false]))
         $ctrl.donorDetails = { 'registration-state': 'NEW' }
-        $ctrl.openAccountBenefitsModal()
+        $ctrl.openModal()
 
-        expect($ctrl.sessionModalService.accountBenefits).toHaveBeenCalledWith(lastPurchaseId)
+        expect($ctrl.sessionModalService.registerAccount).toHaveBeenCalledWith(lastPurchaseId)
         deferred.resolve()
         $rootScope.$digest()
 
@@ -105,15 +104,15 @@ describe('thank you', function () {
       it('should not show accountBenefits modal if purchase link is missing', () => {
         $ctrl.orderService.retrieveLastPurchaseLink.mockReturnValue(undefined)
         $ctrl.donorDetails = { 'registration-state': 'NEW' }
-        $ctrl.openAccountBenefitsModal()
+        $ctrl.openModal()
 
-        expect($ctrl.sessionModalService.accountBenefits).not.toHaveBeenCalled()
+        expect($ctrl.sessionModalService.registerAccount).not.toHaveBeenCalled()
       })
 
       it('should log an error', () => {
         const error = 'Unknown error'
         $ctrl.sessionService.oktaIsUserAuthenticated.mockReturnValue(Observable.throw(error))
-        $ctrl.openAccountBenefitsModal()
+        $ctrl.openModal()
 
         expect($ctrl.$log.error.logs[0]).toEqual(['Failed checking if user is authenticated', error])
       })
