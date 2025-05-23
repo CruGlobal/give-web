@@ -35,7 +35,7 @@ class AccountBenefitsController {
     const lastPurchaseId = this.getLastPurchaseId()
     return this.sessionService.oktaIsUserAuthenticated().subscribe((isAuthenticated) => {
       const registrationState = this.donorDetails['registration-state']
-      if (lastPurchaseId && registrationState !== 'COMPLETED') {
+      if (lastPurchaseId) {
         if (isAuthenticated && registrationState === 'NEW') {
           return this.sessionModalService.registerAccount(lastPurchaseId).then(() => {
             this.isVisible = false

@@ -102,13 +102,6 @@ describe('thank you', function () {
         expect($ctrl.isVisible).toEqual(false)
       })
 
-      it('should not show accountBenefits modal to users who have completed donor matching', () => {
-        $ctrl.donorDetails = { 'registration-state': 'COMPLETED' }
-        $ctrl.openAccountBenefitsModal()
-
-        expect($ctrl.sessionModalService.accountBenefits).not.toHaveBeenCalled()
-      })
-
       it('should not show accountBenefits modal if purchase link is missing', () => {
         $ctrl.orderService.retrieveLastPurchaseLink.mockReturnValue(undefined)
         $ctrl.donorDetails = { 'registration-state': 'NEW' }
