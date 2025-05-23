@@ -1076,28 +1076,59 @@ describe('signUpForm', function () {
     });
 
     describe('skipOptionalMFAEnrollment()', () => {
-      it('should call handleClick when button link is rendered', () => {
+      beforeEach(() => {
         document.body.innerHTML = `
           <div class="select-authenticator-enroll">
             <a class="button skip-all" onclick="handleClick()">
               Continue
             </a>
           </div>
-        `;
+        `
+      })
 
+      it('should start the countdown timer', () => {
         $ctrl.skipOptionalMFAEnrollment()
+        expect(document.querySelector('.select-authenticator-enroll')).toHaveStyle({ display: 'none' })
+
+        expect($ctrl.oktaRedirectCountdown).toBe(10)
+
+        $ctrl.$interval.flush(1000)
+        expect($ctrl.oktaRedirectCountdown).toBe(9)
+
+        $ctrl.$interval.flush(9000)
+        expect($ctrl.oktaRedirectCountdown).toBe(0)
+        expect($ctrl.oktaRedirectInterval).toBeUndefined()
         expect(handleClick).toHaveBeenCalled();
-      });
 
-      it("shouldn't call handleClick if button link is not rendered", () => {
-        document.body.innerHTML = `
-          <div>Something else</div>
-        `;
+        // Test that the timer stopped
+        $ctrl.$interval.flush(10000)
+        expect($ctrl.oktaRedirectCountdown).toBe(0)
+      })
+
+      it('should do nothing when the link is missing', () => {
+        document.body.innerHTML = ''
 
         $ctrl.skipOptionalMFAEnrollment()
-        expect(handleClick).not.toHaveBeenCalled();
-      });
-    });
+        expect($ctrl.oktaRedirectCountdown).toBeUndefined()
+      })
+
+      it('clicking the button should interrupt the countdown', () => {
+        $ctrl.skipOptionalMFAEnrollment()
+        expect($ctrl.oktaRedirectCountdown).toBe(10)
+
+        $ctrl.$interval.flush(5000)
+        expect($ctrl.oktaRedirectCountdown).toBe(5)
+        $ctrl.completeRegistration()
+
+        expect($ctrl.oktaRedirectCountdown).toBe(0)
+        expect($ctrl.oktaRedirectInterval).toBeUndefined()
+        expect(handleClick).toHaveBeenCalled();
+
+        // Test that the timer stopped
+        $ctrl.$interval.flush(10000)
+        expect($ctrl.oktaRedirectCountdown).toBe(0)
+      })
+    })
   });
 
   describe('Injecting error messages', () => {

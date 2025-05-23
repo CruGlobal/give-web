@@ -25,7 +25,7 @@ export default {
   ],
   overrides: [
     {
-      files: ['src/assets/scss/*.{css,scss}'],
+      files: ['src/assets/scss/**/*.{css,scss}'],
       customSyntax: 'postcss-scss',
       rules: {
         'media-feature-range-notation': 'prefix', // Enforces range notation in media queries to use `min-` instead of  `>=` .

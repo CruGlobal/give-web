@@ -54,8 +54,30 @@
         />
       </div>
     </div>
-    
-    <loading ng-if="$ctrl.isLoading" class="okta-signup-loading"></loading>
+
+    <loading ng-if="$ctrl.isLoading && $ctrl.currentStep !== 5" class="okta-signup-loading"></loading>
+
+    <div ng-if="$ctrl.currentStep === 5" class="welcome-message">
+      <loading class="redirect-loading" inline="true" icon-first="true">
+        <div ng-if="$ctrl.oktaRedirectCountdown > 0" class="loading-message"
+          translate="OKTA_REDIRECTING_IN"
+          translate-value-seconds='{{$ctrl.oktaRedirectCountdown}}'>
+        </div>
+        <div ng-if="$ctrl.oktaRedirectCountdown === 0" class="loading-message" translate>
+          OKTA_REDIRECTING_NOW
+        </div>
+      </loading>
+      <h2 translate="OKTA_WELCOME" translate-value-name="{{$ctrl.$scope.firstName}}"></h2>
+      <h4 translate>OKTA_ACCOUNT_CREATED</h4>
+      <p translate>OKTA_REDIRECT_EXPLANATION</p>
+      <p class="okta-url">https://signon.okta.com</p>
+      <button
+        type="button"
+        class="btn btn-primary"
+        ng-click="$ctrl.completeRegistration()"
+        translate>OKTA_REDIRECT_NOW
+      </button>
+    </div>
 
     <div id="osw-container"></div>
   </div>

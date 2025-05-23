@@ -51,7 +51,7 @@ sign-in-form {
     justify-content: center;
     border: 2px solid $okta-brand;
     border-radius: 4px;
-    background-color: white;
+    background-color: $colorCru-white;
     color: $okta-brand;
     font-size: 1.2rem;
     font-weight: bold;
@@ -61,7 +61,7 @@ sign-in-form {
     &:hover {
       border-color: $okta-brand;
       background-color: $okta-brand;
-      color: white;
+      color: $colorCru-white;
     }
 
     &:focus {
@@ -69,7 +69,7 @@ sign-in-form {
       border-color: darken($okta-brand, 3%);
       /* stylelint-disable-next-line scss/no-global-function-names */
       background-color: darken($okta-brand, 3%);
-      color: white;
+      color: $colorCru-white;
     }
   }
 
