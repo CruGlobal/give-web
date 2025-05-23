@@ -123,9 +123,11 @@ sign-up-modal {
         border: 1px solid transparent;
         border-radius: 0;
 
+        $okta-text-color: #1d1d21;
+
         span {
           // Make the selected item color match the color of text inputs
-          color: #1d1d21;
+          color: $okta-text-color;
           line-height: 36px;
         }
 
@@ -138,7 +140,7 @@ sign-up-modal {
           // The mask-* styles essentially duplicate the background-* styles that Okta applies to
           // render the sprite. We use Okta's sprite to keep the same shape via a mask but apply
           // an overridden color to that shape.
-          background-color: #1d1d21;
+          background-color: $okta-text-color;
           background-image: none !important;
           mask-image: url("../img/ui/forms/chosen-sprite@2x.png");
           mask-position: 0 6px;
@@ -385,7 +387,7 @@ sign-up-modal {
   // Make the down arrow match the color of the other text inputs. These styles are like the ones
   // inside #okta-sign-in.auth-container, but are for open dropdowns because the Okta widget moves
   // open dropdowns out of the widget and directly nested under <body>.
-  background-color: #1d1d21;
+  background-color: $okta-text-color;
   background-image: none !important;
   mask-image: url("../img/ui/forms/chosen-sprite@2x.png");
   mask-position: -17px 7px;
