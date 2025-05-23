@@ -1,5 +1,7 @@
 @import 'assets/okta-sign-in/css/okta-sign-in.min.css';
 
+$okta-text-color: #1d1d21;
+
 #okta-sign-in.main-container {
   border: none;
   margin: 0;
@@ -122,8 +124,6 @@ sign-up-modal {
         padding-top: 12px;
         border: 1px solid transparent;
         border-radius: 0;
-
-        $okta-text-color: #1d1d21;
 
         span {
           // Make the selected item color match the color of text inputs
