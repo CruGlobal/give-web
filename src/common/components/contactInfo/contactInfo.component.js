@@ -190,6 +190,7 @@ export default angular
       submitted: '<',
       donorDetails: '=?',
       onSubmit: '&',
-      radioStationApiUrl: '<'
+      radioStationApiUrl: '<',
+      useV3: '<'
     }
   })
