@@ -185,6 +185,6 @@ export default angular
       onOrderCompleted: '&',
       onOrderFailed: '&',
       language: '@',
-      showCoverFees: '@'
+      useV3: '@',
     }
   })

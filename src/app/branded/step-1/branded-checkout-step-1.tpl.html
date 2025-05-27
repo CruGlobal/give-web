@@ -3,15 +3,8 @@
     <loading ng-if="$ctrl.loadingProductConfig">
       <translate>Loading gift details...</translate>
     </loading>
-    <product-config-form code="$ctrl.code"
-                         is-edit="$ctrl.isEdit"
-                         item-config="$ctrl.itemConfig"
-                         default-frequency="$ctrl.defaultFrequency"
-                         uri="$ctrl.item.uri"
-                         submitted="$ctrl.submitted"
-                         on-state-change="$ctrl.onGiftConfigStateChange(state)"
-                         disable-session-restart="true"
-                         ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig">
+      ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig"
+      use-v3="$ctrl.useV3">
     </product-config-form>
     <div ng-if="$ctrl.errorLoadingProductConfig" class="alert alert-danger" role="alert">
       <p translate='LOADING_ERROR' translate-values="{loadData: '$ctrl.loadData()'}" translate-compile></p>
