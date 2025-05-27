@@ -5,8 +5,6 @@ import template from './resetPasswordModal.tpl.html'
 import { initializeFloatingLabels, injectBackButton, showVerificationCodeField } from 'common/lib/oktaSignInWidgetHelper/oktaSignInWidgetHelper'
 
 const componentName = 'resetPasswordModal'
-const backButtonId = 'backButton'
-const backButtonText = 'Back'
 
 class ResetPasswordModalController {
   // --------------------------------------
@@ -24,7 +22,7 @@ class ResetPasswordModalController {
   // Step 5: Reset authenticator
   // Step 6: Reset password
   // Step 7: Upon a success password reset, the user will be logged in and redirected to their previous page
-  // -------------------------------------- //
+  // --------------------------------------
 
   /* @ngInject */
   constructor ($log, $scope, sessionService, envService) {
@@ -44,6 +42,12 @@ class ResetPasswordModalController {
       // Unsubscribe all event listeners
       this.oktaSignInWidget.off()
     }
+  }
+
+  ready () {
+    this.$scope.$apply(() => {
+      this.isLoading = false
+    })
   }
 
   initializeVariables () {
@@ -75,12 +79,7 @@ class ResetPasswordModalController {
     switch (context.formName) {
       case 'identify':
         step = 1
-        injectBackButton({
-          $scope: this.$scope,
-          functionCallback: this.onSignIn,
-          backButtonId,
-          backButtonText
-        })
+        injectBackButton(this)
         break
       case 'select-authenticator-authenticate':
         //  Auth options: okta_email | google_otp | okta_verify | phone_number
@@ -123,12 +122,12 @@ class ResetPasswordModalController {
     }
 
     // This needs to be after showVerificationCodeField to ensure even the verification code field is styled correctly
-    initializeFloatingLabels(this.floatingLabelAbortControllers)
+    initializeFloatingLabels(this)
   }
 
-  ready () {
+  onBackButtonClick () {
     this.$scope.$apply(() => {
-      this.isLoading = false
+      this.onSignIn()
     })
   }
 

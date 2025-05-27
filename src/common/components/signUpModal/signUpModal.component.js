@@ -26,8 +26,6 @@ export const inputFieldErrorSelectorPrefix = '.o-form-input-name-'
 const componentName = 'signUpModal'
 const signUpButtonText = 'Create Account'
 const nextButtonText = 'Continue'
-const backButtonId = 'backButton'
-const backButtonText = 'Back'
 
 const createErrorIcon = () => {
   const icon = document.createElement('span')
@@ -78,6 +76,12 @@ class SignUpModalController {
     if (angular.isDefined(this.oktaRedirectInterval)) {
       this.$interval.cancel(this.oktaRedirectInterval)
     }
+  }
+
+  ready () {
+    this.$scope.$apply(() => {
+      this.isLoading = false
+    })
   }
 
   initializeVariables () {
@@ -484,16 +488,11 @@ class SignUpModalController {
 
     // Don't show back button on the first step or verify step
     if (this.currentStep !== 1 && this.currentStep !== 4) {
-      injectBackButton({
-        $scope: this.$scope,
-        functionCallback: this.goToPreviousStep.bind(this),
-        backButtonId,
-        backButtonText
-      })
+      injectBackButton(this)
     }
 
     // This needs to be after showVerificationCodeField to ensure even the verification code field is styled correctly
-    initializeFloatingLabels(this.floatingLabelAbortControllers)
+    initializeFloatingLabels(this)
 
     // Step 1: Identity
     if (this.loadingCountriesError && this.currentStep === 1) {
@@ -505,9 +504,9 @@ class SignUpModalController {
     }
   }
 
-  ready () {
+  onBackButtonClick () {
     this.$scope.$apply(() => {
-      this.isLoading = false
+      this.goToPreviousStep()
     })
   }
 

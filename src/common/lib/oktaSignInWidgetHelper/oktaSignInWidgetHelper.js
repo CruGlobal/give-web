@@ -14,33 +14,43 @@ export function showVerificationCodeField () {
   verificationCodeButtonLink?.click()
 }
 
-export function injectBackButton ({
-  $scope,
-  functionCallback,
-  backButtonId,
-  backButtonText
-}) {
+export function injectBackButton (context) {
+  // context will be the component instance that calls this function
+  if (!context || !context.onBackButtonClick) {
+    throw new Error('Context must be provided with a valid onBackButtonClick function.')
+  }
+
+  const backButtonId = 'backButton'
+  const backButtonText = 'Back'
   const buttonBar = document.querySelector('.o-form-button-bar')
   // Ensure the button is only added once
   if (buttonBar && !buttonBar.querySelector(`#${backButtonId}`)) {
     const backButton = angular.element(`<button id="${backButtonId}" class="btn btn-secondary" type="button">${backButtonText}</button>`)
-    // Add click behavior to go back a step
     backButton.on('click', (e) => {
       e.preventDefault()
-      $scope.$apply(() => functionCallback())
+      context.onBackButtonClick()
     })
     // Prepend the Back button before the "Next" button
     angular.element(buttonBar).prepend(backButton)
   }
 }
 
-export function initializeFloatingLabels (floatingLabelAbortControllers = []) {
+export function initializeFloatingLabels (context) {
+  // context will be the component instance that calls this function
+  if (!context || !context.floatingLabelAbortControllers) {
+    throw new Error('Context must be provided with a valid floatingLabelAbortControllers array variable.')
+  }
+  // Ensure floatingLabelAbortControllers is initialized
+  if (!context.floatingLabelAbortControllers) {
+    context.floatingLabelAbortControllers = []
+  }
+
   // As the Label and Input fields are not directly related in the DOM, we need to manually
   // add the active class to the label when the input is focused or has a value.
 
   // Remove any existing listeners before adding new ones
-  floatingLabelAbortControllers.forEach(controller => controller.abort())
-  floatingLabelAbortControllers = []
+  context.floatingLabelAbortControllers.forEach(controller => controller.abort())
+  context.floatingLabelAbortControllers = []
 
   document.querySelectorAll('.o-form-content input[type="text"], .o-form-content input[type="password"]')?.forEach(input => {
     const label = input.labels[0]?.parentNode
@@ -53,7 +63,7 @@ export function initializeFloatingLabels (floatingLabelAbortControllers = []) {
     }
     // Create and save the controller so we can later remove the listeners.
     const controller = new AbortController()
-    floatingLabelAbortControllers.push(controller)
+    context.floatingLabelAbortControllers.push(controller)
 
     input.addEventListener('focus', () => {
       label.classList.add('active')
