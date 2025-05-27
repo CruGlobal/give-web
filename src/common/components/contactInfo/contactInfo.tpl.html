@@ -51,13 +51,14 @@
           <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.nameGivenName | showErrors)}">
             <label>
               <span translate>{{'FIRST_NAME'}}</span>
-              <input type="text"
-                      class="form-control  form-control-subtle"
-                      name="nameGivenName"
-                      ng-model="$ctrl.donorDetails['name']['given-name']"
-                      required
-                      ng-maxlength="50"
-                      ng-disabled="$ctrl.nameFieldsDisabled">
+              <input 
+                type="text"
+                class="form-control  form-control-subtle"
+                name="nameGivenName"
+                ng-model="$ctrl.donorDetails['name']['given-name']"
+                required
+                ng-maxlength="50"
+                ng-disabled="$ctrl.nameFieldsDisabled">
             </label>
             <div role="alert" ng-messages="$ctrl.detailsForm.nameGivenName.$error" ng-if="($ctrl.detailsForm.nameGivenName | showErrors)">
               <div class="help-block" ng-message="required" translate>{{'FIRST_NAME_ERROR'}}</div>
@@ -81,7 +82,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-4">
+        <div ng-class="$ctrl.useV3 ? 'col-md-5 col-sm-6' : 'col-sm-4'">
           <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.nameFamilyName | showErrors)}">
             <label>
               <span translate>{{'LAST_NAME'}}</span>
