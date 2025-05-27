@@ -9,6 +9,7 @@ import 'rxjs/add/observable/forkJoin'
 import { phoneNumberRegex } from 'common/app.constants'
 
 import addressForm from 'common/components/addressForm/addressForm.component'
+import emailField from './emailField/emailField.component'
 
 import orderService from 'common/services/api/order.service'
 import radioStationsService from 'common/services/api/radioStations.service'
@@ -178,6 +179,7 @@ export default angular
   .module(componentName, [
     'ngMessages',
     addressForm.name,
+    emailField.name,
     orderService.name,
     radioStationsService.name,
     sessionService.name,
