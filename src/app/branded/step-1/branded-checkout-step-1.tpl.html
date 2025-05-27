@@ -19,7 +19,7 @@
 <div ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig">
   <div class="panel">
     <div class="panel-body">
-      <h3 class="panel-name" translate>{{'YOUR_INFORMATION'}}</h3>
+      <h3 ng-if="!$ctrl.useV3" class="panel-name" translate>{{'YOUR_INFORMATION'}}</h3>
       <contact-info
         submitted="$ctrl.submitted"
         on-submit="$ctrl.onContactInfoSubmit(success)"

@@ -47,7 +47,7 @@
     <div class="mb">
       <h4 ng-if="!$ctrl.useV3" class="panel-title  border-bottom-small  visible" translate>{{$ctrl.useV3 ? 'CONTACT_INFO' : 'YOUR_INFORMATION'}}</h4>
       <div class="row">
-        <div class="col-sm-4">
+        <div ng-class="$ctrl.useV3 ? 'col-md-5 col-sm-6' : 'col-sm-4'">
           <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.nameGivenName | showErrors)}">
             <label>
               <span translate>{{'FIRST_NAME'}}</span>
@@ -65,7 +65,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-2">
+        <div ng-if="!$ctrl.useV3" class="col-sm-2">
           <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.nameMiddleInitial | showErrors)}">
             <label>
               <span translate>{{'MIDDLE_ABBREV'}}</span>
@@ -139,7 +139,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-2" ng-if="!$ctrl.useV3">
           <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.spouseMiddleInitial | showErrors)}">
             <label>
               <span translate>{{'MIDDLE_ABBREV'}}</span>
@@ -155,7 +155,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-4">
+        <div ng-class="$ctrl.useV3 ? 'col-sm-6' : 'col-sm-4'">
           <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.spouseFamilyName | showErrors)}">
             <label>
               <span translate>{{'SPOUSE_LAST_NAME'}}</span>
@@ -209,6 +209,27 @@
           </div>
         </div>
       </div>
+
+      <div ng-if="$ctrl.useV3" class="row">
+        <div class="col-sm-12">
+          <email-field
+            details-form="$ctrl.detailsForm"
+            donor-details="$ctrl.donorDetails">
+          </email-field>
+        </div>
+        <div class="col-sm-12">
+          <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.phoneNumber | showErrors)}">
+            <label>
+              <span translate>{{'PHONE'}}</span>
+              <input type="tel" class="form-control form-control-subtle" name="phoneNumber" ng-model="$ctrl.donorDetails['phone-number']" ng-disabled="$ctrl.donorDetails.staff">
+            </label>
+            <div role="alert" ng-messages="$ctrl.detailsForm.phoneNumber.$error" ng-if="($ctrl.detailsForm.phoneNumber | showErrors)">
+              <div class="help-block" ng-message="phone" translate>{{'INVALID_PHONE_ERROR'}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <div class="mb">
