@@ -278,6 +278,10 @@ label.btn.btn-default-form.active {
         text-indent: 0;
       }
     }
+
+    #sendMessageButton, #sendHandlingButton {
+      text-decoration: underline;
+    }
   }
 
   input.number {
