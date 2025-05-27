@@ -119,7 +119,19 @@
             </label>
           </div>
         </div>
-
+        <div ng-if="$ctrl.donorDetails['donor-type'] === 'Household' && $ctrl.useV3">
+          <div class="col-sm-12 col-md-2">
+            <div class="form-group">
+              <label class="mb0 hidden-xs hidden-sm">
+                <span class="invisible mb0"></span>
+              </label>
+              <button type="button" class="btn btn-secondary btn-block" ng-click="$ctrl.toggleSpouseDetails()" uib-tooltip="{{'SPOUSE_DETAILS_TOOLTIP' | translate}}" aria-label="{{ $ctrl.showSpouseDetails ? ('REMOVE_SPOUSE' | translate) : ('ADD_SPOUSE' | translate) }}">
+                  <span ng-if="!$ctrl.showSpouseDetails" translate>{{'ADD_SPOUSE'}}</span>
+                  <span ng-if="$ctrl.showSpouseDetails" translate>{{'REMOVE_SPOUSE'}}</span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="row" ng-if="($ctrl.donorDetails['donor-type'] === 'Household' && !$ctrl.useV3) || ($ctrl.donorDetails['donor-type'] === 'Household' && $ctrl.useV3 && $ctrl.showSpouseDetails)" >

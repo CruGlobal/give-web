@@ -18,6 +18,7 @@ import sessionService, { SignInEvent, Roles } from 'common/services/session/sess
 import analyticsFactory from 'app/analytics/analytics.factory'
 
 import template from './contactInfo.tpl.html'
+import uibTooltip from 'angular-ui-bootstrap/src/tooltip'
 
 const componentName = 'contactInfo'
 
@@ -31,6 +32,7 @@ class Step1Controller {
     this.radioStationsService = radioStationsService
     this.sessionService = sessionService
     this.analyticsFactory = analyticsFactory
+    this.showSpouseDetails = false
   }
 
   $onInit () {
@@ -118,6 +120,16 @@ class Step1Controller {
       })
   }
 
+  toggleSpouseDetails () {
+    if (this.showSpouseDetails) {
+      this.donorDetails['spouse-name'] = {
+        'given-name': null,
+        'family-name': null
+      }
+    }
+    this.showSpouseDetails = !this.showSpouseDetails
+  }
+
   loadRadioStations () {
     const postalCode = this.donorDetails.mailingAddress.postalCode
 
@@ -183,7 +195,8 @@ export default angular
     orderService.name,
     radioStationsService.name,
     sessionService.name,
-    analyticsFactory.name
+    analyticsFactory.name,
+    uibTooltip
   ])
   .component(componentName, {
     controller: Step1Controller,
