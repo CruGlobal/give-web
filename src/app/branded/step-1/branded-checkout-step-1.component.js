@@ -4,12 +4,12 @@ import every from 'lodash/every'
 import productConfigForm from 'app/productConfig/productConfigForm/productConfigForm.component'
 import contactInfo from 'common/components/contactInfo/contactInfo.component'
 import checkoutStep2 from 'app/checkout/step-2/step-2.component'
+import checkoutErrorMessages from 'app/checkout/checkout-error-messages/checkout-error-messages.component'
 
 import cartService from 'common/services/api/cart.service'
 import orderService from 'common/services/api/order.service'
 import analyticsFactory from '../../analytics/analytics.factory'
 import brandedAnalyticsFactory from '../../branded/analytics/branded-analytics.factory'
-
 import { FEE_DERIVATIVE } from 'common/components/paymentMethods/coverFees/coverFees.component'
 
 import template from './branded-checkout-step-1.tpl.html'
@@ -262,6 +262,7 @@ export default angular
     productConfigForm.name,
     contactInfo.name,
     checkoutStep2.name,
+    checkoutErrorMessages.name,
     cartService.name,
     orderService.name,
     analyticsFactory.name,
