@@ -51,7 +51,6 @@ class SignUpModalController {
     this.geographiesService = geographiesService
     this.imgDomain = envService.read('imgDomain')
     this.publicCru = envService.read('publicCru')
-    this.isInsideAnotherModal = true
   }
 
   $onInit () {
