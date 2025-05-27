@@ -79,8 +79,13 @@ class BrandedCheckoutController {
   next () {
     switch (this.checkoutStep) {
       case 'giftContactPayment':
-        this.checkoutStep = 'review'
-        this.fireAnalyticsEvents('review')
+        // If it is a single step form, the next step should be 'thankYou'
+        if (this.useV3 === 'true') {
+          this.checkoutStep = 'thankYou'
+        } else {
+          this.checkoutStep = 'review'
+          this.fireAnalyticsEvents('review')
+        }
         break
       case 'review':
         this.checkoutStep = 'thankYou'
