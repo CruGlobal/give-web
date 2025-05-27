@@ -1,9 +1,9 @@
-// Give Specific Styles
 $colorGrayscale-sand: #f4f4f4;
 $colorGrayscale-pebble: #f0f0f0;
 $colorGrayscale-stone: #e7e7e7;
 $colorGrayscale-rock: #b9b9b9;
 $colorGrayscale-slate: #909b9c;
+$colorGrayscale-charcoal: #3a3a3a;
 $colorCru-border: #ddd;
 $data-font: "Source Sans Pro", "Helvetica Neue", helvetica, sans-serif;
 
@@ -521,6 +521,142 @@ hr.horizontal-divider {
 .btn-sm {
   font-size: 0.85rem;
   font-weight: 700;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .help-block {
+    padding: 10px;
+    border: 2px solid #f9b625;
+    border-radius: 2px;
+    background-color: lighten($colorCru-gold, 10%);
+    color: darken($colorCru-gold, 30%);
+  }
+
+  input[type="radio"] {
+    position: absolute;
+    cursor: pointer;
+    opacity: 0;
+  }
+
+  label {
+    display: flex;
+    flex: 1;
+    margin: 0;
+    cursor: pointer;
+  
+    .amount-box {
+      min-width: 50px;
+      align-content: center;
+      border-radius: 2px 0 0 2px;
+      margin: 0;
+      aspect-ratio: 1 / 1;
+      background-color: $colorGrayscale-rock;
+      color: inherit;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .amount-description {
+      width: 100%;
+      align-content: center;
+      padding: 5px 10px;
+      margin: 0;
+      background-color: $colorGrayscale-pebble;
+      font-weight: normal;
+    }
+  }
+
+  input[type="radio"]:hover + label {
+    .amount-description {
+      background-color: $colorGrayscale-pebble;
+    }
+  }
+
+  input[type="radio"]:focus + label {
+    .amount-box {
+      min-width: 55px;
+      background-color: $colorGrayscale-charcoal;
+      color: $colorCru-white;
+    }
+  }
+
+  input[type="radio"]:focus.active + label {
+    border: 1px solid #3eb1c8;
+    border-radius: 3px 0 0 3px;
+    
+  }
+
+  input[type="radio"]:checked + label {
+    .amount-box {
+      min-width: 55px;
+      background-color: $colorGrayscale-charcoal;
+      color: $colorCru-white;
+    }
+  }
+}
+
+.custom-amount-button {
+  display: flex;
+  height: 50px;
+  flex-direction: row;
+  border: 1px solid $colorGrayscale-rock;
+
+  .input-prepend {
+    min-width: 50px;
+    align-content: center;
+    margin: 0;
+    aspect-ratio: 1 / 1;
+    background-color: $colorGrayscale-rock;
+    cursor: default;
+    text-align: center;
+  }
+
+  label {
+    all: unset;
+    width: 100%;
+    height: 100%;
+
+    input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      height: 100%;
+      padding: 0 7px;
+      border: none;
+      transition: all 0.3s ease;
+
+      &::placeholder {
+        color: $colorCru-gray;
+      }
+
+      &:focus {
+        border: 1px solid #3eb1c8;
+        outline: none;
+      }
+    }
+  }
+}
+
+/* Check for custom amount input */
+.custom-amount-button:has(input:checked), .custom-amount-button:has(input:focus) {
+  border: 1px solid $colorGrayscale-charcoal;
+  color: $colorGrayscale-charcoal;
+  font-weight: 500;
+}
+
+.custom-amount-button:has(input:checked) .input-prepend, .custom-amount-button:has(input:focus) .input-prepend {
+  min-width: 55px;
+  aspect-ratio: 1 / 1;
+  background-color: $colorGrayscale-charcoal;
+  color: $colorCru-white;
+  transition: all 0.3s ease;
 }
 
 .table-payment-history {
