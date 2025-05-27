@@ -41,7 +41,7 @@ register-account-modal:has(sign-in-modal, sign-up-modal, reset-password-modal) {
 
   .modal-header {
     width: 450px;
-    background-color: #f5f5f5;
+    background-color: $colorCru-background;
 
     /* Override ".modal-content.give-modal-content .modal-header" padding-top styles */
     .modal-content.give-modal-content & {
@@ -85,7 +85,7 @@ register-account-modal:has(sign-in-modal, sign-up-modal, reset-password-modal) {
       justify-content: space-between;
       padding: 1rem;
       border-bottom: 2px solid $colorCru-gold;
-      background-color: white;
+      background-color: $colorCru-white;
       gap: 2rem;
 
       @media (max-width: ($screen-md-min - 1)) {
@@ -96,8 +96,8 @@ register-account-modal:has(sign-in-modal, sign-up-modal, reset-password-modal) {
         border-bottom: unset;
 
         /* Darken .header-image for better contrast */
-        background-color: rgb(0 0 0 / 50%);
-        color: white;
+        background-color: rgb(0, 0, 0, 0.5);
+        color: $colorCru-white;
         gap: 1rem;
         text-align: center;
 
@@ -171,7 +171,7 @@ register-account-modal:has(sign-in-modal, sign-up-modal, reset-password-modal) {
   .modal-header, .inner-modal {
     overflow: hidden;
     border-radius: 5px;
-    background-color: white;
+    background-color: $colorCru-white;
   }
 
   .inner-modal {

@@ -47,6 +47,12 @@ class SessionModalController {
     this.close()
   }
 
+  onAccountBenefitsRegister () {
+    this.sessionService.removeOktaRedirectIndicator()
+    this.registerAccountSignUp = true
+    this.stateChanged('register-account')
+  }
+
   onAccountBenefitsSuccess () {
     this.sessionService.removeOktaRedirectIndicator()
     this.stateChanged('register-account')

@@ -2,6 +2,8 @@ import angular from 'angular'
 import 'angular-mocks'
 import module from './sessionModal.service'
 
+const lastPurchaseId = 'gxwpz='
+
 describe('sessionModalService', function () {
   beforeEach(angular.mock.module(module.name))
   let sessionModalService; let $uibModal; let counter = 0
@@ -164,10 +166,10 @@ describe('sessionModalService', function () {
     })
 
     it('should open signIn modal with last purchase id', () => {
-      sessionModalService.signIn('gxwpz=')
+      sessionModalService.signIn(lastPurchaseId)
 
       expect($uibModal.open).toHaveBeenCalledTimes(1)
-      expect($uibModal.open.mock.calls[0][0].resolve.lastPurchaseId()).toEqual('gxwpz=')
+      expect($uibModal.open.mock.calls[0][0].resolve.lastPurchaseId()).toEqual(lastPurchaseId)
     })
   })
 
@@ -182,20 +184,21 @@ describe('sessionModalService', function () {
 
   describe('registerAccount', () => {
     it('should open registerAccount modal', () => {
-      sessionModalService.registerAccount()
+      sessionModalService.registerAccount({ lastPurchaseId })
 
       expect($uibModal.open).toHaveBeenCalledTimes(1)
       expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('register-account')
+      expect($uibModal.open.mock.calls[0][0].resolve.lastPurchaseId()).toEqual(lastPurchaseId)
     })
   })
 
   describe('accountBenefits', () => {
     it('should open accountBenefits modal', () => {
-      sessionModalService.accountBenefits('gxwpz=')
+      sessionModalService.accountBenefits(lastPurchaseId)
 
       expect($uibModal.open).toHaveBeenCalledTimes(1)
       expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('account-benefits')
-      expect($uibModal.open.mock.calls[0][0].resolve.lastPurchaseId()).toEqual('gxwpz=')
+      expect($uibModal.open.mock.calls[0][0].resolve.lastPurchaseId()).toEqual(lastPurchaseId)
     })
   })
 })

@@ -11,7 +11,7 @@ describe('accountBenefitsModal', function () {
     $location = _$location_
     bindings = {
       modalTitle: '',
-      onStateChange: jest.fn(),
+      onRegister: jest.fn(),
       onSuccess: jest.fn()
     }
     $ctrl = _$componentController_(module.name, {}, bindings)
@@ -26,14 +26,6 @@ describe('accountBenefitsModal', function () {
       $ctrl.$onInit()
 
       expect($ctrl.modalTitle).toEqual('Register Your Account for Online Access')
-      expect($ctrl.onStateChange).not.toHaveBeenCalled()
-    })
-
-    it('initializes component', () => {
-      jest.spyOn($location, 'search').mockReturnValue({ code: 'code', state: 'state '})
-      $ctrl.$onInit()
-
-      expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'register-account' })
     })
   })
 
@@ -45,9 +37,11 @@ describe('accountBenefitsModal', function () {
       expect($ctrl.onSuccess).toHaveBeenCalled()
     })
 
-    it('changes state to \'sign-up\'', () => {
+    it('calls onRegister if role is not registered', () => {
+      jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue(Roles.public)
       $ctrl.registerAccount()
-      expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'sign-up' })
+
+      expect($ctrl.onRegister).toHaveBeenCalled()
     })
   })
 

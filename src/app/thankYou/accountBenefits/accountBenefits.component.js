@@ -33,22 +33,24 @@ class AccountBenefitsController {
 
   openAccountBenefitsModal () {
     const lastPurchaseId = this.getLastPurchaseId()
-    return this.sessionService.oktaIsUserAuthenticated().subscribe((isAuthenticated) => {
+    if (!lastPurchaseId) {
+      return
+    }
+
+    this.sessionService.oktaIsUserAuthenticated().subscribe((isAuthenticated) => {
       const registrationState = this.donorDetails['registration-state']
-      if (lastPurchaseId && registrationState !== 'COMPLETED') {
-        if (isAuthenticated && registrationState === 'NEW') {
-          return this.sessionModalService.registerAccount(lastPurchaseId).then(() => {
-            this.isVisible = false
-          }, angular.noop)
-        } else if (isAuthenticated && registrationState === 'MATCHED') {
-          return this.sessionModalService.userMatch(lastPurchaseId).then(() => {
-            this.isVisible = false
-          }, angular.noop)
-        } else {
-          return this.sessionModalService.accountBenefits(lastPurchaseId).then(() => {
-            this.isVisible = false
-          }, angular.noop)
-        }
+      if (isAuthenticated && registrationState === 'NEW') {
+        return this.sessionModalService.registerAccount({ lastPurchaseId }).then(() => {
+          this.isVisible = false
+        }, angular.noop)
+      } else if (isAuthenticated && registrationState === 'MATCHED') {
+        return this.sessionModalService.userMatch(lastPurchaseId).then(() => {
+          this.isVisible = false
+        }, angular.noop)
+      } else {
+        return this.sessionModalService.accountBenefits(lastPurchaseId).then(() => {
+          this.isVisible = false
+        }, angular.noop)
       }
     },
     error => {
@@ -60,7 +62,7 @@ class AccountBenefitsController {
     if (this.sessionService.getRole() === Roles.registered) {
       this.sessionModalService.userMatch()
     } else {
-      this.sessionModalService.registerAccount(this.getLastPurchaseId()).then(() => {
+      this.sessionModalService.registerAccount({ lastPurchaseId: this.getLastPurchaseId() }).then(() => {
         this.sessionModalService.userMatch().then(() => {
           // Hide component after successful user match
           this.isVisible = false

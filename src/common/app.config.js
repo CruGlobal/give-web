@@ -395,7 +395,13 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     OKTA_FIRST_NAME_FIELD: 'first name',
     OKTA_LAST_NAME_FIELD: 'last name',
     OKTA_EMAIL_FIELD: 'email',
-    OKTA_PASSWORD_FIELD: 'password'
+    OKTA_PASSWORD_FIELD: 'password',
+    OKTA_REDIRECTING_IN: 'Redirecting in {{seconds}}...',
+    OKTA_REDIRECTING_NOW: 'Redirecting...',
+    OKTA_WELCOME: 'Welcome, {{name}}!',
+    OKTA_ACCOUNT_CREATED: 'Your account with Cru was successfully created and verified. <br/><strong>Now let’s sign you in.</strong>',
+    OKTA_REDIRECT_EXPLANATION: 'For your security, you are being redirected to Okta to sign in with your new account. Okta is our secure login provider, helping keep your account safe. <strong>You’ll briefly visit the domain below, then we’ll bring you back after you sign in.</strong>',
+    OKTA_REDIRECT_NOW: 'Take me to Okta now'
   })
 
   $translateProvider.translations('es', {
@@ -622,7 +628,13 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     OKTA_FIRST_NAME_FIELD: 'first name',
     OKTA_LAST_NAME_FIELD: 'last name',
     OKTA_EMAIL_FIELD: 'email',
-    OKTA_PASSWORD_FIELD: 'password'
+    OKTA_PASSWORD_FIELD: 'password',
+    OKTA_REDIRECTING_IN: 'Redirecting in {{seconds}}...',
+    OKTA_REDIRECTING_NOW: 'Redirecting...',
+    OKTA_WELCOME: 'Welcome, {{name}}!',
+    OKTA_ACCOUNT_CREATED: 'Your account with Cru was successfully created and verified. <br/><strong>Now let’s sign you in.</strong>',
+    OKTA_REDIRECT_EXPLANATION: 'For your security, you are being redirected to Okta to sign in with your new account. Okta is our secure login provider, helping keep your account safe. <strong>You’ll briefly visit the domain below, then we’ll bring you back after you sign in.</strong>',
+    OKTA_REDIRECT_NOW: 'Take me to Okta now'
   })
   $translateProvider.preferredLanguage('en')
 }
