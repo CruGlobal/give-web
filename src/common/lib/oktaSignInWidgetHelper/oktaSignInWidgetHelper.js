@@ -1,6 +1,5 @@
 import angular from 'angular'
 
-
 // --------------------------------------
 // Okta SignIn Help functions
 // --------------------------------------
@@ -8,12 +7,11 @@ import angular from 'angular'
 // - injectBackButton()
 // - initializeFloatingLabels()
 
-
-export function showVerificationCodeField() {
+export function showVerificationCodeField () {
   // The verification code field is only shown when the button link "Enter a verification code instead" is clicked.
   // This makes the process of creating an account more streamlined as we remove that click.
-  const verificationCodeButtonLink = document.querySelector('.button-link.enter-auth-code-instead-link');
-  verificationCodeButtonLink?.click();
+  const verificationCodeButtonLink = document.querySelector('.button-link.enter-auth-code-instead-link')
+  verificationCodeButtonLink?.click()
 }
 
 export function injectBackButton ({
@@ -68,4 +66,3 @@ export function initializeFloatingLabels (floatingLabelAbortControllers = []) {
     }, { signal: controller.signal })
   })
 }
-

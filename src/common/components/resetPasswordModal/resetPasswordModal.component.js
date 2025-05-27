@@ -70,7 +70,6 @@ class ResetPasswordModalController {
     this.currentStep = 1
     this.floatingLabelAbortControllers = []
   }
-  
 
   setUpSignUpWidget () {
     this.currentStep = 1
