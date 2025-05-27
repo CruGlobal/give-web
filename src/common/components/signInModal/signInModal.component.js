@@ -43,7 +43,6 @@ export default angular
       onSignUp: '&',
       onSuccess: '&',
       onFailure: '&',
-      onResetPassword: '&',
-      isInsideAnotherModal: '='
+      onResetPassword: '&'
     }
   })
