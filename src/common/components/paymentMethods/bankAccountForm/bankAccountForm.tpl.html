@@ -24,7 +24,7 @@
         </div>
       </div>
       <div class="col-sm-6">
-        <div class="form-group form-group-default form-group-inline" ng-class="{'has-error': ($ctrl.bankPaymentForm.accountType | showErrors)}">
+        <div class="form-group form-group-default form-group-inline text-left" ng-class="{'has-error': ($ctrl.bankPaymentForm.accountType | showErrors)}">
           <label class="label-block" translate>{{'ACCOUNT_TYPE'}}</label>
           <label class="radio-inline">
             <input type="radio" name="accountType" ng-model="$ctrl.bankPayment.accountType" value="Checking" required> <translate>{{'CHECKING'}}</translate>
