@@ -52,6 +52,7 @@ class SignUpModalController {
     this.geographiesService = geographiesService
     this.imgDomain = envService.read('imgDomain')
     this.publicCru = envService.read('publicCru')
+    this.isInsideAnotherModal = true
   }
 
   $onInit () {
@@ -850,9 +851,6 @@ export default angular
       onSignUpError: '&',
       // Called when the user clicks back to sign in link
       onSignIn: '&',
-      // Called with the user dismisses the modal via the close button
-      onCancel: '&',
       lastPurchaseId: '<',
-      isInsideAnotherModal: '='
     }
   })

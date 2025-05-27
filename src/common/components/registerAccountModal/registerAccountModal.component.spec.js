@@ -84,15 +84,24 @@ describe('registerAccountModal', function () {
     describe('with \'PUBLIC\' cortex-session', () => {
       beforeEach(() => {
         $ctrl.sessionService.getRole.mockReturnValue(Roles.public)
-        $ctrl.$onInit()
       })
 
       it('proceeds to sign-in', () => {
+        $ctrl.$onInit()
+
         expect($ctrl.checkDonorDetails).not.toHaveBeenCalled()
         expect($ctrl.stateChanged).toHaveBeenCalledWith('sign-in')
       })
 
+      it('proceeds to sign-up if showSignUp is true', () => {
+        $ctrl.showSignUp = true
+        $ctrl.$onInit()
+
+        expect($ctrl.stateChanged).toHaveBeenCalledWith('sign-up')
+      })
+
       it('proceeds to contact-info', () => {
+        $ctrl.$onInit()
         $ctrl.sessionService.sessionSubject.next({
           firstName: 'Daniel'
         })

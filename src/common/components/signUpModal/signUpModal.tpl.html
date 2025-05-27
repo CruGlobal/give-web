@@ -1,18 +1,5 @@
-<div class="modal-header" ng-if="!$ctrl.isInsideAnotherModal">
-  <button type="button" class="close" aria-label="Close" ng-click="$ctrl.onCancel()">
-    <span aria-hidden="true">×</span>
-  </button>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-xs-12">
-        <h3 class="signup-header" translate>Create Your Account</h3>
-      </div>
-    </div>
-  </div>
-</div>
-
 <div class="modal-body" class="sticky-buttons">
-  <h3 ng-if="$ctrl.isInsideAnotherModal" class="signup-header" translate>Create Your Account</h3>
+  <h3 class="signup-header" translate>Create Your Account</h3>
   <div class="content">
     <div class="signup-steps">
       <div class="step">
@@ -54,8 +41,6 @@
         />
       </div>
     </div>
-
-    <loading ng-if="$ctrl.isLoading && $ctrl.currentStep !== 5" class="okta-signup-loading"></loading>
 
     <div ng-if="$ctrl.currentStep === 5" class="welcome-message">
       <loading class="redirect-loading" inline="true" icon-first="true">

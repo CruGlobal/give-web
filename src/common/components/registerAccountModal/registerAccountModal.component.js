@@ -75,7 +75,7 @@ class RegisterAccountModalController {
         this.checkDonorDetails()
       } else {
         // Proceed to Step 1.
-        this.stateChanged('sign-in')
+        this.stateChanged(this.showSignUp ? 'sign-up' : 'sign-in')
       }
     })
     this.cortexSignUpError = false
@@ -219,6 +219,9 @@ export default angular
     bindings: {
       modalTitle: '=',
       lastPurchaseId: '<',
+      // If true, then the modal will open in the "Create Your Account" section as if the user had
+      // manually clicked "Sign up with Okta"
+      showSignUp: '<?',
       onSuccess: '&',
       onCancel: '&',
       setLoading: '&',

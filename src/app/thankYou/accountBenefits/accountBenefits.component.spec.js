@@ -84,7 +84,7 @@ describe('thank you', function () {
         $ctrl.donorDetails = { 'registration-state': 'NEW' }
         $ctrl.openAccountBenefitsModal()
 
-        expect($ctrl.sessionModalService.registerAccount).toHaveBeenCalledWith(lastPurchaseId)
+        expect($ctrl.sessionModalService.registerAccount).toHaveBeenCalledWith({ lastPurchaseId })
         deferred.resolve()
         $rootScope.$digest()
         expect($ctrl.isVisible).toEqual(false)
@@ -100,13 +100,6 @@ describe('thank you', function () {
         $rootScope.$digest()
 
         expect($ctrl.isVisible).toEqual(false)
-      })
-
-      it('should not show accountBenefits modal to users who have completed donor matching', () => {
-        $ctrl.donorDetails = { 'registration-state': 'COMPLETED' }
-        $ctrl.openAccountBenefitsModal()
-
-        expect($ctrl.sessionModalService.accountBenefits).not.toHaveBeenCalled()
       })
 
       it('should not show accountBenefits modal if purchase link is missing', () => {
@@ -147,7 +140,7 @@ describe('thank you', function () {
         it('shows sign in modal, followed by registerAccount', () => {
           $ctrl.doUserMatch()
 
-          expect($ctrl.sessionModalService.registerAccount).toHaveBeenCalled()
+          expect($ctrl.sessionModalService.registerAccount).toHaveBeenCalledWith({ lastPurchaseId })
           deferred.resolve()
           $rootScope.$digest()
 
