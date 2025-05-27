@@ -21,10 +21,6 @@ class SignInModalController {
       this.$window.location = `/checkout.html${window.location.search}`
     }
   }
-
-  getOktaUrl () {
-    return this.sessionService.getOktaUrl()
-  }
 }
 
 export default angular
@@ -42,7 +38,6 @@ export default angular
       // Called when the user clicks the create account link
       onSignUp: '&',
       onSuccess: '&',
-      onFailure: '&',
-      isInsideAnotherModal: '='
+      onFailure: '&'
     }
   })
