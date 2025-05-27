@@ -1,13 +1,7 @@
 import angular from 'angular'
-import 'angular-sanitize'
-import 'angular-translate'
-import includes from 'lodash/includes'
 import OktaSignIn from '@okta/okta-signin-widget'
-import sessionService, { Roles } from 'common/services/session/session.service'
-import orderService from 'common/services/api/order.service'
+import sessionService from 'common/services/session/session.service'
 import template from './resetPasswordModal.tpl.html'
-import cartService from 'common/services/api/cart.service'
-import geographiesService from 'common/services/api/geographies.service'
 import { initializeFloatingLabels, injectBackButton, showVerificationCodeField } from 'common/lib/oktaSignInWidgetHelper/oktaSignInWidgetHelper'
 
 const componentName = 'resetPasswordModal'
@@ -33,19 +27,10 @@ class ResetPasswordModalController {
   // -------------------------------------- //
 
   /* @ngInject */
-  constructor ($log, $scope, $location, $sanitize, $timeout, $translate, sessionService, cartService, orderService, envService, geographiesService) {
+  constructor ($log, $scope, sessionService, envService) {
     this.$log = $log
     this.$scope = $scope
-    this.$location = $location
-    this.$sanitize = $sanitize
-    this.$timeout = $timeout
-    this.$translate = $translate
     this.sessionService = sessionService
-    this.orderService = orderService
-    this.cartService = cartService
-    this.geographiesService = geographiesService
-    this.imgDomain = envService.read('imgDomain')
-    this.publicCru = envService.read('publicCru')
   }
 
   $onInit () {
@@ -178,19 +163,14 @@ class ResetPasswordModalController {
     }).then(tokens => {
       this.oktaSignInWidget.authClient.handleLoginRedirect(tokens)
     }).catch(error => {
-      this.$log.error('Okta Sign up: Error showing Okta sign in widget.', error)
+      this.$log.error('Okta Forgot Password: Error showing Okta sign in widget.', error)
     })
   }
 }
 
 export default angular
   .module(componentName, [
-    'pascalprecht.translate',
-    'ngSanitize',
-    sessionService.name,
-    orderService.name,
-    cartService.name,
-    geographiesService.name
+    sessionService.name
   ])
   .component(componentName, {
     controller: ResetPasswordModalController,
