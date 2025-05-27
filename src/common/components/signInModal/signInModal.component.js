@@ -43,6 +43,5 @@ export default angular
       onSignUp: '&',
       onSuccess: '&',
       onFailure: '&',
-      isInsideAnotherModal: '='
     }
   })
