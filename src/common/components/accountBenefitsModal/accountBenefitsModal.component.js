@@ -22,7 +22,7 @@ class AccountBenefitsModalController {
       // No need to sign in if we already are
       this.onSuccess()
     } else {
-      this.onStateChange({ state: 'sign-up' })
+      this.onRegister()
     }
   }
 
@@ -42,7 +42,7 @@ export default angular
     templateUrl: template,
     bindings: {
       modalTitle: '=',
-      onStateChange: '&',
+      onRegister: '&',
       onSuccess: '&',
       onCancel: '&'
     }
