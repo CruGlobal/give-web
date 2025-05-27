@@ -8,18 +8,13 @@ const componentName = 'accountBenefitsModal'
 
 class AccountBenefitsModalController {
   /* @ngInject */
-  constructor ($location, gettext, sessionService) {
-    this.$location = $location
+  constructor (gettext, sessionService) {
     this.gettext = gettext
     this.sessionService = sessionService
   }
 
   $onInit () {
     this.modalTitle = this.gettext('Register Your Account for Online Access')
-    const shouldShowRegisterAccountModal = !!this.$location.search()?.code && !!this.$location.search()?.state
-    if (shouldShowRegisterAccountModal) {
-      this.onStateChange({ state: 'register-account' })
-    }
   }
 
   registerAccount () {
