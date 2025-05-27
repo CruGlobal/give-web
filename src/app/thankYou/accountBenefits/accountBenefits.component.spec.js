@@ -84,7 +84,7 @@ describe('thank you', function () {
         $ctrl.donorDetails = { 'registration-state': 'NEW' }
         $ctrl.openAccountBenefitsModal()
 
-        expect($ctrl.sessionModalService.registerAccount).toHaveBeenCalledWith(lastPurchaseId)
+        expect($ctrl.sessionModalService.registerAccount).toHaveBeenCalledWith({ lastPurchaseId })
         deferred.resolve()
         $rootScope.$digest()
         expect($ctrl.isVisible).toEqual(false)
@@ -140,7 +140,7 @@ describe('thank you', function () {
         it('shows sign in modal, followed by registerAccount', () => {
           $ctrl.doUserMatch()
 
-          expect($ctrl.sessionModalService.registerAccount).toHaveBeenCalled()
+          expect($ctrl.sessionModalService.registerAccount).toHaveBeenCalledWith({ lastPurchaseId })
           deferred.resolve()
           $rootScope.$digest()
 
