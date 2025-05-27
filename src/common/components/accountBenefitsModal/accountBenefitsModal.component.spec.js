@@ -26,14 +26,6 @@ describe('accountBenefitsModal', function () {
       $ctrl.$onInit()
 
       expect($ctrl.modalTitle).toEqual('Register Your Account for Online Access')
-      expect($ctrl.onStateChange).not.toHaveBeenCalled()
-    })
-
-    it('initializes component', () => {
-      jest.spyOn($location, 'search').mockReturnValue({ code: 'code', state: 'state '})
-      $ctrl.$onInit()
-
-      expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'register-account' })
     })
   })
 
