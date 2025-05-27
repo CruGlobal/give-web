@@ -1,5 +1,6 @@
-<p><strong>Question {{$ctrl.questionIndex}} of {{$ctrl.questionCount}}</strong></p>
-<p>{{$ctrl.question['question-text']}}</p>
+<h4>
+  <span translate>{{$ctrl.question['question-text']}}</span>
+</h4>
 <div class="alert alert-danger" role="alert" ng-if="$ctrl.hasError">
   <div translate>You must choose one.</div>
 </div>
@@ -9,17 +10,9 @@
            ng-repeat="answer in $ctrl.question.answers">
       <input name="answer"
              ng-model="$ctrl.answer"
-             ng-value="answer"
+             ng-value="answer.answer"
              type="radio"
              required>{{answer.answer}}
     </label>
   </div>
-
-  <p>
-    <button type="button"
-            class="btn btn-md btn-block btn-primary"
-            ng-click="$ctrl.selectAnswer()"
-            translate>Continue
-    </button>
-  </p>
 </form>

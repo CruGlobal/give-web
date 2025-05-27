@@ -16,7 +16,8 @@ export default {
   ],
   ignoreFiles: [
     'src/assets/crubrand/**',
-    'src/assets/cru-scss/**'
+    'src/assets/cru-scss/**',
+    '**/okta-sign-in.min.css'
   ],
   plugins: [
     'stylelint-declaration-strict-value',
@@ -24,7 +25,7 @@ export default {
   ],
   overrides: [
     {
-      files: ['src/assets/scss/*.{css,scss}'],
+      files: ['src/assets/scss/**/*.{css,scss}'],
       customSyntax: 'postcss-scss',
       rules: {
         'media-feature-range-notation': 'prefix', // Enforces range notation in media queries to use `min-` instead of  `>=` .

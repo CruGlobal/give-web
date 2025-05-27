@@ -49,7 +49,8 @@ class BrandedCheckoutController {
     this.analyticsFactory.pageLoaded(true)
     this.formatDonorDetails()
 
-    this.sessionService.signOut().subscribe(() => {
+    // We want to use signOutWithoutRedirectToOkta, as signout will redirect the user to okta to flush Okta's session data.
+    this.sessionService.signOutWithoutRedirectToOkta().subscribe(() => {
       this.checkoutStep = 'giftContactPayment'
       this.fireAnalyticsEvents('contact', 'payment')
       // Remove initialLoadComplete session storage. Used on src/common/components/contactInfo/contactInfo.component.js

@@ -6,7 +6,7 @@
         <select class="form-control form-control-subtle"
                 name="addressCountry" required
                 ng-model="$ctrl.address.country"
-                ng-options="v.name as v['display-name'] for v in $ctrl.countries | orderBy:'\'display-name\''"
+                ng-options="v.name as v['display-name'] for v in $ctrl.countries"
                 ng-change="$ctrl.refreshRegions($ctrl.address.country)"
                 ng-disabled="$ctrl.addressDisabled">
         </select>
@@ -122,7 +122,7 @@
           <select class="form-control  form-control-subtle"
                   name="addressRegion" required
                   ng-model="$ctrl.address.region"
-                  ng-options="v.name as v['display-name'] for v in $ctrl.regions | orderBy:'\'display-name\''"
+                  ng-options="v.name as v['display-name'] for v in $ctrl.regions"
                   ng-disabled="$ctrl.addressDisabled">
           </select>
           <div role="alert" ng-if="$ctrl.loadingRegionsError">

@@ -109,7 +109,6 @@ describe('Designation Editor', function () {
 
     describe('\'PUBLIC\' role', () => {
       it('sets profileLoading and registers sessionEnforcer', () => {
-        jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue(Roles.public)
         $ctrl.$onInit()
 
         expect($ctrl.sessionEnforcerService).toHaveBeenCalledWith(
