@@ -126,6 +126,9 @@ class ProductConfigFormController {
         }
         this.setDefaultAmount()
         this.setDefaultFrequency()
+        if (this.envService.read('isBrandedCheckout')) {
+          this.filterChosenFrequencies()
+        }
       })
 
     const nextDrawDateObservable = this.commonService.getNextDrawDate()
@@ -247,6 +250,9 @@ class ProductConfigFormController {
         .subscribe(data => {
           this.itemConfigForm.$setDirty()
           this.productData = data
+          if (this.envService.read('isBrandedCheckout')) {
+            this.filterChosenFrequencies()
+          }
           this.changingFrequency = false
           this.onStateChange({ state: 'unsubmitted' })
         },
@@ -259,6 +265,21 @@ class ProductConfigFormController {
           this.onStateChange({ state: 'unsubmitted' })
         })
     }
+  }
+
+  filterChosenFrequencies () {
+    let filteredFrequencies = this.productData.frequencies
+    if (this.hideQuarterly) {
+      filteredFrequencies = filteredFrequencies.filter((value) => {
+        return value.name !== 'QUARTERLY'
+      })
+    }
+    if (this.hideAnnual) {
+      filteredFrequencies = filteredFrequencies.filter((value) => {
+        return value.name !== 'ANNUAL'
+      })
+    }
+    this.productData.frequencies = filteredFrequencies
   }
 
   changeAmount (amount, retainCoverFees) {
@@ -418,5 +439,7 @@ export default angular
       submitted: '<',
       onStateChange: '&',
       useV3: '<',
+      hideAnnual: '<',
+      hideQuarterly: '<'
     }
   })

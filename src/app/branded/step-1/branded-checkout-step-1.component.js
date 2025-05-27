@@ -288,5 +288,7 @@ export default angular
       onSubmitted: '&',
       useV3: '<',
       loadingAndSubmitting: '<',
+      hideAnnual: '<',
+      hideQuarterly: '<'
     }
   })

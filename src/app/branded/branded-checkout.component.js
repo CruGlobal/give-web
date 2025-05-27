@@ -191,5 +191,7 @@ export default angular
       onOrderFailed: '&',
       language: '@',
       useV3: '@',
+      hideAnnual: '@',
+      hideQuarterly: '@'
     }
   })
