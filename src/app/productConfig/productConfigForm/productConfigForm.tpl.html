@@ -119,6 +119,18 @@
                   <div class="help-block" ng-message="minimum" translate translate-values="{currencyLimit: (1 | currency)}">{{'AMOUNT_MIN_ERROR'}}</div>
                   <div class="help-block" ng-message="maximum" translate translate-values="{currencyLimit: (10000000 | currency)}">{{'AMOUNT_MAX_ERROR'}}</div>
               </div>
+            </fieldset>
+            <div ng-if="!$ctrl.useV3">
+              <div class="radio radio-custom-amount"
+                  ng-repeat="suggested in $ctrl.suggestedAmounts | orderBy:'order'">
+                <label>
+                  <input name="suggestedAmount"
+                        type="radio"
+                        ng-click="$ctrl.changeAmount(suggested.amount)"
+                        ng-checked="!$ctrl.customInputActive && $ctrl.itemConfig.AMOUNT === suggested.amount" />
+                  {{$ctrl.suggestedAmount(suggested.amount)}} {{suggested.label}}
+                </label>
+              </div>
             </div>
           </div>
 
