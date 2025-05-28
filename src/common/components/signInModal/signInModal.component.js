@@ -21,10 +21,6 @@ class SignInModalController {
       this.$window.location = `/checkout.html${window.location.search}`
     }
   }
-
-  getOktaUrl () {
-    return this.sessionService.getOktaUrl()
-  }
 }
 
 export default angular
