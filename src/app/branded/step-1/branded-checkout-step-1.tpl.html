@@ -1,17 +1,26 @@
+<checkout-error-messages
+  needinfo-errors="$ctrl.needinfoErrors"
+  submission-error="$ctrl.submissionError"
+  submission-error-status="$ctrl.submissionErrorStatus">
+</checkout-error-messages>
 <div class="panel">
   <div class="panel-body loading-overlay-parent">
     <loading ng-if="$ctrl.loadingProductConfig">
       <translate>Loading gift details...</translate>
     </loading>
-    <product-config-form code="$ctrl.code"
-                         is-edit="$ctrl.isEdit"
-                         item-config="$ctrl.itemConfig"
-                         default-frequency="$ctrl.defaultFrequency"
-                         uri="$ctrl.item.uri"
-                         submitted="$ctrl.submitted"
-                         on-state-change="$ctrl.onGiftConfigStateChange(state)"
-                         disable-session-restart="true"
-                         ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig">
+    <product-config-form
+      code="$ctrl.code"
+      is-edit="$ctrl.isEdit"
+      item-config="$ctrl.itemConfig"
+      default-frequency="$ctrl.defaultFrequency"
+      uri="$ctrl.item.uri"
+      submitted="$ctrl.submitted"
+      on-state-change="$ctrl.onGiftConfigStateChange(state)"
+      disable-session-restart="true"
+      ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig"
+      hide-quarterly="$ctrl.hideQuarterly"
+      hide-annual="$ctrl.hideAnnual"
+      use-v3="$ctrl.useV3">
     </product-config-form>
     <div ng-if="$ctrl.errorLoadingProductConfig" class="alert alert-danger" role="alert">
       <p translate='LOADING_ERROR' translate-values="{loadData: '$ctrl.loadData()'}" translate-compile></p>
@@ -21,12 +30,13 @@
 <div ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig">
   <div class="panel">
     <div class="panel-body">
-      <h3 class="panel-name" translate>{{'YOUR_INFORMATION'}}</h3>
+      <h3 ng-if="!$ctrl.useV3" class="panel-name" translate>{{'YOUR_INFORMATION'}}</h3>
       <contact-info
         submitted="$ctrl.submitted"
         on-submit="$ctrl.onContactInfoSubmit(success)"
         donor-details="$ctrl.donorDetails"
-        radio-station-api-url="$ctrl.radioStationApiUrl">
+        radio-station-api-url="$ctrl.radioStationApiUrl"
+        use-v3="$ctrl.useV3">
       </contact-info>
     </div>
   </div>
@@ -79,10 +89,25 @@
   </div>
   <div class="panel">
     <div class="panel-body text-right">
-      <button class="btn btn-primary"
+      <div class="checkout-cta pull-right" ng-if="$ctrl.useV3">
+       <recaptcha-wrapper
+              action="'branded_checkout'"
+              on-success="$ctrl.submit"
+              component-instance="$ctrl"
+              button-id="'submitOrderButton'"
+              button-type="'submit'"
+              button-classes="'btn btn-primary btn-lg btn-block'"
+              button-disabled="$ctrl.errorLoadingProductConfig || !$ctrl.canSubmitOrder()"
+              button-label="'SUBMIT_GIFT'"></recaptcha-wrapper>
+        </div>
+
+      <button ng-if="!$ctrl.useV3" class="btn btn-primary"
               ng-click="$ctrl.submit()"
               ng-disabled="$ctrl.errorLoadingProductConfig"
               translate>{{'CONTINUE'}}</button>
-    </div>
+  </div>
   </div>
 </div>
+<loading type="fixed" ng-if="$ctrl.loadingAndSubmitting">
+  <translate>{{'SUBMITTING_GIFT'}}</translate>
+</loading>

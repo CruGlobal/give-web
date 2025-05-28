@@ -358,7 +358,13 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     RADIO_STATION: 'Radio Station',
     RADIO_STATION_LIST_ERROR: 'There was an error loading radio stations in your area.',
     RADIO_STATION_SELECT_ERROR: 'There was an error selecting a radio station.',
-    PREFERRED_RADIO_STATION: 'Preferred Radio Station: '
+    PREFERRED_RADIO_STATION: 'Preferred Radio Station: ',
+    SPOUSE_DETAILS_TOOLTIP: 'By adding your spouse\'s name, we can ensure that both of your contributions are linked together, providing a clearer and more accurate record of your household\'s giving.',
+    SECURE: 'Secure',
+    ADD_SPOUSE: 'Add Spouse',
+    REMOVE_SPOUSE: 'Remove',
+    SUGGESTED_AMOUNT_HELP: 'Suggested Gift Amounts. Tab for Custom Amount',
+    CUSTOM_AMOUNT: 'Custom Amount'
   })
 
   $translateProvider.translations('es', {
@@ -538,7 +544,7 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     REVIEW_DEFAULT_ERROR: 'There was an issue processing your request. Please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
     ACCOUNT_NUM_FULL: 'Account Number',
     ROUTING_NUM_FULL: 'Routing Number',
-    CARD_NUM_FULL: 'Card Number',
+    CARD_NUM_FULL: 'Número de tarjeta',
     CARD_TYPE: 'Card Type',
     EXPIRES: 'Expires',
     REVIEW_GIFTS: 'Review Gifts',
@@ -571,7 +577,13 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     RADIO_STATION: 'Radio Station',
     RADIO_STATION_LIST_ERROR: 'There was an error loading radio stations in your area.',
     RADIO_STATION_SELECT_ERROR: 'There was an error selecting a radio station.',
-    PREFERRED_RADIO_STATION: 'Preferred Radio Station: '
+    PREFERRED_RADIO_STATION: 'Preferred Radio Station: ',
+    SPOUSE_DETAILS_TOOLTIP: 'By adding your spouse\'s name, we can ensure that both of your contributions are linked together, providing a clearer and more accurate record of your household\'s giving.',
+    SECURE: 'Secure',
+    ADD_SPOUSE: 'Add Spouse',
+    REMOVE_SPOUSE: 'Remove',
+    SUGGESTED_AMOUNT_HELP: 'Suggested Gift Amounts. Tab for Custom Amount',
+    CUSTOM_AMOUNT: 'Custom Amount'
   })
   $translateProvider.preferredLanguage('en')
 }

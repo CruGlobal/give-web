@@ -6,7 +6,7 @@ import 'rxjs/add/observable/from'
 import 'rxjs/add/observable/throw'
 
 import RecurringGiftModel from 'common/models/recurringGift.model'
-import { giftAddedEvent } from 'common/components/nav/navCart/navCart.component'
+import { giftAddedEvent } from 'common/lib/cartEvents'
 
 import module from './giveOneTimeGift.modal.component'
 

@@ -59,6 +59,9 @@ Add the following code to your page where appropriate. See the [Branded checkout
     on-order-completed="$event.$window.onOrderCompleted($event.purchase)"
     on-order-failed="$event.$window.onOrderFailed($event.donorDetails)"
     radio-station-api-url="https://api.domain.com/getStations"
+    hide-annual="true"
+    hide-quarterly="true"
+    use-v3="true"
     premium-code="BOOKS01"
     premium-name="Books"
     premium-image-url="https://api.images.com/img.png">
@@ -136,6 +139,9 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
   - `$event.$window` - Provides access to the browser's global `window` object. This allows you to call a custom callback function like `onOrderCompleted` in the example.
   - `$event.purchase` - contains the order's details that are loaded for the thank you page
 - `radio-station-api-url` - Provides a URL path for fetching a list of radio stations in the donor's vicinity.  If you plan to use this feature, contact Cru's Digital Products and Services (DPS) department ([help@cru.org](mailto:help@cru.org)) to have your URL domain whitelisted to interact with our API - *Optional*
+- `hide-annual` - Hides the annual frequency option. If you don't want this feature, do not add this attribute at all. - *Optional*
+- `hide-quarterly` - Hides the quarterly frequency option. If you don't want this feature, do not add this attribute at all. - *Optional*
+- `use-v3` - Version 3 removes the review page from the checkout flow and makes UX improvements on the form. - *Optional*
 
 
 #### Server-side configuration for a new branded checkout domain
@@ -206,5 +212,3 @@ Use the `cortexApiService` which provides convenience methods for sending reques
 Replace `https://give-static.cru.org` with `https://give-stage-static.cru.org` to use the staging environment.
 
 ### Deployments
-
-GitHub actions auto-deploys master and staging builds to S3 buckets, which backs CloudFront.
