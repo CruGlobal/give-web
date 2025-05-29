@@ -850,6 +850,6 @@ export default angular
       onSignUpError: '&',
       // Called when the user clicks back to sign in link
       onSignIn: '&',
-      lastPurchaseId: '<',
+      lastPurchaseId: '<'
     }
   })
