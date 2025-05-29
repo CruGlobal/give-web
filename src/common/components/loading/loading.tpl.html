@@ -1,9 +1,10 @@
 <div ng-class="{
         'loading-centered': $ctrl.type === 'centered' || $ctrl.type === 'overlay',
-        'loading-overlay': $ctrl.type === 'overlay'
+        'loading-overlay': $ctrl.type === 'overlay',
+        'icon-first': $ctrl.iconFirst
       }">
   <div>
-    <span ng-class="{ 'mr-' : $ctrl.inline === 'true', 'center-block' : $ctrl.inline !== 'true'  }">
+    <span ng-class="$ctrl.inline ? 'mr-' : 'center-block'">
       <ng-transclude></ng-transclude>
     </span>
     <span class="loading-wrap">
