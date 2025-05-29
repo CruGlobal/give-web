@@ -4,7 +4,6 @@ import module from './accountBenefits.component'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/from'
 import 'rxjs/add/observable/throw'
-import { Roles } from 'common/services/session/session.service'
 
 describe('thank you', function () {
   describe('accountBenefits', function () {
