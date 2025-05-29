@@ -30,6 +30,7 @@ class SessionModalController {
     this.stateChanged(this.resolve.state)
     this.hideCloseButton = this.resolve.hideCloseButton
     this.lastPurchaseId = this.resolve.lastPurchaseId
+    this.registerAccountSignUp = this.resolve.registerAccountSignUp
   }
 
   stateChanged (state) {
