@@ -25,7 +25,7 @@ class ResetPasswordModalController {
   // --------------------------------------
 
   /* @ngInject */
-  constructor ($log, $scope, sessionService, envService) {
+  constructor ($log, $scope, sessionService) {
     this.$log = $log
     this.$scope = $scope
     this.sessionService = sessionService
@@ -102,7 +102,6 @@ class ResetPasswordModalController {
     this.$scope.$apply(() => {
       this.currentStep = step
     })
-    
 
     if (context.formName === 'challenge-authenticator') {
       if (context.authenticatorKey === 'okta_email') {

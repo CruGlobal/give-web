@@ -18,7 +18,7 @@ export function showVerificationCodeField () {
 }
 
 export function injectBackButton (context) {
-  // context will be the component instance that calls this function
+  // context will be the component instance that calls the function onBackButtonClick()
   if (!context || !context.onBackButtonClick) {
     throw new Error('Context must be provided with a valid onBackButtonClick function.')
   }
@@ -39,15 +39,10 @@ export function injectBackButton (context) {
 }
 
 export function initializeFloatingLabels (context) {
-  // context will be the component instance that calls this function
+  // context will be the component instance that updates te array variable floatingLabelAbortControllers
   if (!context || !context.floatingLabelAbortControllers) {
     throw new Error('Context must be provided with a valid floatingLabelAbortControllers array variable.')
   }
-  // Ensure floatingLabelAbortControllers is initialized
-  if (!context.floatingLabelAbortControllers) {
-    context.floatingLabelAbortControllers = []
-  }
-
   // As the Label and Input fields are not directly related in the DOM, we need to manually
   // add the active class to the label when the input is focused or has a value.
 
