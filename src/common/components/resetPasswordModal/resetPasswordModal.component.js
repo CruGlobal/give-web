@@ -1,18 +1,10 @@
 import angular from 'angular'
-import 'angular-sanitize'
-import 'angular-translate'
-import includes from 'lodash/includes'
 import OktaSignIn from '@okta/okta-signin-widget'
-import sessionService, { Roles } from 'common/services/session/session.service'
-import orderService from 'common/services/api/order.service'
+import sessionService from 'common/services/session/session.service'
 import template from './resetPasswordModal.tpl.html'
-import cartService from 'common/services/api/cart.service'
-import geographiesService from 'common/services/api/geographies.service'
 import { initializeFloatingLabels, injectBackButton, showVerificationCodeField } from 'common/lib/oktaSignInWidgetHelper/oktaSignInWidgetHelper'
 
 const componentName = 'resetPasswordModal'
-const backButtonId = 'backButton'
-const backButtonText = 'Back'
 
 class ResetPasswordModalController {
   // --------------------------------------
@@ -30,29 +22,16 @@ class ResetPasswordModalController {
   // Step 5: Reset authenticator
   // Step 6: Reset password
   // Step 7: Upon a success password reset, the user will be logged in and redirected to their previous page
-  // -------------------------------------- //
+  // --------------------------------------
 
   /* @ngInject */
-  constructor ($log, $scope, $location, $sanitize, $timeout, $translate, sessionService, cartService, orderService, envService, geographiesService) {
+  constructor ($log, $scope, sessionService) {
     this.$log = $log
     this.$scope = $scope
-    this.$location = $location
-    this.$sanitize = $sanitize
-    this.$timeout = $timeout
-    this.$translate = $translate
     this.sessionService = sessionService
-    this.orderService = orderService
-    this.cartService = cartService
-    this.geographiesService = geographiesService
-    this.imgDomain = envService.read('imgDomain')
-    this.publicCru = envService.read('publicCru')
   }
 
   $onInit () {
-    // unsure
-    if (includes([Roles.identified, Roles.registered], this.sessionService.getRole())) {
-      this.onSignIn()
-    }
     this.initializeVariables()
     this.setUpSignUpWidget()
   }
@@ -63,6 +42,12 @@ class ResetPasswordModalController {
       // Unsubscribe all event listeners
       this.oktaSignInWidget.off()
     }
+  }
+
+  ready () {
+    this.$scope.$apply(() => {
+      this.isLoading = false
+    })
   }
 
   initializeVariables () {
@@ -94,12 +79,7 @@ class ResetPasswordModalController {
     switch (context.formName) {
       case 'identify':
         step = 1
-        injectBackButton({
-          $scope: this.$scope,
-          functionCallback: this.onSignIn,
-          backButtonId,
-          backButtonText
-        })
+        injectBackButton(this)
         break
       case 'select-authenticator-authenticate':
         //  Auth options: okta_email | google_otp | okta_verify | phone_number
@@ -141,12 +121,12 @@ class ResetPasswordModalController {
     }
 
     // This needs to be after showVerificationCodeField to ensure even the verification code field is styled correctly
-    initializeFloatingLabels(this.floatingLabelAbortControllers)
+    initializeFloatingLabels(this)
   }
 
-  ready () {
+  onBackButtonClick () {
     this.$scope.$apply(() => {
-      this.isLoading = false
+      this.onSignIn()
     })
   }
 
@@ -181,19 +161,14 @@ class ResetPasswordModalController {
     }).then(tokens => {
       this.oktaSignInWidget.authClient.handleLoginRedirect(tokens)
     }).catch(error => {
-      this.$log.error('Okta Sign up: Error showing Okta sign in widget.', error)
+      this.$log.error('Okta Forgot Password: Error showing Okta sign in widget.', error)
     })
   }
 }
 
 export default angular
   .module(componentName, [
-    'pascalprecht.translate',
-    'ngSanitize',
-    sessionService.name,
-    orderService.name,
-    cartService.name,
-    geographiesService.name
+    sessionService.name
   ])
   .component(componentName, {
     controller: ResetPasswordModalController,

@@ -10,7 +10,8 @@ import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
 import { schema, user } from './signUpModal.component.mock'
 import { customFields } from './signUpFormCustomFields'
-import {injectBackButton, showVerificationCodeField} from '../../lib/oktaSignInWidgetHelper/oktaSignInWidgetHelper';
+import {showVerificationCodeField, injectBackButton} from '../../lib/oktaSignInWidgetHelper/oktaSignInWidgetHelper';
+import { before } from 'lodash'
 
 jest.mock('../../lib/oktaSignInWidgetHelper/oktaSignInWidgetHelper');
 showVerificationCodeField.mockImplementation(() => {})
@@ -914,11 +915,10 @@ describe('signUpForm', function () {
         jest.spyOn($ctrl, 'redirectToSignInModalIfNeeded').mockImplementation(() => {});
         jest.spyOn($ctrl, 'injectErrorMessages').mockImplementation(() => {});
         jest.spyOn($ctrl, 'skipOptionalMFAEnrollment').mockImplementation(() => {});
-
         $ctrl.$onInit()
       })
 
-      fit('updates the form', () => {
+      it('updates the form', () => {
         $ctrl.currentStep = 2
         $ctrl.afterRender({ formName: 'enroll-profile' })
 
@@ -1371,6 +1371,9 @@ describe('signUpForm', function () {
   });
 
   describe('injectBackButton', () => {
+    beforeEach(() => {
+      injectBackButton.mockClear();
+    });
     it('does not add back button on step 1', () => {
       $ctrl.currentStep = 1
       $ctrl.afterRender({ formName: 'enroll-profile' })

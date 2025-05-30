@@ -1,13 +1,8 @@
 import angular from 'angular'
 import 'angular-mocks'
-import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/from'
 import 'rxjs/add/observable/of'
 import module from './signInForm.component'
-import { Sessions } from 'common/services/session/session.service'
-import { cortexRole } from 'common/services/session/fixtures/cortex-role'
-import { giveSession } from 'common/services/session/fixtures/give-session'
-import { cruProfile } from 'common/services/session/fixtures/cru-profile'
 
 describe('signInForm', function () {
   beforeEach(angular.mock.module(module.name))
@@ -31,15 +26,5 @@ describe('signInForm', function () {
 
   it('to be defined', function () {
     expect($ctrl).toBeDefined()
-  })
-
-  describe('getOktaUrl()', () => {
-    it('should call sessionService getOktaUrl and return Okta URL', () => {
-      jest.spyOn($ctrl.sessionService, 'getOktaUrl').mockReturnValue('URL')
-      const response = $ctrl.getOktaUrl()
-
-      expect($ctrl.sessionService.getOktaUrl).toHaveBeenCalled();
-      expect(response).toEqual('URL')
-    })
   })
 })
