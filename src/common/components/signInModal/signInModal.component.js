@@ -40,6 +40,5 @@ export default angular
       onSuccess: '&',
       onFailure: '&',
       onResetPassword: '&',
-      isInsideAnotherModal: '='
     }
   })
