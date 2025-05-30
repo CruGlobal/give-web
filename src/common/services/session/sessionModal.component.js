@@ -30,6 +30,7 @@ class SessionModalController {
     this.stateChanged(this.resolve.state)
     this.hideCloseButton = this.resolve.hideCloseButton
     this.lastPurchaseId = this.resolve.lastPurchaseId
+    this.registerAccountSignUp = this.resolve.registerAccountSignUp
   }
 
   stateChanged (state) {
@@ -45,6 +46,12 @@ class SessionModalController {
     this.analyticsFactory.track('ga-sign-in-create-login')
     this.sessionService.removeOktaRedirectIndicator()
     this.close()
+  }
+
+  onAccountBenefitsRegister () {
+    this.sessionService.removeOktaRedirectIndicator()
+    this.registerAccountSignUp = true
+    this.stateChanged('register-account')
   }
 
   onAccountBenefitsSuccess () {

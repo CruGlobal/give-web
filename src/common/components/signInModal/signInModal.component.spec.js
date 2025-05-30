@@ -11,7 +11,6 @@ describe('signInModal', function () {
   beforeEach(inject(function (_$componentController_) {
     bindings = {
       modalTitle: '',
-      onStateChange: onStateChange,
       onSuccess: jest.fn()
     }
     $ctrl = _$componentController_(module.name, {}, bindings)
@@ -47,15 +46,6 @@ describe('signInModal', function () {
         expect($ctrl.modalTitle).toEqual('Sign In')
         expect($ctrl.$window.location).toEqual('https://give.cru.org/')
       })
-    })
-  })
-
-  describe('getOktaUrl', () => {
-    it('should call sessionService getOktaUrl', () => {
-      jest.spyOn($ctrl.sessionService, 'getOktaUrl').mockReturnValue('URL')
-      expect($ctrl.sessionService.getOktaUrl).not.toHaveBeenCalled()
-      $ctrl.getOktaUrl()
-      expect($ctrl.sessionService.getOktaUrl).toHaveBeenCalled()
     })
   })
 })

@@ -1,6 +1,6 @@
 import angular from 'angular'
 import sessionModalService from 'common/services/session/sessionModal.service'
-import sessionService, { Roles } from 'common/services/session/session.service'
+import sessionService from 'common/services/session/session.service'
 import orderService from 'common/services/api/order.service'
 import template from './accountBenefits.tpl.html'
 
@@ -26,47 +26,42 @@ class AccountBenefitsController {
       // Show account benefits if registration state is NEW or MATCHED
       if (changes.donorDetails.currentValue['registration-state'] !== 'COMPLETED') {
         this.isVisible = true
-        this.openAccountBenefitsModal()
+        this.openModal(true)
       }
     }
   }
 
-  openAccountBenefitsModal () {
+  openModal (defaultToAccountBenefits = false) {
     const lastPurchaseId = this.getLastPurchaseId()
-    return this.sessionService.oktaIsUserAuthenticated().subscribe((isAuthenticated) => {
+    if (!lastPurchaseId) {
+      return
+    }
+
+    this.sessionService.oktaIsUserAuthenticated().subscribe((isAuthenticated) => {
       const registrationState = this.donorDetails['registration-state']
-      if (lastPurchaseId && registrationState !== 'COMPLETED') {
-        if (isAuthenticated && registrationState === 'NEW') {
-          return this.sessionModalService.registerAccount(lastPurchaseId).then(() => {
-            this.isVisible = false
-          }, angular.noop)
-        } else if (isAuthenticated && registrationState === 'MATCHED') {
-          return this.sessionModalService.userMatch(lastPurchaseId).then(() => {
-            this.isVisible = false
-          }, angular.noop)
-        } else {
-          return this.sessionModalService.accountBenefits(lastPurchaseId).then(() => {
-            this.isVisible = false
-          }, angular.noop)
-        }
+      if (isAuthenticated && registrationState === 'NEW') {
+        return this.sessionModalService.registerAccount({ lastPurchaseId }).then(() => {
+          this.isVisible = false
+        }, angular.noop)
+      } else if (isAuthenticated && registrationState === 'MATCHED') {
+        return this.sessionModalService.userMatch(lastPurchaseId).then(() => {
+          this.isVisible = false
+        }, angular.noop)
+      } else if (defaultToAccountBenefits) {
+        // The modal is showing because donorDetails['registration-state'] changed
+        return this.sessionModalService.accountBenefits(lastPurchaseId).then(() => {
+          this.isVisible = false
+        }, angular.noop)
+      } else {
+        // The user clicked the Register Your Account button in the template
+        return this.sessionModalService.registerAccount({ lastPurchaseId, signUp: true }).then(() => {
+          this.isVisible = false
+        }, angular.noop)
       }
     },
     error => {
       this.$log.error('Failed checking if user is authenticated', error)
     })
-  }
-
-  doUserMatch () {
-    if (this.sessionService.getRole() === Roles.registered) {
-      this.sessionModalService.userMatch()
-    } else {
-      this.sessionModalService.registerAccount(this.getLastPurchaseId()).then(() => {
-        this.sessionModalService.userMatch().then(() => {
-          // Hide component after successful user match
-          this.isVisible = false
-        }, angular.noop)
-      }, angular.noop)
-    }
   }
 
   getLastPurchaseId () {

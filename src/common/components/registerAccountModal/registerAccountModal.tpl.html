@@ -59,13 +59,11 @@
       on-sign-up="$ctrl.onSignUp()"
       on-success="$ctrl.onIdentitySuccess()"
       on-failure="$ctrl.onIdentityFailure()"
-      is-inside-another-modal="true"
     ></sign-in-modal>
     <sign-up-modal
       ng-switch-when="sign-up"
       on-sign-up-error="$ctrl.onSignUpError(donorDetails)"
       on-sign-in="$ctrl.onSignIn()"
-      is-inside-another-modal="true"
       last-purchase-id="$ctrl.lastPurchaseId"
     ></sign-up-modal>
     <div ng-switch-when="loading-donor" class="modal-body">
