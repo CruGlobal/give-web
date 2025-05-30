@@ -138,6 +138,33 @@
                   {{$ctrl.suggestedAmount(suggested.amount)}} {{suggested.label}}
                 </label>
               </div>
+              <div class="radio radio-custom-amount form-inline" ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}">
+                <div class="form-group">
+                  <label>
+                    <input name="suggestedAmount"
+                           type="radio"
+                           ng-checked="$ctrl.customInputActive" />
+                    <input class="form-control form-control-subtle"
+                           name="amount"
+                           type="text"
+                           step="1"
+                           ng-model="$ctrl.customAmount"
+                           ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
+                           ng-focus="$ctrl.customInputActive = true"
+                           ng-required="$ctrl.customInputActive"
+                           placeholder="{{'OTHER_PLACEHOLDER' | translate}}" />
+                  </label>
+                  <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error"
+                       ng-if="($ctrl.itemConfigForm.amount | showErrors)">
+                    <div class="help-block" ng-message="pattern" translate>{{'VALID_DOLLAR_AMOUNT_ERROR'}}</div>
+                    <div class="help-block" ng-message="required" translate>{{'AMOUNT_EMPTY_ERROR'}}</div>
+                    <div class="help-block" ng-message="minimum" translate translate-values="{currencyLimit: (1 | currency)}">{{'AMOUNT_MIN_ERROR'}}</div>
+                    <div class="help-block" ng-message="maximum" translate translate-values="{currencyLimit: (10000000 | currency)}">
+                      {{'AMOUNT_MAX_ERROR'}}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
