@@ -1,7 +1,6 @@
 import angular from 'angular'
 import 'angular-gettext'
 import uibTooltip from 'angular-ui-bootstrap/src/tooltip'
-import sessionService from 'common/services/session/session.service'
 import signInButtonComponent from './signInButton/signInButton.component'
 import template from './signInForm.tpl.html'
 
@@ -9,24 +8,18 @@ const componentName = 'signInForm'
 
 class SignInFormController {
   /* @ngInject */
-  constructor (sessionService, gettext) {
+  constructor (gettext) {
     this.$injector = angular.injector()
-    this.sessionService = sessionService
     this.gettext = gettext
   }
 
   $onInit () {
     this.onSignInPage = this.onSignInPage || false
   }
-
-  getOktaUrl () {
-    return this.sessionService.getOktaUrl()
-  }
 }
 
 export default angular
   .module(componentName, [
-    sessionService.name,
     signInButtonComponent.name,
     uibTooltip,
     'gettext'
@@ -37,6 +30,7 @@ export default angular
     bindings: {
       onSuccess: '&',
       onFailure: '&',
+      onResetPassword: '&',
       lastPurchaseId: '<',
       // Optional if on-sign-in-page is true
       onSignUpWithOkta: '&?',

@@ -6,7 +6,7 @@
     <div ng-switch="$ctrl.state">
       <h3 ng-switch-when="loading-donor" translate>Checking your donor account</h3>
       <h3 ng-switch-when="user-match" translate>Access Your Account</h3>
-      <div ng-switch-when="sign-in,sign-up" ng-switch-when-separator="," class="new-user-info">
+      <div ng-switch-when="sign-in,sign-up,reset-password" ng-switch-when-separator="," class="new-user-info">
         <div class="header-container">
           <picture>
             <source srcset="{{$ctrl.imgDomain}}/assets/img/register-account-header.jpeg 1x, {{$ctrl.imgDomain}}/assets/img/register-account-header@2x.jpeg 2x">
@@ -59,6 +59,8 @@
       on-sign-up="$ctrl.onSignUp()"
       on-success="$ctrl.onIdentitySuccess()"
       on-failure="$ctrl.onIdentityFailure()"
+      on-reset-password="$ctrl.onResetPassword()"
+      is-inside-another-modal="true"
     ></sign-in-modal>
     <sign-up-modal
       ng-switch-when="sign-up"
@@ -66,6 +68,11 @@
       on-sign-in="$ctrl.onSignIn()"
       last-purchase-id="$ctrl.lastPurchaseId"
     ></sign-up-modal>
+    <reset-password-modal
+      ng-switch-when="reset-password"
+      on-sign-in="$ctrl.onSignIn()"
+      is-inside-another-modal="true"
+    ></reset-password-modal>
     <div ng-switch-when="loading-donor" class="modal-body">
       <loading></loading>
     </div>
