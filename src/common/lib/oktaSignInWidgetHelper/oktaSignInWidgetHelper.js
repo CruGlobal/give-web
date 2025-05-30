@@ -7,6 +7,9 @@ import angular from 'angular'
 // - injectBackButton()
 // - initializeFloatingLabels()
 
+export const backButtonId = 'backButton'
+export const backButtonText = 'Back'
+
 export function showVerificationCodeField () {
   // The verification code field is only shown when the button link "Enter a verification code instead" is clicked.
   // This makes the process of creating an account more streamlined as we remove that click.

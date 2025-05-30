@@ -1,4 +1,4 @@
-import { showVerificationCodeField, injectBackButton } from "./oktaSignInWidgetHelper";
+import { showVerificationCodeField, injectBackButton, initializeFloatingLabels, backButtonId, backButtonText } from "./oktaSignInWidgetHelper";
 
 describe('oktaSignInWidgetHelper', () => {
   describe('showVerificationCodeField()', () => {
@@ -32,17 +32,17 @@ describe('oktaSignInWidgetHelper', () => {
   });
 
   describe('injectBackButton', () => {
-    const $scope = {
-      $apply: (functionCallback) => {
-        if (typeof functionCallback === 'function') {
-          functionCallback();
+    const onBackButtonClickSpy = jest.fn()
+    const thisComponent = {
+      onBackButtonClick: onBackButtonClickSpy,
+      $scope: {
+        $apply: (functionCallback) => {
+          if (typeof functionCallback === 'function') {
+            functionCallback();
+          }
         }
       }
     }
-    const mockFunction = jest.fn()
-    const backButtonId = 'backButtonId'
-    const backButtonText = 'backButtonText'
-
     beforeEach(() => {
      document.body.innerHTML = `
         <div class="o-form-button-bar">
@@ -54,12 +54,7 @@ describe('oktaSignInWidgetHelper', () => {
     });
 
     it("should render the back button in the HTML", () => {
-      injectBackButton({
-      $scope,
-      functionCallback: mockFunction,
-      backButtonId,
-      backButtonText
-      });
+      injectBackButton(thisComponent);
 
       const backButton = document.querySelector(`#${backButtonId}`);
       expect(backButton).not.toBeNull();
@@ -72,29 +67,19 @@ describe('oktaSignInWidgetHelper', () => {
       <button id="${backButtonId}" class="btn btn-secondary" type="button">${backButtonText}</button>
       `;
 
-      injectBackButton({
-      $scope,
-      functionCallback: mockFunction,
-      backButtonId,
-      backButtonText
-      });
+      injectBackButton(thisComponent);
 
       const buttons = document.querySelectorAll(`#${backButtonId}`);
       expect(buttons.length).toBe(1); // Ensure only one button exists
     });
 
     it("should call the functionCallback when the back button is clicked", () => {
-      injectBackButton({
-      $scope,
-      functionCallback: mockFunction,
-      backButtonId,
-      backButtonText
-      });
+      injectBackButton(thisComponent);
 
       const backButton = document.querySelector(`#${backButtonId}`);
       backButton.click();
 
-      expect(mockFunction).toHaveBeenCalled();
+      expect(onBackButtonClickSpy).toHaveBeenCalled();
     });
 
     it("should not render the back button if the button bar is not present", () => {
@@ -102,15 +87,47 @@ describe('oktaSignInWidgetHelper', () => {
       <div>Something else</div>
       `;
 
-      injectBackButton({
-      $scope,
-      functionCallback: mockFunction,
-      backButtonId,
-      backButtonText
-      });
+      injectBackButton(thisComponent);
 
       const backButton = document.querySelector(`#${backButtonId}`);
       expect(backButton).toBeNull();
     });
   })
+
+  describe('initializeFloatingLabels', () => {
+    const thisComponent = {
+      floatingLabelAbortControllers: []
+    }
+    beforeEach(() => {
+      document.body.innerHTML = `
+      <div class="o-form-content">
+        <div class="label-holder">
+          <label for="input58">First name</label>
+        </div>
+        <div class="input-holder">
+          <input type="text" id="input58" />
+        </div>
+      </div>
+      `;
+    });
+    
+    it('should update floatingLabelAbortControllers variable', () => {
+      expect(thisComponent.floatingLabelAbortControllers.length).toEqual(0);
+      initializeFloatingLabels(thisComponent);
+      expect(thisComponent.floatingLabelAbortControllers.length).toEqual(1);
+    });
+
+
+    it('should add the "active" class to the label when input is focused', () => {
+      initializeFloatingLabels(thisComponent);
+
+      const input = document.querySelector('#input58');
+      const label = input.labels[0]?.parentNode;
+
+      // Simulate focusing the input
+      input.dispatchEvent(new Event('focus'));
+
+      expect(label.classList.contains('active')).toBe(true);
+    });
+  });
 });
