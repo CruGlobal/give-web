@@ -1,6 +1,7 @@
 <div ng-class="{
-        'loading-centered': $ctrl.type === 'centered' || $ctrl.type === 'overlay',
-        'loading-overlay': $ctrl.type === 'overlay',
+        'loading-centered': $ctrl.type === 'centered' || $ctrl.type === 'overlay' || $ctrl.type === 'fixed',
+        'loading-overlay': $ctrl.type === 'overlay' || $ctrl.type === 'fixed',
+        'loading-fixed': $ctrl.type === 'fixed',
         'icon-first': $ctrl.iconFirst
       }">
   <div>

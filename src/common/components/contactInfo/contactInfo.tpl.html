@@ -45,19 +45,20 @@
 
   <form novalidate ng-keyup="$event.key === 'Enter' && $ctrl.submitDetails()" name="$ctrl.detailsForm">
     <div class="name mb">
-      <h4 class="panel-title  border-bottom-small  visible" translate>{{'YOUR_INFORMATION'}}</h4>
+      <h4 ng-if="!$ctrl.useV3" class="panel-title  border-bottom-small  visible" translate>{{$ctrl.useV3 ? 'CONTACT_INFO' : 'YOUR_INFORMATION'}}</h4>
       <div class="row">
-        <div class="col-sm-4">
+        <div ng-class="$ctrl.useV3 ? 'col-md-5 col-sm-6' : 'col-sm-4'">
           <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.nameGivenName | showErrors)}">
             <label>
               <span translate>{{'FIRST_NAME'}}</span>
-              <input type="text"
-                      class="form-control  form-control-subtle"
-                      name="nameGivenName"
-                      ng-model="$ctrl.donorDetails['name']['given-name']"
-                      required
-                      ng-maxlength="50"
-                      ng-disabled="$ctrl.nameFieldsDisabled">
+              <input 
+                type="text"
+                class="form-control  form-control-subtle"
+                name="nameGivenName"
+                ng-model="$ctrl.donorDetails['name']['given-name']"
+                required
+                ng-maxlength="50"
+                ng-disabled="$ctrl.nameFieldsDisabled">
             </label>
             <div role="alert" ng-messages="$ctrl.detailsForm.nameGivenName.$error" ng-if="($ctrl.detailsForm.nameGivenName | showErrors)">
               <div class="help-block" ng-message="required" translate>{{'FIRST_NAME_ERROR'}}</div>
@@ -65,7 +66,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-2">
+        <div ng-if="!$ctrl.useV3" class="col-sm-2">
           <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.nameMiddleInitial | showErrors)}">
             <label>
               <span translate>{{'MIDDLE_ABBREV'}}</span>
@@ -81,7 +82,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-4">
+        <div ng-class="$ctrl.useV3 ? 'col-md-5 col-sm-6' : 'col-sm-4'">
           <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.nameFamilyName | showErrors)}">
             <label>
               <span translate>{{'LAST_NAME'}}</span>
@@ -99,7 +100,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-2">
+        <div ng-if="!$ctrl.useV3" class="col-sm-2">
           <div class="form-group">
             <label>
               <span translate>{{'SUFFIX'}}</span>
@@ -118,11 +119,23 @@
             </label>
           </div>
         </div>
-
+        <div ng-if="$ctrl.donorDetails['donor-type'] === 'Household' && $ctrl.useV3">
+          <div class="col-sm-12 col-md-2">
+            <div class="form-group">
+              <label class="mb0 hidden-xs hidden-sm">
+                <span class="invisible mb0"></span>
+              </label>
+              <button type="button" class="btn btn-secondary btn-block" ng-click="$ctrl.toggleSpouseDetails()" uib-tooltip="{{'SPOUSE_DETAILS_TOOLTIP' | translate}}" aria-label="{{ $ctrl.showSpouseDetails ? ('REMOVE_SPOUSE' | translate) : ('ADD_SPOUSE' | translate) }}">
+                  <span ng-if="!$ctrl.showSpouseDetails" translate>{{'ADD_SPOUSE'}}</span>
+                  <span ng-if="$ctrl.showSpouseDetails" translate>{{'REMOVE_SPOUSE'}}</span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="row" ng-if="$ctrl.donorDetails['donor-type'] === 'Household'">
-        <div class="col-sm-4">
+      <div class="row" ng-if="($ctrl.donorDetails['donor-type'] === 'Household' && !$ctrl.useV3) || ($ctrl.donorDetails['donor-type'] === 'Household' && $ctrl.useV3 && $ctrl.showSpouseDetails)" >
+        <div ng-class="$ctrl.useV3 ? 'col-sm-6' : 'col-sm-4'">
           <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.spouseGivenName | showErrors)}">
             <label>
               <span translate>{{'SPOUSE_FIRST_NAME'}}</span>
@@ -139,7 +152,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-2" ng-if="!$ctrl.useV3">
           <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.spouseMiddleInitial | showErrors)}">
             <label>
               <span translate>{{'MIDDLE_ABBREV'}}</span>
@@ -155,7 +168,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-4">
+        <div ng-class="$ctrl.useV3 ? 'col-sm-6' : 'col-sm-4'">
           <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.spouseFamilyName | showErrors)}">
             <label>
               <span translate>{{'SPOUSE_LAST_NAME'}}</span>
@@ -172,7 +185,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-2" ng-if="!$ctrl.useV3">
           <div class="form-group">
             <label>
               <span translate>{{'SUFFIX'}}</span>
@@ -209,6 +222,27 @@
           </div>
         </div>
       </div>
+
+      <div ng-if="$ctrl.useV3" class="row">
+        <div class="col-sm-12">
+          <email-field
+            details-form="$ctrl.detailsForm"
+            donor-details="$ctrl.donorDetails">
+          </email-field>
+        </div>
+        <div class="col-sm-12">
+          <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.phoneNumber | showErrors)}">
+            <label>
+              <span translate>{{'PHONE'}}</span>
+              <input type="tel" class="form-control form-control-subtle" name="phoneNumber" ng-model="$ctrl.donorDetails['phone-number']" ng-disabled="$ctrl.donorDetails.staff">
+            </label>
+            <div role="alert" ng-messages="$ctrl.detailsForm.phoneNumber.$error" ng-if="($ctrl.detailsForm.phoneNumber | showErrors)">
+              <div class="help-block" ng-message="phone" translate>{{'INVALID_PHONE_ERROR'}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <div class="address mb">
@@ -219,25 +253,19 @@
         parent-form="$ctrl.detailsForm"
         on-address-changed="$ctrl.loadRadioStations()"
         address-disabled="$ctrl.donorDetails.staff"
+        compact-address="true"
       >
       </address-form>
     </div>
 
-    <div class="contact-info mb">
+    <div ng-if="!$ctrl.useV3" class="contact-info mb">
       <h4 class="panel-title  border-bottom-small  visible" translate>{{'CONTACT_INFO'}}</h4>
       <div class="row">
         <div class="col-sm-6">
-          <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.email | showErrors)}">
-            <label>
-              <span translate>{{'EMAIL'}}</span>
-              <input type="email" class="form-control  form-control-subtle" name="email" ng-model="$ctrl.donorDetails['email']" required ng-maxlength="100" ng-disabled="$ctrl.donorDetails.staff">
-            </label>
-            <div role="alert" ng-messages="$ctrl.detailsForm.email.$error" ng-if="($ctrl.detailsForm.email | showErrors)">
-              <div class="help-block" ng-message="required" translate>{{'EMAIL_MISSING_ERROR'}}</div>
-              <div class="help-block" ng-message="email" translate>{{'EMAIL_INVALID_ERROR'}}</div>
-              <div class="help-block" ng-message="maxlength" translate>{{'EMAIL_LENGTH_ERROR'}}</div>
-            </div>
-          </div>
+          <email-field
+            details-form="$ctrl.detailsForm"
+            donor-details="$ctrl.donorDetails">
+          </email-field>
         </div>
         <div class="col-sm-6">
           <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.phoneNumber | showErrors)}">

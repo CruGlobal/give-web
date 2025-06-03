@@ -60,7 +60,6 @@ class BrandedCheckoutController {
       console.error(err)
     })
     this.$translate.use(this.language || 'en')
-
     this.checkoutService.initializeRecaptcha()
   }
 
@@ -80,8 +79,13 @@ class BrandedCheckoutController {
   next () {
     switch (this.checkoutStep) {
       case 'giftContactPayment':
-        this.checkoutStep = 'review'
-        this.fireAnalyticsEvents('review')
+        // If it is a single step form, the next step should be 'thankYou'
+        if (this.useV3 === 'true') {
+          this.checkoutStep = 'thankYou'
+        } else {
+          this.checkoutStep = 'review'
+          this.fireAnalyticsEvents('review')
+        }
         break
       case 'review':
         this.checkoutStep = 'thankYou'
@@ -179,6 +183,9 @@ export default angular
       frequency: '@',
       day: '@',
       apiUrl: '@',
+      premiumCode: '@',
+      premiumName: '@',
+      premiumImageUrl: '@',
       radioStationApiUrl: '@',
       donorDetailsVariable: '@donorDetails',
       defaultPaymentType: '@',
@@ -186,6 +193,9 @@ export default angular
       onOrderCompleted: '&',
       onOrderFailed: '&',
       language: '@',
-      showCoverFees: '@'
+      showCoverFees: '@',
+      useV3: '@',
+      hideAnnual: '@',
+      hideQuarterly: '@'
     }
   })

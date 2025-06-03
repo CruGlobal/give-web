@@ -23,8 +23,6 @@ label.custom-amount {
   width: auto;
 }
 
-
-
 .radio,
 .checkbox {
   label {
@@ -222,6 +220,23 @@ label.btn.btn-default-form.active {
   }
 }
 
+.give-selection-reverse-order {
+  display: flex;
+  flex-direction: column;
+
+  & > .suggested-gift-amounts {
+    order: 3;
+  }
+
+  & > .gift-frequency {
+    order: 1;
+  }
+  
+  & > .special-instructions {
+    order: 2;
+  }
+}
+
 @media (max-width: 549px) {
   .give-modal-recipient {
     margin-top: 5px;
@@ -262,6 +277,10 @@ label.btn.btn-default-form.active {
       li {
         text-indent: 0;
       }
+    }
+
+    #sendMessageButton, #sendHandlingButton {
+      text-decoration: underline;
     }
   }
 
@@ -333,4 +352,3 @@ label.btn.btn-default-form.active {
     }
   }
 }
-

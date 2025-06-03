@@ -7,7 +7,7 @@ import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
 import { forcedUserToLogout } from '../../../common/services/session/session.service'
 import module, { brandedCoverFeeCheckedEvent } from './productConfigForm.component'
-import { giftAddedEvent, cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
+import { giftAddedEvent, cartUpdatedEvent } from 'common/lib/cartEvents'
 import { giveGiftParams } from '../giveGiftParams'
 import { brandedCheckoutAmountUpdatedEvent } from '../../../common/components/paymentMethods/coverFees/coverFees.component'
 
@@ -371,7 +371,21 @@ describe('product config form component', function () {
     it('orders frequency by name', () => {
       expect($ctrl.frequencyOrder({ name: 'NA' })).toEqual(0)
       expect($ctrl.frequencyOrder({ name: 'MON' })).toEqual(1)
-      expect($ctrl.frequencyOrder({ name: 'QUARTERLY' })).toEqual(2)
+    })
+
+    it('changes frequency order when quarterly is shown', () => {
+      $ctrl.hideQuarterly = false
+      expect($ctrl.frequencyOrder({ name: 'QUARTERLY' })).toEqual(2) 
+    })
+
+    it('changes frequency order when quarterly is hidden', () => {
+      $ctrl.hideQuarterly = true
+      expect($ctrl.frequencyOrder({ name: 'NA' })).toEqual(0)
+    })
+
+    it('should change frequency order when annual is shown and quarterly is hidden', () => {
+      $ctrl.hideAnnual = true
+      $ctrl.hideQuarterly = false
       expect($ctrl.frequencyOrder({ name: 'ANNUAL' })).toEqual(3)
     })
   })
