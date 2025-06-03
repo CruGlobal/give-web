@@ -16,7 +16,8 @@ export default {
   ],
   ignoreFiles: [
     'src/assets/crubrand/**',
-    'src/assets/cru-scss/**'
+    'src/assets/cru-scss/**',
+    '**/okta-sign-in.min.css'
   ],
   plugins: [
     'stylelint-declaration-strict-value',
@@ -24,11 +25,11 @@ export default {
   ],
   overrides: [
     {
-      files: ['src/assets/scss/*.{css,scss}'],
+      files: ['src/assets/scss/**/*.{css,scss}'],
       customSyntax: 'postcss-scss',
       rules: {
         'media-feature-range-notation': 'prefix', // Enforces range notation in media queries to use `min-` instead of  `>=` .
-        'color-function-notation': 'legacy', // Uses legacy `rgb(r, g, b)` format instead of `rgb(r g b / a)`.
+        'color-function-notation': null, // Disables the color function notation rule to allow both `rgb()` and `rgba()` functions.
         'declaration-block-no-redundant-longhand-properties': [true, {
           /**
            * Ignore specific shorthand properties that are not widely supported in all major browsers.

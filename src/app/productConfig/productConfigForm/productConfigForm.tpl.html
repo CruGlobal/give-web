@@ -73,6 +73,10 @@
             <p translate>{{'GIFT_IN_CART_ERROR'}}</p>
           </div>
 
+        <div ng-if="$ctrl.errorForcedUserToLogout" class="alert alert-warning" role="alert">
+          <p translate>{{'FORCED_USER_TO_LOGOUT'}}</p>
+        </div>
+
         <h4 class="panel-title border-bottom-small" translate>
           {{'GIFT_AMOUNT'}}
         </h4>

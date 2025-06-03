@@ -1290,6 +1290,7 @@ describe('order service', () => {
         submittingOrder: false,
         onSubmittingOrder: jest.fn(),
         onSubmitted: jest.fn(),
+        saveDonorDataForRegistration: jest.fn(),
         $scope: {
           $emit: jest.fn(),
         },
@@ -1336,6 +1337,7 @@ describe('order service', () => {
               expect(self.orderService.clearCardSecurityCodes).toHaveBeenCalled()
       
               expect(mockController.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
+              expect(mockController.saveDonorDataForRegistration).toHaveBeenCalledWith()
               done()
             }, done)
       })
@@ -1368,6 +1370,7 @@ describe('order service', () => {
           expect(self.orderService.submit).toHaveBeenCalledWith('1234', '411111')
           expect(self.orderService.clearCardSecurityCodes).toHaveBeenCalled()
           expect(mockController.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
+          expect(mockController.saveDonorDataForRegistration).toHaveBeenCalledWith()
           done()
         }, done)
       })
@@ -1381,6 +1384,7 @@ describe('order service', () => {
           expect(self.orderService.submit).toHaveBeenCalledWith(undefined, undefined)
           expect(self.orderService.clearCardSecurityCodes).toHaveBeenCalled()
           expect(mockController.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
+          expect(mockController.saveDonorDataForRegistration).toHaveBeenCalledWith()
           done()
         }, done)
       })

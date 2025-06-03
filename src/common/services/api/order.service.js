@@ -472,6 +472,7 @@ class Order {
         this.clearCoverFees()
         controller.onSubmitted()
         controller.$scope.$emit(cartUpdatedEvent)
+        controller.saveDonorDataForRegistration()
       },
       (error) => {
         // Handle the error side effects when the observable errors

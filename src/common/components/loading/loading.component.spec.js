@@ -14,5 +14,6 @@ describe('loading', () => {
     expect($ctrl).toBeDefined()
     expect($ctrl.type).toEqual('block')
     expect($ctrl.inline).toEqual(false)
+    expect($ctrl.iconFirst).toEqual(false)
   })
 })

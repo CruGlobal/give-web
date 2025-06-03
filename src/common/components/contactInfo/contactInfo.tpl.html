@@ -44,7 +44,7 @@
   </div>
 
   <form novalidate ng-keyup="$event.key === 'Enter' && $ctrl.submitDetails()" name="$ctrl.detailsForm">
-    <div class="mb">
+    <div class="name mb">
       <h4 ng-if="!$ctrl.useV3" class="panel-title  border-bottom-small  visible" translate>{{$ctrl.useV3 ? 'CONTACT_INFO' : 'YOUR_INFORMATION'}}</h4>
       <div class="row">
         <div ng-class="$ctrl.useV3 ? 'col-md-5 col-sm-6' : 'col-sm-4'">
@@ -245,7 +245,7 @@
 
     </div>
 
-    <div class="mb">
+    <div class="address mb">
       <h4 class="panel-title  border-bottom-small  visible" translate>{{'MAILING_ADDRESS'}}</h4>
 
       <address-form
@@ -258,7 +258,7 @@
       </address-form>
     </div>
 
-    <div ng-if="!$ctrl.useV3" class="mb">
+    <div ng-if="!$ctrl.useV3" class="contact-info mb">
       <h4 class="panel-title  border-bottom-small  visible" translate>{{'CONTACT_INFO'}}</h4>
       <div class="row">
         <div class="col-sm-6">

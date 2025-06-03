@@ -184,8 +184,9 @@ Use yarn for faster installs and to update the yarn lock file: https://yarnpkg.c
 ### Install & Run
 
 1. `yarn`
-2. `yarn start`
-3. Browse to [`http://localhost:9000`](http://localhost:9000)
+2. `yarn build` _(During the build we copy the latest assets from Okta sign-in-widget package to ensure the sign up form is styled, and shows icons.)_
+3. `yarn start`
+4. Browse to [`http://localhost:9000`](http://localhost:9000)
 Note: For session cookies to work correctly, add the below entries to your hosts file, and use [`https://localhost.cru.org:9000`](https://localhost.cru.org:9000) for development
 ```
 127.0.0.1    localhost.cru.org
@@ -212,3 +213,20 @@ Use the `cortexApiService` which provides convenience methods for sending reques
 Replace `https://give-static.cru.org` with `https://give-stage-static.cru.org` to use the staging environment.
 
 ### Deployments
+GitHub actions auto-deploys master and staging builds to S3 buckets, which backs CloudFront.
+
+## Okta sign-in widget
+On the initial set up, [by their instructions](https://www.npmjs.com/package/@okta/okta-signin-widget#using-the-npm-module), we copied the /css, /images and /label folders to our `/assets/okta-sign-in` folder.
+When you update the `@okta/okta-signin-widget` package, you may also need to update the `/assets/okta-sign-in` folder.
+You can do so by copying the assets from `/node_modules/@okta/okta-signin-widget/dist/`.
+
+Below is a breakdown of the assets you will need to move.
+
+#### `node_modules/@okta/okta-signin-widget/dist/css/`
+Move the file `okta-sign-in.min.css` to the folder `/assets/okta-sign-in/css`. At the time of implementing the Okta sign-in widget, there wasn't a need to add the other css files.
+
+#### `node_modules/@okta/okta-signin-widget/dist/img/`
+_I highly doubt you will need to move over more images. I didn't want to use webpack for these images, as there are a lot of images we do not need._ But if you need to move them, please move them into the folder `/assets/okta-sign-in/img`.
+
+#### `node_modules/@okta/okta-signin-widget/dist/labels/`
+Webpack copies the labels from `@okta/okta-signin-widget` and stores them on our application, so do need to update these.
