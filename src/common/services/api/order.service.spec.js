@@ -1075,6 +1075,38 @@ describe('order service', () => {
     })
   })
 
+  describe('cardBin', () => {
+    describe('retrieveCardBin', () => {
+      it('should return the cardBin from session storage', () => {
+        self.$window.sessionStorage.setItem('cardBin', '411111')
+
+        expect(self.orderService.retrieveCardBin()).toEqual('411111')
+      })
+    })
+
+      describe('retrieveCardBins', () => {
+      it('should return the stored cardBins', () => {
+        self.$window.sessionStorage.setItem('storedBins', '{"/paymentmethods/crugive/giydsnjqgi=":"411111","/paymentmethods/crugive/giydsnjqgy=":"411111"}')
+
+        expect(self.orderService.retrieveCardBins()).toEqual({
+          '/paymentmethods/crugive/giydsnjqgi=': '411111',
+          '/paymentmethods/crugive/giydsnjqgy=': '411111'
+        })
+      })
+    })
+
+    describe('clearCardBins', () => {
+      it('should clear the stored the encrypted cvv', () => {
+        self.$window.sessionStorage.setItem('cardBin', '411111')
+        self.$window.sessionStorage.setItem('storedBins', { 'some uri': '411111' })
+        self.orderService.clearCardBins()
+
+        expect(self.$window.sessionStorage.getItem('cvv')).toBeNull()
+        expect(self.$window.sessionStorage.getItem('storedCvvs')).toBeNull()
+      })
+    })
+  })
+
   describe('storeLastPurchaseLink', () => {
     it('should save the link to the completed purchase', () => {
       self.orderService.storeLastPurchaseLink('/purchases/crugive/giydanbt=')
@@ -1327,24 +1359,26 @@ describe('order service', () => {
           })
       })
 
-      it('should submit the order with a CVV if paying with a credit card', (done) => {
+      it('should submit the order with a CVV and cardBin if paying with a credit card', (done) => {
         self.orderService.retrieveCardSecurityCode = jest.fn().mockReturnValue('1234')
+        self.orderService.retrieveCardBin = jest.fn().mockReturnValue('411111')
         mockController.creditCardPaymentDetails = {}
         mockController.coverFeeDecision = true
         self.orderService.submitOrder(mockController).subscribe(() => {
-          expect(self.orderService.submit).toHaveBeenCalledWith('1234')
+          expect(self.orderService.submit).toHaveBeenCalledWith('1234', '411111')
           expect(self.orderService.clearCardSecurityCodes).toHaveBeenCalled()
           expect(mockController.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
           done()
         }, done)
       })
 
-      it('should submit the order without a CVV if paying with an existing credit card or the cvv in session storage is missing', (done) => {
+      it('should submit the order without a CVV and cardBin if paying with an existing credit card or the cvv in session storage is missing', (done) => {
         mockController.creditCardPaymentDetails = {}
         self.orderService.retrieveCardSecurityCode = jest.fn().mockReturnValue(undefined)
+        self.orderService.retrieveCardBin = jest.fn().mockReturnValue(undefined)
         mockController.coverFeeDecision = true
         self.orderService.submitOrder(mockController).subscribe(() => {
-          expect(self.orderService.submit).toHaveBeenCalledWith(undefined)
+          expect(self.orderService.submit).toHaveBeenCalledWith(undefined, undefined)
           expect(self.orderService.clearCardSecurityCodes).toHaveBeenCalled()
           expect(mockController.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
           done()
@@ -1355,10 +1389,11 @@ describe('order service', () => {
         self.orderService.submit.mockImplementation(() => Observable.throw({ data: 'CardErrorException: Invalid Card Number: some details' }))
         mockController.creditCardPaymentDetails = {}
         self.orderService.retrieveCardSecurityCode = jest.fn().mockReturnValue('1234')
+        self.orderService.retrieveCardBin = jest.fn().mockReturnValue('411111')
         self.orderService.submitOrder(mockController).subscribe(
           () => done("Observable unexpectedly succeeded"),
           () => { // error handler
-            expect(self.orderService.submit).toHaveBeenCalledWith('1234')
+            expect(self.orderService.submit).toHaveBeenCalledWith('1234', '411111')
             expect(self.orderService.clearCardSecurityCodes).not.toHaveBeenCalled()
             expect(self.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'CardErrorException: Invalid Card Number: some details' }])
             expect(mockController.submissionError).toEqual('CardErrorException')
@@ -1370,11 +1405,12 @@ describe('order service', () => {
       it('should mask the security code on a credit card error', (done) => {
         self.orderService.submit.mockReturnValue(Observable.throw({ data: 'some error', config: { data: { 'security-code': '1234' } } }))
         self.orderService.retrieveCardSecurityCode = jest.fn().mockReturnValue('1234')
+        self.orderService.retrieveCardBin = jest.fn().mockReturnValue('411111')
         mockController.creditCardPaymentDetails = {}
         self.orderService.submitOrder(mockController).subscribe(
           () => done("Observable unexpectedly succeeded"),
           () => { // error handler
-            expect(self.orderService.submit).toHaveBeenCalledWith('1234')
+            expect(self.orderService.submit).toHaveBeenCalledWith('1234', '411111')
             expect(self.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'some error', config: { data: { 'security-code': 'XXXX' } } }])
             done()
           })
