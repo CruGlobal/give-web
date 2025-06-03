@@ -1096,13 +1096,13 @@ describe('order service', () => {
     })
 
     describe('clearCardBins', () => {
-      it('should clear the stored the encrypted cvv', () => {
+      it('should clear the stored the card bin', () => {
         self.$window.sessionStorage.setItem('cardBin', '411111')
         self.$window.sessionStorage.setItem('storedBins', { 'some uri': '411111' })
         self.orderService.clearCardBins()
 
-        expect(self.$window.sessionStorage.getItem('cvv')).toBeNull()
-        expect(self.$window.sessionStorage.getItem('storedCvvs')).toBeNull()
+        expect(self.$window.sessionStorage.getItem('cardBin')).toBeNull()
+        expect(self.$window.sessionStorage.getItem('storedBins')).toBeNull()
       })
     })
   })
