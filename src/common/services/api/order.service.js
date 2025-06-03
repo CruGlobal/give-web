@@ -460,13 +460,15 @@ class Order {
       submitRequest = this.submit()
     } else if (controller.creditCardPaymentDetails) {
       const cvv = this.retrieveCardSecurityCode()
-      submitRequest = this.submit(cvv)
+      const cardBin = this.retrieveCardBin()
+      submitRequest = this.submit(cvv, cardBin)
     } else {
       submitRequest = Observable.throw({ data: 'Current payment type is unknown' })
     }
     return submitRequest
       .do(() => {
         this.clearCardSecurityCodes()
+        this.clearCardBins()
         this.clearCoverFees()
         controller.onSubmitted()
         controller.$scope.$emit(cartUpdatedEvent)
