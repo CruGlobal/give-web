@@ -33,11 +33,11 @@ import loading from 'common/components/loading/loading.component'
 import analyticsFactory from 'app/analytics/analytics.factory'
 import brandedAnalyticsFactory from 'app/branded/analytics/branded-analytics.factory'
 
-import { brandedCheckoutAmountUpdatedEvent } from 'common/components/paymentMethods/coverFees/coverFees.component'
-
 import template from './productConfigForm.tpl.html'
 
 export const brandedCoverFeeCheckedEvent = 'brandedCoverFeeCheckedEvent'
+
+const FEE_DERIVATIVE = 0.9765 // 2.35% processing fee (calculated by 1 - 0.0235)
 
 const componentName = 'productConfigForm'
 
@@ -95,7 +95,7 @@ class ProductConfigFormController {
     if (isNaN(amount)) {
       delete this.itemConfig.AMOUNT
     } else {
-      this.itemConfig.AMOUNT = amount
+      this.setAmount(amount)
     }
 
     if (inRange(parseInt(this.itemConfig.RECURRING_DAY_OF_MONTH, 10), 1, 29)) {
@@ -186,7 +186,7 @@ class ProductConfigFormController {
         this.changeCustomAmount(this.itemConfig.AMOUNT)
       }
     } else {
-      this.itemConfig.AMOUNT = amountOptions[0]
+      this.setAmount(amountOptions[0])
     }
   }
 
@@ -285,12 +285,11 @@ class ProductConfigFormController {
   changeAmount (amount, retainCoverFees) {
     this.itemConfigForm.$setDirty()
     this.checkAmountChanged(amount)
-    this.itemConfig.AMOUNT = amount
+    this.setAmount(amount)
     this.customAmount = ''
     this.customInputActive = false
     if (!retainCoverFees && this.amountChanged) {
       this.orderService.clearCoverFees()
-      this.$scope.$emit(brandedCheckoutAmountUpdatedEvent)
     }
     this.updateQueryParam({ key: giveGiftParams.amount, value: amount })
   }
@@ -298,12 +297,11 @@ class ProductConfigFormController {
   changeCustomAmount (amount, retainCoverFees) {
     const amountAsNumber = parseFloat(amount)
     this.checkAmountChanged(amountAsNumber)
-    this.itemConfig.AMOUNT = amountAsNumber
+    this.setAmount(amountAsNumber)
     this.customAmount = amount
     this.customInputActive = true
     if (!retainCoverFees && this.amountChanged) {
       this.orderService.clearCoverFees()
-      this.$scope.$emit(brandedCheckoutAmountUpdatedEvent)
     }
     this.updateQueryParam({ key: giveGiftParams.amount, value: amount })
   }
@@ -321,6 +319,16 @@ class ProductConfigFormController {
     this.errorAlreadyInCart = false
     this.updateQueryParam({ key: giveGiftParams.day, value: day })
     this.updateQueryParam({ key: giveGiftParams.month, value: month })
+  }
+
+  /*
+   * Set the itemConfig's amount and update priceWithFees. `itemConfig.AMOUNT` should not be updated
+   * directly without using this helper.
+   */
+  setAmount (amount) {
+    this.itemConfig.AMOUNT = amount
+    const amountWithFees = amount / FEE_DERIVATIVE
+    this.itemConfig.priceWithFees = this.$filter('currency')(amountWithFees, '$', 2)
   }
 
   saveGiftToCart () {
