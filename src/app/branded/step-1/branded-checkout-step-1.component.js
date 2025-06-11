@@ -10,7 +10,6 @@ import cartService from 'common/services/api/cart.service'
 import orderService from 'common/services/api/order.service'
 import analyticsFactory from '../../analytics/analytics.factory'
 import brandedAnalyticsFactory from '../../branded/analytics/branded-analytics.factory'
-import { FEE_DERIVATIVE } from 'common/components/paymentMethods/coverFees/coverFees.component'
 
 import template from './branded-checkout-step-1.tpl.html'
 import 'rxjs/add/operator/catch'
@@ -54,12 +53,6 @@ class BrandedCheckoutStep1Controller {
     }
     this.itemConfig['campaign-page'] = this.campaignPage
     this.itemConfig.AMOUNT = this.amount
-
-    // These lines calculate the price with fees for amounts coming in from the client site via component config
-    if (this.amount) {
-      const amountWithFees = this.amount / FEE_DERIVATIVE
-      this.itemConfig.priceWithFees = this.$filter('currency')(amountWithFees, '$', 2)
-    }
 
     switch (this.frequency) {
       case 'monthly':

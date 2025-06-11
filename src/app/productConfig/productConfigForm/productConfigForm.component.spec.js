@@ -9,7 +9,6 @@ import { forcedUserToLogout } from '../../../common/services/session/session.ser
 import module, { brandedCoverFeeCheckedEvent } from './productConfigForm.component'
 import { giftAddedEvent, cartUpdatedEvent } from 'common/lib/cartEvents'
 import { giveGiftParams } from '../giveGiftParams'
-import { brandedCheckoutAmountUpdatedEvent } from '../../../common/components/paymentMethods/coverFees/coverFees.component'
 
 describe('product config form component', function () {
   beforeEach(angular.mock.module(module.name))
@@ -73,7 +72,6 @@ describe('product config form component', function () {
       expect($ctrl.initItemConfig).toHaveBeenCalled()
       expect($ctrl.loadData).toHaveBeenCalled()
       expect($ctrl.waitForFormInitialization).toHaveBeenCalled()
-      expect($ctrl.$rootScope.$on).toHaveBeenCalledWith(brandedCoverFeeCheckedEvent, expect.any(Function))
       $ctrl.$rootScope.$on.mock.calls[0][1]()
     })
 
@@ -105,6 +103,7 @@ describe('product config form component', function () {
       $ctrl.initItemConfig()
 
       expect($ctrl.itemConfig.AMOUNT).toEqual(85)
+      expect($ctrl.itemConfig.priceWithFees).toEqual('$87.05')
       expect($ctrl.itemConfig['RECURRING_DAY_OF_MONTH']).toEqual('09')
       expect($ctrl.itemConfig['RECURRING_START_MONTH']).toEqual('08')
     })
@@ -116,6 +115,7 @@ describe('product config form component', function () {
       $ctrl.initItemConfig()
 
       expect($ctrl.itemConfig.AMOUNT).toBeUndefined()
+      expect($ctrl.itemConfig.priceWithFees).toBeUndefined()
       expect($ctrl.itemConfig['RECURRING_DAY_OF_MONTH']).toBeUndefined()
       expect($ctrl.itemConfig['RECURRING_START_MONTH']).toBeUndefined()
     })
@@ -123,19 +123,25 @@ describe('product config form component', function () {
     it('should handle a whole number amount', () => {
       $ctrl.itemConfig.AMOUNT = 10
       $ctrl.initItemConfig()
+
       expect($ctrl.itemConfig.AMOUNT).toEqual(10)
+      expect($ctrl.itemConfig.priceWithFees).toEqual('$10.24')
     })
 
     it('should handle amount on first time through', () => {
       $ctrl.itemConfig.AMOUNT = undefined
       $ctrl.initItemConfig()
+
       expect($ctrl.itemConfig.AMOUNT).toBeUndefined()
+      expect($ctrl.itemConfig.priceWithFees).toBeUndefined()
     })
 
     it('should handle amount with cents', () => {
       $ctrl.itemConfig.AMOUNT = 10.25
       $ctrl.initItemConfig()
+
       expect($ctrl.itemConfig.AMOUNT).toEqual(10.25)
+      expect($ctrl.itemConfig.priceWithFees).toEqual('$10.50')
     })
   })
 
@@ -256,6 +262,7 @@ describe('product config form component', function () {
       $ctrl.setDefaultAmount()
 
       expect($ctrl.itemConfig.AMOUNT).toEqual(50)
+      expect($ctrl.itemConfig.priceWithFees).toEqual('$51.20')
     })
 
     it('should set the default amount if there are suggested amounts', () => {
@@ -263,39 +270,44 @@ describe('product config form component', function () {
       $ctrl.setDefaultAmount()
 
       expect($ctrl.itemConfig.AMOUNT).toEqual(14)
+      expect($ctrl.itemConfig.priceWithFees).toEqual('$14.34')
     })
 
     it('should use an existing selectableAmounts', () => {
-      $ctrl.itemConfig.AMOUNT = 100
+      $ctrl.setAmount(100)
       $ctrl.setDefaultAmount()
 
       expect($ctrl.itemConfig.AMOUNT).toEqual(100)
+      expect($ctrl.itemConfig.priceWithFees).toEqual('$102.41')
       expect($ctrl.changeCustomAmount).not.toHaveBeenCalled()
     })
 
     it('should use an existing suggestedAmounts', () => {
-      $ctrl.itemConfig.AMOUNT = 14
+      $ctrl.setAmount(14)
       $ctrl.suggestedAmounts = [{ amount: 14 }]
       $ctrl.setDefaultAmount()
 
       expect($ctrl.itemConfig.AMOUNT).toEqual(14)
+      expect($ctrl.itemConfig.priceWithFees).toEqual('$14.34')
       expect($ctrl.changeCustomAmount).not.toHaveBeenCalled()
     })
 
     it('should initialize the custom value without suggestedAmounts', () => {
-      $ctrl.itemConfig.AMOUNT = 14
+      $ctrl.setAmount(14)
       $ctrl.setDefaultAmount()
 
       expect($ctrl.itemConfig.AMOUNT).toEqual(14)
+      expect($ctrl.itemConfig.priceWithFees).toEqual('$14.34')
       expect($ctrl.changeCustomAmount).toHaveBeenCalledWith(14)
     })
 
     it('should initialize the custom value with suggestedAmounts', () => {
-      $ctrl.itemConfig.AMOUNT = 14
+      $ctrl.setAmount(14)
       $ctrl.suggestedAmounts = [{ amount: 25 }]
       $ctrl.setDefaultAmount()
 
       expect($ctrl.itemConfig.AMOUNT).toEqual(14)
+      expect($ctrl.itemConfig.priceWithFees).toEqual('$14.34')
       expect($ctrl.changeCustomAmount).toHaveBeenCalledWith(14)
     })
   })
@@ -373,14 +385,22 @@ describe('product config form component', function () {
     it('orders frequency by name', () => {
       expect($ctrl.frequencyOrder({ name: 'NA' })).toEqual(0)
       expect($ctrl.frequencyOrder({ name: 'MON' })).toEqual(1)
-      if (!$ctrl.hideQuarterly) {
-        expect($ctrl.frequencyOrder({ name: 'QUARTERLY' })).toEqual(2)
-      }
-      if ($ctrl.hideAnnual === true && !$ctrl.hideQuarterly) {
-        expect($ctrl.frequencyOrder({ name: 'ANNUAL' })).toEqual(3)
-      } else if ($ctrl.hideAnnual === true) {
-        expect($ctrl.frequencyOrder({ name: 'ANNUAL' })).toEqual(2)
-      }
+    })
+
+    it('changes frequency order when quarterly is shown', () => {
+      $ctrl.hideQuarterly = false
+      expect($ctrl.frequencyOrder({ name: 'QUARTERLY' })).toEqual(2)
+    })
+
+    it('changes frequency order when quarterly is hidden', () => {
+      $ctrl.hideQuarterly = true
+      expect($ctrl.frequencyOrder({ name: 'NA' })).toEqual(0)
+    })
+
+    it('should change frequency order when annual is shown and quarterly is hidden', () => {
+      $ctrl.hideAnnual = true
+      $ctrl.hideQuarterly = false
+      expect($ctrl.frequencyOrder({ name: 'ANNUAL' })).toEqual(3)
     })
   })
 
@@ -448,6 +468,7 @@ describe('product config form component', function () {
 
       expect($ctrl.itemConfigForm.$setDirty).toHaveBeenCalled()
       expect($ctrl.itemConfig.AMOUNT).toEqual(100)
+      expect($ctrl.itemConfig.priceWithFees).toEqual('$102.41')
       expect($ctrl.customAmount).toBe('')
       expect($ctrl.customInputActive).toEqual(false)
       expect($ctrl.updateQueryParam).toHaveBeenCalledWith({ key: giveGiftParams.amount, value: 100 })
@@ -460,9 +481,9 @@ describe('product config form component', function () {
       $ctrl.itemConfig.AMOUNT = 50
       $ctrl.changeAmount(100)
 
+      expect($ctrl.itemConfig.priceWithFees).toEqual('$102.41')
       expect($ctrl.amountChanged).toEqual(true)
       expect($ctrl.orderService.clearCoverFees).toHaveBeenCalled()
-      expect($ctrl.$scope.$emit).toHaveBeenCalledWith(brandedCheckoutAmountUpdatedEvent)
     })
 
     it('should not clear cover fees if we are explicitly retaining them and the amount changed', () => {
@@ -472,9 +493,9 @@ describe('product config form component', function () {
       $ctrl.itemConfig.AMOUNT = 50
       $ctrl.changeAmount(100, true)
 
+      expect($ctrl.itemConfig.priceWithFees).toEqual('$102.41')
       expect($ctrl.amountChanged).toEqual(true)
       expect($ctrl.orderService.clearCoverFees).not.toHaveBeenCalled()
-      expect($ctrl.$scope.$emit).not.toHaveBeenCalled()
     })
 
     it('should not clear cover fees if we did not change the amount', () => {
@@ -484,9 +505,9 @@ describe('product config form component', function () {
       $ctrl.itemConfig.AMOUNT = 50
       $ctrl.changeAmount(50)
 
+      expect($ctrl.itemConfig.priceWithFees).toEqual('$51.20')
       expect($ctrl.amountChanged).toEqual(false)
       expect($ctrl.orderService.clearCoverFees).not.toHaveBeenCalled()
-      expect($ctrl.$scope.$emit).not.toHaveBeenCalled()
     })
   })
 
@@ -496,6 +517,7 @@ describe('product config form component', function () {
       $ctrl.changeCustomAmount(300)
 
       expect($ctrl.itemConfig.AMOUNT).toEqual(300)
+      expect($ctrl.itemConfig.priceWithFees).toEqual('$307.22')
       expect($ctrl.customAmount).toEqual(300)
       expect($ctrl.customInputActive).toEqual(true)
       expect($ctrl.updateQueryParam).toHaveBeenCalledWith({ key: giveGiftParams.amount, value: 300 })
@@ -506,6 +528,7 @@ describe('product config form component', function () {
       $ctrl.changeCustomAmount('300')
 
       expect($ctrl.itemConfig.AMOUNT).toEqual(300)
+      expect($ctrl.itemConfig.priceWithFees).toEqual('$307.22')
       expect($ctrl.customAmount).toEqual('300')
       expect($ctrl.customInputActive).toEqual(true)
       expect($ctrl.updateQueryParam).toHaveBeenCalledWith({ key: giveGiftParams.amount, value: '300' })
@@ -519,8 +542,8 @@ describe('product config form component', function () {
       $ctrl.changeCustomAmount(1)
 
       expect($ctrl.amountChanged).toEqual(true)
+      expect($ctrl.itemConfig.priceWithFees).toEqual('$1.02')
       expect($ctrl.orderService.clearCoverFees).toHaveBeenCalled()
-      expect($ctrl.$scope.$emit).toHaveBeenCalledWith(brandedCheckoutAmountUpdatedEvent)
     })
 
     it('should not clear cover fees if we are explicitly retaining them and the amount changed', () => {
@@ -531,6 +554,7 @@ describe('product config form component', function () {
       $ctrl.changeCustomAmount(1, true)
 
       expect($ctrl.amountChanged).toEqual(true)
+      expect($ctrl.itemConfig.priceWithFees).toEqual('$1.02')
       expect($ctrl.orderService.clearCoverFees).not.toHaveBeenCalled()
       expect($ctrl.$scope.$emit).not.toHaveBeenCalled()
     })
@@ -543,6 +567,7 @@ describe('product config form component', function () {
       $ctrl.changeAmount(5)
 
       expect($ctrl.amountChanged).toEqual(false)
+      expect($ctrl.itemConfig.priceWithFees).toEqual('$5.12')
       expect($ctrl.orderService.clearCoverFees).not.toHaveBeenCalled()
       expect($ctrl.$scope.$emit).not.toHaveBeenCalled()
     })
@@ -575,6 +600,18 @@ describe('product config form component', function () {
 
       expect($ctrl.updateQueryParam).toHaveBeenCalledWith({ key: giveGiftParams.day, value: '11' })
       expect($ctrl.errorAlreadyInCart).toEqual(false)
+    })
+  })
+
+  describe('setAmount', () => {
+    it('should set AMOUNT and priceWithFees', () => {
+      $ctrl.setAmount(50)
+      expect($ctrl.itemConfig.priceWithFees).toEqual('$51.20')
+    })
+
+    it('should should handle large numbers properly', () => {
+      $ctrl.setAmount(25000)
+      expect($ctrl.itemConfig.priceWithFees).toEqual('$25,601.64')
     })
   })
 
@@ -630,8 +667,8 @@ describe('product config form component', function () {
       const operation = isEdit ? 'editItem' : 'addItem'
       const cartEvent = isEdit ? cartUpdatedEvent : giftAddedEvent
       const operationArgs = isEdit
-        ? ['uri', 'items/crugive/<some id>', { AMOUNT: 85 }]
-        : ['items/crugive/<some id>', { AMOUNT: 85 }, undefined]
+        ? ['uri', 'items/crugive/<some id>', { AMOUNT: 85, priceWithFees: '$87.05' }]
+        : ['items/crugive/<some id>', { AMOUNT: 85, priceWithFees: '$87.05' }, undefined]
       beforeEach(() => {
         $ctrl.isEdit = isEdit
         jest.spyOn($ctrl.cartService, operation).mockReturnValue(Observable.of({ self: { uri: 'uri' } }))
