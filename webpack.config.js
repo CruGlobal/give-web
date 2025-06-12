@@ -15,7 +15,6 @@ const giveComponents = [
   'app/thankYou/thankYou.component.js',
   'app/productConfig/productConfig.component.js',
   'app/signIn/signIn.component.js',
-  'app/signOut/signOut.component.js',
   'app/searchResults/searchResults.component.js',
   'app/profile/yourGiving/yourGiving.component.js',
   'app/profile/profile.component.js',
@@ -23,7 +22,8 @@ const giveComponents = [
   'app/profile/payment-methods/payment-methods.component.js',
   'app/designationEditor/designationEditor.component.js',
   'app/newsletterSubscription/newsletterSubscription.component.js',
-  'app/oktaAuthCallback/oktaAuthCallback.component.js'
+  'app/oktaAuthCallback/oktaAuthCallback.component.js',
+  'app/signOut/signOut.component.js'
 ]
 
 const giveCss = ['assets/scss/styles.scss']

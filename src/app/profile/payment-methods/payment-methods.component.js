@@ -16,7 +16,7 @@ import uibModal from 'angular-ui-bootstrap/src/modal'
 
 class PaymentMethodsController {
   /* @ngInject */
-  constructor ($rootScope, $uibModal, $log, $timeout, $window, $location, profileService, sessionEnforcerService, analyticsFactory) {
+  constructor ($rootScope, $uibModal, profileService, sessionEnforcerService, analyticsFactory, $log, $timeout, $window, $location) {
     this.$log = $log
     this.$rootScope = $rootScope
     this.$uibModal = $uibModal
