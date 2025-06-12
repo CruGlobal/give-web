@@ -34,7 +34,6 @@ class Step3Controller {
     this.startDate = startDate
     this.sessionStorage = $window.sessionStorage
     this.sessionService = sessionService
-    this.selfReference = this
     this.isBranded = envService.read('isBrandedCheckout')
     this.datadogRum = datadogRum
 

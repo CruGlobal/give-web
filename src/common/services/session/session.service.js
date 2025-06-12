@@ -291,7 +291,7 @@ const session = /* @ngInject */ function ($cookies, $document, $rootScope, $http
     return $window.sessionStorage.getItem(redirectLocation)
   }
   function setRedirectingOnLogin () {
-    if (['/sign-in.html'].indexOf($location.path()) + 1) {
+    if ($location.path() === '/sign-in.html') {
       // Save marketing search queries as they are lost on redirect
       $window.sessionStorage.setItem(locationSearchOnLogin, $window.location.search)
     } else {
