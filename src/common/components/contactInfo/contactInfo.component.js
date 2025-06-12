@@ -104,7 +104,7 @@ class Step1Controller {
         if (overrideDonorDetails) {
           const initialLoad = !this.$window.sessionStorage.getItem('initialLoadComplete')
           if (initialLoad) {
-            this.donorDetails = assign(this.donorDetails, pick(overrideDonorDetails, [
+            assign(this.donorDetails, pick(overrideDonorDetails, [
               'donor-type', 'name', 'organization-name', 'phone-number', 'spouse-name', 'mailingAddress', 'email'
             ]))
             this.$window.sessionStorage.setItem('initialLoadComplete', 'true')
@@ -113,7 +113,7 @@ class Step1Controller {
 
         const checkoutSavedData = this.sessionService.session.checkoutSavedData
         if (checkoutSavedData) {
-          this.donorDetails = assign(this.donorDetails, pick(checkoutSavedData, [
+          assign(this.donorDetails, pick(checkoutSavedData, [
             'name', 'mailingAddress', 'donor-type', 'organization-name', 'phone-number', 'spouse-name'
           ]))
           if (!!this.donorDetails['spouse-name']['given-name'] || !!this.donorDetails['spouse-name']['family-name']) {
