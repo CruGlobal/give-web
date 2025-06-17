@@ -127,20 +127,6 @@ class Step3Controller {
     return enableSubmitBtn
   }
 
-  saveDonorDataForRegistration () {
-    if (this.donorDetails['registration-state'] !== 'COMPLETED') {
-      const storeSessionData = {}
-      storeSessionData.name = { ...this.donorDetails.name }
-      storeSessionData.mailingAddress = { ...this.donorDetails.mailingAddress }
-      storeSessionData['spouse-name'] = { ...this.donorDetails['spouse-name'] }
-      storeSessionData['donor-type'] = this.donorDetails['donor-type']
-      storeSessionData['organization-name'] = this.donorDetails['organization-name']
-      storeSessionData['phone-number'] = this.donorDetails['phone-number']
-      storeSessionData.email = this.donorDetails.email
-      this.sessionService.updateCheckoutSavedData(storeSessionData)
-    }
-  }
-
   submitOrder () {
     this.orderService.submitOrder(this).subscribe(() => {
       if (!this.isBranded) {

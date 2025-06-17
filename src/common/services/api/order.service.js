@@ -445,6 +445,20 @@ class Order {
     }
   }
 
+  saveDonorDataForRegistration (donorDetails) {
+    if (donorDetails['registration-state'] !== 'COMPLETED') {
+      const storeSessionData = {}
+      storeSessionData.name = { ...donorDetails.name }
+      storeSessionData.mailingAddress = { ...donorDetails.mailingAddress }
+      storeSessionData['spouse-name'] = { ...donorDetails['spouse-name'] }
+      storeSessionData['donor-type'] = donorDetails['donor-type']
+      storeSessionData['organization-name'] = donorDetails['organization-name']
+      storeSessionData['phone-number'] = donorDetails['phone-number']
+      storeSessionData.email = donorDetails.email
+      this.sessionService.updateCheckoutSavedData(storeSessionData)
+    }
+  }
+
   submitOrder (controller) {
     delete controller.submissionError
     delete controller.submissionErrorStatus
@@ -472,7 +486,7 @@ class Order {
         this.clearCoverFees()
         controller.onSubmitted()
         controller.$scope.$emit(cartUpdatedEvent)
-        controller.saveDonorDataForRegistration()
+        this.saveDonorDataForRegistration(controller.donorDetails)
       },
       (error) => {
         // Handle the error side effects when the observable errors
