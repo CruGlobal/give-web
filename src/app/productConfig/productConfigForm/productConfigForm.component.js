@@ -449,8 +449,8 @@ export default angular
       updateQueryParam: '&',
       submitted: '<',
       onStateChange: '&',
+      useV3: '<',
       hideAnnual: '<',
-      hideQuarterly: '<',
-      useV3: '<'
+      hideQuarterly: '<'
     }
   })

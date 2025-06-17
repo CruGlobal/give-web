@@ -8,10 +8,10 @@ import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
 import 'rxjs/add/operator/do'
 import 'rxjs/add/operator/finally'
+import 'rxjs/add/observable/empty'
 import map from 'lodash/map'
 import omit from 'lodash/omit'
 import isString from 'lodash/isString'
-import { datadogRum } from '@datadog/browser-rum'
 import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort'
 import extractPaymentAttributes from 'common/services/paymentHelpers/extractPaymentAttributes'
 import { cartUpdatedEvent } from 'common/lib/cartEvents'
@@ -21,6 +21,7 @@ import cartService from './cart.service'
 import tsysService from './tsys.service'
 import hateoasHelperService from 'common/services/hateoasHelper.service'
 import sessionService, { Roles } from 'common/services/session/session.service'
+import { datadogRum } from '@datadog/browser-rum'
 
 import formatAddressForCortex from '../addressHelpers/formatAddressForCortex'
 import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate'
@@ -482,8 +483,8 @@ class Order {
     return submitRequest
       .do(() => {
         this.clearCardSecurityCodes()
-        this.clearCoverFees()
         this.clearCardBins()
+        this.clearCoverFees()
         controller.onSubmitted()
         controller.$scope.$emit(cartUpdatedEvent)
         this.saveDonorDataForRegistration(controller.donorDetails)

@@ -567,7 +567,7 @@ hr.horizontal-divider {
       border-radius: 2px 0 0 2px;
       margin: 0;
       aspect-ratio: 1 / 1;
-      background-color: $colorCru-border;
+      background-color: $colorGrayscale-rock;
       color: inherit;
       text-align: center;
       transition: all 0.3s ease;
@@ -592,16 +592,22 @@ hr.horizontal-divider {
   input[type="radio"]:focus + label {
     .amount-box {
       min-width: 55px;
-      background-color:$colorGrayscale-charcoal;
-      color: $colorGrayscale-rock;
+      background-color: $colorGrayscale-charcoal;
+      color: $colorCru-white;
     }
+  }
+
+  input[type="radio"]:focus.active + label {
+    border: 1px solid #3eb1c8;
+    border-radius: 3px 0 0 3px;
+    
   }
 
   input[type="radio"]:checked + label {
     .amount-box {
       min-width: 55px;
       background-color: $colorGrayscale-charcoal;
-      color: $colorGrayscale-rock;
+      color: $colorCru-white;
     }
   }
 }
@@ -637,7 +643,6 @@ hr.horizontal-divider {
       height: 100%;
       padding: 0 7px;
       border: none;
-      border-radius: 2px;
       transition: all 0.3s ease;
 
       &::placeholder {
@@ -653,13 +658,13 @@ hr.horizontal-divider {
 }
 
 /* Check for custom amount input */
-.custom-amount-button:has(input:checked) {
+.custom-amount-button:has(input:checked), .custom-amount-button:has(input:focus) {
   border: 1px solid $colorGrayscale-charcoal;
   color: $colorGrayscale-charcoal;
-  font-weight: 700;
+  font-weight: 500;
 }
 
-.custom-amount-button:has(input:checked) .input-prepend {
+.custom-amount-button:has(input:checked) .input-prepend, .custom-amount-button:has(input:focus) .input-prepend {
   min-width: 55px;
   aspect-ratio: 1 / 1;
   background-color: $colorGrayscale-charcoal;

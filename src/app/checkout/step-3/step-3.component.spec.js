@@ -358,41 +358,6 @@ describe('checkout', () => {
         expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
       })
     })
-
-    describe('logToDatadogRum', () => {
-      beforeEach(() => {
-        self.controller.datadogRum = {
-          addError: jest.fn()
-        }
-      })
-
-      it('should log a checkout error', () => {
-        const error = {
-          data: 'Server Error',
-          status: 500
-        }
-
-        self.controller.logToDatadogRum(error)
-        expect(self.controller.datadogRum.addError)
-          .toHaveBeenCalledWith(new Error(`Error submitting purchase: ${JSON.stringify(error)}`), { context: 'Checkout Submission', errorCode: error.status })
-      })
-
-      it('should log a checkout error without data', () => {
-        const error = 'Some error that is unstructured'
-        self.controller.logToDatadogRum(error)
-        expect(self.controller.datadogRum.addError)
-          .toHaveBeenCalledWith(new Error(`Error submitting purchase: ${JSON.stringify(error)}`), { context: 'Checkout Submission', errorCode: error.status })
-      })
-
-      it('should log InvalidCVV errors differently', () => {
-        const error = {
-          data: 'InvalidCVV2Exception: Invalid CVV',
-          status: 500
-        }
-        self.controller.logToDatadogRum(error)
-        expect(self.controller.datadogRum.addError).toHaveBeenCalledWith(new Error('Invalid CVV'), { context: 'Checkout Submission', errorCode: error.status })
-      })
-    })
     
     describe('logToDatadogRum', () => {
       beforeEach(() => {

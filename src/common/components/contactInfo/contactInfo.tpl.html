@@ -45,14 +45,13 @@
 
   <form novalidate ng-keyup="$event.key === 'Enter' && $ctrl.submitDetails()" name="$ctrl.detailsForm">
     <div class="name mb">
-      <h4 ng-if="$ctrl.useV3 !== 'true'" class="panel-title  border-bottom-small  visible" translate>{{'YOUR_INFORMATION'}}</h4>
-      <h4 ng-if="$ctrl.useV3 === 'true'" class="panel-title  border-bottom-small  visible" translate>{{'CONTACT_INFO'}}</h4>
+      <h4 ng-if="!$ctrl.useV3" class="panel-title  border-bottom-small  visible" translate>{{$ctrl.useV3 ? 'CONTACT_INFO' : 'YOUR_INFORMATION'}}</h4>
       <div class="row">
-        <div ng-class="{'col-md-5 col-sm-6' : $ctrl.useV3, 'col-sm-4' : !$ctrl.useV3}">
+        <div ng-class="$ctrl.useV3 ? 'col-md-5 col-sm-6' : 'col-sm-4'">
           <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.nameGivenName | showErrors)}">
             <label>
               <span translate>{{'FIRST_NAME'}}</span>
-              <input
+              <input 
                 type="text"
                 class="form-control  form-control-subtle"
                 name="nameGivenName"
@@ -67,7 +66,7 @@
             </div>
           </div>
         </div>
-        <div ng-if="$ctrl.useV3 !== 'true'" ng-class="{'col-sm-1': $ctrl.hideSpouseDetails, 'col-sm-2': !$ctrl.hideSpouseDetails}">
+        <div ng-if="!$ctrl.useV3" class="col-sm-2">
           <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.nameMiddleInitial | showErrors)}">
             <label>
               <span translate>{{'MIDDLE_ABBREV'}}</span>
@@ -83,7 +82,7 @@
             </div>
           </div>
         </div>
-        <div ng-class="{'col-md-5 col-sm-6' : $ctrl.useV3, 'col-sm-4' : !$ctrl.useV3}">
+        <div ng-class="$ctrl.useV3 ? 'col-md-5 col-sm-6' : 'col-sm-4'">
           <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.nameFamilyName | showErrors)}">
             <label>
               <span translate>{{'LAST_NAME'}}</span>
@@ -101,7 +100,7 @@
             </div>
           </div>
         </div>
-        <div ng-if="$ctrl.useV3 !== 'true'" class="col-sm-2">
+        <div ng-if="!$ctrl.useV3" class="col-sm-2">
           <div class="form-group">
             <label>
               <span translate>{{'SUFFIX'}}</span>
@@ -120,15 +119,15 @@
             </label>
           </div>
         </div>
-        <div ng-if="$ctrl.donorDetails['donor-type'] === 'Household' && $ctrl.useV3 === 'true'">
+        <div ng-if="$ctrl.donorDetails['donor-type'] === 'Household' && $ctrl.useV3">
           <div class="col-sm-12 col-md-2">
             <div class="form-group">
               <label class="mb0 hidden-xs hidden-sm">
                 <span class="invisible mb0"></span>
               </label>
-              <button type="button" class="btn btn-primary btn-block" ng-click="$ctrl.toggleSpouseDetails()" uib-tooltip="{{'By adding your spouse\'s name, we can ensure that both of your contributions are linked together, providing a clearer and more accurate record of your household\'s giving.' | translate}}">
-                  <span ng-if="!$ctrl.showSpouseDetails">Add Spouse</span>
-                  <span ng-if="$ctrl.showSpouseDetails">Remove</span>
+              <button type="button" class="btn btn-secondary btn-block" ng-click="$ctrl.toggleSpouseDetails()" uib-tooltip="{{'SPOUSE_DETAILS_TOOLTIP' | translate}}" aria-label="{{ $ctrl.showSpouseDetails ? ('REMOVE_SPOUSE' | translate) : ('ADD_SPOUSE' | translate) }}">
+                  <span ng-if="!$ctrl.showSpouseDetails" translate>{{'ADD_SPOUSE'}}</span>
+                  <span ng-if="$ctrl.showSpouseDetails" translate>{{'REMOVE_SPOUSE'}}</span>
               </button>
             </div>
           </div>
@@ -153,7 +152,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-2" ng-if="$ctrl.useV3 !== 'true'">
+        <div class="col-sm-2" ng-if="!$ctrl.useV3">
           <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.spouseMiddleInitial | showErrors)}">
             <label>
               <span translate>{{'MIDDLE_ABBREV'}}</span>
@@ -186,7 +185,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-2" ng-if="$ctrl.useV3 !== 'true'">
+        <div class="col-sm-2" ng-if="!$ctrl.useV3">
           <div class="form-group">
             <label>
               <span translate>{{'SUFFIX'}}</span>
@@ -224,7 +223,7 @@
         </div>
       </div>
 
-      <div ng-if="$ctrl.useV3 === 'true'" class="row">
+      <div ng-if="$ctrl.useV3" class="row">
         <div class="col-sm-12">
           <email-field
             details-form="$ctrl.detailsForm"
@@ -259,7 +258,7 @@
       </address-form>
     </div>
 
-    <div ng-if="$ctrl.useV3 !== 'true'" class="contact-info mb">
+    <div ng-if="!$ctrl.useV3" class="contact-info mb">
       <h4 class="panel-title  border-bottom-small  visible" translate>{{'CONTACT_INFO'}}</h4>
       <div class="row">
         <div class="col-sm-6">

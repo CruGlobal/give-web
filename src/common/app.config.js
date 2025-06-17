@@ -401,7 +401,13 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     OKTA_WELCOME: 'Welcome, {{name}}!',
     OKTA_ACCOUNT_CREATED: 'Your account with Cru was successfully created and verified. <br/><strong>Now let’s sign you in.</strong>',
     OKTA_REDIRECT_EXPLANATION: 'For your security, you are being redirected to Okta to sign in with your new account. Okta is our secure login provider, helping keep your account safe. <strong>You’ll briefly visit the domain below, then we’ll bring you back after you sign in.</strong>',
-    OKTA_REDIRECT_NOW: 'Take me to Okta now'
+    OKTA_REDIRECT_NOW: 'Take me to Okta now',
+    SPOUSE_DETAILS_TOOLTIP: 'By adding your spouse\'s name, we can ensure that both of your contributions are linked together, providing a clearer and more accurate record of your household\'s giving.',
+    SECURE: 'Secure',
+    ADD_SPOUSE: 'Add Spouse',
+    REMOVE_SPOUSE: 'Remove',
+    SUGGESTED_AMOUNT_HELP: 'Suggested Gift Amounts. Tab for Custom Amount',
+    CUSTOM_AMOUNT: 'Custom Amount'
   })
 
   $translateProvider.translations('es', {
@@ -634,7 +640,13 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     OKTA_WELCOME: 'Welcome, {{name}}!',
     OKTA_ACCOUNT_CREATED: 'Your account with Cru was successfully created and verified. <br/><strong>Now let’s sign you in.</strong>',
     OKTA_REDIRECT_EXPLANATION: 'For your security, you are being redirected to Okta to sign in with your new account. Okta is our secure login provider, helping keep your account safe. <strong>You’ll briefly visit the domain below, then we’ll bring you back after you sign in.</strong>',
-    OKTA_REDIRECT_NOW: 'Take me to Okta now'
+    OKTA_REDIRECT_NOW: 'Take me to Okta now',
+    SPOUSE_DETAILS_TOOLTIP: 'By adding your spouse\'s name, we can ensure that both of your contributions are linked together, providing a clearer and more accurate record of your household\'s giving.',
+    SECURE: 'Secure',
+    ADD_SPOUSE: 'Add Spouse',
+    REMOVE_SPOUSE: 'Remove',
+    SUGGESTED_AMOUNT_HELP: 'Suggested Gift Amounts. Tab for Custom Amount',
+    CUSTOM_AMOUNT: 'Custom Amount'
   })
   $translateProvider.preferredLanguage('en')
 }

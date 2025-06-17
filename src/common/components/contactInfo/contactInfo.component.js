@@ -130,6 +130,12 @@ class Step1Controller {
   }
 
   toggleSpouseDetails () {
+    if (this.showSpouseDetails) {
+      this.donorDetails['spouse-name'] = {
+        'given-name': null,
+        'family-name': null
+      }
+    }
     this.showSpouseDetails = !this.showSpouseDetails
   }
 
@@ -212,9 +218,6 @@ export default angular
       donorDetails: '=?',
       onSubmit: '&',
       radioStationApiUrl: '<',
-      hideSpouseDetails: '<',
-      compactAddress: '<',
-      useV3: '<',
-      radioStationRadius: '<'
+      useV3: '<'
     }
   })

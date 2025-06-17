@@ -224,15 +224,15 @@ label.btn.btn-default-form.active {
   display: flex;
   flex-direction: column;
 
-  & > .panel.panel-default:nth-child(1) {
+  & > .suggested-gift-amounts {
     order: 3;
   }
 
-  & > .panel.panel-default:nth-child(2) {
+  & > .gift-frequency {
     order: 1;
   }
-
-  & > .panel.panel-default:nth-child(3) {
+  
+  & > .special-instructions {
     order: 2;
   }
 }

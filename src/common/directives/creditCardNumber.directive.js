@@ -14,7 +14,7 @@ const creditCardNumberDirective = /* @ngInject */ function () {
       }
 
       ngModelCtrl.$parsers.unshift(function (creditCardNumber) {
-        let trimmedCardNum = creditCardNumber.replace(/\s+/g, '').replace(/\D/gi, '')
+        let trimmedCardNum = creditCardNumber.replace(/\s+/g, '').replace(/\D/g, '')
         const cardType = cruPayments.creditCard.card.info.type(creditCardNumber)
         const numbers = []
 

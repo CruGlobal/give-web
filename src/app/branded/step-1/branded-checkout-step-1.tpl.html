@@ -15,8 +15,6 @@
       default-frequency="$ctrl.defaultFrequency"
       uri="$ctrl.item.uri"
       submitted="$ctrl.submitted"
-      hide-quarterly="$ctrl.hideQuarterly"
-      hide-annual="$ctrl.hideAnnual"
       on-state-change="$ctrl.onGiftConfigStateChange(state)"
       disable-session-restart="true"
       ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig"
@@ -32,15 +30,13 @@
 <div ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig">
   <div class="panel">
     <div class="panel-body">
-      <h3 ng-if="$ctrl.useV3 !== 'true'" class="panel-name" translate>{{'YOUR_INFORMATION'}}</h3>
+      <h3 ng-if="!$ctrl.useV3" class="panel-name" translate>{{'YOUR_INFORMATION'}}</h3>
       <contact-info
         submitted="$ctrl.submitted"
         on-submit="$ctrl.onContactInfoSubmit(success)"
         donor-details="$ctrl.donorDetails"
         radio-station-api-url="$ctrl.radioStationApiUrl"
-        hide-spouse-details="$ctrl.hideSpouseDetails"
-        use-v3="$ctrl.useV3"
-        compact-address="true">
+        use-v3="$ctrl.useV3">
       </contact-info>
     </div>
   </div>
@@ -93,7 +89,7 @@
   </div>
   <div class="panel">
     <div class="panel-body text-right">
-      <div class="checkout-cta pull-right" ng-if="$ctrl.useV3 === 'true'">
+      <div class="checkout-cta pull-right" ng-if="$ctrl.useV3">
        <recaptcha-wrapper
               action="'branded_checkout'"
               on-success="$ctrl.submit"
@@ -105,7 +101,7 @@
               button-label="'SUBMIT_GIFT'"></recaptcha-wrapper>
         </div>
 
-      <button ng-if="$ctrl.useV3 !== 'true'" class="btn btn-primary"
+      <button ng-if="!$ctrl.useV3" class="btn btn-primary"
               ng-click="$ctrl.submit()"
               ng-disabled="$ctrl.errorLoadingProductConfig"
               translate>{{'CONTINUE'}}</button>

@@ -194,9 +194,8 @@ export default angular
       onOrderFailed: '&',
       language: '@',
       showCoverFees: '@',
-      hideSpouseDetails: '@',
+      useV3: '@',
       hideAnnual: '@',
-      hideQuarterly: '@',
-      useV3: '@'
+      hideQuarterly: '@'
     }
   })

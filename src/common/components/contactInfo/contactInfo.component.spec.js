@@ -599,5 +599,38 @@ describe('contactInfo', function () {
       expect(self.controller.submissionError).toEqual('Invalid email address')
       expect(self.controller.onSubmit).toHaveBeenCalledWith({ success: false })
     })
+
+    it('should clear out spouse name', () => {
+      self.controller.detailsForm.$valid = true
+      self.controller.showSpouseDetails = true
+      self.controller.donorDetails = {
+        'given-name': 'Fname',
+        email: 'someone@asdf.com',
+        emailFormUri: '/emails/crugive',
+        'donor-type': 'Staff',
+        'spouse-name': {
+          'given-name': 'Spouse',
+          'family-name': 'Name'
+        }
+      }
+
+      jest.spyOn(self.controller.orderService, 'updateDonorDetails').mockReturnValue(Observable.of('donor details success'))
+      jest.spyOn(self.controller.orderService, 'addEmail').mockReturnValue(Observable.of('email success'))
+      jest.spyOn(self.controller.analyticsFactory, 'checkoutStepOptionEvent').mockImplementation(() => {})
+
+      self.controller.toggleSpouseDetails()
+      self.controller.submitDetails()
+
+      expect(self.controller.orderService.updateDonorDetails).toHaveBeenCalledWith({
+        'given-name': 'Fname',
+        email: 'someone@asdf.com',
+        emailFormUri: '/emails/crugive',
+        'donor-type': 'Staff',
+        'spouse-name': {
+          'given-name': null,
+          'family-name': null
+        }
+      })
+    })
   })
 })

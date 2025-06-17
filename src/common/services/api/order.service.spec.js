@@ -1076,6 +1076,38 @@ describe('order service', () => {
     })
   })
 
+  describe('cardBin', () => {
+    describe('retrieveCardBin', () => {
+      it('should return the cardBin from session storage', () => {
+        self.$window.sessionStorage.setItem('cardBin', '411111')
+
+        expect(self.orderService.retrieveCardBin()).toEqual('411111')
+      })
+    })
+
+      describe('retrieveCardBins', () => {
+      it('should return the stored cardBins', () => {
+        self.$window.sessionStorage.setItem('storedBins', '{"/paymentmethods/crugive/giydsnjqgi=":"411111","/paymentmethods/crugive/giydsnjqgy=":"411111"}')
+
+        expect(self.orderService.retrieveCardBins()).toEqual({
+          '/paymentmethods/crugive/giydsnjqgi=': '411111',
+          '/paymentmethods/crugive/giydsnjqgy=': '411111'
+        })
+      })
+    })
+
+    describe('clearCardBins', () => {
+      it('should clear the stored the card bin', () => {
+        self.$window.sessionStorage.setItem('cardBin', '411111')
+        self.$window.sessionStorage.setItem('storedBins', { 'some uri': '411111' })
+        self.orderService.clearCardBins()
+
+        expect(self.$window.sessionStorage.getItem('cardBin')).toBeNull()
+        expect(self.$window.sessionStorage.getItem('storedBins')).toBeNull()
+      })
+    })
+  })
+
   describe('storeLastPurchaseLink', () => {
     it('should save the link to the completed purchase', () => {
       self.orderService.storeLastPurchaseLink('/purchases/crugive/giydanbt=')
@@ -1253,15 +1285,22 @@ describe('order service', () => {
 
   describe('submitOrder', () => {
     let mockController
+    const mockDonorDetails = {
+      'email-address': 'email@cru.org',
+      'first-name': 'Test',
+      'last-name': 'User',
+    }
 
     beforeEach(() => {
       mockController = {
         submittingOrder: false,
         onSubmittingOrder: jest.fn(),
         onSubmitted: jest.fn(),
+        saveDonorDataForRegistration: jest.fn(),
         $scope: {
           $emit: jest.fn(),
         },
+        donorDetails: mockDonorDetails,
       }
 
       // Mock the submit() method to return a resolved observable
@@ -1287,31 +1326,28 @@ describe('order service', () => {
           self.orderService.clearCardSecurityCodes = jest.fn()
           self.orderService.retrieveCardSecurityCode = jest.fn()
           self.orderService.clearCoverFees = jest.fn()
+          self.orderService.saveDonorDataForRegistration = jest.fn()
           mockController.loadCart = jest.fn()
           self.$window.scrollTo = jest.fn()
-          jest.spyOn(self.sessionService, 'updateCheckoutSavedData')
         })
-
+        
         afterEach(() => {
           expect(mockController.onSubmittingOrder).toHaveBeenCalledWith({ value: true })
           expect(mockController.onSubmittingOrder).toHaveBeenCalledWith({ value: false })
           expect(mockController.onSubmitted).toHaveBeenCalled()
         })
-
+        
         it('should submit the order normally if paying with a bank account', (done) => {
           mockController.bankAccountPaymentDetails = {}
-          mockController.donorDetails = {
-            'registration-state': 'NEW'
-          }
           self.orderService.submitOrder(mockController).subscribe(
             () => {
               expect(self.orderService.submit).toHaveBeenCalled()
               expect(self.orderService.clearCardSecurityCodes).toHaveBeenCalled()
-
+              expect(self.orderService.saveDonorDataForRegistration).toHaveBeenCalledWith(mockDonorDetails)
+      
               expect(mockController.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
-              expect(self.sessionService.updateCheckoutSavedData).toHaveBeenCalled()
               done()
-            })
+            }, done)
       })
 
       it('should handle an error submitting an order with a bank account', (done) => {
@@ -1328,15 +1364,12 @@ describe('order service', () => {
             expect(self.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'error saving bank account' }])
             expect(mockController.submissionError).toEqual('error saving bank account')
             expect(self.$window.scrollTo).toHaveBeenCalledWith(0, 0)
-
+    
             done()
           })
       })
 
-      it('should submit the order with a CVV and card Bin if paying with a credit card', (done) => {
-        mockController.donorDetails = {
-          'registration-state': 'MATCHED'
-        }
+      it('should submit the order with a CVV and cardBin if paying with a credit card', (done) => {
         self.orderService.retrieveCardSecurityCode = jest.fn().mockReturnValue('1234')
         self.orderService.retrieveCardBin = jest.fn().mockReturnValue('411111')
         mockController.creditCardPaymentDetails = {}
@@ -1344,25 +1377,22 @@ describe('order service', () => {
         self.orderService.submitOrder(mockController).subscribe(() => {
           expect(self.orderService.submit).toHaveBeenCalledWith('1234', '411111')
           expect(self.orderService.clearCardSecurityCodes).toHaveBeenCalled()
+          expect(self.orderService.saveDonorDataForRegistration).toHaveBeenCalledWith(mockDonorDetails)
           expect(mockController.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
-          expect(self.sessionService.updateCheckoutSavedData).toHaveBeenCalled()
           done()
-        })
+        }, done)
       })
 
-      it('should submit the order without a CVV if paying with an existing credit card or the cvv in session storage is missing', (done) => {
-        mockController.donorDetails = {
-          'registration-state': 'COMPLETED'
-        }
+      it('should submit the order without a CVV and cardBin if paying with an existing credit card or the cvv in session storage is missing', (done) => {
         mockController.creditCardPaymentDetails = {}
         self.orderService.retrieveCardSecurityCode = jest.fn().mockReturnValue(undefined)
-        self.orderService.retrieveCardBin = jest.fn().mockReturnValue(null)
+        self.orderService.retrieveCardBin = jest.fn().mockReturnValue(undefined)
         mockController.coverFeeDecision = true
         self.orderService.submitOrder(mockController).subscribe(() => {
-          expect(self.orderService.submit).toHaveBeenCalledWith(undefined, null)
+          expect(self.orderService.submit).toHaveBeenCalledWith(undefined, undefined)
           expect(self.orderService.clearCardSecurityCodes).toHaveBeenCalled()
+          expect(self.orderService.saveDonorDataForRegistration).toHaveBeenCalledWith(mockDonorDetails)
           expect(mockController.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
-          expect(self.sessionService.updateCheckoutSavedData).not.toHaveBeenCalled()
           done()
         }, done)
       })
@@ -1377,6 +1407,7 @@ describe('order service', () => {
           () => { // error handler
             expect(self.orderService.submit).toHaveBeenCalledWith('1234', '411111')
             expect(self.orderService.clearCardSecurityCodes).not.toHaveBeenCalled()
+            expect(self.orderService.saveDonorDataForRegistration).not.toHaveBeenCalled()
             expect(self.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'CardErrorException: Invalid Card Number: some details' }])
             expect(mockController.submissionError).toEqual('CardErrorException')
             expect(self.$window.scrollTo).toHaveBeenCalledWith(0, 0)
@@ -1404,6 +1435,7 @@ describe('order service', () => {
           () => { // error handler
             expect(self.orderService.submit).not.toHaveBeenCalled()
             expect(self.orderService.clearCardSecurityCodes).not.toHaveBeenCalled()
+            expect(self.orderService.saveDonorDataForRegistration).not.toHaveBeenCalled()
             expect(self.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'Current payment type is unknown' }])
             expect(mockController.submissionError).toEqual('Current payment type is unknown')
             expect(self.$window.scrollTo).toHaveBeenCalledWith(0, 0)
@@ -1413,9 +1445,6 @@ describe('order service', () => {
 
       it('should clear out cover fee data', (done) => {
         mockController.creditCardPaymentDetails = {}
-        mockController.donorDetails = {
-          'registration-state': 'NEW'
-        }
         self.orderService.submitOrder(mockController).subscribe(() => {
           done()
         }, done)
