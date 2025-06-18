@@ -1361,6 +1361,7 @@ describe('order service', () => {
             expect(self.orderService.submit).toHaveBeenCalled()
             expect(mockController.loadCart).toHaveBeenCalled()
             expect(self.orderService.clearCardSecurityCodes).not.toHaveBeenCalled()
+            expect(self.orderService.saveDonorDataForRegistration).not.toHaveBeenCalled()
             expect(self.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'error saving bank account' }])
             expect(mockController.submissionError).toEqual('error saving bank account')
             expect(self.$window.scrollTo).toHaveBeenCalledWith(0, 0)

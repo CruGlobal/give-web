@@ -94,8 +94,3 @@ export default angular
     analyticsFactory.name
   ])
   .factory(serviceName, SessionModalService)
-  .config(function (modalStateServiceProvider) {
-    modalStateServiceProvider.registerModal(
-      /* @ngInject */
-      function (sessionModalService) {})
-  })
