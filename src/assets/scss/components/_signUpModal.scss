@@ -91,6 +91,12 @@ sign-up-modal, reset-password-modal {
       }
     }
   }
+
+  .welcome-message {
+    .redirect-loading {
+      margin: 20px 0;
+    }
+  }
 }
 
 sign-up-modal {
