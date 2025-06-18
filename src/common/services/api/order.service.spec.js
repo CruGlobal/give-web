@@ -1284,16 +1284,21 @@ describe('order service', () => {
 
   describe('submitOrder', () => {
     let mockController
+    const mockDonorDetails = {
+      'email-address': 'email@cru.org',
+      'first-name': 'Test',
+      'last-name': 'User',
+    }
 
     beforeEach(() => {
       mockController = {
         submittingOrder: false,
         onSubmittingOrder: jest.fn(),
         onSubmitted: jest.fn(),
-        saveDonorDataForRegistration: jest.fn(),
         $scope: {
           $emit: jest.fn(),
         },
+        donorDetails: mockDonorDetails,
       }
 
       // Mock the submit() method to return a resolved observable
@@ -1319,6 +1324,7 @@ describe('order service', () => {
           self.orderService.clearCardSecurityCodes = jest.fn()
           self.orderService.retrieveCardSecurityCode = jest.fn()
           self.orderService.clearCoverFees = jest.fn()
+          self.orderService.saveDonorDataForRegistration = jest.fn()
           mockController.loadCart = jest.fn()
           self.$window.scrollTo = jest.fn()
         })
@@ -1335,9 +1341,9 @@ describe('order service', () => {
             () => {
               expect(self.orderService.submit).toHaveBeenCalled()
               expect(self.orderService.clearCardSecurityCodes).toHaveBeenCalled()
+              expect(self.orderService.saveDonorDataForRegistration).toHaveBeenCalledWith(mockDonorDetails)
       
               expect(mockController.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
-              expect(mockController.saveDonorDataForRegistration).toHaveBeenCalledWith()
               done()
             }, done)
       })
@@ -1353,6 +1359,7 @@ describe('order service', () => {
             expect(self.orderService.submit).toHaveBeenCalled()
             expect(mockController.loadCart).toHaveBeenCalled()
             expect(self.orderService.clearCardSecurityCodes).not.toHaveBeenCalled()
+            expect(self.orderService.saveDonorDataForRegistration).not.toHaveBeenCalled()
             expect(self.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'error saving bank account' }])
             expect(mockController.submissionError).toEqual('error saving bank account')
             expect(self.$window.scrollTo).toHaveBeenCalledWith(0, 0)
@@ -1369,8 +1376,8 @@ describe('order service', () => {
         self.orderService.submitOrder(mockController).subscribe(() => {
           expect(self.orderService.submit).toHaveBeenCalledWith('1234', '411111')
           expect(self.orderService.clearCardSecurityCodes).toHaveBeenCalled()
+          expect(self.orderService.saveDonorDataForRegistration).toHaveBeenCalledWith(mockDonorDetails)
           expect(mockController.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
-          expect(mockController.saveDonorDataForRegistration).toHaveBeenCalledWith()
           done()
         }, done)
       })
@@ -1383,8 +1390,8 @@ describe('order service', () => {
         self.orderService.submitOrder(mockController).subscribe(() => {
           expect(self.orderService.submit).toHaveBeenCalledWith(undefined, undefined)
           expect(self.orderService.clearCardSecurityCodes).toHaveBeenCalled()
+          expect(self.orderService.saveDonorDataForRegistration).toHaveBeenCalledWith(mockDonorDetails)
           expect(mockController.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
-          expect(mockController.saveDonorDataForRegistration).toHaveBeenCalledWith()
           done()
         }, done)
       })
@@ -1399,6 +1406,7 @@ describe('order service', () => {
           () => { // error handler
             expect(self.orderService.submit).toHaveBeenCalledWith('1234', '411111')
             expect(self.orderService.clearCardSecurityCodes).not.toHaveBeenCalled()
+            expect(self.orderService.saveDonorDataForRegistration).not.toHaveBeenCalled()
             expect(self.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'CardErrorException: Invalid Card Number: some details' }])
             expect(mockController.submissionError).toEqual('CardErrorException')
             expect(self.$window.scrollTo).toHaveBeenCalledWith(0, 0)
@@ -1426,6 +1434,7 @@ describe('order service', () => {
           () => { // error handler
             expect(self.orderService.submit).not.toHaveBeenCalled()
             expect(self.orderService.clearCardSecurityCodes).not.toHaveBeenCalled()
+            expect(self.orderService.saveDonorDataForRegistration).not.toHaveBeenCalled()
             expect(self.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'Current payment type is unknown' }])
             expect(mockController.submissionError).toEqual('Current payment type is unknown')
             expect(self.$window.scrollTo).toHaveBeenCalledWith(0, 0)
