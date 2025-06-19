@@ -92,7 +92,7 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         publicGive: 'https://give-prod-cloud.cru.org',
         acsUrl: 'https://cru-mkt-prod1-m.adobe-campaign.com/lp/LPEmailPrefCenter?_uuid=8831d67a-0d46-406b-8987-fd07c97c4ca7&service=%400fAlW4GPmxXExp8qlx7HDlAM6FSZUd0yYRlQg6HRsO_kglfi0gs650oHPZX6LrOvg7OHoIWWpobOeGZduxdNU_m5alc&pkey=',
         oktaUrl: 'https://signon.okta.com',
-        oktaClientId: '0oa1p8kb6gr1IGGdc0h8',
+        oktaClientId: '0oa22s4b0hbsS58xv0h8',
         oktaReferrer: 'https://give-prod-cloud.cru.org',
         recaptchaKey: '6LduSiQqAAAAAOLA7NEU8-3-mdCmBKEUCwaFQuJF'
       },
@@ -129,7 +129,7 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         publicGive: 'https://give-preprod.cru.org',
         acsUrl: 'https://cru-mkt-prod1-m.adobe-campaign.com/lp/LPEmailPrefCenter?_uuid=8831d67a-0d46-406b-8987-fd07c97c4ca7&service=%400fAlW4GPmxXExp8qlx7HDlAM6FSZUd0yYRlQg6HRsO_kglfi0gs650oHPZX6LrOvg7OHoIWWpobOeGZduxdNU_m5alc&pkey=',
         oktaUrl: 'https://signon.okta.com',
-        oktaClientId: '0oa1p8kb6gr1IGGdc0h8',
+        oktaClientId: '0oa22s4b0hbsS58xv0h8',
         oktaReferrer: 'https://give-preprod.cru.org'
       },
       production: {
@@ -141,7 +141,7 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         acsUrl: 'https://cru-mkt-prod1-m.adobe-campaign.com/lp/LPEmailPrefCenter?_uuid=8831d67a-0d46-406b-8987-fd07c97c4ca7&service=%400fAlW4GPmxXExp8qlx7HDlAM6FSZUd0yYRlQg6HRsO_kglfi0gs650oHPZX6LrOvg7OHoIWWpobOeGZduxdNU_m5alc&pkey=',
         isBrandedCheckout: false,
         oktaUrl: 'https://signon.okta.com',
-        oktaClientId: '0oa1p8kb6gr1IGGdc0h8',
+        oktaClientId: '0oa22s4b0hbsS58xv0h8',
         oktaReferrer: 'https://give.cru.org',
         recaptchaKey: '6LduSiQqAAAAAOLA7NEU8-3-mdCmBKEUCwaFQuJF'
       },
