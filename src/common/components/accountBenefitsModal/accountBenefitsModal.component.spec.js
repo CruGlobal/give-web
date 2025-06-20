@@ -45,11 +45,4 @@ describe('accountBenefitsModal', function () {
     })
   })
 
-  describe('onFailure()', () => {
-    it('calls sessionService.removeOktaRedirectIndicator()', () => {
-      jest.spyOn($ctrl.sessionService, 'removeOktaRedirectIndicator')
-      $ctrl.onFailure()
-      expect($ctrl.sessionService.removeOktaRedirectIndicator).toHaveBeenCalled()
-    })
-  })
 })
