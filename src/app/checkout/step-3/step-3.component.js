@@ -32,7 +32,6 @@ class Step3Controller {
     this.cartService = cartService
     this.commonService = commonService
     this.startDate = startDate
-    this.selfReference = this
     this.isBranded = envService.read('isBrandedCheckout')
     this.datadogRum = datadogRum
 

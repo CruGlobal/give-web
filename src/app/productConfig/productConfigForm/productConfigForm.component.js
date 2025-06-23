@@ -30,7 +30,6 @@ import { giveGiftParams } from '../giveGiftParams'
 import loading from 'common/components/loading/loading.component'
 import analyticsFactory from 'app/analytics/analytics.factory'
 import brandedAnalyticsFactory from 'app/branded/analytics/branded-analytics.factory'
-
 import template from './productConfigForm.tpl.html'
 
 export const brandedCoverFeeCheckedEvent = 'brandedCoverFeeCheckedEvent'

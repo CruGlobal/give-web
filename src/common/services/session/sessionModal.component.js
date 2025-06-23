@@ -15,10 +15,7 @@ const componentName = 'sessionModal'
 
 class SessionModalController {
   /* @ngInject */
-  constructor ($rootScope, $document, $window, sessionService, analyticsFactory) {
-    this.$rootScope = $rootScope
-    this.$document = $document
-    this.$window = $window
+  constructor (sessionService, analyticsFactory) {
     this.sessionService = sessionService
     this.analyticsFactory = analyticsFactory
     this.$injector = angular.injector()

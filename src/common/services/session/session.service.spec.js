@@ -341,7 +341,7 @@ describe('session service', function () {
       jest.spyOn(sessionService.authClient.token, 'parseFromUrl').mockResolvedValue({})
 
       sessionService.handleOktaRedirect().subscribe(() => {
-        fail()
+        done('should not have resolved as not authenticated.')
       }, error => {
         expect(error).toBeDefined()
         done()

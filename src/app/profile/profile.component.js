@@ -8,7 +8,9 @@ import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/forkJoin'
 import 'rxjs/add/operator/do'
 import { phoneNumberRegex } from 'common/app.constants'
+
 import template from './profile.tpl.html'
+
 import profileService from 'common/services/api/profile.service'
 import addressForm from 'common/components/addressForm/addressForm.component'
 import sessionEnforcerService, {
