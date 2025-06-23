@@ -9,7 +9,6 @@ const componentName = 'signInForm'
 class SignInFormController {
   /* @ngInject */
   constructor (gettext) {
-    this.$injector = angular.injector()
     this.gettext = gettext
   }
 
