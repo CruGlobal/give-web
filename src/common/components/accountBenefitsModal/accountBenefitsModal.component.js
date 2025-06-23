@@ -25,7 +25,6 @@ class AccountBenefitsModalController {
       this.onRegister()
     }
   }
-
 }
 
 export default angular
