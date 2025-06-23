@@ -1,9 +1,6 @@
 import angular from 'angular'
 
-import signInModal from 'common/components/signInModal/signInModal.component'
 import signUpModal from 'common/components/signUpModal/signUpModal.component'
-import resetPasswordModal from 'common/components/resetPasswordModal/resetPasswordModal.component'
-import forgotPasswordModal from 'common/components/forgotPasswordModal/forgotPasswordModal.component'
 import userMatchModal from 'common/components/userMatchModal/userMatchModal.component'
 import contactInfoModal from 'common/components/contactInfoModal/contactInfoModal.component'
 import accountBenefitsModal from 'common/components/accountBenefitsModal/accountBenefitsModal.component'
@@ -18,10 +15,9 @@ const componentName = 'sessionModal'
 
 class SessionModalController {
   /* @ngInject */
-  constructor (sessionService, analyticsFactory, $document) {
+  constructor (sessionService, analyticsFactory) {
     this.sessionService = sessionService
     this.analyticsFactory = analyticsFactory
-    this.$document = $document
     this.$injector = angular.injector()
     this.isLoading = false
     this.scrollModalToTop = scrollModalToTop
@@ -29,7 +25,9 @@ class SessionModalController {
 
   $onInit () {
     this.stateChanged(this.resolve.state)
+    this.hideCloseButton = this.resolve.hideCloseButton
     this.lastPurchaseId = this.resolve.lastPurchaseId
+    this.registerAccountSignUp = this.resolve.registerAccountSignUp
   }
 
   stateChanged (state) {
@@ -37,26 +35,34 @@ class SessionModalController {
     this.scrollModalToTop()
   }
 
-  onSignInSuccess () {
-    const $injector = this.$injector
-    if (!$injector.has('sessionService')) {
-      $injector.loadNewModules(['sessionService'])
-    }
-    this.$document[0].body.dispatchEvent(
-      new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
-    this.close()
+  onSignIn () {
+    this.stateChanged('register-account')
   }
 
   onSignUpSuccess () {
     this.analyticsFactory.track('ga-sign-in-create-login')
+    this.sessionService.removeOktaRedirectIndicator()
     this.close()
   }
 
+  onAccountBenefitsRegister () {
+    this.sessionService.removeOktaRedirectIndicator()
+    this.registerAccountSignUp = true
+    this.stateChanged('register-account')
+  }
+
+  onAccountBenefitsSuccess () {
+    this.sessionService.removeOktaRedirectIndicator()
+    this.stateChanged('register-account')
+  }
+
   onFailure () {
+    this.sessionService.removeOktaRedirectIndicator()
     this.dismiss({ $value: 'error' })
   }
 
   onCancel () {
+    this.sessionService.removeOktaRedirectIndicator()
     this.dismiss({ $value: 'cancel' })
   }
 
@@ -67,10 +73,7 @@ class SessionModalController {
 
 export default angular
   .module(componentName, [
-    signInModal.name,
     signUpModal.name,
-    resetPasswordModal.name,
-    forgotPasswordModal.name,
     userMatchModal.name,
     contactInfoModal.name,
     accountBenefitsModal.name,

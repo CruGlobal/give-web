@@ -1,0 +1,111 @@
+sign-up-modal, reset-password-modal {
+  position: relative;
+
+  .signup-header {
+    padding-bottom: 30px;
+    border-bottom: 2px solid #f5f5f5;
+    text-align: center;
+  }
+
+  .signup-steps {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    padding-top: 16px;
+    gap: 16px;
+
+    .between-steps {
+      img {
+        width: 18px;
+      }
+    }
+
+    .step {
+      img {
+        width: 55px;
+        opacity: 1;
+
+        &.semi-transparent {
+          opacity: 0.5;
+        }
+      }
+    }
+  }
+
+  .okta-signup-loading {
+    padding: 153px 0;
+
+    .loading-message {
+      padding-bottom: 0.5rem;
+    }
+  }
+
+  form {
+    margin-bottom: 40px;
+  }
+
+  .buttons {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    width: 100%;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 30px;
+    border-top: 1px solid rgb(0 0 0 / 0.15) ;
+    background-color: $colorCru-white;
+
+    .back-to-sign-in {
+      width: 150px;
+    }
+
+    .next-action {
+      width: calc(100% - 150px);
+    }
+  }
+
+  .checking-for-existing-data {
+    font-size: 14px;
+  }
+
+  .sticky-buttons {
+    position: unset;
+    height: calc(100vh - 170px);
+    max-height: 560px;
+    overflow-y: auto;
+
+    // When inside another modal
+    &:not(.modal-body) {
+      height: calc(100vh - 230px);
+      max-height: 520px;
+
+      form {
+        margin-bottom: 60px;
+      }
+
+      .buttons {
+        padding: 15px 0 0;
+      }
+    }
+  }
+
+  .welcome-message {
+    .redirect-loading {
+      margin: 20px 0;
+    }
+  }
+}
+
+sign-up-modal {
+  // Hide password requirements unless on the password step
+  section[data-se="password-authenticator--rules"] {
+    display: none;
+  }
+
+  div[data-se="o-form-fieldset-credentials.passcode"] ~ section[data-se="password-authenticator--rules"] {
+    display: block;
+  }
+}

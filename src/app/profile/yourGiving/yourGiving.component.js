@@ -18,7 +18,7 @@ import sessionEnforcerService, {
   EnforcerCallbacks,
   EnforcerModes
 } from 'common/services/session/sessionEnforcer.service'
-import sessionService, { Roles, SignOutEvent } from 'common/services/session/session.service'
+import { Roles, SignOutEvent } from 'common/services/session/session.service'
 import analyticsFactory from 'app/analytics/analytics.factory'
 import template from './yourGiving.tpl.html'
 
@@ -32,7 +32,7 @@ export const givingViews = ['recipient', 'historical']
 
 class YourGivingController {
   /* @ngInject */
-  constructor ($log, $rootScope, $window, $location, $uibModal, $filter, sessionEnforcerService, profileService, sessionService, analyticsFactory) {
+  constructor ($log, $rootScope, $window, $location, $uibModal, $filter, sessionEnforcerService, profileService, analyticsFactory) {
     this.$log = $log
     this.$window = $window
     this.$location = $location
@@ -40,7 +40,6 @@ class YourGivingController {
     this.$rootScope = $rootScope
     this.sessionEnforcerService = sessionEnforcerService
     this.profileService = profileService
-    this.sessionService = sessionService
     this.analyticsFactory = analyticsFactory
     this.dateFilter = $filter('date')
     this.reload = false
@@ -174,7 +173,6 @@ export default angular
     stopStartRecurringGiftsModal.name,
     profileService.name,
     sessionEnforcerService.name,
-    sessionService.name,
     analyticsFactory.name,
     uibDropdown,
     uibModal

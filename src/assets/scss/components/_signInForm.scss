@@ -1,0 +1,89 @@
+sign-in-form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  gap: 20px;
+  text-align: center;
+
+  hr {
+    width: 65%;
+    margin-block: auto;
+  }
+
+  .no-account {
+    font-size: 1.2rem;
+  }
+
+  summary {
+    display: list-item;
+    order: -1; // Make both summaries appear before the descriptions
+    margin: 1rem 0;
+    cursor: pointer;
+  }
+
+  .details-wrapper {
+    display: flex;
+    flex-wrap: wrap; // Keep the summaries on the first line and wrap the description to the next line
+
+    details:first-of-type summary {
+      min-width: 150px; // Ensure that the summaries are wide enough that the description is forced to wrap to the next line
+      flex: 1; // Push the second summary to the right edge
+    }
+  }
+
+  // The goal is to have two <details> on one line that display their descriptions in the same
+  // location on the page on the line before
+  details {
+    display: contents; // Make the descriptions participate in the .details-wrapper flexbox layout
+    text-align: left;
+  }
+
+  > p {
+    margin-bottom: 0;
+  }
+
+  .okta-signup-button {
+    $okta-brand: #007dc1;
+
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid $okta-brand;
+    border-radius: 4px;
+    background-color: $colorCru-white;
+    color: $okta-brand;
+    font-size: 1.2rem;
+    font-weight: bold;
+    gap: 0.5rem;
+    padding-block: 20px;
+
+    &:hover {
+      border-color: $okta-brand;
+      background-color: $okta-brand;
+      color: $colorCru-white;
+    }
+
+    &:focus {
+      /* stylelint-disable-next-line scss/no-global-function-names */
+      border-color: darken($okta-brand, 3%);
+      /* stylelint-disable-next-line scss/no-global-function-names */
+      background-color: darken($okta-brand, 3%);
+      color: $colorCru-white;
+    }
+  }
+
+  .alert {
+    text-align: left;
+  }
+}
+
+sign-in-button {
+  .okta-button {
+    width: 100%;
+  }
+
+  .fa {
+    padding-left: 0.25rem;
+  }
+}

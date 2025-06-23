@@ -16,11 +16,6 @@ describe('sessionModalController', function () {
         },
         close: jest.fn(),
         dismiss: jest.fn(),
-        $document: [{
-          body: {
-            dispatchEvent: jest.fn()
-          }
-        }],
         $injector: {
           has: jest.fn(),
           loadNewModules: jest.fn()
@@ -53,52 +48,44 @@ describe('sessionModalController', function () {
     })
   })
 
-  describe('$ctrl.onSignInSuccess', () => {
-    it('should close modal', () => {
-      $ctrl.$injector.has.mockImplementation(() => true)
-      $ctrl.onSignInSuccess()
-      const $injector = $ctrl.$injector
-
-      expect($ctrl.close).toHaveBeenCalled()
-      expect($ctrl.$document[0].body.dispatchEvent).toHaveBeenCalledWith(
-        new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
-    })
-
-    it('should add the sessionService module', () => {
-      $ctrl.$injector.has.mockImplementation(() => false)
-      $ctrl.$injector.loadNewModules.mockImplementation(() => {})
-      $ctrl.onSignInSuccess()
-      const $injector = $ctrl.$injector
-
-      expect($injector.loadNewModules).toHaveBeenCalledWith(['sessionService'])
-      expect($ctrl.$document[0].body.dispatchEvent).toHaveBeenCalledWith(
-        new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
-    })
-  })
-
   describe('$ctrl.onSignUpSuccess', () => {
     it('should close modal', () => {
+      jest.spyOn($ctrl.sessionService, 'removeOktaRedirectIndicator').mockImplementation(() => {})
       jest.spyOn($ctrl.analyticsFactory, 'track').mockImplementation(() => {})
       $ctrl.onSignUpSuccess()
 
       expect($ctrl.close).toHaveBeenCalled()
       expect($ctrl.analyticsFactory.track).toHaveBeenCalledWith('ga-sign-in-create-login')
+      expect($ctrl.sessionService.removeOktaRedirectIndicator).toHaveBeenCalled()
+    })
+  })
+
+  describe('$ctrl.onAccountBenefitsSuccess', () => {
+    it('should move to register-account page and remove Okta Indicator', () => {
+      jest.spyOn($ctrl.sessionService, 'removeOktaRedirectIndicator').mockImplementation(() => {})
+      $ctrl.onAccountBenefitsSuccess()
+      expect($ctrl.sessionService.removeOktaRedirectIndicator).toHaveBeenCalled()
+      expect($ctrl.state).toEqual('register-account')
     })
   })
 
   describe('$ctrl.onFailure', () => {
     it('should dismiss modal with \'error\'', () => {
+      jest.spyOn($ctrl.sessionService, 'removeOktaRedirectIndicator').mockImplementation(() => {})
       $ctrl.onFailure()
 
       expect($ctrl.dismiss).toHaveBeenCalledWith({ $value: 'error' })
+      expect($ctrl.sessionService.removeOktaRedirectIndicator).toHaveBeenCalled()
     })
   })
 
   describe('$ctrl.onCancel', () => {
     it('should dismiss modal with \'cancel\'', () => {
+      jest.spyOn($ctrl.sessionService, 'removeOktaRedirectIndicator').mockImplementation(() => {})
       $ctrl.onCancel()
 
       expect($ctrl.dismiss).toHaveBeenCalledWith({ $value: 'cancel' })
+      expect($ctrl.sessionService.removeOktaRedirectIndicator).toHaveBeenCalled()
     })
   })
 

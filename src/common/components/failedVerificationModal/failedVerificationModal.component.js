@@ -6,9 +6,5 @@ const componentName = 'failedVerificationModal'
 export default angular
   .module(componentName, [])
   .component(componentName, {
-    templateUrl: template,
-    bindings: {
-      title: '@',
-      onOk: '&'
-    }
+    templateUrl: template
   })

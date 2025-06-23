@@ -1,120 +1,181 @@
 import angular from 'angular'
-import 'angular-gettext'
-import 'angular-messages'
-import omit from 'lodash/omit'
-
-import modalStateService from 'common/services/modalState.service'
+import OktaSignIn from '@okta/okta-signin-widget'
 import sessionService from 'common/services/session/session.service'
-import showErrors from 'common/filters/showErrors.filter'
 import template from './resetPasswordModal.tpl.html'
-import valueMatch from 'common/directives/valueMatch.directive'
+import { initializeFloatingLabels, injectBackButton, showVerificationCodeField } from 'common/lib/oktaSignInWidgetHelper/oktaSignInWidgetHelper'
 
 const componentName = 'resetPasswordModal'
 
 class ResetPasswordModalController {
+  // --------------------------------------
+  // Reset Password process.
+  // It's a multi-step process, handled by this component.
+  // --------------------------------------
+  // Step 1: Identify (email)
+  // Step 2: Select authenticator
+  //    2.1: This shows a list of authenticators to choose from.
+  //    2.2: Even if you haven't set them up. There is no way around this.
+  //    2.3: If the user selects phone, they will also be prompted to authenticate with another option.
+  // Step 3: Authenticator verification data
+  //    3.1: You will only see this page for okta_email.
+  // Step 4: Challenge authenticator
+  // Step 5: Reset authenticator
+  // Step 6: Reset password
+  // Step 7: Upon a success password reset, the user will be logged in and redirected to their previous page
+  // --------------------------------------
+
   /* @ngInject */
-  constructor ($window, $location, $log, $timeout, gettext, sessionService, modalStateService) {
-    this.$window = $window
-    this.$location = $location
+  constructor ($log, $scope, sessionService) {
     this.$log = $log
-    this.$timeout = $timeout
-    this.gettext = gettext
+    this.$scope = $scope
     this.sessionService = sessionService
-    this.modalState = modalStateService
   }
 
   $onInit () {
-    const params = this.$location.search()
-    this.modalTitle = this.gettext('Reset Password')
-    if (Object.prototype.hasOwnProperty.call(params, 'e')) {
-      this.email = params.e
-    }
-    if (Object.prototype.hasOwnProperty.call(params, 'k')) {
-      this.resetKey = params.k
-    }
-    // Change state to forgot-password if we are missing required fields.
-    if (angular.isUndefined(this.email) || angular.isUndefined(this.resetKey)) {
-      this.onStateChange({ state: 'forgot-password' })
-    }
-    this.isLoading = false
-    this.passwordChanged = false
-    this.setPristine()
+    this.initializeVariables()
+    this.setUpSignUpWidget()
   }
 
   $onDestroy () {
-    this.removeQueryParams()
-    if (!this.exitWithoutRefresh) {
-      // use $timeout here as workaround to Firefox bug
-      this.$timeout(() => this.$window.location.reload())
+    if (this.oktaSignInWidget) {
+      this.oktaSignInWidget.remove()
+      // Unsubscribe all event listeners
+      this.oktaSignInWidget.off()
     }
   }
 
-  resetPassword () {
-    if (!this.form.$valid) {
+  ready () {
+    this.$scope.$apply(() => {
+      this.isLoading = false
+    })
+  }
+
+  initializeVariables () {
+    this.isLoading = true
+    this.currentStep = 1
+    this.floatingLabelAbortControllers = []
+  }
+
+  setUpSignUpWidget () {
+    this.currentStep = 1
+
+    this.oktaSignInWidget = new OktaSignIn({
+      ...this.sessionService.oktaSignInWidgetDefaultOptions,
+      assets: {
+        baseUrl: '/assets/okta-sign-in/'
+      },
+      flow: 'resetPassword'
+    })
+
+    this.signIn()
+
+    this.oktaSignInWidget.on('ready', this.ready.bind(this))
+    this.oktaSignInWidget.on('afterRender', this.afterRender.bind(this))
+  }
+
+  afterRender (context) {
+    let step = this.currentStep
+
+    switch (context.formName) {
+      case 'identify':
+        step = 1
+        injectBackButton(this)
+        break
+      case 'select-authenticator-authenticate':
+        //  Auth options: okta_email | google_otp | okta_verify | phone_number
+        step = 2
+        break
+      case 'authenticator-verification-data':
+        // Only for auth options: okta_email | phone_number
+        step = 3
+        this.triggerNotificationClick()
+        break
+      case 'challenge-authenticator':
+        //  Auth options: okta_email | google_otp | okta_verify | phone_number
+        step = 4
+        break
+      case 'reset-authenticator':
+        step = 5
+        break
+    }
+
+    this.$scope.$apply(() => {
+      this.currentStep = step
+    })
+
+    if (context.formName === 'challenge-authenticator') {
+      if (context.authenticatorKey === 'okta_email') {
+        showVerificationCodeField()
+      }
+    }
+
+    // Handle inactivity error
+    // The Okta widget has an issue where if the page is idle for a period of time,
+    // the Okta interaction session will expire, causing the widget to show an error "You have been logged out due to inactivity..."
+    // The user then has to click "back to sign in," to rerender the Okta widget.
+    // To avoid the error showing, we check if the context formName is 'terminal'. If it is, we know there was an error,
+    // and we re-render the widget to refresh the widget.
+    if (context.formName === 'terminal') {
+      this.reRenderWidget()
       return
     }
 
-    this.setPristine()
-    this.isLoading = true
-    this.sessionService
-      .resetPassword(this.email, this.password, this.resetKey)
-      .subscribe(() => {
-        this.isLoading = false
-        this.passwordChanged = true
-        // Remove modal name and modal params on success
-        this.removeQueryParams()
-      }, (error) => {
-        this.isLoading = false
-        this.hasError = true
-        switch (error.data.error) {
-          case 'invalid_reset_key':
-          case 'password_cant_change':
-            this.errors[error.data.error] = true
-            break
-          case 'invalid_password':
-            this.errors[error.data.error] = true
-            this.invalidPasswordMessage = error.data.description
-            break
-          default:
-            this.$log.error('Error resetting password', omit(error, ['config.data.password', 'config.data.resetKey']))
-            this.errors.unknown = true
-        }
-      })
+    // This needs to be after showVerificationCodeField to ensure even the verification code field is styled correctly
+    initializeFloatingLabels(this)
   }
 
-  setPristine () {
-    this.errors = {}
-    this.hasError = false
+  onBackButtonClick () {
+    this.$scope.$apply(() => {
+      this.onSignIn()
+    })
   }
 
-  backToSignIn () {
-    this.exitWithoutRefresh = true
-    this.onStateChange({ state: 'sign-in' })
+  triggerNotificationClick () {
+    // This step requires the user to click a button to trigger the notification to be sent to their email or phone.
+    // We remove this step by clicking the button for the user.
+    const verificationCodeButtonLink = document.querySelector(`
+      .authenticator-verification-data--okta_email input.button[type="submit"],
+      .authenticator-verification-data--phone_number input.button[type="submit"]
+    `)
+    verificationCodeButtonLink?.click()
   }
 
-  removeQueryParams () {
-    this.modalState.name(null)
-    this.$location.search('e', null)
-    this.$location.search('k', null)
-    this.$location.search('theme', null)
+  reRenderWidget () {
+    // Render the widget again to show new step
+    // Unfortunately, this removes the error messages, which is why we inject them after rendering
+    this.oktaSignInWidget.remove()
+    return this.oktaSignInWidget.renderEl(
+      { el: '#osw-container' },
+      null,
+      (error) => {
+        const errorName = 'Okta Forgot Password: Error rendering Okta widget.'
+        console.error(errorName, error)
+        this.$log.error(errorName, error)
+      }
+    )
+  }
+
+  signIn () {
+    return this.oktaSignInWidget.showSignInAndRedirect({
+      el: '#osw-container'
+    }).then(tokens => {
+      this.oktaSignInWidget.authClient.handleLoginRedirect(tokens)
+    }).catch(error => {
+      this.$log.error('Okta Forgot Password: Error showing Okta sign in widget.', error)
+    })
   }
 }
 
 export default angular
   .module(componentName, [
-    'gettext',
-    'ngMessages',
-    showErrors.name,
-    sessionService.name,
-    modalStateService.name,
-    valueMatch.name
+    sessionService.name
   ])
   .component(componentName, {
     controller: ResetPasswordModalController,
     templateUrl: template,
     bindings: {
-      modalTitle: '=',
-      onStateChange: '&',
-      onSuccess: '&'
+      // Called when the user clicks back to sign in link
+      onSignIn: '&',
+      isInsideAnotherModal: '='
     }
   })

@@ -1,10 +1,9 @@
 name: CI
 
 on:
-  push: 
+  push:
     branches: [staging, master]
   pull_request:
-    branches: [staging, master]
   workflow_dispatch:
     # Allows manual build and deploy of any branch/ref
     inputs:
@@ -28,11 +27,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: .tool-versions
-      
+
       - name: Install Dependencies
       # --ignore-optional is used to avoid installing optional dependencies like fsevents which is not supported on Linux
         run: yarn install --immutable --immutable-cache --ignore-optional
-      
+
       - name: Lint Check (JS)
         run: yarn lint
 
@@ -47,19 +46,19 @@ jobs:
         with:
           # Help Codecov detect commit SHA
           fetch-depth: 2
-      
+
       - uses: actions/setup-node@v4
         with:
           node-version-file: .tool-versions
-      
+
       - name: Install Dependencies
         run: yarn install --immutable --immutable-cache --ignore-optional
-      
+
       - name: Run Tests
         run: yarn test:coverage
-      
+
       - name: Upload Codecov Reports
-        uses: codecov/codecov-action@v2 
+        uses: codecov/codecov-action@v2
 
   build:
     name: 🏗️ Build app
@@ -69,10 +68,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: .tool-versions
-      
+
       - name: Install Dependencies
         run: yarn install --immutable --immutable-cache --ignore-optional
-      
+
       - name: Build App
         env:
           S3_GIVE_DOMAIN: //${{ secrets.GIVE_WEB_HOSTNAME }}
@@ -94,10 +93,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: .tool-versions
-      
+
       - name: Install Dependencies
         run: yarn install --immutable --immutable-cache --ignore-optional
-      
+
       - name: Build App
         env:
           S3_GIVE_DOMAIN: //${{ secrets.GIVE_WEB_HOSTNAME }}
@@ -110,14 +109,14 @@ jobs:
         with:
           aws-region: us-east-1
           role-to-assume: ${{ secrets.AWS_GITHUB_ACTIONS_ROLE }}
-      
+
       # Deploying to S3 with the --delete flag can be problematic if a cached file references a deleted file
       # Solution: deploy once without deleting old files, invalidate the Cloudfront cache, then deploy a second time with the flag to delete previous files
       - name: Deploy to S3
         run: aws s3 sync dist s3://${{ secrets.AWS_WEB_STATIC_BUCKET_NAME }} --region us-east-1 --acl public-read --cache-control 'public, max-age=300'
-      
+
       - name: AWS Cloudfront
         run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
-      
+
       - name: Deploy to S3 and Delete Previous Files
         run: aws s3 sync dist  s3://${{ secrets.AWS_WEB_STATIC_BUCKET_NAME }} --region us-east-1 --acl public-read --cache-control 'public, max-age=300' --delete

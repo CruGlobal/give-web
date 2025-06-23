@@ -2,188 +2,242 @@ import angular from 'angular'
 import 'angular-mocks'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/from'
+import 'rxjs/add/observable/of'
 import module from './resetPasswordModal.component'
+import {showVerificationCodeField, injectBackButton, initializeFloatingLabels} from '../../lib/oktaSignInWidgetHelper/oktaSignInWidgetHelper';
+
+jest.mock('../../lib/oktaSignInWidgetHelper/oktaSignInWidgetHelper');
+showVerificationCodeField.mockImplementation(() => {})
+injectBackButton.mockImplementation(() => {})
+initializeFloatingLabels.mockImplementation(() => {})
 
 describe('resetPasswordModal', function () {
   beforeEach(angular.mock.module(module.name))
-  let $ctrl, $rootScope, $verifyNoPendingTasks
+  let $ctrl, bindings, $rootScope, $flushPendingTasks
 
-  beforeEach(inject(function (_$componentController_, _$rootScope_, _$verifyNoPendingTasks_) {
-    $verifyNoPendingTasks = _$verifyNoPendingTasks_
+  beforeEach(inject(function (_$rootScope_,  _$componentController_, _$flushPendingTasks_) {
     $rootScope = _$rootScope_
-    $ctrl = _$componentController_(
-      module.name, {
-        modalStateService: {
-          name: jest.fn()
-        },
-        $window: {
-          location: {
-            reload: jest.fn(),
-            search: jest.fn()
-          }
-        }
-      }, {
-        form: { $valid: true },
-        onStateChange: jest.fn()
-      }
-    )
+    $flushPendingTasks = _$flushPendingTasks_
+    bindings = {
+      onSignIn: jest.fn(),
+      resetPasswordModal: {
+        $valid: false,
+        $setSubmitted: jest.fn()
+      },
+    }
+    $ctrl = _$componentController_(module.name, {}, bindings)
+    $flushPendingTasks()
+
+    // Prevent the actual Okta widget from being created in tests
+    jest.spyOn($ctrl, 'setUpSignUpWidget').mockImplementation(() => {})
+
+    jest.spyOn($ctrl.sessionService, 'signIn').mockReturnValue(Observable.of({}))
   }))
 
+  it('to be defined', function () {
+    expect($ctrl).toBeDefined()
+  })
+
   describe('$onInit()', () => {
-    describe('missing required modalState.params', () => {
-      it('changes to \'forgot-password\' state', () => {
-        $ctrl.$onInit()
+    it('should initialize variables and set up Okta Sign Up widget', () => {
+      $ctrl.$onInit()
 
-        expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'forgot-password' })
-      })
-    })
-
-    describe('with modalState.params', () => {
-      beforeEach(() => {
-        jest.spyOn($ctrl.$location, 'search').mockReturnValue({ e: 'professorx@xavier.edu', k: 'abc123def456' })
-      })
-
-      it('initializes the modal', () => {
-        $ctrl.$onInit()
-
-        expect($ctrl.onStateChange).not.toHaveBeenCalled()
-        expect($ctrl.email).toEqual('professorx@xavier.edu')
-        expect($ctrl.resetKey).toEqual('abc123def456')
-        expect($ctrl.isLoading).toEqual(false)
-        expect($ctrl.passwordChanged).toEqual(false)
-        expect($ctrl.modalTitle).toEqual('Reset Password')
-      })
+      expect($ctrl.isLoading).toEqual(true)
+      expect($ctrl.currentStep).toEqual(1)
+      expect($ctrl.floatingLabelAbortControllers).toEqual([])
+       expect($ctrl.setUpSignUpWidget).toHaveBeenCalled()
     })
   })
 
-  describe('$onDestroy', () => {
-    it('removes query params and refreshes the page', () => {
-      jest.spyOn($ctrl, 'removeQueryParams').mockImplementation(() => {})
+  describe('$onDestroy()', () => {
+    it('should close all subscriptions', () => {
+      const remove = jest.fn()
+      const off = jest.fn()
+      $ctrl.oktaSignInWidget = {
+        remove,
+        off
+      }
+
       $ctrl.$onDestroy()
-
-      expect($ctrl.removeQueryParams).toHaveBeenCalled()
-      $ctrl.$timeout.flush()
-
-      expect($ctrl.$window.location.reload).toHaveBeenCalled()
-    })
-
-    it('removes query params and does not refresh the page', () => {
-      $ctrl.exitWithoutRefresh = true
-      jest.spyOn($ctrl, 'removeQueryParams').mockImplementation(() => {})
-      $ctrl.$onDestroy()
-
-      expect($ctrl.removeQueryParams).toHaveBeenCalled()
-      $verifyNoPendingTasks('$timeout')
-
-      expect($ctrl.$window.location.reload).not.toHaveBeenCalled()
+      expect(remove).toHaveBeenCalled()
+      expect(off).toHaveBeenCalled()
     })
   })
 
-  describe('resetPassword', () => {
-    let deferred
-    beforeEach(inject(function (_$q_) {
-      deferred = _$q_.defer()
-      jest.spyOn($ctrl.sessionService, 'resetPassword').mockImplementation(() => Observable.from(deferred.promise))
-    }))
+  describe('afterRender()', () => {
+    beforeEach(() => {
+      jest.spyOn($ctrl, 'triggerNotificationClick').mockImplementation(() => {});
+      jest.spyOn($ctrl, 'reRenderWidget').mockImplementation(() => {});
+      jest.spyOn($ctrl, 'onSignIn').mockImplementation(() => {});
+      
+      $ctrl.$onInit();
+    });
 
-    describe('invalid form', () => {
-      it('does not submit the form', () => {
-        $ctrl.form.$valid = false
-        $ctrl.resetPassword()
+    describe('steps', () => {
+      afterEach(() => {
+        expect(initializeFloatingLabels).toHaveBeenCalled();
+      });
 
-        expect($ctrl.sessionService.resetPassword).not.toHaveBeenCalled()
-      })
+      it('sets up step 1', () => {
+        $ctrl.currentStep = 0;
+        $ctrl.afterRender({ formName: 'identify' });
+
+        expect($ctrl.currentStep).toBe(1);
+        expect(injectBackButton).toHaveBeenCalledWith($ctrl);
+      });
+
+      it('sets up step 2', () => {
+        $ctrl.afterRender({ formName: 'select-authenticator-authenticate' });
+
+        expect($ctrl.currentStep).toBe(2);
+      });
+
+      it('sets up step 3', () => {
+        $ctrl.afterRender({ formName: 'authenticator-verification-data' });
+
+        expect($ctrl.currentStep).toBe(3);
+        expect($ctrl.triggerNotificationClick).toHaveBeenCalled();
+      });
+
+      it('sets up step 4 without showing verification code', () => {
+        $ctrl.afterRender({ formName: 'challenge-authenticator', authenticatorKey: 'google_otp' });
+
+        expect($ctrl.currentStep).toBe(4);
+        expect(showVerificationCodeField).not.toHaveBeenCalled();
+      });
+
+      it('sets up step 4 with showing verification code', () => {
+        $ctrl.afterRender({ formName: 'challenge-authenticator', authenticatorKey: 'okta_email' });
+
+        expect($ctrl.currentStep).toBe(4);
+        expect(showVerificationCodeField).toHaveBeenCalled();
+      });
+
+      it('sets up step 5', () => {
+        $ctrl.afterRender({ formName: 'reset-authenticator' });
+
+        expect($ctrl.currentStep).toBe(5);
+      });
+    });
+
+    it('should re-render the widget', () => {
+      $ctrl.afterRender({ formName: 'terminal' });
+
+      expect($ctrl.reRenderWidget).toHaveBeenCalled();
+    });    
+  });
+
+
+  describe('reRenderWidget()', () => {
+
+  
+    it('should re-render the widget', (done) => {
+      const remove = jest.fn()
+      const renderEl = jest.fn()
+      $ctrl.oktaSignInWidget = {
+        remove,
+        renderEl
+      }
+      jest.spyOn($ctrl.$log, 'error').mockImplementation(() => {});
+      $ctrl.reRenderWidget()
+      expect(remove).toHaveBeenCalled()
+      expect(renderEl).toHaveBeenCalled()
+
+      const error = new Error('Render error');
+      renderEl.mockImplementation((_, __, callback) => callback(error));
+      $ctrl.reRenderWidget()
+      setTimeout(() => {
+        expect($ctrl.$log.error).toHaveBeenCalledWith('Okta Forgot Password: Error rendering Okta widget.', error);
+        done();
+      });
+    });
+  });
+
+  describe('triggerNotificationClick()', () => {
+    const handleClick = jest.fn();
+    window.handleClick = handleClick;
+    beforeEach(() => {
+      handleClick.mockClear();
     })
 
-    describe('valid form', () => {
-      beforeEach(() => {
-        $ctrl.email = 'professorx@xavier.edu'
-        $ctrl.password = 'Cerebro12345678'
-        $ctrl.resetKey = 'abc123def456'
-        $ctrl.resetPassword()
+    it('should trigger the email verification code to be sent', () => {
+      document.body.innerHTML = `
+        <div class="authenticator-verification-data--okta_email">
+          <input class="button" type="submit" onclick="handleClick()">
+            Send Verification Notification
+          </input>
+        </div>
+      `;
+      $ctrl.triggerNotificationClick()
+      expect(handleClick).toHaveBeenCalled();
+    });
+
+    it('should trigger the sms verification code to be sent', () => {
+      document.body.innerHTML = `
+        <div class="authenticator-verification-data--phone_number">
+          <input class="button" type="submit" onclick="handleClick()">
+            Send Verification Notification
+          </input>
+        </div>
+      `;
+      $ctrl.triggerNotificationClick()
+      expect(handleClick).toHaveBeenCalled();
+    });
+
+    it("shouldn't call handleClick if button link is not rendered", () => {
+      document.body.innerHTML = `
+        <div>Something else</div>
+      `;
+
+      $ctrl.triggerNotificationClick()
+      expect(handleClick).not.toHaveBeenCalled();
+    });
+  });
+
+
+  describe('signIn()', () => {
+    it('should authenticated and handle login', (done) => {
+      jest.spyOn($ctrl.$log, 'error').mockImplementation(() => {});
+      const showSignInAndRedirect = jest.fn().mockImplementation(() => Promise.resolve({
+      token: 'token'
+      }));
+      const handleLoginRedirect = jest.fn();
+      $ctrl.oktaSignInWidget = {
+        showSignInAndRedirect,
+        authClient: {
+          handleLoginRedirect
+        }
+      }
+
+      $ctrl.signIn().then(() => {
+      expect(showSignInAndRedirect).toHaveBeenCalledWith({
+        el: '#osw-container'
       })
-
-      it('sets isLoading to true and calls sessionService.resetPassword', () => {
-        expect($ctrl.isLoading).toEqual(true)
-        expect($ctrl.sessionService.resetPassword)
-          .toHaveBeenCalledWith('professorx@xavier.edu', 'Cerebro12345678', 'abc123def456')
+      expect(handleLoginRedirect).toHaveBeenCalledWith({
+        token: 'token'
       })
+      expect($ctrl.$log.error).not.toHaveBeenCalled()
+      done()
+      });
+    });
 
-      describe('resetPassword success', () => {
-        beforeEach(() => {
-          jest.spyOn($ctrl, 'removeQueryParams').mockImplementation(() => {})
-          deferred.resolve()
-          $rootScope.$digest()
-        })
+    it('should handle an error with $log', (done) => {
+      const error = new Error('Error signing in')
+      jest.spyOn($ctrl.$log, 'error').mockImplementation(() => {})
+      const showSignInAndRedirect = jest.fn().mockRejectedValue(error)
+      const handleLoginRedirect = jest.fn()
+      $ctrl.oktaSignInWidget = {
+        showSignInAndRedirect,
+        authClient: {
+          handleLoginRedirect
+        }
+      }
 
-        it('sets passwordChanged', () => {
-          expect($ctrl.isLoading).toEqual(false)
-          expect($ctrl.passwordChanged).toEqual(true)
-          expect($ctrl.removeQueryParams).toHaveBeenCalled()
-        })
-      })
-
-      describe('resetPassword failure', () => {
-        describe('400 Bad Request', () => {
-          it('sets \'invalid_reset_key\' error', () => {
-            deferred.reject({ status: 400, data: { error: 'invalid_reset_key' } })
-            $rootScope.$digest()
-
-            expect($ctrl.hasError).toEqual(true)
-            expect($ctrl.errors).toEqual(expect.objectContaining({ invalid_reset_key: true }))
-          })
-
-          it('sets invalid_password error', () => {
-            deferred.reject({ status: 400, data: { error: 'invalid_password', description: 'Invalid password...' } })
-            $rootScope.$digest()
-
-            expect($ctrl.hasError).toEqual(true)
-            expect($ctrl.errors).toEqual(expect.objectContaining({ invalid_password: true }))
-            expect($ctrl.invalidPasswordMessage).toEqual('Invalid password...')
-          })
-        })
-
-        describe('403 Forbidden', () => {
-          it('sets \'password_cant_change\' error', () => {
-            deferred.reject({ status: 403, data: { error: 'password_cant_change' } })
-            $rootScope.$digest()
-
-            expect($ctrl.hasError).toEqual(true)
-            expect($ctrl.errors).toEqual(expect.objectContaining({ password_cant_change: true }))
-          })
-        })
-
-        describe('500 Internal Server Error', () => {
-          it('sets \'unknown\' error', () => {
-            deferred.reject({ status: 500, data: { error: 'unknown' } })
-            $rootScope.$digest()
-
-            expect($ctrl.hasError).toEqual(true)
-            expect($ctrl.errors).toEqual(expect.objectContaining({ unknown: true }))
-          })
-        })
-      })
-    })
-  })
-
-  describe('backToSignIn', () => {
-    it('avoids refresh and changes state', () => {
-      $ctrl.backToSignIn()
-
-      expect($ctrl.exitWithoutRefresh).toEqual(true)
-      expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'sign-in' })
-    })
-  })
-
-  describe('removeQueryParams', () => {
-    it('removes query params', () => {
-      jest.spyOn($ctrl.$location, 'search').mockImplementation(() => {})
-      $ctrl.removeQueryParams()
-
-      expect($ctrl.modalState.name).toHaveBeenCalledWith(null)
-      expect($ctrl.$location.search).toHaveBeenCalledWith('e', null)
-      expect($ctrl.$location.search).toHaveBeenCalledWith('k', null)
-      expect($ctrl.$location.search).toHaveBeenCalledWith('theme', null)
+      $ctrl.signIn().then(() => {
+        expect(handleLoginRedirect).not.toHaveBeenCalled()
+        expect($ctrl.$log.error).toHaveBeenCalledWith('Okta Forgot Password: Error showing Okta sign in widget.', error)
+        done()
+      }, done)
     })
   })
 })

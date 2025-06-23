@@ -1,0 +1,401 @@
+@import 'assets/okta-sign-in/css/okta-sign-in.min.css';
+
+$okta-text-color: #1d1d21;
+
+#okta-sign-in.main-container {
+  border: none;
+  margin: 0;
+  box-shadow: none;
+
+  .okta-sign-in-header {
+    display: none;
+  }
+
+  .auth-content {
+    padding: 0;
+    padding-top: 10px;
+  }
+
+  .okta-form-title {
+    display: none;
+  }
+}
+
+sign-up-modal {
+  .back-to-sign-in {
+    margin-top: 20px;
+  }
+}
+
+#okta-sign-in.auth-container {
+  overflow: visible;
+  width: 100%;
+
+  .clearfix {
+    &::after, &::before {
+      // Fix warning icon height
+      // This may be removed if https://github.com/okta/okta-signin-widget/pull/3801 is merged upstream
+      height: calc(100% + 2px);
+    }
+  }
+
+  .beacon-container {
+    display: none;
+  }
+
+  // ============== Container ============== //
+
+  .o-form-content {
+    overflow: hidden;
+    padding-top: 10px;
+  }
+
+  &.main-container {
+    box-shadow: none;
+  }
+
+  .o-form-fieldset-container {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid $colorCru-background;
+    border-radius: 7px;
+  }
+
+  // ============== Errors ============== //
+
+  .o-form-explain.o-form-input-error {
+    $okta-error-background: #ffe3e3;
+
+    padding-top: 6px;
+    padding-left: 20px;
+    background: $okta-error-background;
+  }
+
+  // ============== Fields ============== //
+
+  .o-form-label {
+    @include transition(top 0.3s ease, font-size 0.3s ease);
+
+    position: absolute;
+    z-index: 20;
+    top: 17px;
+    width: auto;
+    padding: 0;
+    padding-left: 8px;
+
+    @media (prefers-reduced-motion) {
+      transition: none;
+    }
+
+    label {
+      $ota-form-label-color: #9c9c9c;
+
+      color: $ota-form-label-color;
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    &.active {
+      top: 2px;
+
+      label {
+        font-size: 12px;
+      }
+    }
+
+
+    .o-form-explain {
+      font-size: 12px;
+    }
+  }
+
+  .o-form-select-fieldset {
+    .o-form-label {
+      top: 2px;
+
+      label {
+        font-size: 12px;
+      }
+    }
+
+    .chzn-container {
+      &>.chzn-single {
+        height: auto;
+        padding-top: 12px;
+        border: 1px solid transparent;
+        border-radius: 0;
+
+        span {
+          // Make the selected item color match the color of text inputs
+          color: $okta-text-color;
+          line-height: 36px;
+        }
+
+        div {
+          top: 6px;
+        }
+
+        b {
+          // Make the down arrow match the color of the other text inputs
+          // The mask-* styles essentially duplicate the background-* styles that Okta applies to
+          // render the sprite. We use Okta's sprite to keep the same shape via a mask but apply
+          // an overridden color to that shape.
+          background-color: $okta-text-color;
+          background-image: none !important;
+          mask-image: url("../img/ui/forms/chosen-sprite@2x.png");
+          mask-position: 0 6px;
+          mask-repeat: no-repeat;
+          mask-size: 52px 37px;
+        }
+      }
+
+      &:focus-within {
+        box-shadow: none;
+
+        &>.chzn-single {
+          border-color: $colorCru-gold;
+          box-shadow: none;
+        }
+      }
+    }
+
+    .chzn-container-single .chzn-drop {
+      border-radius: 0;
+    }
+  }
+
+  // override okta styles
+  .focused-input,
+  .link.help:focus,
+  input[type="radio"]:focus+label,
+  input[type="text"]:focus {
+    box-shadow: none
+  }
+
+  .o-form-fieldset {
+    position: relative;
+    width: 100%;
+    border-top: 1px solid $colorCru-background;
+    margin: 0;
+
+    input:-webkit-autofill {
+      // Override Okta's webkit autofill styles
+      border-radius: unset;
+      box-shadow: unset;
+    }
+
+    &[data-se="o-form-fieldset-userProfile.state"],
+    &[data-se="o-form-fieldset-userProfile.zipCode"] {
+      width: 50%;
+    }
+
+    &[data-se="o-form-fieldset-userProfile.state"] {
+      // Remove the rounded border from the state dropdown and error message right border because
+      // they are next to the ZIP code
+      /* stylelint-disable-next-line no-descending-specificity */
+      .chzn-single,
+      .chzn-drop,
+      .o-form-input-error {
+        border-radius: 0 0 0 6px;
+      }
+
+      // If the state dropdown or ZIP code has an error message, remove the border rounding from the
+      // dropdown because the rounding goes to the error message
+      &:has(.okta-form-input-error),
+      &:has(+ [data-se="o-form-fieldset-userProfile.zipCode"] .o-form-input-error) {
+        .chzn-single,
+        .chzn-drop {
+          border-radius: 0;
+        }
+      }
+    }
+
+    &:first-child {
+      border-top: none;
+    }
+
+    &:first-of-type {
+      input,
+      .chzn-container a {
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+      }
+    }
+
+    &:last-of-type {
+      // Usually the last fieldset has rounded bottom borders
+      // ".chzn-container a" is for select boxes
+      input,
+      .o-form-input-error,
+      .chzn-container a {
+        border-bottom-left-radius: 6px;
+        border-bottom-right-radius: 6px;
+      }
+
+      // Also, if the field has errors, the error box gets the rounded border instead of the input
+      &:has(.okta-form-input-error) input {
+        border-bottom-left-radius: unset;
+        border-bottom-right-radius: unset;
+      }
+
+      // However, if it is a password field with a password requirements sibling, the password
+      // requirements box gets the rounded border instead of the input or error message
+      &[data-se="o-form-fieldset-credentials.passcode"]:has(+ [data-se="password-authenticator--rules"]) {
+        input,
+        .o-form-input-error {
+          border-bottom-left-radius: unset;
+          border-bottom-right-radius: unset;
+        }
+      }
+    }
+
+    // If the state has an error, but not the zip code, remove the rounded border from the zip code input
+    &[data-se="o-form-fieldset-userProfile.state"]:has(.o-form-input-error) + [data-se="o-form-fieldset-userProfile.zipCode"] input {
+      border-radius: 0;
+    }
+
+    &[data-se="o-form-fieldset-userProfile.zipCode"] {
+      border-left: 1px solid $colorCru-background;
+
+      /* stylelint-disable-next-line no-descending-specificity */
+      input, .o-form-input-error {
+        border-bottom-left-radius: 0;
+      }
+    }
+
+    // Allow the account type dropdown to have rounded corners if the organisation field is hidden
+    &:has([data-se="o-form-input-accountType"]):has(+ .o-form-fieldset[style="display: none;"] [data-se="o-form-input-organizationName"]) .chzn-container {
+      .chzn-drop, a {
+        border-bottom-left-radius: 6px;
+        border-bottom-right-radius: 6px;
+      }
+    }
+
+    &[data-se="o-form-fieldset-credentials.passcode"] {
+      margin-bottom: 0;
+    }
+  }
+
+  .o-form-input .o-form-control {
+    height: auto;
+    border: none;
+    border-radius: 0;
+    background: none;
+
+    /* stylelint-disable-next-line no-descending-specificity */
+    input {
+      height: auto;
+    }
+
+    // Style input fields, but not input fields in dropdowns
+    input[type="text"]:not(.chzn-search input),
+    input[type="password"] {
+      padding-top: 20px;
+      padding-bottom: 12px;
+      border: 1px solid transparent;
+      appearance: none;
+
+      &:focus {
+        border-color: $colorCru-gold;
+        box-shadow: none;
+      }
+    }
+  }
+
+  // ============== Password rules ============== //
+
+  section[data-se="password-authenticator--rules"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 0 0 6px 6px;
+    border-top: 1px solid $colorCru-background;
+
+    /* stylelint-disable-next-line selector-class-pattern */
+    .password-authenticator--list {
+      margin: 0;
+    }
+  }
+
+  // ============== Injected buttons ============== //
+
+  // cru back button
+  .o-form-button-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    /* stylelint-disable-next-line selector-id-pattern */
+    #backButton,
+    .button.button-primary {
+      padding-top: 7px;
+      padding-bottom: 7px;
+    }
+
+    /* stylelint-disable-next-line selector-id-pattern */
+    #backButton {
+      width: 100%;
+      border-color: $colorCru-gray !important;
+      background-color: $colorCru-white !important;
+      color: $colorCru-gray !important;
+
+      &:hover,
+      &:focus,
+      &:active {
+        background: $colorCru-gray !important;
+        color: $colorCru-white !important;
+      }
+    }
+
+    .button.button-primary {
+      height: auto;
+      color: $colorText;
+
+      /* stylelint-disable-next-line scss/at-extend-no-missing-placeholder */
+      @extend .btn;
+      /* stylelint-disable-next-line scss/at-extend-no-missing-placeholder */
+      @extend .btn-primary;
+    }
+  }
+
+  // cru error message
+  .cru-error {
+    float: left;
+  }
+
+  // cru retry button
+  .cru-retry-button:hover {
+    text-decoration: underline;
+  }
+}
+
+// ============== Okta overrides ============== //
+// select dropdown focus style
+/* stylelint-disable-next-line no-descending-specificity */
+.chzn-container:focus-within {
+  box-shadow: none;
+}
+
+// select dropdown border radius style
+/* stylelint-disable-next-line no-descending-specificity */
+.chzn-container-single .chzn-single {
+  border-radius: 0;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+.chzn-container-active.chzn-with-drop .chzn-single div b {
+  // Make the down arrow match the color of the other text inputs. These styles are like the ones
+  // inside #okta-sign-in.auth-container, but are for open dropdowns because the Okta widget moves
+  // open dropdowns out of the widget and directly nested under <body>.
+  background-color: $okta-text-color;
+  background-image: none !important;
+  mask-image: url("../img/ui/forms/chosen-sprite@2x.png");
+  mask-position: -17px 7px;
+  mask-repeat: no-repeat;
+  mask-size: 52px 37px;
+}
+
+/* stylelint-disable-next-line no-descending-specificity, selector-id-pattern */
+#countryCodeInput_chzn.chzn-container-single .chzn-single {
+  border-radius: 6px 6px 0 0;
+}

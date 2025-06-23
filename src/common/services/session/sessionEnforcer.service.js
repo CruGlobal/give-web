@@ -92,14 +92,17 @@ const SessionEnforcerService = /* @ngInject */ function (orderService, sessionSe
     })
     if (enforced.length) {
       angular.forEach(enforced, (enforcer) => {
-        if (angular.isFunction(enforcer[EnforcerCallbacks.change])) enforcer[EnforcerCallbacks.change](role)
+        if (angular.isFunction(enforcer[EnforcerCallbacks.change])) {
+          enforcer[EnforcerCallbacks.change](role, donorDetails['registration-state'])
+        }
       })
 
       if (angular.isUndefined(modal)) {
-        modal = sessionModalService.open(find(enforced, { mode: EnforcerModes.donor }) ? 'register-account' : 'sign-in', {
+        modal = sessionModalService.open('register-account', {
           backdrop: 'static',
           keyboard: false
         }).result
+
         modal && modal.then(() => {
           angular.forEach(enforced, (enforcer) => {
             if (angular.isFunction(enforcer[EnforcerCallbacks.signIn])) enforcer[EnforcerCallbacks.signIn]()
@@ -113,6 +116,24 @@ const SessionEnforcerService = /* @ngInject */ function (orderService, sessionSe
           modal = undefined
         })
       }
+    } else {
+      angular.forEach(enforcers, (enforcer) => {
+        if (includes(enforcer.roles, role)) {
+          if (angular.isUndefined(modal)) {
+            if (sessionModalService.currentModal()) {
+              sessionModalService.currentModal().dismiss()
+            }
+          } else {
+            if (angular.isFunction(enforcer[EnforcerCallbacks.signIn])) {
+              enforcer[EnforcerCallbacks.signIn]()
+              if (sessionModalService.currentModal()) {
+                sessionModalService.currentModal().close()
+              }
+            }
+            modal = undefined
+          }
+        }
+      })
     }
   }
 

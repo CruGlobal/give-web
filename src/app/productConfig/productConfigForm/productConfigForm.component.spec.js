@@ -5,7 +5,7 @@ import { advanceTo, clear } from 'jest-date-mock'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
-
+import { forcedUserToLogout } from '../../../common/services/session/session.service'
 import module, { brandedCoverFeeCheckedEvent } from './productConfigForm.component'
 import { giftAddedEvent, cartUpdatedEvent } from 'common/lib/cartEvents'
 import { giveGiftParams } from '../giveGiftParams'
@@ -38,7 +38,7 @@ describe('product config form component', function () {
       defaultFrequency: 'MON',
       updateQueryParam: jest.fn(),
       onStateChange: jest.fn(),
-      $window: { location: '' }
+      $window: { location: '', sessionStorage: { getItem: jest.fn() } }
     })
   }))
 
@@ -848,6 +848,22 @@ describe('product config form component', function () {
     it('should navigate to other giving link', () => {
       $ctrl.giveLink('https://example.com')
       expect($ctrl.$window.location).toEqual('https://example.com')
+    })
+  })
+
+
+  describe('shouldShowForcedUserToLogoutError', () => {
+    it('should call $window.sessionStorage', () => {
+      $ctrl.$onInit()
+      expect($ctrl.$window.sessionStorage.getItem).toHaveBeenCalledWith(forcedUserToLogout)
+      expect($ctrl.errorForcedUserToLogout).toEqual(false)
+    })
+
+    it('should set errorForcedUserToLogout to true', () => {
+      $ctrl.$window.sessionStorage.getItem.mockReturnValue('true')
+      $ctrl.$onInit()
+      expect($ctrl.$window.sessionStorage.getItem).toHaveBeenCalledWith(forcedUserToLogout)
+      expect($ctrl.errorForcedUserToLogout).toEqual(true)
     })
   })
 })

@@ -20,6 +20,7 @@ import paymentMethodsComponent from '../profile/payment-methods/payment-methods.
 import receiptsComponent from '../profile/receipts/receipts.component'
 
 import sessionService from 'common/services/session/session.service'
+import sessionModalService from 'common/services/session/sessionModal.service'
 
 import template from './main.tpl.html'
 
@@ -27,15 +28,21 @@ const componentName = 'main'
 
 class MainController {
   /* @ngInject */
-  constructor ($window, sessionService) {
-    this.$window = $window
+  constructor (sessionService, sessionModalService) {
     this.sessionService = sessionService
+    this.sessionModalService = sessionModalService
   }
 
   signOut () {
-    this.sessionService.signOut().subscribe(() => {
-      this.$window.location = '/cart.html'
-    })
+    this.sessionService.signOut().subscribe()
+  }
+
+  signInModal () {
+    this.sessionModalService.signIn()
+  }
+
+  registerAccountModal () {
+    this.sessionModalService.registerAccount()
   }
 }
 
@@ -107,6 +114,7 @@ export default angular
     yourGivingComponent.name,
     productConfigComponent.name,
     signInComponent.name,
+    signOutComponent.name,
     searchResultsComponent.name,
     profileComponent.name,
     designationEditorComponent.name,
@@ -116,6 +124,7 @@ export default angular
     oktaAuthCallbackComponent.name,
     signOutComponent.name,
     sessionService.name,
+    sessionModalService.name,
     'ui.router'
   ])
   .config(routingConfig)
