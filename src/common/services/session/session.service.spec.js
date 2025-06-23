@@ -509,14 +509,14 @@ describe('session service', function () {
 
 
 
-  describe('downgradeToGuest( skipEvent )', () => {
+  describe('downgradeToGuestOld( skipEvent )', () => {
     beforeEach(() => {
       jest.spyOn($rootScope, '$broadcast')
     })
 
     describe('with \'PUBLIC\' role', () => {
       it('throws error', () => {
-        sessionService.downgradeToGuest().subscribe(angular.noop, (error) => {
+        sessionService.downgradeToGuestOld().subscribe(angular.noop, (error) => {
           expect(error).toBeDefined()
         })
 
@@ -534,7 +534,7 @@ describe('session service', function () {
 
       it('make http request to cas/downgrade', done => {
         $httpBackend.expectPOST('https://give-stage2.cru.org/okta/downgrade', {}).respond(204, {})
-        sessionService.downgradeToGuest().subscribe((data) => {
+        sessionService.downgradeToGuestOld().subscribe((data) => {
           expect(data).toEqual({})
         })
         $rootScope.$digest()
@@ -558,7 +558,7 @@ describe('session service', function () {
 
       it('make http request to cas/downgrade', done => {
         $httpBackend.expectPOST('https://give-stage2.cru.org/okta/downgrade', {}).respond(204, {})
-        sessionService.downgradeToGuest(true).subscribe((data) => {
+        sessionService.downgradeToGuestOld(true).subscribe((data) => {
           expect(data).toEqual({})
         })
         $rootScope.$digest()
