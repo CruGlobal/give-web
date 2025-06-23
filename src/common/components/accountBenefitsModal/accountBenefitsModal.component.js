@@ -25,10 +25,6 @@ class AccountBenefitsModalController {
       this.onRegister()
     }
   }
-
-  onFailure () {
-    this.sessionService.removeOktaRedirectIndicator()
-  }
 }
 
 export default angular
