@@ -13,10 +13,6 @@ describe('signInForm', function () {
     bindings = {
       onSuccess: jest.fn(),
       onFailure: jest.fn(),
-      $injector: {
-        has: jest.fn(),
-        loadNewModules: jest.fn()
-      }
     }
 
     const scope = { $apply: jest.fn() }

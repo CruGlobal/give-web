@@ -42,7 +42,7 @@ export const SignOutEvent = 'SessionSignedOut'
 // DOM event triggered on document.body when the user signs in
 export const BodySignInEvent = 'giveSignInSuccess'
 
-const session = /* @ngInject */ function ($cookies, $document, $rootScope, $http, $timeout, $window, $location, envService) {
+const session = /* @ngInject */ function ($cookies, $document, $injector, $rootScope, $http, $timeout, $window, $location, envService) {
   const session = {}
   const sessionSubject = new BehaviorSubject(session)
   let sessionTimeout
@@ -83,7 +83,6 @@ const session = /* @ngInject */ function ($cookies, $document, $rootScope, $http
     oktaSignInWidgetDefaultOptions,
     clearCheckoutSavedData: clearCheckoutSavedData,
     downgradeToGuest: downgradeToGuest,
-    downgradeToGuestOld: downgradeToGuestOld,
     getRole: currentRole,
     getOktaUrl: getOktaUrl,
     handleOktaRedirect: handleOktaRedirect,
@@ -133,7 +132,6 @@ const session = /* @ngInject */ function ($cookies, $document, $rootScope, $http
         })
         .subscribe({
           next: response => {
-            const $injector = angular.injector()
             $document[0].body.dispatchEvent(
               new window.CustomEvent(BodySignInEvent, { bubbles: true, detail: { $injector } })
             )
@@ -203,7 +201,7 @@ const session = /* @ngInject */ function ($cookies, $document, $rootScope, $http
     return Observable.from(authClient.isAuthenticated())
   }
 
-  function downgradeToGuest (redirectHome = true) {
+  function signOut (redirectHome = true) {
     const oktaSignOut = () => {
       // Add session data so on return to page we can show an explanation to the user about what happened.
       if (!redirectHome) {
@@ -231,10 +229,6 @@ const session = /* @ngInject */ function ($cookies, $document, $rootScope, $http
           .then(() => authClient.revokeRefreshToken())
           .then(() => oktaSignOut())
       })
-  }
-
-  function signOut (redirectHome = true) {
-    return this.downgradeToGuest(redirectHome)
   }
 
   function signOutWithoutRedirectToOkta () {
@@ -265,7 +259,7 @@ const session = /* @ngInject */ function ($cookies, $document, $rootScope, $http
     }, 2000)
   }
 
-  function downgradeToGuestOld (skipEvent = false) {
+  function downgradeToGuest (skipEvent = false) {
     const observable = currentRole() === Roles.public
       ? Observable.throw('must be IDENTIFIED')
       : Observable

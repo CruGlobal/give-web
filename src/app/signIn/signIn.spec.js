@@ -71,18 +71,18 @@ describe('signIn', function () {
   })
 
   describe('checkoutAsGuest()', () => {
-    describe('downgradeToGuestOld success', () => {
+    describe('downgradeToGuest success', () => {
       it('navigates to checkout', () => {
-        jest.spyOn($ctrl.sessionService, 'downgradeToGuestOld').mockReturnValue(Observable.of({}))
+        jest.spyOn($ctrl.sessionService, 'downgradeToGuest').mockReturnValue(Observable.of({}))
         $ctrl.checkoutAsGuest()
 
         expect($ctrl.$window.location).toEqual('/checkout.html')
       })
     })
 
-    describe('downgradeToGuestOld failure', () => {
+    describe('downgradeToGuest failure', () => {
       it('navigates to checkout', () => {
-        jest.spyOn($ctrl.sessionService, 'downgradeToGuestOld').mockReturnValue(Observable.throw({}))
+        jest.spyOn($ctrl.sessionService, 'downgradeToGuest').mockReturnValue(Observable.throw({}))
         $ctrl.checkoutAsGuest()
 
         expect($ctrl.$window.location).toEqual('/checkout.html')

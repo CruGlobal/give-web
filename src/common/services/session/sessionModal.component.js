@@ -18,7 +18,6 @@ class SessionModalController {
   constructor (sessionService, analyticsFactory) {
     this.sessionService = sessionService
     this.analyticsFactory = analyticsFactory
-    this.$injector = angular.injector()
     this.isLoading = false
     this.scrollModalToTop = scrollModalToTop
   }
