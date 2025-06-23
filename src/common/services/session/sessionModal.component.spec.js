@@ -4,20 +4,11 @@ import module from './sessionModal.component'
 
 describe('sessionModalController', function () {
   beforeEach(angular.mock.module(module.name))
-  let $ctrl, state, $rootScope
+  let $ctrl, state
 
-  beforeEach(inject(function ($componentController, _$rootScope_) {
+  beforeEach(inject(function ($componentController) {
     state = 'sign-in'
-    $rootScope = _$rootScope_
-    $ctrl = $componentController(module.name, {
-      $window: {
-        location: '/sign-in.html',
-        sessionStorage: {
-          getItem: jest.fn(),
-          removeItem: jest.fn(),
-        }
-      }
-    },
+    $ctrl = $componentController(module.name, {},
       {
         resolve: {
           state: state,
