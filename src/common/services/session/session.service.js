@@ -83,6 +83,7 @@ const session = /* @ngInject */ function ($cookies, $document, $rootScope, $http
     oktaSignInWidgetDefaultOptions,
     clearCheckoutSavedData: clearCheckoutSavedData,
     downgradeToGuest: downgradeToGuest,
+    downgradeToGuestOld: downgradeToGuestOld,
     getRole: currentRole,
     getOktaUrl: getOktaUrl,
     handleOktaRedirect: handleOktaRedirect,
@@ -202,7 +203,7 @@ const session = /* @ngInject */ function ($cookies, $document, $rootScope, $http
     return Observable.from(authClient.isAuthenticated())
   }
 
-  function signOut (redirectHome = true) {
+  function downgradeToGuest (redirectHome = true) {
     const oktaSignOut = () => {
       // Add session data so on return to page we can show an explanation to the user about what happened.
       if (!redirectHome) {
@@ -230,6 +231,10 @@ const session = /* @ngInject */ function ($cookies, $document, $rootScope, $http
           .then(() => authClient.revokeRefreshToken())
           .then(() => oktaSignOut())
       })
+  }
+
+  function signOut (redirectHome = true) {
+    return this.downgradeToGuest(redirectHome)
   }
 
   function signOutWithoutRedirectToOkta () {
@@ -260,7 +265,7 @@ const session = /* @ngInject */ function ($cookies, $document, $rootScope, $http
     }, 2000)
   }
 
-  function downgradeToGuest (skipEvent = false) {
+  function downgradeToGuestOld (skipEvent = false) {
     const observable = currentRole() === Roles.public
       ? Observable.throw('must be IDENTIFIED')
       : Observable
