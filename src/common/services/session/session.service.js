@@ -42,7 +42,7 @@ export const SignOutEvent = 'SessionSignedOut'
 // DOM event triggered on document.body when the user signs in
 export const BodySignInEvent = 'giveSignInSuccess'
 
-const session = /* @ngInject */ function ($cookies, $document, $rootScope, $http, $timeout, $window, $location, envService) {
+const session = /* @ngInject */ function ($cookies, $document, $injector, $rootScope, $http, $timeout, $window, $location, envService) {
   const session = {}
   const sessionSubject = new BehaviorSubject(session)
   let sessionTimeout
@@ -132,7 +132,6 @@ const session = /* @ngInject */ function ($cookies, $document, $rootScope, $http
         })
         .subscribe({
           next: response => {
-            const $injector = angular.injector()
             $document[0].body.dispatchEvent(
               new window.CustomEvent(BodySignInEvent, { bubbles: true, detail: { $injector } })
             )

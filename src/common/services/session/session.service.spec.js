@@ -33,9 +33,9 @@ describe('session service', function () {
   }))
 
   beforeEach(angular.mock.module(module.name))
-  let sessionService, $httpBackend, $cookies, $q, $rootScope, $verifyNoPendingTasks, $window, $location, envService
+  let sessionService, $httpBackend, $cookies, $q, $rootScope, $verifyNoPendingTasks, $window, $location, $injector, envService
 
-  beforeEach(inject(function (_sessionService_, _$httpBackend_, _$cookies_, _$q_, _$rootScope_, _$verifyNoPendingTasks_, _$window_, _$location_, _envService_) {
+  beforeEach(inject(function (_sessionService_, _$httpBackend_, _$cookies_, _$q_, _$rootScope_, _$verifyNoPendingTasks_, _$window_, _$location_, _$injector_, _envService_) {
     sessionService = _sessionService_
     $httpBackend = _$httpBackend_
     $cookies = _$cookies_
@@ -44,6 +44,7 @@ describe('session service', function () {
     $verifyNoPendingTasks = _$verifyNoPendingTasks_
     $window = _$window_
     $location = _$location_
+    $injector = _$injector_
     envService = _envService_
   }))
 
@@ -315,9 +316,6 @@ describe('session service', function () {
           accessToken: 'accessToken'
         }
       }))
-
-      const $injector = {}
-      jest.spyOn(angular, 'injector').mockReturnValue($injector)
 
       const giveSignInSuccessCallback = jest.fn()
       window.document.body.addEventListener(BodySignInEvent, giveSignInSuccessCallback, { once: true })
