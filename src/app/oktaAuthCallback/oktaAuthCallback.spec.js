@@ -73,26 +73,26 @@ describe('oktaAuthCallback', function () {
 
 
   describe('onSignInFailure()', () => {
-    it('should log error message', () => {
+    it('should log error message when error is an Error instance', () => {
       jest.spyOn($log, 'error').mockImplementation(() => {})
-      $ctrl.onSignInFailure('error')
-      expect($log.error).toHaveBeenCalledWith('error')
+      const error = new Error('Failed')
+      $ctrl.onSignInFailure(error)
+      expect($log.error).toHaveBeenCalledWith('Failed', error)
+      expect($ctrl.errorMessage).toEqual('Failed')
+    })
+
+    it('should log error message when error is not an Error instance', () => {
+      jest.spyOn($log, 'error').mockImplementation(() => {})
+      const error = { err: 'ERR' }
+      $ctrl.onSignInFailure(error)
+      expect($log.error).toHaveBeenCalledWith(unknownErrorMessage, error)
+      expect($ctrl.errorMessage).toEqual(unknownErrorMessage)
     })
 
     it('should call clearRedirectLocation()', () => {
       jest.spyOn($ctrl.sessionService, 'clearRedirectLocation')
-      $ctrl.onSignInFailure('error')
-      expect($ctrl.sessionService.clearRedirectLocation).toHaveBeenCalled()
-    })
-
-    it('should call clearRedirectLocation()', () => {
-      $ctrl.onSignInFailure('error')
-      expect($ctrl.errorMessage).toEqual('error')
-    })
-
-    it('should call clearRedirectLocation()', () => {
       $ctrl.onSignInFailure(undefined)
-      expect($ctrl.errorMessage).toEqual(unknownErrorMessage)
+      expect($ctrl.sessionService.clearRedirectLocation).toHaveBeenCalled()
     })
   })
 
