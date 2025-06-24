@@ -75,8 +75,8 @@ describe('oktaAuthCallback', function () {
   describe('onSignInFailure()', () => {
     it('should log error message', () => {
       jest.spyOn($log, 'error').mockImplementation(() => {})
-      $ctrl.onSignInFailure('error')
-      expect($log.error).toHaveBeenCalledWith('error')
+      $ctrl.onSignInFailure({ error: 'ERR' })
+      expect($log.error).toHaveBeenCalledWith(expect.any(String), { error: 'ERR' })
     })
 
     it('should call clearRedirectLocation()', () => {
@@ -86,8 +86,8 @@ describe('oktaAuthCallback', function () {
     })
 
     it('should call clearRedirectLocation()', () => {
-      $ctrl.onSignInFailure('error')
-      expect($ctrl.errorMessage).toEqual('error')
+      $ctrl.onSignInFailure({})
+      expect($ctrl.errorMessage).toEqual(unknownErrorMessage)
     })
 
     it('should call clearRedirectLocation()', () => {
