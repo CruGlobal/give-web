@@ -119,8 +119,8 @@ class OktaAuthCallbackController {
   }
 
   onSignInFailure (error) {
-    const errorMessage = error || unknownErrorMessage
-    this.$log.error(errorMessage)
+    const errorMessage = error instanceof Error ? error.message : unknownErrorMessage
+    this.$log.error(errorMessage, error)
     this.sessionService.clearRedirectLocation()
     this.errorMessage = errorMessage
   }
