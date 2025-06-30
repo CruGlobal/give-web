@@ -119,9 +119,10 @@ class OktaAuthCallbackController {
   }
 
   onSignInFailure (error) {
-    this.$log.error('Failed to authenticate user when redirecting from Okta', error)
+    const errorMessage = error instanceof Error ? error.message : unknownErrorMessage
+    this.$log.error(errorMessage, error)
     this.sessionService.clearRedirectLocation()
-    this.errorMessage = unknownErrorMessage
+    this.errorMessage = errorMessage
   }
 
   redirectToLocationPriorToLogin () {
