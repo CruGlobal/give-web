@@ -64,19 +64,19 @@ class BrandedCheckoutController {
     this.checkoutService.initializeRecaptcha()
   }
 
-  normalizeApiUrl (url) {    
+  normalizeApiUrl (url) {
     if (!url) return url
-    
+
     url = url.replace(/\/+$/, '')
-    
+
     if (url.startsWith('https://') || url.startsWith('http://')) {
       return url.replace(/^https?:/, '')
     }
-    
+
     if (!url.startsWith('//')) {
       return '//' + url
     }
-    
+
     return url
   }
 
