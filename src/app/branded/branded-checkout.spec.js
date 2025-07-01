@@ -62,7 +62,7 @@ describe('branded checkout', () => {
       $ctrl.apiUrl = 'https://custom-api.cru.org'
       $ctrl.$onInit()
 
-      expect($ctrl.envService.read('apiUrl')).toEqual('https://custom-api.cru.org')
+      expect($ctrl.envService.read('apiUrl')).toEqual('//custom-api.cru.org')
       expect($ctrl.envService.read('isBrandedCheckout')).toEqual(true)
     })
 
@@ -82,6 +82,38 @@ describe('branded checkout', () => {
     it('should initialize recaptcha', () => {
       $ctrl.$onInit()
       expect($ctrl.checkoutService.initializeRecaptcha).toHaveBeenCalled()
+    })
+  })
+
+  describe('normalizeApiUrl', () => {
+    it('should handle URLs with https:// protocol', () => {
+      const result = $ctrl.normalizeApiUrl('https://give.domain.com')
+      expect(result).toEqual('//give.domain.com')
+    })
+
+    it('should handle URLs with http:// protocol', () => {
+      const result = $ctrl.normalizeApiUrl('http://give.domain.com')
+      expect(result).toEqual('//give.domain.com')
+    })
+
+    it('should handle URLs without protocol', () => {
+      const result = $ctrl.normalizeApiUrl('give.domain.com')
+      expect(result).toEqual('//give.domain.com')
+    })
+
+    it('should handle URLs already in protocol-relative format', () => {
+      const result = $ctrl.normalizeApiUrl('//give.domain.com')
+      expect(result).toEqual('//give.domain.com')
+    })
+
+    it('should remove trailing slashes', () => {
+      const result = $ctrl.normalizeApiUrl('https://give.domain.com/')
+      expect(result).toEqual('//give.domain.com')
+    })
+
+    it('should remove multiple trailing slashes', () => {
+      const result = $ctrl.normalizeApiUrl('https://give.domain.com///')
+      expect(result).toEqual('//give.domain.com')
     })
   })
 
