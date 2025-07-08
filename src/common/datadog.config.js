@@ -1,8 +1,8 @@
-import 'angular-environment'
-import { datadogRum } from '@datadog/browser-rum'
+import 'angular-environment';
+import { datadogRum } from '@datadog/browser-rum';
 
 const dataDogConfig = /* @ngInject */ function (envServiceProvider) {
-  const clientToken = process.env.DATADOG_RUM_CLIENT_TOKEN
+  const clientToken = process.env.DATADOG_RUM_CLIENT_TOKEN;
   if (clientToken) {
     const config = {
       applicationId: '3937053e-386b-4b5b-ab4a-c83217d2f953',
@@ -17,13 +17,11 @@ const dataDogConfig = /* @ngInject */ function (envServiceProvider) {
       trackUserInteractions: true,
       trackResources: true,
       trackLongTasks: true,
-      defaultPrivacyLevel: 'mask-user-input'
-    }
+      defaultPrivacyLevel: 'mask-user-input',
+    };
 
-    window.datadogRum = datadogRum
-    window.datadogRum && window.datadogRum.init(config)
+    window.datadogRum = datadogRum;
+    window.datadogRum && window.datadogRum.init(config);
   }
-}
-export {
-  dataDogConfig as default
-}
+};
+export { dataDogConfig as default };

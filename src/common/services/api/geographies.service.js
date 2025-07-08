@@ -1,73 +1,76 @@
-import angular from 'angular'
-import 'rxjs/add/operator/map'
-import map from 'lodash/map'
+import angular from 'angular';
+import 'rxjs/add/operator/map';
+import map from 'lodash/map';
 
-import cortexApiService from '../cortexApi.service'
-import hateoasHelperService from 'common/services/hateoasHelper.service'
+import cortexApiService from '../cortexApi.service';
+import hateoasHelperService from 'common/services/hateoasHelper.service';
 
-const serviceName = 'geographiesService'
+const serviceName = 'geographiesService';
 
 class Geographies {
   /* @ngInject */
-  constructor (cortexApiService, hateoasHelperService) {
-    this.cortexApiService = cortexApiService
-    this.hateoasHelperService = hateoasHelperService
+  constructor(cortexApiService, hateoasHelperService) {
+    this.cortexApiService = cortexApiService;
+    this.hateoasHelperService = hateoasHelperService;
   }
 
-  getCountries () {
-    return this.cortexApiService.get({
-      path: ['geographies', this.cortexApiService.scope, 'countries'],
-      zoom: {
-        countries: 'element[]'
-      },
-      cache: true
-    })
+  getCountries() {
+    return this.cortexApiService
+      .get({
+        path: ['geographies', this.cortexApiService.scope, 'countries'],
+        zoom: {
+          countries: 'element[]',
+        },
+        cache: true,
+      })
       .map((data) => {
-        const countries = data.countries
+        const countries = data.countries;
 
         // Order countries in alphabetical order
-        countries.sort((a, b) => a['display-name'].localeCompare(b['display-name']))
+        countries.sort((a, b) =>
+          a['display-name'].localeCompare(b['display-name']),
+        );
 
-        return countries
-      })
+        return countries;
+      });
   }
 
-  getRegions (country) {
-    return this.cortexApiService.get({
-      path: this.hateoasHelperService.getLink(country, 'regions'),
-      zoom: {
-        regions: 'element[]'
-      },
-      cache: true
-    })
-      .map(data => {
-        const regions = data.regions
+  getRegions(country) {
+    return this.cortexApiService
+      .get({
+        path: this.hateoasHelperService.getLink(country, 'regions'),
+        zoom: {
+          regions: 'element[]',
+        },
+        cache: true,
+      })
+      .map((data) => {
+        const regions = data.regions;
 
         // Order regions in alphabetical order
-        regions.sort((a, b) => a['display-name'].localeCompare(b['display-name']))
+        regions.sort((a, b) =>
+          a['display-name'].localeCompare(b['display-name']),
+        );
 
         if (country && country.name === 'US') {
-          return map(regions, region => {
+          return map(regions, (region) => {
             if (region.name === 'AA') {
-              region['display-name'] = 'Armed Forces Americas (AA)'
+              region['display-name'] = 'Armed Forces Americas (AA)';
             }
             if (region.name === 'AE') {
-              region['display-name'] = 'Armed Forces Europe (AE)'
+              region['display-name'] = 'Armed Forces Europe (AE)';
             }
             if (region.name === 'AP') {
-              region['display-name'] = 'Armed Forces Pacific (AP)'
+              region['display-name'] = 'Armed Forces Pacific (AP)';
             }
-            return region
-          })
+            return region;
+          });
         }
-        return regions
-      })
+        return regions;
+      });
   }
 }
 
 export default angular
-  .module(serviceName, [
-    cortexApiService.name,
-    hateoasHelperService.name
-  ])
-  .service(serviceName, Geographies)
+  .module(serviceName, [cortexApiService.name, hateoasHelperService.name])
+  .service(serviceName, Geographies);

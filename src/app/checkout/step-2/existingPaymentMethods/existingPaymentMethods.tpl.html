@@ -3,36 +3,71 @@
     <span translate>Your Payment Methods</span>
     <i class="fas fa-lock u-floatRight mt--"></i>
   </div>
-  
+
   <div class="panel-body">
     <form novalidate name="$ctrl.creditCardPaymentForm">
-      <div class="radio radio-method saved-payment-methods" ng-repeat="paymentMethod in $ctrl.paymentMethods" ng-init="expired = !$ctrl.validPaymentMethod(paymentMethod)">
+      <div
+        class="radio radio-method saved-payment-methods"
+        ng-repeat="paymentMethod in $ctrl.paymentMethods"
+        ng-init="expired = !$ctrl.validPaymentMethod(paymentMethod)"
+      >
         <div class="row">
           <label>
-            <input type="radio" name="paymentMethod" ng-model="$ctrl.selectedPaymentMethod" ng-value="paymentMethod" ng-disabled="expired" required ng-change="$ctrl.switchPayment()">
-            <payment-method-display payment-method="paymentMethod" expired="expired"></payment-method-display>
-            <button class="btn btn-xs btn-link" ng-click="$ctrl.openPaymentMethodFormModal(paymentMethod)" ng-if="paymentMethod['card-type']" translate>edit</button>
+            <input
+              type="radio"
+              name="paymentMethod"
+              ng-model="$ctrl.selectedPaymentMethod"
+              ng-value="paymentMethod"
+              ng-disabled="expired"
+              required
+              ng-change="$ctrl.switchPayment()"
+            />
+            <payment-method-display
+              payment-method="paymentMethod"
+              expired="expired"
+            ></payment-method-display>
+            <button
+              class="btn btn-xs btn-link"
+              ng-click="$ctrl.openPaymentMethodFormModal(paymentMethod)"
+              ng-if="paymentMethod['card-type']"
+              translate
+            >
+              edit
+            </button>
           </label>
-          <span ng-if="$ctrl.selectedPaymentMethod['card-type'] && $ctrl.selectedPaymentMethod === paymentMethod">
-            <credit-card-cvv ></credit-card-cvv>
+          <span
+            ng-if="$ctrl.selectedPaymentMethod['card-type'] && $ctrl.selectedPaymentMethod === paymentMethod"
+          >
+            <credit-card-cvv></credit-card-cvv>
           </span>
         </div>
       </div>
     </form>
 
-    <div class="panel panel-default tab-toggle mb0 mt"
-         ng-if="(($ctrl.cartData && $ctrl.cartData.items) || $ctrl.brandedCheckoutItem) && $ctrl.selectedPaymentMethod && $ctrl.selectedPaymentMethod['card-type']">
+    <div
+      class="panel panel-default tab-toggle mb0 mt"
+      ng-if="(($ctrl.cartData && $ctrl.cartData.items) || $ctrl.brandedCheckoutItem) && $ctrl.selectedPaymentMethod && $ctrl.selectedPaymentMethod['card-type']"
+    >
       <div class="panel-title panel-heading" translate>{{'OPTIONAL'}}</div>
       <div class="panel-body">
-        <cover-fees cart-data="$ctrl.cartData" branded-checkout-item="$ctrl.brandedCheckoutItem"></cover-fees>
+        <cover-fees
+          cart-data="$ctrl.cartData"
+          branded-checkout-item="$ctrl.brandedCheckoutItem"
+        ></cover-fees>
       </div>
     </div>
 
     <div class="mt">
-      <button id="addNewPaymentMethodButton" type="button" class="btn btn-default btn-xs" ng-click="$ctrl.openPaymentMethodFormModal()">
+      <button
+        id="addNewPaymentMethodButton"
+        type="button"
+        class="btn btn-default btn-xs"
+        ng-click="$ctrl.openPaymentMethodFormModal()"
+      >
         <i class="fa fa-plus"></i>
         <span translate>Add New Payment Method</span>
       </button>
     </div>
-  </div><!-- // panel-body -->
+  </div>
+  <!-- // panel-body -->
 </div>

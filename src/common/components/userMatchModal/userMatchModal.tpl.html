@@ -1,103 +1,238 @@
 <div class="modal-body">
   <div ng-switch="$ctrl.matchState">
-    <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingDonorDetailsError">
+    <div
+      class="alert alert-danger"
+      role="alert"
+      ng-if="$ctrl.loadingDonorDetailsError"
+    >
       <p>
-        <span translate>There was an error loading your profile. You can use the retry button to try loading them again. If you continue to see this message, contact</span>
+        <span translate
+          >There was an error loading your profile. You can use the retry button
+          to try loading them again. If you continue to see this message,
+          contact</span
+        >
         <a href="mailto:eGift@cru.org">eGift@cru.org</a>
         <span translate>for assistance.</span>
       </p>
-      <p><button type="button" class="btn btn-primary" ng-click="$ctrl.$onInit()" translate>Retry</button></p>
+      <p>
+        <button
+          type="button"
+          class="btn btn-primary"
+          ng-click="$ctrl.$onInit()"
+          translate
+        >
+          Retry
+        </button>
+      </p>
     </div>
 
-    <div class="alert alert-danger" role="alert" ng-if="$ctrl.selectContactError">
+    <div
+      class="alert alert-danger"
+      role="alert"
+      ng-if="$ctrl.selectContactError"
+    >
       <p>
-        <span translate>There was an error saving your answer. Please try again. If you continue to see this message, contact</span>
+        <span translate
+          >There was an error saving your answer. Please try again. If you
+          continue to see this message, contact</span
+        >
         <a href="mailto:eGift@cru.org">eGift@cru.org</a>
         <span translate>for assistance.</span>
       </p>
     </div>
     <div class="activate-progress">
       <p ng-if="$ctrl.matchState === 'identity'" translate>
-        Has someone in your household donated before? We may already have an account for you.
+        Has someone in your household donated before? We may already have an
+        account for you.
       </p>
-      <div ng-if="$ctrl.matchState === 'question' || $ctrl.matchState === 'success'">
-        <progress id="activation-progress" ng-attr-value="{{$ctrl.getCurrentStep()}}" ng-attr-max="{{$ctrl.stepCount - 1}}"></progress>
-        <label for="activation-progress" class="step-label" ng-switch="$ctrl.matchState" style="--progress: {{$ctrl.getCurrentStep() / ($ctrl.stepCount - 1)}}">
-          <span ng-switch-when="question"><span translate>Question</span><br />{{$ctrl.questionIndex}} <span translate>of</span> {{$ctrl.questionCount}}</span>
+      <div
+        ng-if="$ctrl.matchState === 'question' || $ctrl.matchState === 'success'"
+      >
+        <progress
+          id="activation-progress"
+          ng-attr-value="{{$ctrl.getCurrentStep()}}"
+          ng-attr-max="{{$ctrl.stepCount - 1}}"
+        ></progress>
+        <label
+          for="activation-progress"
+          class="step-label"
+          ng-switch="$ctrl.matchState"
+          style="--progress: {{$ctrl.getCurrentStep() / ($ctrl.stepCount - 1)}}"
+        >
+          <span ng-switch-when="question"
+            ><span translate>Question</span><br />{{$ctrl.questionIndex}}
+            <span translate>of</span> {{$ctrl.questionCount}}</span
+          >
           <span ng-switch-when="success" translate>Activated</span>
         </label>
       </div>
     </div>
     <div ng-switch-when="activate">
-      <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingQuestionsError">
+      <div
+        class="alert alert-danger"
+        role="alert"
+        ng-if="$ctrl.loadingQuestionsError"
+      >
         <p>
-          <span translate>There was an error loading the verification questions. Please try again. If you continue to see this message, contact</span>
+          <span translate
+            >There was an error loading the verification questions. Please try
+            again. If you continue to see this message, contact</span
+          >
           <a href="mailto:eGift@cru.org">eGift@cru.org</a>
           <span translate>for assistance.</span>
         </p>
       </div>
       <p class="text-center" translate>
-        Please answer the following questions to confirm your identity so that you can access your account.
+        Please answer the following questions to confirm your identity so that
+        you can access your account.
       </p>
     </div>
-    <user-match-identity ng-switch-when="identity"
-                         contacts="$ctrl.contacts"
-                         submitted="$ctrl.identitySubmitted"
-                         on-submit="$ctrl.onSelectContact(success, contact)">
+    <user-match-identity
+      ng-switch-when="identity"
+      contacts="$ctrl.contacts"
+      submitted="$ctrl.identitySubmitted"
+      on-submit="$ctrl.onSelectContact(success, contact)"
+    >
     </user-match-identity>
-    <user-match-question ng-switch-when="question"
-                         ng-init="$ctrl.analyticsFactory.track('ga-registration-match-security-question'+$ctrl.questionCount)"
-                         question="$ctrl.getQuestion()"
-                         question-index="$ctrl.questionIndex"
-                         question-count="$ctrl.questionCount"
-                         submitted="$ctrl.answerSubmitted"
-                         on-question-answer="$ctrl.onQuestionAnswer(success, question, answer)">
+    <user-match-question
+      ng-switch-when="question"
+      ng-init="$ctrl.analyticsFactory.track('ga-registration-match-security-question'+$ctrl.questionCount)"
+      question="$ctrl.getQuestion()"
+      question-index="$ctrl.questionIndex"
+      question-count="$ctrl.questionCount"
+      submitted="$ctrl.answerSubmitted"
+      on-question-answer="$ctrl.onQuestionAnswer(success, question, answer)"
+    >
     </user-match-question>
     <div ng-switch-when="success" class="success">
       <h4 class="text-center" translate>Success!</h4>
-      <p ng-if="!$ctrl.skippedQuestions" translate ng-init="$ctrl.analyticsFactory.track('ga-registration-match-linked-account-success')">
-        Thank you for taking the time to answer our security questions. Your account is now activated, and you are signed in.
+      <p
+        ng-if="!$ctrl.skippedQuestions"
+        translate
+        ng-init="$ctrl.analyticsFactory.track('ga-registration-match-linked-account-success')"
+      >
+        Thank you for taking the time to answer our security questions. Your
+        account is now activated, and you are signed in.
       </p>
-      <p ng-if="$ctrl.skippedQuestions" translate ng-init="$ctrl.analyticsFactory.track('ga-registration-no-match-new-account-success')">
-        Thank you for completing account registration. Your account is now activated, and you are signed in.
+      <p
+        ng-if="$ctrl.skippedQuestions"
+        translate
+        ng-init="$ctrl.analyticsFactory.track('ga-registration-no-match-new-account-success')"
+      >
+        Thank you for completing account registration. Your account is now
+        activated, and you are signed in.
       </p>
       <p ng-if="$ctrl.cartCount > 0" translate>
-        You may now resume checkout to continue giving the gifts that are in your cart.
+        You may now resume checkout to continue giving the gifts that are in
+        your cart.
       </p>
       <p ng-if="$ctrl.cartCount === 0" translate>
         You may now find giving opportunities or view your dashboard.
       </p>
     </div>
-    <failed-verification-modal ng-switch-when="failure"
-                               ng-init="$ctrl.analyticsFactory.track('ga-registration-match-failed-questions')">
+    <failed-verification-modal
+      ng-switch-when="failure"
+      ng-init="$ctrl.analyticsFactory.track('ga-registration-match-failed-questions')"
+    >
     </failed-verification-modal>
-    <div ng-switch-default style="height: 100px;" ng-if="!$ctrl.loadingDonorDetailsError"></div>
+    <div
+      ng-switch-default
+      style="height: 100px"
+      ng-if="!$ctrl.loadingDonorDetailsError"
+    ></div>
   </div>
 </div>
 <div class="modal-footer" ng-switch="$ctrl.matchState" ng-if="$ctrl.matchState">
-  <button ng-switch-when="identity" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.requestIdentitySubmit()" translate>Next</button>
+  <button
+    ng-switch-when="identity"
+    class="btn btn-md btn-block btn-primary"
+    ng-click="$ctrl.requestIdentitySubmit()"
+    translate
+  >
+    Next
+  </button>
   <div ng-switch-when="activate">
-    <button type="button" class="btn btn-md back" ng-click="$ctrl.changeMatchState('identity')" translate>Back</button>
-    <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.loadQuestions()" translate>Next</button>
+    <button
+      type="button"
+      class="btn btn-md back"
+      ng-click="$ctrl.changeMatchState('identity')"
+      translate
+    >
+      Back
+    </button>
+    <button
+      type="button"
+      class="btn btn-md btn-block btn-primary"
+      ng-click="$ctrl.loadQuestions()"
+      translate
+    >
+      Next
+    </button>
   </div>
   <div ng-switch-when="question">
-    <button type="button" class="btn btn-md back" ng-click="$ctrl.back()" translate>Back</button>
-    <button type="button" class="btn btn-md btn-block btn-primary"
-            ng-click="$ctrl.requestAnswerSubmit()"
-            ng-switch="$ctrl.getQuestion().key">
+    <button
+      type="button"
+      class="btn btn-md back"
+      ng-click="$ctrl.back()"
+      translate
+    >
+      Back
+    </button>
+    <button
+      type="button"
+      class="btn btn-md btn-block btn-primary"
+      ng-click="$ctrl.requestAnswerSubmit()"
+      ng-switch="$ctrl.getQuestion().key"
+    >
       <span ng-switch-default translate>Next</span>
       <span ng-switch-when="ministry-gift" translate>Finish Activation</span>
     </button>
   </div>
   <div ng-switch-when="match-success">
     <div ng-if="$ctrl.cartCount > 0">
-      <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.continueCheckout()" translate>Continue Checkout</button>
-      <button type="button" class="btn btn-md btn-block" ng-click="$ctrl.goToOpportunities()" translate>Find Giving Opportunities</button>
+      <button
+        type="button"
+        class="btn btn-md btn-block btn-primary"
+        ng-click="$ctrl.continueCheckout()"
+        translate
+      >
+        Continue Checkout
+      </button>
+      <button
+        type="button"
+        class="btn btn-md btn-block"
+        ng-click="$ctrl.goToOpportunities()"
+        translate
+      >
+        Find Giving Opportunities
+      </button>
     </div>
     <div ng-if="$ctrl.cartCount === 0">
-      <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.goToOpportunities()" translate>Find Giving Opportunities</button>
-      <button type="button" class="btn btn-md btn-block" ng-click="$ctrl.goToGivingDashboard()" translate>Go to My Dashboard</button>
+      <button
+        type="button"
+        class="btn btn-md btn-block btn-primary"
+        ng-click="$ctrl.goToOpportunities()"
+        translate
+      >
+        Find Giving Opportunities
+      </button>
+      <button
+        type="button"
+        class="btn btn-md btn-block"
+        ng-click="$ctrl.goToGivingDashboard()"
+        translate
+      >
+        Go to My Dashboard
+      </button>
     </div>
   </div>
-  <button ng-switch-when="failure" type="button" class="btn btn-primary pull-right" ng-click="$ctrl.onFailure()" translate>OK</button>
+  <button
+    ng-switch-when="failure"
+    type="button"
+    class="btn btn-primary pull-right"
+    ng-click="$ctrl.onFailure()"
+    translate
+  >
+    OK
+  </button>
 </div>

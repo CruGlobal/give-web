@@ -2,11 +2,31 @@
   <span ng-if="$ctrl.paymentMethod['card-type']">
     <span ng-switch="$ctrl.paymentMethod['card-type']">
       &nbsp;
-      <img class="payment-icon hidden-xs" ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/american-express-curved-128px.png" ng-switch-when="American Express"/>
-      <img class="payment-icon hidden-xs" ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/discover-curved-128px.png" ng-switch-when="Discover"/>
-      <img class="payment-icon hidden-xs" ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/mastercard-curved-128px.png" ng-switch-when="MasterCard"/>
-      <img class="payment-icon hidden-xs" ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/visa-curved-128px.png" ng-switch-when="Visa"/>
-      <img class="payment-icon hidden-xs" ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/diners-curved-128px.png" ng-switch-when="Diners Club"/>
+      <img
+        class="payment-icon hidden-xs"
+        ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/american-express-curved-128px.png"
+        ng-switch-when="American Express"
+      />
+      <img
+        class="payment-icon hidden-xs"
+        ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/discover-curved-128px.png"
+        ng-switch-when="Discover"
+      />
+      <img
+        class="payment-icon hidden-xs"
+        ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/mastercard-curved-128px.png"
+        ng-switch-when="MasterCard"
+      />
+      <img
+        class="payment-icon hidden-xs"
+        ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/visa-curved-128px.png"
+        ng-switch-when="Visa"
+      />
+      <img
+        class="payment-icon hidden-xs"
+        ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/diners-curved-128px.png"
+        ng-switch-when="Diners Club"
+      />
     </span>
     <strong>{{$ctrl.paymentMethod['card-type']}}</strong>
     <span>ends in ****{{$ctrl.paymentMethod['last-four-digits']}}</span>
@@ -14,14 +34,18 @@
       <span class="hidden-xs" ng-if="!$ctrl.expired" translate>EXPIRES</span>
       <span class="hidden-xs" ng-if="$ctrl.expired" translate>EXPIRED</span>
       <span class="visible-xs-inline">EXP</span>
-      {{$ctrl.paymentMethod['expiry-month']}}/<span class="hidden-xs">{{$ctrl.paymentMethod['expiry-year'] | limitTo : 2}}</span>{{$ctrl.paymentMethod['expiry-year'] | limitTo : 2 : 2}}
+      {{$ctrl.paymentMethod['expiry-month']}}/<span class="hidden-xs"
+        >{{$ctrl.paymentMethod['expiry-year'] | limitTo : 2}}</span
+      >{{$ctrl.paymentMethod['expiry-year'] | limitTo : 2 : 2}}
     </small>
   </span>
   <span ng-if="!$ctrl.paymentMethod['card-type']">
-    <img class="payment-icon hidden-xs" ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/bank-curved-128px.png" />
+    <img
+      class="payment-icon hidden-xs"
+      ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/bank-curved-128px.png"
+    />
     <strong>
-      {{$ctrl.paymentMethod['bank-name']}}
-      -
+      {{$ctrl.paymentMethod['bank-name']}} -
       {{$ctrl.paymentMethod['account-type']}}
     </strong>
     <span>ends in ****{{$ctrl.paymentMethod['display-account-number']}}</span>

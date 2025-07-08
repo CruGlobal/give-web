@@ -1,30 +1,36 @@
 <div class="checkbox checkbox-inline">
   <label ng-if="$ctrl.item">
-    <input type="checkbox"
-           name="coverFees"
-           ng-model="$ctrl.coverFees"
-           ng-value="true"
-           ng-change="$ctrl.storeCoverFeeDecision()">
+    <input
+      type="checkbox"
+      name="coverFees"
+      ng-model="$ctrl.coverFees"
+      ng-value="true"
+      ng-change="$ctrl.storeCoverFeeDecision()"
+    />
     <span class="cover-fees-text">
-      I want my gift to go even further for ministry!
-      To help cover credit/debit card processing fees, please adjust my gift amount to
+      I want my gift to go even further for ministry! To help cover credit/debit
+      card processing fees, please adjust my gift amount to
       {{$ctrl.item.priceWithFees}}
-      <span class="text-lowercase"
-            ng-if="$ctrl.item.frequency && $ctrl.item.frequency.toLowerCase() !== 'single'">
+      <span
+        class="text-lowercase"
+        ng-if="$ctrl.item.frequency && $ctrl.item.frequency.toLowerCase() !== 'single'"
+      >
         {{$ctrl.item.frequency}}.
       </span>
     </span>
   </label>
   <div ng-if="$ctrl.cartData.items.length > 1">
     <label>
-      <input type="checkbox"
-             name="coverFees"
-             ng-model="$ctrl.coverFees"
-             ng-value="true"
-             ng-change="$ctrl.storeCoverFeeDecision()">
+      <input
+        type="checkbox"
+        name="coverFees"
+        ng-model="$ctrl.coverFees"
+        ng-value="true"
+        ng-change="$ctrl.storeCoverFeeDecision()"
+      />
       <span class="cover-fees-text">
-      I want my gifts to go even further for ministry!
-      To help cover credit/debit card processing fees, please adjust my gift amounts to:
+        I want my gifts to go even further for ministry! To help cover
+        credit/debit card processing fees, please adjust my gift amounts to:
       </span>
     </label>
     <ul>
@@ -37,9 +43,7 @@
           {{cartItem.frequency}} gift
         </span>
         for
-        <span>
-          {{cartItem.displayName}}
-        </span>
+        <span> {{cartItem.displayName}} </span>
       </li>
     </ul>
   </div>

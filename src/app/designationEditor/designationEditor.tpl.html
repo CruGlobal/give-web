@@ -1,116 +1,208 @@
 <div class="container loading-overlay-parent">
-  <div class="alert alert-danger mt-" role="alert" ng-if="$ctrl.loadingContentError">
+  <div
+    class="alert alert-danger mt-"
+    role="alert"
+    ng-if="$ctrl.loadingContentError"
+  >
     <p translate>
-      There was an error loading your page.
-      You can use the retry button to try loading it again.
-      If you continue to see this message, contact <a href="mailto:techhelp@cru.org">techhelp@cru.org</a> for assistance.
+      There was an error loading your page. You can use the retry button to try
+      loading it again. If you continue to see this message, contact
+      <a href="mailto:techhelp@cru.org">techhelp@cru.org</a> for assistance.
     </p>
-    <p><button id="retryButton1" type="button" class="btn btn-primary" ng-click="$ctrl.getDesignationContent()" translate>Retry</button></p>
+    <p>
+      <button
+        id="retryButton1"
+        type="button"
+        class="btn btn-primary"
+        ng-click="$ctrl.getDesignationContent()"
+        translate
+      >
+        Retry
+      </button>
+    </p>
   </div>
-  <div class="alert alert-danger mt-" role="alert" ng-if="$ctrl.saveDesignationError">
+  <div
+    class="alert alert-danger mt-"
+    role="alert"
+    ng-if="$ctrl.saveDesignationError"
+  >
     <p translate>
-      There was an error saving your page.
-      You can use the retry button to try saving it again.
-      If you continue to see this message, contact <a href="mailto:techhelp@cru.org">techhelp@cru.org</a> for assistance.
+      There was an error saving your page. You can use the retry button to try
+      saving it again. If you continue to see this message, contact
+      <a href="mailto:techhelp@cru.org">techhelp@cru.org</a> for assistance.
     </p>
-    <p><button id="retryButton2" type="button" class="btn btn-primary" ng-click="$ctrl.save()" translate>Retry</button></p>
+    <p>
+      <button
+        id="retryButton2"
+        type="button"
+        class="btn btn-primary"
+        ng-click="$ctrl.save()"
+        translate
+      >
+        Retry
+      </button>
+    </p>
   </div>
   <div class="panel panel-margin-bottom">
     <div class="panel-body">
       <div class="row">
-        <div class="col-sm-6  col-xs-12">
+        <div class="col-sm-6 col-xs-12">
           <h2 class="mb0">
             {{$ctrl.designationContent['jcr:title']}}
-            <a id="editTitleButton" class="edit-trigger edit-trigger-text inline" ng-click="$ctrl.editTitle()"
-               ng-if="$ctrl.contentLoaded && !$ctrl.isPerson()">
+            <a
+              id="editTitleButton"
+              class="edit-trigger edit-trigger-text inline"
+              ng-click="$ctrl.editTitle()"
+              ng-if="$ctrl.contentLoaded && !$ctrl.isPerson()"
+            >
               <i class="fa fa-pencil"></i>
             </a>
           </h2>
-          <p class="mt0" ng-if="$ctrl.designationContent.designationNumber">#{{$ctrl.designationContent.designationNumber}}</p>
+          <p class="mt0" ng-if="$ctrl.designationContent.designationNumber">
+            #{{$ctrl.designationContent.designationNumber}}
+          </p>
         </div>
 
-        <div class="col-sm-6  col-xs-12 text-right">
-          <a id="doneEditingButton1" ng-href="{{$ctrl.getDoneEditingUrl()}}" class="btn btn-secondary"
-             ng-if="$ctrl.contentLoaded" translate>
+        <div class="col-sm-6 col-xs-12 text-right">
+          <a
+            id="doneEditingButton1"
+            ng-href="{{$ctrl.getDoneEditingUrl()}}"
+            class="btn btn-secondary"
+            ng-if="$ctrl.contentLoaded"
+            translate
+          >
             Done Editing
           </a>
 
-          <button id="personalOptionsButton" type="button" class="btn btn-default" ng-click="$ctrl.editPersonalOptions()"
-                  ng-if="$ctrl.contentLoaded && $ctrl.isPerson()" translate>
+          <button
+            id="personalOptionsButton"
+            type="button"
+            class="btn btn-default"
+            ng-click="$ctrl.editPersonalOptions()"
+            ng-if="$ctrl.contentLoaded && $ctrl.isPerson()"
+            translate
+          >
             Page Options
           </button>
 
-          <button id="pageOptionsButton" type="button" class="btn btn-default" ng-click="$ctrl.editPageOptions()"
-                  ng-if="$ctrl.contentLoaded && !$ctrl.isPerson()" translate>
+          <button
+            id="pageOptionsButton"
+            type="button"
+            class="btn btn-default"
+            ng-click="$ctrl.editPageOptions()"
+            ng-if="$ctrl.contentLoaded && !$ctrl.isPerson()"
+            translate
+          >
             Page Options
           </button>
 
-          <product-config product-code="{{$ctrl.designationNumber}}"
-                          button-label="{{'Give a Gift' | translate}}"></product-config>
+          <product-config
+            product-code="{{$ctrl.designationNumber}}"
+            button-label="{{'Give a Gift' | translate}}"
+          ></product-config>
         </div>
       </div>
     </div>
   </div>
   <div class="panel panel-margin-bottom">
     <div class="panel-cover-wrap">
-      <div href="" ng-click="$ctrl.contentLoaded && $ctrl.selectPhoto('coverPhoto', $ctrl.designationContent.coverPhoto)">
-        <div class="edit-trigger" ng-if="$ctrl.contentLoaded"><i class="fa fa-camera"></i></div>
-        <img ng-src="{{$ctrl.imgDomain}}/assets/img/photo-placeholder.png"
-             ng-if="!$ctrl.photoUrl($ctrl.designationContent.coverPhoto)"
-             class="panel-cover-image">
-        <img desig-img-src="{{$ctrl.photoUrl($ctrl.designationContent.coverPhoto).cover}}"
-             ng-if="$ctrl.photoUrl($ctrl.designationContent.coverPhoto)"
-             class="panel-cover-image">
+      <div
+        href=""
+        ng-click="$ctrl.contentLoaded && $ctrl.selectPhoto('coverPhoto', $ctrl.designationContent.coverPhoto)"
+      >
+        <div class="edit-trigger" ng-if="$ctrl.contentLoaded">
+          <i class="fa fa-camera"></i>
+        </div>
+        <img
+          ng-src="{{$ctrl.imgDomain}}/assets/img/photo-placeholder.png"
+          ng-if="!$ctrl.photoUrl($ctrl.designationContent.coverPhoto)"
+          class="panel-cover-image"
+        />
+        <img
+          desig-img-src="{{$ctrl.photoUrl($ctrl.designationContent.coverPhoto).cover}}"
+          ng-if="$ctrl.photoUrl($ctrl.designationContent.coverPhoto)"
+          class="panel-cover-image"
+        />
       </div>
     </div>
     <div class="panel-body">
       <div class="row">
         <div class="col-md-10 col-md-offset-1">
           <div href="" class="pull-right secondary-wrapper ml mb">
-            <div class="edit-trigger" ng-if="$ctrl.contentLoaded"
-                 ng-click="$ctrl.contentLoaded && $ctrl.selectPhotos('secondaryPhotos')">
+            <div
+              class="edit-trigger"
+              ng-if="$ctrl.contentLoaded"
+              ng-click="$ctrl.contentLoaded && $ctrl.selectPhotos('secondaryPhotos')"
+            >
               <i class="fa fa-camera"></i>
             </div>
 
-            <img ng-src="{{$ctrl.imgDomain}}/assets/img/photo-placeholder.png"
-                 ng-if="$ctrl.contentLoaded && !$ctrl.carouselImages.length">
-            <div class="secondaryPhoto" ng-if="$ctrl.contentLoaded && $ctrl.carouselImages.length">
-              <div class="cmp-carousel" data-cmp-delay="5000" data-cmp-is="carousel">
+            <img
+              ng-src="{{$ctrl.imgDomain}}/assets/img/photo-placeholder.png"
+              ng-if="$ctrl.contentLoaded && !$ctrl.carouselImages.length"
+            />
+            <div
+              class="secondaryPhoto"
+              ng-if="$ctrl.contentLoaded && $ctrl.carouselImages.length"
+            >
+              <div
+                class="cmp-carousel"
+                data-cmp-delay="5000"
+                data-cmp-is="carousel"
+              >
                 <div class="cmp-carousel__content">
-                  <div ng-repeat="image in $ctrl.carouselImages"
-                       role="tabpanel"
-                       class="cmp-carousel__item {{$first ? 'cmp-carousel__item--active' : ''}}"
-                       data-cmp-hook-carousel="item"
-                       aria-hidden="{{!$first}}">
+                  <div
+                    ng-repeat="image in $ctrl.carouselImages"
+                    role="tabpanel"
+                    class="cmp-carousel__item {{$first ? 'cmp-carousel__item--active' : ''}}"
+                    data-cmp-hook-carousel="item"
+                    aria-hidden="{{!$first}}"
+                  >
                     <div class="image">
                       <div class="cmp-image">
-                        <img desig-img-src="{{$ctrl.photoUrl(image).secondary}}"
-                             class="cmp-image__image"
-                             itemprop="contentUrl"
-                             data-cmp-hook-image="image">
+                        <img
+                          desig-img-src="{{$ctrl.photoUrl(image).secondary}}"
+                          class="cmp-image__image"
+                          itemprop="contentUrl"
+                          data-cmp-hook-image="image"
+                        />
                       </div>
                     </div>
                   </div>
-                  <div ng-if="$ctrl.carouselImages.length > 1" class="cmp-carousel__actions">
-                    <button class="cmp-carousel__action cmp-carousel__action--previous"
-                            data-cmp-hook-carousel="previous"
-                            aria-label="Previous">
+                  <div
+                    ng-if="$ctrl.carouselImages.length > 1"
+                    class="cmp-carousel__actions"
+                  >
+                    <button
+                      class="cmp-carousel__action cmp-carousel__action--previous"
+                      data-cmp-hook-carousel="previous"
+                      aria-label="Previous"
+                    >
                       <span class="cmp-carousel__action-icon"></span>
                       <span class="cmp-carousel__action-text">Previous</span>
                     </button>
-                    <button class="cmp-carousel__action cmp-carousel__action--next"
-                            data-cmp-hook-carousel="next"
-                            aria-label="Next">
+                    <button
+                      class="cmp-carousel__action cmp-carousel__action--next"
+                      data-cmp-hook-carousel="next"
+                      aria-label="Next"
+                    >
                       <span class="cmp-carousel__action-icon"></span>
                       <span class="cmp-carousel__action-text">Next</span>
                     </button>
                   </div>
-                  <ol role="tablist" class="cmp-carousel__indicators" data-cmp-hook-carousel="indicators">
-                    <li ng-repeat="image in $ctrl.carouselImages"
-                        role="tab" class="cmp-carousel__indicator {{$first ? 'cmp-carousel__indicator--active' : ''}}"
-                        data-cmp-hook-carousel="indicator"
-                        aria-selected="{{$first}}"
-                        tabindex="{{$first ? '0' : '-1'}}"></li>
+                  <ol
+                    role="tablist"
+                    class="cmp-carousel__indicators"
+                    data-cmp-hook-carousel="indicators"
+                  >
+                    <li
+                      ng-repeat="image in $ctrl.carouselImages"
+                      role="tab"
+                      class="cmp-carousel__indicator {{$first ? 'cmp-carousel__indicator--active' : ''}}"
+                      data-cmp-hook-carousel="indicator"
+                      aria-selected="{{$first}}"
+                      tabindex="{{$first ? '0' : '-1'}}"
+                    ></li>
                   </ol>
                 </div>
               </div>
@@ -118,28 +210,50 @@
           </div>
 
           <div class="designation-editor-paragraph-text">
-            <a id="editTextButton" class="edit-trigger edit-trigger-text" ng-click="$ctrl.editText('paragraphText')" ng-if="$ctrl.contentLoaded">
+            <a
+              id="editTextButton"
+              class="edit-trigger edit-trigger-text"
+              ng-click="$ctrl.editText('paragraphText')"
+              ng-if="$ctrl.contentLoaded"
+            >
               <i class="fa fa-pencil"></i>
             </a>
             <div ng-bind-html="$ctrl.designationContent.paragraphText"></div>
             <p ng-if="!$ctrl.designationContent.paragraphText">
-              <i translate>Edit this page and use this space to share with current and potential ministry partners about your vision and calling to Cru.</i>
+              <i translate
+                >Edit this page and use this space to share with current and
+                potential ministry partners about your vision and calling to
+                Cru.</i
+              >
             </p>
           </div>
 
           <div class="signature-wrap" ng-if="$ctrl.isCampaign()">
-            <a id="editSignatureImageButton" class="edit-trigger edit-trigger-text" ng-if="$ctrl.contentLoaded"
-               ng-click="$ctrl.selectPhoto('signatureImage', $ctrl.designationContent.signatureImage)">
+            <a
+              id="editSignatureImageButton"
+              class="edit-trigger edit-trigger-text"
+              ng-if="$ctrl.contentLoaded"
+              ng-click="$ctrl.selectPhoto('signatureImage', $ctrl.designationContent.signatureImage)"
+            >
               <i class="fa fa-pencil"></i>
             </a>
-            <img ng-src="{{$ctrl.imgDomain}}/assets/img/signature.png"
-                 ng-if="!$ctrl.photoUrl($ctrl.designationContent.signatureImage)"
-                 class="signature-image">
-            <img desig-img-src="{{$ctrl.photoUrl($ctrl.designationContent.signatureImage).original}}"
-                 ng-if="$ctrl.photoUrl($ctrl.designationContent.signatureImage)"
-                 class="signature-image">
+            <img
+              ng-src="{{$ctrl.imgDomain}}/assets/img/signature.png"
+              ng-if="!$ctrl.photoUrl($ctrl.designationContent.signatureImage)"
+              class="signature-image"
+            />
+            <img
+              desig-img-src="{{$ctrl.photoUrl($ctrl.designationContent.signatureImage).original}}"
+              ng-if="$ctrl.photoUrl($ctrl.designationContent.signatureImage)"
+              class="signature-image"
+            />
 
-            <a id="editSignatureTextButton" class="edit-trigger edit-trigger-text" ng-if="$ctrl.contentLoaded" ng-click="$ctrl.editText('psText')">
+            <a
+              id="editSignatureTextButton"
+              class="edit-trigger edit-trigger-text"
+              ng-if="$ctrl.contentLoaded"
+              ng-click="$ctrl.editText('psText')"
+            >
               <i class="fa fa-pencil"></i>
             </a>
             <div ng-bind-html="$ctrl.designationContent.psText"></div>
@@ -149,18 +263,30 @@
           </div>
 
           <p>
-            <a id="editWebsiteButton" class="edit-trigger edit-trigger-text" ng-if="$ctrl.contentLoaded"
-               ng-click="$ctrl.editWebsite()"><i class="fa fa-pencil"></i></a>
+            <a
+              id="editWebsiteButton"
+              class="edit-trigger edit-trigger-text"
+              ng-if="$ctrl.contentLoaded"
+              ng-click="$ctrl.editWebsite()"
+              ><i class="fa fa-pencil"></i
+            ></a>
             <label class="product-website-link">
-              Website: <a id="visitWebsiteLink" ng-href="{{$ctrl.designationContent.websiteURL}}" target="_blank">
+              Website:
+              <a
+                id="visitWebsiteLink"
+                ng-href="{{$ctrl.designationContent.websiteURL}}"
+                target="_blank"
+              >
                 {{$ctrl.designationContent.websiteURL}}
               </a>
             </label>
           </p>
 
           <p>
-            <product-config product-code="{{$ctrl.designationNumber}}"
-                            button-label="{{'Give a Gift' | translate}}"></product-config>
+            <product-config
+              product-code="{{$ctrl.designationNumber}}"
+              button-label="{{'Give a Gift' | translate}}"
+            ></product-config>
           </p>
         </div>
       </div>

@@ -1,27 +1,32 @@
-import angular from 'angular'
+import angular from 'angular';
 
-const serviceName = 'modalStateService'
+const serviceName = 'modalStateService';
 
 const ModalStateService = /* @ngInject */ function () {
-  const MODAL_PARAM = 'modal'
-  const registeredModals = {}
+  const MODAL_PARAM = 'modal';
+  const registeredModals = {};
 
-  this.registerModal = registerModal
+  this.registerModal = registerModal;
 
-  function registerModal (name, injectableFn) {
-    registeredModals[name] = injectableFn
+  function registerModal(name, injectableFn) {
+    registeredModals[name] = injectableFn;
   }
 
-  this.$get = /* @ngInject */ ($injector, $location, $document, $httpParamSerializer) => {
+  this.$get = /* @ngInject */ (
+    $injector,
+    $location,
+    $document,
+    $httpParamSerializer,
+  ) => {
     return {
       name: name,
       invokeModal: invokeModal,
-      urlFor: urlFor
-    }
+      urlFor: urlFor,
+    };
 
-    function invokeModal (name) {
+    function invokeModal(name) {
       if (Object.prototype.hasOwnProperty.call(registeredModals, name)) {
-        return $injector.invoke(registeredModals[name])
+        return $injector.invoke(registeredModals[name]);
       }
     }
 
@@ -30,37 +35,37 @@ const ModalStateService = /* @ngInject */ function () {
      * @param name
      * @returns {*} current modal name or undefined
      */
-    function name (name) {
+    function name(name) {
       if (angular.isDefined(name)) {
-        $location.search(MODAL_PARAM, name)
+        $location.search(MODAL_PARAM, name);
       }
-      return $location.search()[MODAL_PARAM]
+      return $location.search()[MODAL_PARAM];
     }
 
-    function urlFor (name, params, url) {
-      const a = $document[0].createElement('a')
-      params = angular.isDefined(params) ? params : $location.search()
-      a.href = angular.isDefined(url) ? url : $location.absUrl()
-      params[MODAL_PARAM] = name
-      a.search = $httpParamSerializer(params)
-      return a.href
+    function urlFor(name, params, url) {
+      const a = $document[0].createElement('a');
+      params = angular.isDefined(params) ? params : $location.search();
+      a.href = angular.isDefined(url) ? url : $location.absUrl();
+      params[MODAL_PARAM] = name;
+      a.search = $httpParamSerializer(params);
+      return a.href;
     }
-  }
-}
+  };
+};
 
 const modalStateServiceRunner = /* @ngInject */ function (modalStateService) {
-  const name = modalStateService.name()
+  const name = modalStateService.name();
   if (angular.isDefined(name) && name !== '') {
-    modalStateService.invokeModal(name)
+    modalStateService.invokeModal(name);
   }
-}
+};
 
-export function scrollModalToTop () {
-  const element = window.document.querySelector('.modal')
-  element && (element.scrollTop = 0)
+export function scrollModalToTop() {
+  const element = window.document.querySelector('.modal');
+  element && (element.scrollTop = 0);
 }
 
 export default angular
   .module(serviceName, [])
   .provider(serviceName, ModalStateService)
-  .run(modalStateServiceRunner)
+  .run(modalStateServiceRunner);

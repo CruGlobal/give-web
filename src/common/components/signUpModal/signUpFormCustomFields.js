@@ -4,14 +4,14 @@ export const customFields = {
     type: 'select',
     options: {
       Household: 'Give as an Individual',
-      Organization: 'Give as an Organization'
+      Organization: 'Give as an Organization',
     },
     'label-top': true,
     label: 'Account Type',
     required: true,
     wide: true,
     value: 'Household',
-    className: 'o-form-select-fieldset'
+    className: 'o-form-select-fieldset',
   },
   organizationName: {
     name: 'organizationName',
@@ -21,8 +21,8 @@ export const customFields = {
     required: false,
     maxLength: 50,
     showWhen: {
-      accountType: 'Organization'
-    }
+      accountType: 'Organization',
+    },
   },
   countryCode: {
     inputId: 'countryCodeInput',
@@ -35,7 +35,7 @@ export const customFields = {
     multirowError: true,
     'data-se': 'o-form-fieldset-userProfile.countryCode',
     wide: true,
-    className: 'o-form-select-fieldset'
+    className: 'o-form-select-fieldset',
   },
   streetAddress: {
     name: 'userProfile.streetAddress',
@@ -45,7 +45,7 @@ export const customFields = {
     'label-top': true,
     multirowError: true,
     'data-se': 'o-form-fieldset-userProfile.streetAddress',
-    maxLength: 200
+    maxLength: 200,
   },
   streetAddressExtended: {
     name: 'userProfile.streetAddressExtended',
@@ -55,7 +55,7 @@ export const customFields = {
     'label-top': true,
     multirowError: true,
     'data-se': 'o-form-fieldset-userProfile.streetAddressExtended',
-    maxLength: 100
+    maxLength: 100,
   },
   internationalAddressLine3: {
     name: 'userProfile.internationalAddressLine3',
@@ -68,9 +68,9 @@ export const customFields = {
     maxLength: 100,
     showWhen: {
       'userProfile.countryCode': function (value) {
-        return value !== 'US'
-      }
-    }
+        return value !== 'US';
+      },
+    },
   },
   internationalAddressLine4: {
     name: 'userProfile.internationalAddressLine4',
@@ -83,9 +83,9 @@ export const customFields = {
     maxLength: 100,
     showWhen: {
       'userProfile.countryCode': function (value) {
-        return value !== 'US'
-      }
-    }
+        return value !== 'US';
+      },
+    },
   },
   city: {
     name: 'userProfile.city',
@@ -97,8 +97,8 @@ export const customFields = {
     'data-se': 'o-form-fieldset-userProfile.city',
     maxLength: 50,
     showWhen: {
-      'userProfile.countryCode': 'US'
-    }
+      'userProfile.countryCode': 'US',
+    },
   },
   state: {
     inputId: 'stateInput',
@@ -112,9 +112,9 @@ export const customFields = {
     'data-se': 'o-form-fieldset-userProfile.state',
     wide: true,
     showWhen: {
-      'userProfile.countryCode': 'US'
+      'userProfile.countryCode': 'US',
     },
-    className: 'o-form-select-fieldset'
+    className: 'o-form-select-fieldset',
   },
   zipCode: {
     name: 'userProfile.zipCode',
@@ -125,7 +125,7 @@ export const customFields = {
     multirowError: true,
     'data-se': 'o-form-fieldset-userProfile.zipCode',
     showWhen: {
-      'userProfile.countryCode': 'US'
-    }
-  }
-}
+      'userProfile.countryCode': 'US',
+    },
+  },
+};

@@ -1,13 +1,20 @@
 <div class="panel">
   <div class="panel-body">
     <h3 class="panel-name" translate>{{'REVIEW'}}</h3>
-    <div class="alert alert-danger" role="alert" ng-if="$ctrl.errorLoadingCart" translate="RETRY_LOAD" translate-value-retryLoadFunction="{{$ctrl.loadCart()}}"></div>
+    <div
+      class="alert alert-danger"
+      role="alert"
+      ng-if="$ctrl.errorLoadingCart"
+      translate="RETRY_LOAD"
+      translate-value-retryLoadFunction="{{$ctrl.loadCart()}}"
+    ></div>
     <checkout-step-3
       cart-data="$ctrl.cartData"
       change-step="$ctrl.changeStep(newStep)"
       premium-name="$ctrl.premiumName"
-      premium-code="$ctrl.itemConfig.PREMIUM_CODE"  
-      radio-station-name="$ctrl.radioStationName">
+      premium-code="$ctrl.itemConfig.PREMIUM_CODE"
+      radio-station-name="$ctrl.radioStationName"
+    >
     </checkout-step-3>
   </div>
 </div>
