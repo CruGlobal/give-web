@@ -1,5 +1,14 @@
-<span class="giftsum-line" ng-repeat="rateTotal in $ctrl.rateTotals | orderBy : 'frequency' : false : $ctrl.rateTotalsComparator" ng-switch="rateTotal.frequency" ng-if="rateTotal.amount > 0">
+<span
+  class="giftsum-line"
+  ng-repeat="rateTotal in $ctrl.rateTotals | orderBy : 'frequency' : false : $ctrl.rateTotalsComparator"
+  ng-switch="rateTotal.frequency"
+  ng-if="rateTotal.amount > 0"
+>
   <span ng-switch-when="Annually" translate>{{'ANNUAL_GIFT_TOTAL'}}</span>
-  <span ng-switch-default translate="FREQUENCY_GIFT_TOTAL" translate-value-frequency="{{rateTotal.frequency}}"></span>
+  <span
+    ng-switch-default
+    translate="FREQUENCY_GIFT_TOTAL"
+    translate-value-frequency="{{rateTotal.frequency}}"
+  ></span>
   <strong>{{rateTotal.total | coverFeesFilter:rateTotal:'total'}}</strong>
 </span>

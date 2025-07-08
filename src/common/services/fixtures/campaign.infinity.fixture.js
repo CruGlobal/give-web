@@ -11,7 +11,8 @@ export default {
     customized: true,
     'jcr:versionHistory': '671c8c7b-74af-47d4-8f6d-3a53e103ae3e',
     'cq:template': '/apps/Give/templates/campaign',
-    secondaryPhoto: '/content/dam/give/designations/0/1/2/3/4/0123456/CMS1_085319.jpg',
+    secondaryPhoto:
+      '/content/dam/give/designations/0/1/2/3/4/0123456/CMS1_085319.jpg',
     psText: '',
     organizationId: '1-103-1',
     parentDesignationNumber: '',
@@ -30,7 +31,28 @@ export default {
     letterDate: '',
     websiteURL: '',
     defaultCampaign: '867EM1',
-    suggestedAmounts: { 'jcr:primaryType': 'nt:unstructured', 1: { 'jcr:primaryType': 'nt:unstructured', description: 'for 10 Bibles', amount: 25 }, 2: { 'jcr:primaryType': 'nt:unstructured', description: 'for 40 Bibles', amount: 100 } },
-    "design-controller":       {"carousel": {"image": {"fileReference": "/content/dam/give/designations/0/1/2/3/4/0123456/CMS1_085319.jpg", "sling:resourceType": "Give/components/content/image", "jcr:primaryType": "nt:unstructured"}}}
-  }
-}
+    suggestedAmounts: {
+      'jcr:primaryType': 'nt:unstructured',
+      1: {
+        'jcr:primaryType': 'nt:unstructured',
+        description: 'for 10 Bibles',
+        amount: 25,
+      },
+      2: {
+        'jcr:primaryType': 'nt:unstructured',
+        description: 'for 40 Bibles',
+        amount: 100,
+      },
+    },
+    'design-controller': {
+      carousel: {
+        image: {
+          fileReference:
+            '/content/dam/give/designations/0/1/2/3/4/0123456/CMS1_085319.jpg',
+          'sling:resourceType': 'Give/components/content/image',
+          'jcr:primaryType': 'nt:unstructured',
+        },
+      },
+    },
+  },
+};

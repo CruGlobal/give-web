@@ -7,10 +7,18 @@
             <loading ng-if="$ctrl.loadingCartData">
               <translate>Loading cart data...</translate>
             </loading>
-            <div class="alert alert-warning" role="alert" ng-if="$ctrl.cartData && !$ctrl.cartData.items.length">
+            <div
+              class="alert alert-warning"
+              role="alert"
+              ng-if="$ctrl.cartData && !$ctrl.cartData.items.length"
+            >
               <p translate>Your cart is empty</p>
             </div>
-            <div class="alert alert-danger" role="alert" ng-if="!$ctrl.loadingCartData && !$ctrl.cartData">
+            <div
+              class="alert alert-danger"
+              role="alert"
+              ng-if="!$ctrl.loadingCartData && !$ctrl.cartData"
+            >
               <p translate>There was an error loading your cart</p>
             </div>
           </div>
@@ -24,29 +32,38 @@
           <div class="col-md-12">
             <div class="panel">
               <div class="panel-body">
-                <i class="fal fa-lock-alt mr--" style="font-size: 24px;"></i>
-                <h3 class="panel-name inline-block" translate>Secure Checkout</h3>
+                <i class="fal fa-lock-alt mr--" style="font-size: 24px"></i>
+                <h3 class="panel-name inline-block" translate>
+                  Secure Checkout
+                </h3>
 
                 <div class="steps-wrap mb_x clearfix">
-                  <div class="steps-single" ng-class="{'on': $ctrl.checkoutStep === 'contact'}">
+                  <div
+                    class="steps-single"
+                    ng-class="{'on': $ctrl.checkoutStep === 'contact'}"
+                  >
                     <span class="step-title" translate>
-                    Contact Information
+                      Contact Information
                     </span>
                     <div class="step-bar">
                       <span class="step-digit">1</span>
                     </div>
                   </div>
-                  <div class="steps-single" ng-class="{'on': $ctrl.checkoutStep === 'payment'}">
-                    <span class="step-title" translate>
-                    Payment Method
-                    </span>
+                  <div
+                    class="steps-single"
+                    ng-class="{'on': $ctrl.checkoutStep === 'payment'}"
+                  >
+                    <span class="step-title" translate> Payment Method </span>
                     <div class="step-bar">
                       <span class="step-digit">2</span>
                     </div>
                   </div>
-                  <div class="steps-single" ng-class="{'on': $ctrl.checkoutStep === 'review'}">
+                  <div
+                    class="steps-single"
+                    ng-class="{'on': $ctrl.checkoutStep === 'review'}"
+                  >
                     <span class="step-title" translate>
-                    Review and Submit Gift
+                      Review and Submit Gift
                     </span>
                     <div class="step-bar">
                       <span class="step-digit">3</span>
@@ -60,37 +77,49 @@
                   </div>
                 </div>
 
-
-                <checkout-step-1 ng-if="$ctrl.checkoutStep === 'contact'" change-step="$ctrl.changeStep(newStep)"></checkout-step-1>
-                <checkout-step-2 ng-if="$ctrl.checkoutStep === 'payment'" change-step="$ctrl.changeStep(newStep)" cart-data="$ctrl.cartData"></checkout-step-2>
-                <checkout-step-3 ng-if="$ctrl.checkoutStep === 'review'" change-step="$ctrl.changeStep(newStep)"
-                                 load-cart="$ctrl.loadCart()"
-                                 cart-data="$ctrl.cartData"
-                                 submit="$ctrl.submittedOrder"
-                                 on-submit-btn-change-state="$ctrl.enableSubmitOrderBtn = $event.enabled"
-                                 on-submitting-order="$ctrl.submittingOrder = value"
-                                 submitting-order="$ctrl.submittingOrder"
-                                 on-submitted="$ctrl.submittedOrder = false">
+                <checkout-step-1
+                  ng-if="$ctrl.checkoutStep === 'contact'"
+                  change-step="$ctrl.changeStep(newStep)"
+                ></checkout-step-1>
+                <checkout-step-2
+                  ng-if="$ctrl.checkoutStep === 'payment'"
+                  change-step="$ctrl.changeStep(newStep)"
+                  cart-data="$ctrl.cartData"
+                ></checkout-step-2>
+                <checkout-step-3
+                  ng-if="$ctrl.checkoutStep === 'review'"
+                  change-step="$ctrl.changeStep(newStep)"
+                  load-cart="$ctrl.loadCart()"
+                  cart-data="$ctrl.cartData"
+                  submit="$ctrl.submittedOrder"
+                  on-submit-btn-change-state="$ctrl.enableSubmitOrderBtn = $event.enabled"
+                  on-submitting-order="$ctrl.submittingOrder = value"
+                  submitting-order="$ctrl.submittingOrder"
+                  on-submitted="$ctrl.submittedOrder = false"
+                >
                 </checkout-step-3>
-
-              </div> <!-- // panelbody -->
-            </div><!-- // panel -->
+              </div>
+              <!-- // panelbody -->
+            </div>
+            <!-- // panel -->
           </div>
         </div>
       </div>
       <div class="col-md-4 hidden-xs">
-        <checkout-cart-summary cart-data="$ctrl.cartData"
-                               show-submit-btn="$ctrl.checkoutStep === 'review'"
-                               enable-submit-btn="$ctrl.enableSubmitOrderBtn"
-                               submitting-order="$ctrl.submittingOrder"
-                               component-reference="$ctrl.selfReference">
+        <checkout-cart-summary
+          cart-data="$ctrl.cartData"
+          show-submit-btn="$ctrl.checkoutStep === 'review'"
+          enable-submit-btn="$ctrl.enableSubmitOrderBtn"
+          submitting-order="$ctrl.submittingOrder"
+          component-reference="$ctrl.selfReference"
+        >
         </checkout-cart-summary>
       </div>
       <div class="col-md-4 hidden-xs hidden-sm pull-right">
         <help></help>
       </div>
-    </div> <!-- // masonry container -->
-
+    </div>
+    <!-- // masonry container -->
   </div>
 </div>
 <!-- End content wrap -->

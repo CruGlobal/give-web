@@ -1,28 +1,24 @@
-import angular from 'angular'
-import 'angular-gettext'
-import uibTooltip from 'angular-ui-bootstrap/src/tooltip'
-import signInButtonComponent from './signInButton/signInButton.component'
-import template from './signInForm.tpl.html'
+import angular from 'angular';
+import 'angular-gettext';
+import uibTooltip from 'angular-ui-bootstrap/src/tooltip';
+import signInButtonComponent from './signInButton/signInButton.component';
+import template from './signInForm.tpl.html';
 
-const componentName = 'signInForm'
+const componentName = 'signInForm';
 
 class SignInFormController {
   /* @ngInject */
-  constructor (gettext) {
-    this.gettext = gettext
+  constructor(gettext) {
+    this.gettext = gettext;
   }
 
-  $onInit () {
-    this.onSignInPage = this.onSignInPage || false
+  $onInit() {
+    this.onSignInPage = this.onSignInPage || false;
   }
 }
 
 export default angular
-  .module(componentName, [
-    signInButtonComponent.name,
-    uibTooltip,
-    'gettext'
-  ])
+  .module(componentName, [signInButtonComponent.name, uibTooltip, 'gettext'])
   .component(componentName, {
     controller: SignInFormController,
     templateUrl: template,
@@ -33,6 +29,6 @@ export default angular
       lastPurchaseId: '<',
       // Optional if on-sign-in-page is true
       onSignUpWithOkta: '&?',
-      onSignInPage: '<'
-    }
-  })
+      onSignInPage: '<',
+    },
+  });

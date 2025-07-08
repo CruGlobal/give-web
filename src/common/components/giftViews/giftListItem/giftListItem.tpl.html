@@ -1,28 +1,39 @@
 <div class="col-xs-12 col-sm-3 mb-">
-  <img desig-src="{{$ctrl.gift.designationNumber}}">
+  <img desig-src="{{$ctrl.gift.designationNumber}}" />
 </div>
 
-<div ng-class="{'col-xs-12 col-sm-9': !$ctrl.selectable, 'col-xs-7 col-sm-6': $ctrl.selectable}">
+<div
+  ng-class="{'col-xs-12 col-sm-9': !$ctrl.selectable, 'col-xs-7 col-sm-6': $ctrl.selectable}"
+>
   <h4 class="recipient-name">{{$ctrl.gift.designationName}}</h4>
   <span class="modal-meta">#{{$ctrl.gift.designationNumber}}</span>
   <ng-transclude />
 </div>
 
-<div ng-if="$ctrl.selectable"
-     class="col-xs-5 col-sm-3">
-  <div class="checkbox-right" ng-transclude="selectInput" ng-switch="$ctrl.selectable">
-    <label ng-switch-when="checkbox">{{$ctrl.selectLabel}}
-      <input type="checkbox"
-             name="selectedGift"
-             ng-model="$ctrl.gift._selectedGift"
-             ng-change="$ctrl.onSelected({gift: $ctrl.gift, selected: $ctrl.gift._selectedGift})">
+<div ng-if="$ctrl.selectable" class="col-xs-5 col-sm-3">
+  <div
+    class="checkbox-right"
+    ng-transclude="selectInput"
+    ng-switch="$ctrl.selectable"
+  >
+    <label ng-switch-when="checkbox"
+      >{{$ctrl.selectLabel}}
+      <input
+        type="checkbox"
+        name="selectedGift"
+        ng-model="$ctrl.gift._selectedGift"
+        ng-change="$ctrl.onSelected({gift: $ctrl.gift, selected: $ctrl.gift._selectedGift})"
+      />
     </label>
-    <label ng-switch-when="radio">{{$ctrl.selectLabel}}
-      <input type="radio"
-             name="selectedGift"
-             ng-model="$ctrl.gift._selectedGift"
-             ng-value="true"
-             ng-change="$ctrl.onSelected({gift: $ctrl.gift, selected: true})">
+    <label ng-switch-when="radio"
+      >{{$ctrl.selectLabel}}
+      <input
+        type="radio"
+        name="selectedGift"
+        ng-model="$ctrl.gift._selectedGift"
+        ng-value="true"
+        ng-change="$ctrl.onSelected({gift: $ctrl.gift, selected: true})"
+      />
     </label>
   </div>
 </div>

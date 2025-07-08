@@ -2,13 +2,21 @@
   <checkout-error-messages
     needinfo-errors="$ctrl.needinfoErrors"
     submission-error="$ctrl.submissionError"
-    submission-error-status="$ctrl.submissionErrorStatus">
+    submission-error-status="$ctrl.submissionErrorStatus"
+  >
   </checkout-error-messages>
   <div class="mb">
     <div class="panel panel-default">
       <div class="panel-heading">
         <translate>{{'CONTACT_INFORMATION'}}</translate>
-        <button id="changeContactButton" class="btn btn-default btn-panel-head pull-right" ng-click="$ctrl.changeStep({newStep: 'contact'})" translate>{{'CHANGE'}}</button>
+        <button
+          id="changeContactButton"
+          class="btn btn-default btn-panel-head pull-right"
+          ng-click="$ctrl.changeStep({newStep: 'contact'})"
+          translate
+        >
+          {{'CHANGE'}}
+        </button>
       </div>
       <div class="panel-body">
         <div class="row">
@@ -30,10 +38,10 @@
             <div ng-if="$ctrl.donorDetails['donor-type'] === 'Organization'">
               {{$ctrl.donorDetails['organization-name']}}
             </div>
-            <display-address address="$ctrl.donorDetails.mailingAddress"></display-address>
-            <div>
-              {{$ctrl.donorDetails.email}}
-            </div>
+            <display-address
+              address="$ctrl.donorDetails.mailingAddress"
+            ></display-address>
+            <div>{{$ctrl.donorDetails.email}}</div>
             <div ng-if="$ctrl.donorDetails && $ctrl.radioStationName">
               <translate>{{'PREFERRED_RADIO_STATION'}}</translate>
               {{$ctrl.radioStationName}}
@@ -49,7 +57,14 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <translate>{{'PAYMENT_METHOD'}}</translate>
-        <button id="changePaymentButton" class="btn btn-default btn-panel-head pull-right" ng-click="$ctrl.changeStep({newStep: 'payment'})" translate>{{'CHANGE'}}</button>
+        <button
+          id="changePaymentButton"
+          class="btn btn-default btn-panel-head pull-right"
+          ng-click="$ctrl.changeStep({newStep: 'payment'})"
+          translate
+        >
+          {{'CHANGE'}}
+        </button>
       </div>
       <div class="panel-body">
         <div class="row">
@@ -62,17 +77,24 @@
                 </div>
                 <div class="form-group">
                   <label class="" translate>{{'ACCOUNT_NUM_FULL'}}</label>
-                  <p class="number">************{{$ctrl.bankAccountPaymentDetails['display-account-number']}}</p>
+                  <p class="number">
+                    ************{{$ctrl.bankAccountPaymentDetails['display-account-number']}}
+                  </p>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label class="" translate>{{'ACCOUNT_TYPE'}}</label>
-                  <p class="number">{{$ctrl.bankAccountPaymentDetails['account-type'] | capitalize}}</p>
+                  <p class="number">
+                    {{$ctrl.bankAccountPaymentDetails['account-type'] |
+                    capitalize}}
+                  </p>
                 </div>
                 <div class="form-group">
                   <label class="" translate>{{'ROUTING_NUM_FULL'}}</label>
-                  <p class="number">{{$ctrl.bankAccountPaymentDetails['routing-number']}}</p>
+                  <p class="number">
+                    {{$ctrl.bankAccountPaymentDetails['routing-number']}}
+                  </p>
                 </div>
               </div>
             </div>
@@ -84,23 +106,32 @@
                 </div>
                 <div class="form-group">
                   <label class="" translate>{{'CARD_NUM_FULL'}}</label>
-                  <p class="number">************{{$ctrl.creditCardPaymentDetails['last-four-digits']}}</p>
+                  <p class="number">
+                    ************{{$ctrl.creditCardPaymentDetails['last-four-digits']}}
+                  </p>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label class="" translate>{{'CARD_TYPE'}}</label>
-                  <p class="number">{{$ctrl.creditCardPaymentDetails['card-type']}}</p>
+                  <p class="number">
+                    {{$ctrl.creditCardPaymentDetails['card-type']}}
+                  </p>
                 </div>
                 <div class="form-group">
                   <label class="" translate>{{'EXPIRES'}}</label>
-                  <p class="number">{{$ctrl.creditCardPaymentDetails['expiry-month']}}/{{$ctrl.creditCardPaymentDetails['expiry-year']}}</p><!-- TODO: deal with localization -->
+                  <p class="number">
+                    {{$ctrl.creditCardPaymentDetails['expiry-month']}}/{{$ctrl.creditCardPaymentDetails['expiry-year']}}
+                  </p>
+                  <!-- TODO: deal with localization -->
                 </div>
               </div>
               <div class="col-md-12">
                 <div class="form-group">
                   <label class="" translate>{{'BILLING_ADDRESS'}}</label>
-                  <display-address address="$ctrl.creditCardPaymentDetails.address"></display-address>
+                  <display-address
+                    address="$ctrl.creditCardPaymentDetails.address"
+                  ></display-address>
                 </div>
               </div>
             </div>
@@ -115,13 +146,18 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <translate>{{'CHOOSE_RESOURCE'}}</translate>
-        <button id="changePremiumButton" class="btn btn-default btn-panel-head pull-right" ng-click="$ctrl.changeStep({newStep: 'premium'})" translate>{{'CHANGE'}}</button>
+        <button
+          id="changePremiumButton"
+          class="btn btn-default btn-panel-head pull-right"
+          ng-click="$ctrl.changeStep({newStep: 'premium'})"
+          translate
+        >
+          {{'CHANGE'}}
+        </button>
       </div>
       <div class="panel-body">
         <div class="row">
-          <div class="col-md-12">
-            {{$ctrl.premiumName}}
-          </div>
+          <div class="col-md-12">{{$ctrl.premiumName}}</div>
         </div>
       </div>
     </div>
@@ -131,66 +167,118 @@
     <div class="panel panel-default">
       <div id="step3-header" class="panel-heading">
         <translate>{{'REVIEW_GIFTS'}}</translate>
-        <button id="changeCartButton" class="btn btn-default btn-panel-head pull-right" ng-click="$ctrl.changeStep({newStep: 'cart'})" translate>{{'CHANGE'}}</button>
+        <button
+          id="changeCartButton"
+          class="btn btn-default btn-panel-head pull-right"
+          ng-click="$ctrl.changeStep({newStep: 'cart'})"
+          translate
+        >
+          {{'CHANGE'}}
+        </button>
       </div>
       <div class="panel-body">
         <loading ng-if="!$ctrl.cartData"></loading>
-        <table class="table giftsum-table" ng-if="$ctrl.cartData" aria-labelledby="step3-header">
+        <table
+          class="table giftsum-table"
+          ng-if="$ctrl.cartData"
+          aria-labelledby="step3-header"
+        >
           <thead>
-          <tr>
-            <th class="th-title-gift" translate>{{'GIFT'}}</th>
-            <th class="th-title-frequency" translate>{{'FREQUENCY'}}</th>
-            <th class="th-title-amount" translate>{{'AMOUNT'}}</th>
-          </tr>
+            <tr>
+              <th class="th-title-gift" translate>{{'GIFT'}}</th>
+              <th class="th-title-frequency" translate>{{'FREQUENCY'}}</th>
+              <th class="th-title-amount" translate>{{'AMOUNT'}}</th>
+            </tr>
           </thead>
           <tbody>
-          <tr ng-repeat-start="i in $ctrl.cartData.items" ng-if="i.giftStartDateWarning">
-            <td colspan="3">
-              <div class="alert alert-warning text-center">
-                <strong translate>{{'WARNING'}}</strong>
-                <span translate="FUTURE_WARNING" translate-value-days="{{i.giftStartDateDaysFromNow}}"></span>
-                <div>
-                  <button class="btn btn-default" ng-click="i.giftStartDateWarning = false" translate="KEEP_DATE" translate-value-keepdate="{{i.giftStartDate.format('ll')}}"></button>
-                  <button class="btn btn-primary" ng-click="$ctrl.updateGiftStartMonth(i, $ctrl.startDate(i.config['RECURRING_DAY_OF_MONTH'], $ctrl.nextDrawDate).format('MM'))" translate="CHANGE_TO_DATE" translate-value-changedate="{{$ctrl.startDate(i.config['RECURRING_DAY_OF_MONTH'], $ctrl.nextDrawDate).format('ll')}}"></button>
+            <tr
+              ng-repeat-start="i in $ctrl.cartData.items"
+              ng-if="i.giftStartDateWarning"
+            >
+              <td colspan="3">
+                <div class="alert alert-warning text-center">
+                  <strong translate>{{'WARNING'}}</strong>
+                  <span
+                    translate="FUTURE_WARNING"
+                    translate-value-days="{{i.giftStartDateDaysFromNow}}"
+                  ></span>
+                  <div>
+                    <button
+                      class="btn btn-default"
+                      ng-click="i.giftStartDateWarning = false"
+                      translate="KEEP_DATE"
+                      translate-value-keepdate="{{i.giftStartDate.format('ll')}}"
+                    ></button>
+                    <button
+                      class="btn btn-primary"
+                      ng-click="$ctrl.updateGiftStartMonth(i, $ctrl.startDate(i.config['RECURRING_DAY_OF_MONTH'], $ctrl.nextDrawDate).format('MM'))"
+                      translate="CHANGE_TO_DATE"
+                      translate-value-changedate="{{$ctrl.startDate(i.config['RECURRING_DAY_OF_MONTH'], $ctrl.nextDrawDate).format('ll')}}"
+                    ></button>
+                  </div>
                 </div>
-              </div>
-            </td>
-          </tr>
-          <tr class="giftsum-gift-row" ng-repeat-end>
-            <td class="td-gift">
-              <img desig-src="{{i.designationNumber}}" class="giftsum-profile pull-left" width="90" height="51">
-              <span class="giftsum-person giftsum-title">{{i.displayName}}</span>
-              <span class="giftsum-accountnum giftsum-detail">#{{i.designationNumber}}</span>
-            </td>
-            <td class="td-frequency">
-              <span class="giftsum-frequency giftsum-title">{{i.frequency}}</span>
-              <span class="giftsum-date giftsum-detail" ng-if="i.frequency !== 'Single'" translate="STARTING_DATE" translate-value-startdate="{{i.giftStartDate.format('ll')}}"></span>
-            </td>
-            <td class="td-amount">
-              <span class="giftsum-about giftsum-title">{{i.price | coverFeesFilter:i:'price'}}</span>
-              <span class="giftsum-detail"><span class="visible-xs" translate>{{'GIFT_AMOUNT'}}</span></span>
-            </td>
-          </tr>
+              </td>
+            </tr>
+            <tr class="giftsum-gift-row" ng-repeat-end>
+              <td class="td-gift">
+                <img
+                  desig-src="{{i.designationNumber}}"
+                  class="giftsum-profile pull-left"
+                  width="90"
+                  height="51"
+                />
+                <span class="giftsum-person giftsum-title"
+                  >{{i.displayName}}</span
+                >
+                <span class="giftsum-accountnum giftsum-detail"
+                  >#{{i.designationNumber}}</span
+                >
+              </td>
+              <td class="td-frequency">
+                <span class="giftsum-frequency giftsum-title"
+                  >{{i.frequency}}</span
+                >
+                <span
+                  class="giftsum-date giftsum-detail"
+                  ng-if="i.frequency !== 'Single'"
+                  translate="STARTING_DATE"
+                  translate-value-startdate="{{i.giftStartDate.format('ll')}}"
+                ></span>
+              </td>
+              <td class="td-amount">
+                <span class="giftsum-about giftsum-title"
+                  >{{i.price | coverFeesFilter:i:'price'}}</span
+                >
+                <span class="giftsum-detail"
+                  ><span class="visible-xs" translate
+                    >{{'GIFT_AMOUNT'}}</span
+                  ></span
+                >
+              </td>
+            </tr>
           </tbody>
           <tfoot>
-          <tr>
-            <td colspan="3">
-              <div class="checkout-cart-summary pull-left">
-                <display-rate-totals rate-totals="$ctrl.cartData.frequencyTotals"></display-rate-totals>
-              </div>
-              <div class="checkout-cta pull-right">
-                <recaptcha-wrapper
-                           action="$ctrl.isBranded ? 'branded_checkout' : 'checkout'"
-                           on-success="$ctrl.submitOrder"
-                           component-instance="$ctrl"
-                           button-id="'submitOrderButton'"
-                           button-type="'submit'"
-                           button-classes="'btn btn-primary btn-lg btn-block'"
-                           button-disabled="!$ctrl.canSubmitOrder()"
-                           button-label="'SUBMIT_GIFT'"></recaptcha-wrapper>
-              </div>
-            </td>
-          </tr>
+            <tr>
+              <td colspan="3">
+                <div class="checkout-cart-summary pull-left">
+                  <display-rate-totals
+                    rate-totals="$ctrl.cartData.frequencyTotals"
+                  ></display-rate-totals>
+                </div>
+                <div class="checkout-cta pull-right">
+                  <recaptcha-wrapper
+                    action="$ctrl.isBranded ? 'branded_checkout' : 'checkout'"
+                    on-success="$ctrl.submitOrder"
+                    component-instance="$ctrl"
+                    button-id="'submitOrderButton'"
+                    button-type="'submit'"
+                    button-classes="'btn btn-primary btn-lg btn-block'"
+                    button-disabled="!$ctrl.canSubmitOrder()"
+                    button-label="'SUBMIT_GIFT'"
+                  ></recaptcha-wrapper>
+                </div>
+              </td>
+            </tr>
           </tfoot>
         </table>
       </div>

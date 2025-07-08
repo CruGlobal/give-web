@@ -1,13 +1,23 @@
 <div class="form-group">
-  <input type="text" class="form-control form-control-subtle" ng-model="$ctrl.search" ng-change="$ctrl.onSearchChange()">
+  <input
+    type="text"
+    class="form-control form-control-subtle"
+    ng-model="$ctrl.search"
+    ng-change="$ctrl.onSearchChange()"
+  />
 </div>
 <div ng-switch="$ctrl.searchState">
   <div ng-switch-when="results">
-    <div class="row repeating-row select-recipient-row" ng-repeat="result in $ctrl.results">
-      <gift-list-item gift="result"
-                      selectable="{{$ctrl.selectable}}"
-                      select-label="{{$ctrl.selectLabel}}"
-                      on-selected="$ctrl.gatherSelections(gift)">
+    <div
+      class="row repeating-row select-recipient-row"
+      ng-repeat="result in $ctrl.results"
+    >
+      <gift-list-item
+        gift="result"
+        selectable="{{$ctrl.selectable}}"
+        select-label="{{$ctrl.selectLabel}}"
+        on-selected="$ctrl.gatherSelections(gift)"
+      >
       </gift-list-item>
     </div>
   </div>
@@ -17,7 +27,10 @@
         <i class="fa fa-search fa-2x"></i>
       </div>
       <div class="col-xs-10">
-        <p class="mb0" translate>Enter the name or account number of the recipient you would like to give to in the search box above</p>
+        <p class="mb0" translate>
+          Enter the name or account number of the recipient you would like to
+          give to in the search box above
+        </p>
       </div>
     </div>
   </div>

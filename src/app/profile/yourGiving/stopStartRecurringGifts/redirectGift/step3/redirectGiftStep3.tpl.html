@@ -1,16 +1,32 @@
 <div class="modal-header">
-  <button type="button" class="close" ng-click="$ctrl.onCancel()" aria-label="{{'Close' | translate}}">
+  <button
+    type="button"
+    class="close"
+    ng-click="$ctrl.onCancel()"
+    aria-label="{{'Close' | translate}}"
+  >
     <span aria-hidden="true">×</span>
   </button>
   <div class="container-fluid">
     <div class="row">
       <div class="col-xs-12">
         <div class="border-bottom-small" ng-switch="$ctrl.state">
-          <h3 ng-switch-when="update" translate>Make Changes To Your Recurring Gifts</h3>
-          <p ng-switch-when="update" translate>Please review the amount, payment method, and frequency of this gift below.</p>
+          <h3 ng-switch-when="update" translate>
+            Make Changes To Your Recurring Gifts
+          </h3>
+          <p ng-switch-when="update" translate>
+            Please review the amount, payment method, and frequency of this gift
+            below.
+          </p>
           <h3 ng-switch-when="confirm" translate>Confirm Your Changes.</h3>
-          <p ng-switch-when="confirm">We will stop your gift to <strong>{{$ctrl.stopGift.designationName}}</strong> and begin a new gift to <strong>{{$ctrl.gift.designationName}}</strong>.</p>
-          <p ng-switch-when="confirm" translate>Please review your changes and click "Confirm Changes."</p>
+          <p ng-switch-when="confirm">
+            We will stop your gift to
+            <strong>{{$ctrl.stopGift.designationName}}</strong> and begin a new
+            gift to <strong>{{$ctrl.gift.designationName}}</strong>.
+          </p>
+          <p ng-switch-when="confirm" translate>
+            Please review your changes and click "Confirm Changes."
+          </p>
         </div>
       </div>
     </div>
@@ -18,7 +34,10 @@
 </div>
 
 <div class="modal-body">
-  <div class="alert alert-danger" role="alert" ng-if="$ctrl.hasError" translate>An error occurred saving changes. You may try again by clicking "Confirm Changes."</div>
+  <div class="alert alert-danger" role="alert" ng-if="$ctrl.hasError" translate>
+    An error occurred saving changes. You may try again by clicking "Confirm
+    Changes."
+  </div>
   <form name="$ctrl.redirectForm" ng-switch="$ctrl.state">
     <div class="repeating-row" ng-switch-when="update">
       <gift-list-item gift="$ctrl.gift">
@@ -27,7 +46,9 @@
     </div>
     <div class="repeating-row" ng-switch-when="confirm">
       <div class="col-xs-12">
-        <p class="text-danger">The recurring gift to this recipient will be stopped:</p>
+        <p class="text-danger">
+          The recurring gift to this recipient will be stopped:
+        </p>
       </div>
       <gift-list-item gift="$ctrl.stopGift" />
     </div>
@@ -45,33 +66,45 @@
 <div class="modal-footer" ng-switch="$ctrl.state">
   <div class="row" ng-switch-when="update">
     <div class="col-xs-6">
-      <button type="button"
-              class="btn btn-default"
-              ng-click="$ctrl.previous()"
-              translate>Back
+      <button
+        type="button"
+        class="btn btn-default"
+        ng-click="$ctrl.previous()"
+        translate
+      >
+        Back
       </button>
     </div>
     <div class="col-xs-6 text-right">
-      <button type="button"
-              class="btn btn-primary"
-              ng-click="$ctrl.state = 'confirm'"
-              translate>Continue
+      <button
+        type="button"
+        class="btn btn-primary"
+        ng-click="$ctrl.state = 'confirm'"
+        translate
+      >
+        Continue
       </button>
     </div>
   </div>
   <div class="row" ng-switch-when="confirm">
     <div class="col-xs-6">
-      <button type="button"
-              class="btn btn-default"
-              ng-click="$ctrl.previous()"
-              translate>Back
+      <button
+        type="button"
+        class="btn btn-default"
+        ng-click="$ctrl.previous()"
+        translate
+      >
+        Back
       </button>
     </div>
     <div class="col-xs-6 text-right">
-      <button type="button"
-              class="btn btn-primary"
-              ng-click="$ctrl.submitGift()"
-              translate>Confirm Changes
+      <button
+        type="button"
+        class="btn btn-primary"
+        ng-click="$ctrl.submitGift()"
+        translate
+      >
+        Confirm Changes
       </button>
     </div>
   </div>

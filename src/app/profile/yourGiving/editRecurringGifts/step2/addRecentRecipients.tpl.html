@@ -1,5 +1,10 @@
 <div class="modal-header">
-  <button type="button" class="close" aria-label="Close" ng-click="$ctrl.dismiss()">
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    ng-click="$ctrl.dismiss()"
+  >
     <span aria-hidden="true">x</span>
   </button>
   <div class="container-fluid">
@@ -21,7 +26,11 @@
         <loading ng-if="$ctrl.loadingRecentRecipients">
           <translate>Loading recent recipients...</translate>
         </loading>
-        <div class="alert alert-warning" role="alert" ng-if="$ctrl.loadedNoRecentRecipients()">
+        <div
+          class="alert alert-warning"
+          role="alert"
+          ng-if="$ctrl.loadedNoRecentRecipients()"
+        >
           <p>
             <translate>
               You don't seem to have any recent recipients.
@@ -34,7 +43,10 @@
             </translate>
           </p>
         </div>
-        <div ng-repeat="gift in $ctrl.recentRecipients" class="row repeating-row user-profile">
+        <div
+          ng-repeat="gift in $ctrl.recentRecipients"
+          class="row repeating-row user-profile"
+        >
           <gift-list-item gift="gift" selectable="checkbox"></gift-list-item>
         </div>
       </div>
@@ -44,13 +56,15 @@
 
 <div class="modal-footer">
   <div class="col-xs-6">
-    <a class="btn btn-default"
-       ng-click="$ctrl.previous()"
-       translate>
-      Back
-    </a>
+    <a class="btn btn-default" ng-click="$ctrl.previous()" translate> Back </a>
   </div>
   <div class="col-xs-6 text-right">
-    <button class="btn btn-primary" ng-click="$ctrl.gatherSelections()" translate>Continue</button>
+    <button
+      class="btn btn-primary"
+      ng-click="$ctrl.gatherSelections()"
+      translate
+    >
+      Continue
+    </button>
   </div>
 </div>

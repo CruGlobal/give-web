@@ -1,6 +1,7 @@
 <div class="loading-overlay-parent">
   <div ng-switch="$ctrl.state">
-    <register-account-modal ng-switch-when="register-account"
+    <register-account-modal
+      ng-switch-when="register-account"
       modal-title="$ctrl.modalTitle"
       show-sign-up="$ctrl.registerAccountSignUp"
       hide-close-button="$ctrl.hideCloseButton"
@@ -9,13 +10,15 @@
       on-cancel="$ctrl.onCancel()"
       set-loading="$ctrl.setLoading(loading)"
     ></register-account-modal>
-    <account-benefits-modal ng-switch-when="account-benefits"
+    <account-benefits-modal
+      ng-switch-when="account-benefits"
       modal-title="$ctrl.modalTitle"
       on-register="$ctrl.onAccountBenefitsRegister()"
       on-success="$ctrl.onAccountBenefitsSuccess()"
       on-cancel="$ctrl.onCancel()"
     ></account-benefits-modal>
-    <user-match-modal ng-switch-when="user-match"
+    <user-match-modal
+      ng-switch-when="user-match"
       modal-title="$ctrl.modalTitle"
       on-state-change="$ctrl.stateChanged(state)"
       on-success="$ctrl.onSignUpSuccess()"

@@ -1,32 +1,35 @@
-import angular from 'angular'
-import 'angular-messages'
-import template from './productConfig.tpl.html'
-import commonModule from 'common/common.module'
-import productModalService from 'common/services/productModal.service'
-import modalStateService from 'common/services/modalState.service'
-import { giveGiftParams } from './giveGiftParams'
-import analyticsFactory from 'app/analytics/analytics.factory'
+import angular from 'angular';
+import 'angular-messages';
+import template from './productConfig.tpl.html';
+import commonModule from 'common/common.module';
+import productModalService from 'common/services/productModal.service';
+import modalStateService from 'common/services/modalState.service';
+import { giveGiftParams } from './giveGiftParams';
+import analyticsFactory from 'app/analytics/analytics.factory';
 
 // include designation edit button component to be included on designation page
-import designationEditButtonComponent from '../designationEditButton/designationEditButton.component'
+import designationEditButtonComponent from '../designationEditButton/designationEditButton.component';
 
-const componentName = 'productConfig'
+const componentName = 'productConfig';
 
 class ProductConfigController {
   /* @ngInject */
-  constructor (productModalService, analyticsFactory, $window, $log) {
-    this.productModalService = productModalService
-    this.analyticsFactory = analyticsFactory
-    this.$window = $window
-    this.$log = $log
+  constructor(productModalService, analyticsFactory, $window, $log) {
+    this.productModalService = productModalService;
+    this.analyticsFactory = analyticsFactory;
+    this.$window = $window;
+    this.$log = $log;
   }
 
-  configModal () {
-    this.productModalService
-      .configureProduct(this.productCode, {
+  configModal() {
+    this.productModalService.configureProduct(
+      this.productCode,
+      {
         CAMPAIGN_CODE: this.campaignCode,
-        'campaign-page': this.campaignPage
-      }, false)
+        'campaign-page': this.campaignPage,
+      },
+      false,
+    );
   }
 }
 
@@ -37,7 +40,7 @@ export default angular
     modalStateService.name,
     productModalService.name,
     designationEditButtonComponent.name,
-    analyticsFactory.name
+    analyticsFactory.name,
   ])
   .component(componentName, {
     controller: ProductConfigController,
@@ -48,8 +51,8 @@ export default angular
       productCode: '@',
       describedBy: '@',
       buttonLabel: '@',
-      buttonSize: '@'
-    }
+      buttonSize: '@',
+    },
   })
   // todo: Move config to designation page (individual search result).
   .config(function (modalStateServiceProvider) {
@@ -57,9 +60,19 @@ export default angular
       'give-gift',
       /* @ngInject */
       function ($location, productModalService) {
-        const params = $location.search()
-        if (Object.prototype.hasOwnProperty.call(params, giveGiftParams.designation)) {
-          productModalService.configureProduct(params[giveGiftParams.designation], null, false)
+        const params = $location.search();
+        if (
+          Object.prototype.hasOwnProperty.call(
+            params,
+            giveGiftParams.designation,
+          )
+        ) {
+          productModalService.configureProduct(
+            params[giveGiftParams.designation],
+            null,
+            false,
+          );
         }
-      })
-  })
+      },
+    );
+  });

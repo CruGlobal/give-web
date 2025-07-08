@@ -9,8 +9,8 @@ export const user = {
   state: 'state',
   zipCode: '11111',
   countryCode: 'US',
-  organizationName: 'organizationName'
-}
+  organizationName: 'organizationName',
+};
 
 export const schema = [
   {
@@ -18,27 +18,27 @@ export const schema = [
     required: true,
     label: 'First Name',
     type: 'text',
-    value: ''
+    value: '',
   },
   {
     name: 'userProfile.lastName',
     required: true,
     label: 'Last Name',
     type: 'text',
-    value: ''
+    value: '',
   },
   {
     name: 'userProfile.email',
     required: true,
     label: 'Email Address',
     type: 'email',
-    value: ''
+    value: '',
   },
   {
     name: 'credentials.passcode',
     required: true,
     label: 'Password',
     type: 'password',
-    value: ''
-  }
-]
+    value: '',
+  },
+];

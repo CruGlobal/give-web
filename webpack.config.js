@@ -1,13 +1,14 @@
-const webpack = require('webpack')
-const path = require('path')
-const isBuild = (process.env.npm_lifecycle_event || '').startsWith('build')
+const webpack = require('webpack');
+const path = require('path');
+const isBuild = (process.env.npm_lifecycle_event || '').startsWith('build');
 
-const CopyWebpackPlugin = require('copy-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const MomentLocalesPlugin = require('moment-locales-webpack-plugin')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-const ManifestPlugin = require('webpack-manifest-plugin')
-const StyleLintPlugin = require('stylelint-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
+const BundleAnalyzerPlugin =
+  require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const ManifestPlugin = require('webpack-manifest-plugin');
+const StyleLintPlugin = require('stylelint-webpack-plugin');
 
 const giveComponents = [
   'app/cart/cart.component.js',
@@ -23,25 +24,25 @@ const giveComponents = [
   'app/designationEditor/designationEditor.component.js',
   'app/newsletterSubscription/newsletterSubscription.component.js',
   'app/oktaAuthCallback/oktaAuthCallback.component.js',
-  'app/signOut/signOut.component.js'
-]
+  'app/signOut/signOut.component.js',
+];
 
-const giveCss = ['assets/scss/styles.scss']
+const giveCss = ['assets/scss/styles.scss'];
 
 const brandedComponents = [
   'app/branded/branded-checkout.component.js',
-  'assets/scss/branded-checkout.scss'
-]
+  'assets/scss/branded-checkout.scss',
+];
 
 // Okta sign-in widget assets files
 const oktaSignInLabelsDestinations = [
   'dist/assets/okta-sign-in/labels',
-  'src/assets/okta-sign-in/labels'
-]
+  'src/assets/okta-sign-in/labels',
+];
 const oktaSignInFontDestinations = [
   'dist/assets/okta-sign-in/font/[name].[ext]',
-  'src/assets/okta-sign-in/font/[name].[ext]'
-]
+  'src/assets/okta-sign-in/font/[name].[ext]',
+];
 
 const sharedConfig = {
   mode: isBuild ? 'production' : 'development',
@@ -49,49 +50,65 @@ const sharedConfig = {
   entry: {},
   resolve: {
     modules: [path.resolve(__dirname, 'src'), 'node_modules'],
-    extensions: ['.js', '.jsx', '.ts', '.tsx']
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
   },
   output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'dist'),
   },
   plugins: [
     new CopyWebpackPlugin([
       {
-        from: path.resolve(__dirname, 'node_modules/@okta/okta-signin-widget/dist/css/okta-sign-in.min.css'),
+        from: path.resolve(
+          __dirname,
+          'node_modules/@okta/okta-signin-widget/dist/css/okta-sign-in.min.css',
+        ),
         to: path.resolve(__dirname, 'src/assets/okta-sign-in/css'),
-        transform (content) {
+        transform(content) {
           // Replace `../font` with `/assets/fonts/okta-sign-in` to load the fonts correctly.
           // Also changing the font to use our default font.
-          return content.toString().replace(/\.\.\/font/g, '/assets/okta-sign-in/font').replace(/Inter,montserrat-okta,Arial,Helvetica,sans-serif/g, '"Source Sans Pro", "Helvetica Neue", Helvetica, sans-serif')
-        }
+          return content
+            .toString()
+            .replace(/\.\.\/font/g, '/assets/okta-sign-in/font')
+            .replace(
+              /Inter,montserrat-okta,Arial,Helvetica,sans-serif/g,
+              '"Source Sans Pro", "Helvetica Neue", Helvetica, sans-serif',
+            );
+        },
       },
-      ...oktaSignInLabelsDestinations.map(destination => ({
-        from: path.resolve(__dirname, 'node_modules/@okta/okta-signin-widget/dist/labels'),
-        to: path.resolve(__dirname, destination)
+      ...oktaSignInLabelsDestinations.map((destination) => ({
+        from: path.resolve(
+          __dirname,
+          'node_modules/@okta/okta-signin-widget/dist/labels',
+        ),
+        to: path.resolve(__dirname, destination),
       })),
-      ...oktaSignInFontDestinations.map(destination => ({
-        from: path.resolve(__dirname, 'node_modules/@okta/okta-signin-widget/dist/font/okticon.*'),
-        to: path.resolve(__dirname, destination)
+      ...oktaSignInFontDestinations.map((destination) => ({
+        from: path.resolve(
+          __dirname,
+          'node_modules/@okta/okta-signin-widget/dist/font/okticon.*',
+        ),
+        to: path.resolve(__dirname, destination),
       })),
       {
         context: 'src',
         from: '**/*.+(eot|png|jpeg|svg|ttf|woff)',
-        to: '[path][name].[ext]'
+        to: '[path][name].[ext]',
       },
       {
         context: 'src/assets/okta-sign-in/img',
         from: '**/*.+(png|jpe?g|gif|svg|ico)',
-        to: 'img/[path][name].[ext]'
+        to: 'img/[path][name].[ext]',
       },
       'unsupportedBrowser.html',
-      'branded-checkout.html'
+      'branded-checkout.html',
     ]),
     new webpack.EnvironmentPlugin({
       GITHUB_SHA: 'development',
       S3_GIVE_DOMAIN: '',
-      ROLLBAR_ACCESS_TOKEN: JSON.stringify(process.env.ROLLBAR_ACCESS_TOKEN) || 'development-token',
-      DATADOG_RUM_CLIENT_TOKEN: process.env.DATADOG_RUM_CLIENT_TOKEN || ''
+      ROLLBAR_ACCESS_TOKEN:
+        JSON.stringify(process.env.ROLLBAR_ACCESS_TOKEN) || 'development-token',
+      DATADOG_RUM_CLIENT_TOKEN: process.env.DATADOG_RUM_CLIENT_TOKEN || '',
     }),
     ...(isBuild
       ? []
@@ -100,41 +117,48 @@ const sharedConfig = {
             configFile: path.resolve(__dirname, 'stylelint.config.mjs'),
             context: 'src/assets/scss',
             files: '**/*.(css|scss)',
-            quiet: false
-          })
+            quiet: false,
+          }),
         ]),
     // To strip all locales except “en”
-    new MomentLocalesPlugin()
+    new MomentLocalesPlugin(),
   ],
   module: {
     rules: [
       {
         test: /\.(js|jsx|ts|tsx)$/,
         exclude: /node_modules/,
-        use: [{
-          loader: 'babel-loader',
-          options: {
-            presets: [['@babel/preset-env', {
-              modules: false,
-              targets: {
-                browsers: ['defaults', 'ie >= 11']
-              }
-            }],
-            '@babel/preset-react',
-            '@babel/preset-typescript'],
-            plugins: [
-              '@babel/plugin-transform-runtime',
-              'angularjs-annotate'
-            ]
-          }
-        }]
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: [
+                [
+                  '@babel/preset-env',
+                  {
+                    modules: false,
+                    targets: {
+                      browsers: ['defaults', 'ie >= 11'],
+                    },
+                  },
+                ],
+                '@babel/preset-react',
+                '@babel/preset-typescript',
+              ],
+              plugins: [
+                '@babel/plugin-transform-runtime',
+                'angularjs-annotate',
+              ],
+            },
+          },
+        ],
       },
       {
         test: /\.html$/,
         use: [
           `ngtemplate-loader?relativeTo=${path.resolve(__dirname, './src')}/`,
-          'html-loader'
-        ]
+          'html-loader',
+        ],
       },
       {
         test: /\.s?[ac]ss$/,
@@ -147,11 +171,11 @@ const sharedConfig = {
             options: {
               sourceMap: true,
               sassOptions: {
-                quietDeps: true
-              }
-            }
-          }
-        ]
+                quietDeps: true,
+              },
+            },
+          },
+        ],
       },
       {
         test: /\.s?[ac]ss$/,
@@ -164,45 +188,45 @@ const sharedConfig = {
             options: {
               sourceMap: true,
               sassOptions: {
-                quietDeps: true
-              }
-            }
-          }
-        ]
-      }
-    ]
+                quietDeps: true,
+              },
+            },
+          },
+        ],
+      },
+    ],
   },
   optimization: {
-    usedExports: true
-  }
-}
+    usedExports: true,
+  },
+};
 
 const devServer = {
   https: true,
   historyApiFallback: {
-    rewrites: [{ from: /\/(?!test-release).+\.html/, to: '/index.html' }]
+    rewrites: [{ from: /\/(?!test-release).+\.html/, to: '/index.html' }],
   },
   proxy: {
     '/bin': {
       target: 'https://give-stage2.cru.org',
-      changeOrigin: true
+      changeOrigin: true,
     },
     '/content': {
       target: 'https://give-stage2.cru.org',
-      changeOrigin: true
+      changeOrigin: true,
     },
     '/etc': {
       target: 'https://give-stage2.cru.org',
-      changeOrigin: true
+      changeOrigin: true,
     },
     '/designations': {
       target: 'https://give-stage2.cru.org',
-      changeOrigin: true
-    }
+      changeOrigin: true,
+    },
   },
   port: 9000,
-  public: 'localhost.cru.org:9000'
-}
+  public: 'localhost.cru.org:9000',
+};
 
 module.exports = (env = {}) => [
   // Manifest Loader build
@@ -214,56 +238,60 @@ module.exports = (env = {}) => [
             'give.v2': 'loaders/give.js',
             'branded-checkout.v2': 'loaders/branded.js',
             give: [...giveComponents, ...giveCss],
-            branded: brandedComponents
+            branded: brandedComponents,
           }
         : {
             'dev.v2': 'loaders/dev.js',
-            main: 'app/main/main.component.js'
-          })
+            main: 'app/main/main.component.js',
+          }),
     },
     output: {
-      filename (chunkData) {
-        return ['dev.v2', 'give.v2', 'branded-checkout.v2'].includes(chunkData.chunk.name)
+      filename(chunkData) {
+        return ['dev.v2', 'give.v2', 'branded-checkout.v2'].includes(
+          chunkData.chunk.name,
+        )
           ? '[name].js'
-          : 'chunks/[name].[contenthash].js'
+          : 'chunks/[name].[contenthash].js';
       },
-      path: path.resolve(__dirname, 'dist')
+      path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
       new MiniCssExtractPlugin({
-        filename: 'chunks/[name].[contenthash].min.css'
+        filename: 'chunks/[name].[contenthash].min.css',
       }),
       ...sharedConfig.plugins,
       new BundleAnalyzerPlugin({
-        analyzerMode: env.analyze ? 'static' : 'disabled'
+        analyzerMode: env.analyze ? 'static' : 'disabled',
       }),
       new ManifestPlugin({
         // Don't include assets or map files in the manifest
-        filter: file => file.isChunk && !/.*\.map$/.test(file.name),
+        filter: (file) => file.isChunk && !/.*\.map$/.test(file.name),
         publicPath: (process.env.S3_GIVE_DOMAIN || '') + '/',
         seed: {
-          'fontawesome.css': '//give.cru.org/css/fontawesome.css'
-        }
-      })
+          'fontawesome.css': '//give.cru.org/css/fontawesome.css',
+        },
+      }),
     ],
     optimization: {
       usedExports: true,
       splitChunks: {
         filename: 'chunks/[name].[contenthash].js',
-        chunks (chunk) {
+        chunks(chunk) {
           // Don't chunk loader files
-          return !['dev.v2', 'give.v2', 'branded-checkout.v2'].includes(chunk.name)
+          return !['dev.v2', 'give.v2', 'branded-checkout.v2'].includes(
+            chunk.name,
+          );
         },
         cacheGroups: {
           angular: {
             test: /[\\/]node_modules[\\/]angular[\\/]/,
             name: 'angular',
-            chunks: 'all'
-          }
-        }
-      }
+            chunks: 'all',
+          },
+        },
+      },
     },
-    devServer
+    devServer,
   },
   // Legacy build (single big file)
   {
@@ -271,16 +299,16 @@ module.exports = (env = {}) => [
     entry: {
       app: giveComponents,
       give: giveCss,
-      'branded-checkout': brandedComponents
+      'branded-checkout': brandedComponents,
     },
     plugins: [
       new MiniCssExtractPlugin({
-        filename: '[name].min.css'
+        filename: '[name].min.css',
       }),
       ...sharedConfig.plugins,
       new BundleAnalyzerPlugin({
-        analyzerMode: env.analyze ? 'static' : 'disabled'
-      })
-    ]
-  }
-]
+        analyzerMode: env.analyze ? 'static' : 'disabled',
+      }),
+    ],
+  },
+];

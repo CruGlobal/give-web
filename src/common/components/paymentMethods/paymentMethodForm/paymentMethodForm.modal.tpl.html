@@ -1,5 +1,11 @@
 <div class="modal-header">
-  <button type="button" id="closeButtonTop" class="close" aria-label="Close" ng-click="$ctrl.dismiss()">
+  <button
+    type="button"
+    id="closeButtonTop"
+    class="close"
+    aria-label="Close"
+    ng-click="$ctrl.dismiss()"
+  >
     <span aria-hidden="true">×</span>
   </button>
   <div class="container-fluid">
@@ -7,8 +13,12 @@
       <div class="col-xs-12">
         <div class="border-bottom-small">
           <h3 class="text-center">
-            <span ng-if="!$ctrl.resolve.paymentMethod" translate>Add New Payment Method</span>
-            <span ng-if="$ctrl.resolve.paymentMethod" translate>Edit Payment Method</span>
+            <span ng-if="!$ctrl.resolve.paymentMethod" translate
+              >Add New Payment Method</span
+            >
+            <span ng-if="$ctrl.resolve.paymentMethod" translate
+              >Edit Payment Method</span
+            >
           </h3>
         </div>
       </div>
@@ -29,24 +39,38 @@
           hide-cvv="$ctrl.resolve.hideCvv"
           mailing-address="$ctrl.resolve.mailingAddress"
           default-payment-type="$ctrl.resolve.defaultPaymentType"
-          hide-payment-type-options="$ctrl.resolve.hidePaymentTypeOptions">
+          hide-payment-type-options="$ctrl.resolve.hidePaymentTypeOptions"
+        >
         </payment-method-form>
       </div>
     </div>
 
     <div class="row mt">
       <div class="col-xs-12">
-        <button type="button"
-                id="saveChangesButton"
-                class="btn btn-primary pull-right"
-                ng-click="$ctrl.resolve.onPaymentFormStateChange({$event: {state: 'submitted'}})"
-                ng-disabled="$ctrl.resolve.paymentForm.state === 'loading' || $ctrl.resolve.paymentForm.state === 'encrypting' || $ctrl.resolve.paymentForm.state === 'success'">
-          <span ng-if="!$ctrl.resolve.paymentMethod" translate>Add Payment Method</span>
-          <span ng-if="$ctrl.resolve.paymentMethod" translate>Update Payment Method</span>
+        <button
+          type="button"
+          id="saveChangesButton"
+          class="btn btn-primary pull-right"
+          ng-click="$ctrl.resolve.onPaymentFormStateChange({$event: {state: 'submitted'}})"
+          ng-disabled="$ctrl.resolve.paymentForm.state === 'loading' || $ctrl.resolve.paymentForm.state === 'encrypting' || $ctrl.resolve.paymentForm.state === 'success'"
+        >
+          <span ng-if="!$ctrl.resolve.paymentMethod" translate
+            >Add Payment Method</span
+          >
+          <span ng-if="$ctrl.resolve.paymentMethod" translate
+            >Update Payment Method</span
+          >
         </button>
-        <button id="cancelButton" type="button" class="btn btn-default" ng-click="$ctrl.dismiss()" translate>Cancel &amp; Return</button>
+        <button
+          id="cancelButton"
+          type="button"
+          class="btn btn-default"
+          ng-click="$ctrl.dismiss()"
+          translate
+        >
+          Cancel &amp; Return
+        </button>
       </div>
     </div>
   </div>
 </div>
-

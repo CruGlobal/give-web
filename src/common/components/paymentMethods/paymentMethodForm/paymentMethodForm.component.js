@@ -1,47 +1,49 @@
-import angular from 'angular'
+import angular from 'angular';
 
-import paymentMethodDisplay from '../paymentMethodDisplay.component'
-import bankAccountForm from '../bankAccountForm/bankAccountForm.component'
-import creditCardForm from '../creditCardForm/creditCardForm.component'
-import orderService from '../../../services/api/order.service'
+import paymentMethodDisplay from '../paymentMethodDisplay.component';
+import bankAccountForm from '../bankAccountForm/bankAccountForm.component';
+import creditCardForm from '../creditCardForm/creditCardForm.component';
+import orderService from '../../../services/api/order.service';
 
-import template from './paymentMethodForm.tpl.html'
-import { brandedCoverFeeCheckedEvent } from '../../../../app/productConfig/productConfigForm/productConfigForm.component'
+import template from './paymentMethodForm.tpl.html';
+import { brandedCoverFeeCheckedEvent } from '../../../../app/productConfig/productConfigForm/productConfigForm.component';
 
-const componentName = 'paymentMethodForm'
+const componentName = 'paymentMethodForm';
 
 class PaymentMethodFormController {
   /* @ngInject */
-  constructor ($log, $scope, envService, orderService) {
-    this.$log = $log
-    this.$scope = $scope
+  constructor($log, $scope, envService, orderService) {
+    this.$log = $log;
+    this.$scope = $scope;
 
-    this.paymentType = 'bankAccount'
-    this.imgDomain = envService.read('imgDomain')
-    this.orderService = orderService
+    this.paymentType = 'bankAccount';
+    this.imgDomain = envService.read('imgDomain');
+    this.orderService = orderService;
   }
 
-  $onInit () {
+  $onInit() {
     if (this.paymentMethod) {
-      this.paymentType = this.paymentMethod['account-type'] ? 'bankAccount' : 'creditCard'
+      this.paymentType = this.paymentMethod['account-type']
+        ? 'bankAccount'
+        : 'creditCard';
     } else if (this.defaultPaymentType === 'creditCard') {
-      this.paymentType = 'creditCard'
+      this.paymentType = 'creditCard';
     }
   }
 
-  changePaymentType (type) {
+  changePaymentType(type) {
     if (type === 'bankAccount') {
-      this.orderService.storeCoverFeeDecision(false)
+      this.orderService.storeCoverFeeDecision(false);
       if (this.brandedCheckoutItem) {
-        this.$scope.$emit(brandedCoverFeeCheckedEvent)
+        this.$scope.$emit(brandedCoverFeeCheckedEvent);
       }
     }
-    this.paymentType = type
+    this.paymentType = type;
     this.onPaymentFormStateChange({
       $event: {
-        state: 'unsubmitted'
-      }
-    })
+        state: 'unsubmitted',
+      },
+    });
   }
 }
 
@@ -50,7 +52,7 @@ export default angular
     paymentMethodDisplay.name,
     bankAccountForm.name,
     creditCardForm.name,
-    orderService.name
+    orderService.name,
   ])
   .component(componentName, {
     controller: PaymentMethodFormController,
@@ -66,6 +68,6 @@ export default angular
       hidePaymentTypeOptions: '<',
       cartData: '<',
       brandedCheckoutItem: '<',
-      onPaymentFormStateChange: '&'
-    }
-  })
+      onPaymentFormStateChange: '&',
+    },
+  });

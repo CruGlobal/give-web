@@ -1,59 +1,55 @@
-import angular from 'angular'
-import 'rxjs/add/operator/pluck'
+import angular from 'angular';
+import 'rxjs/add/operator/pluck';
 
-import cortexApiService from '../cortexApi.service'
+import cortexApiService from '../cortexApi.service';
 
-const serviceName = 'verificationService'
+const serviceName = 'verificationService';
 
 const VerificationService = /* @ngInject */ function (cortexApiService) {
-  function getContacts () {
+  function getContacts() {
     return cortexApiService
       .get({
-        path: ['verificationcontacts', cortexApiService.scope]
+        path: ['verificationcontacts', cortexApiService.scope],
       })
-      .pluck('verification-contacts')
+      .pluck('verification-contacts');
   }
 
-  function selectContact (contact) {
-    return cortexApiService
-      .post({
-        path: ['verificationcontacts', cortexApiService.scope, 'form'],
-        data: contact
-      })
+  function selectContact(contact) {
+    return cortexApiService.post({
+      path: ['verificationcontacts', cortexApiService.scope, 'form'],
+      data: contact,
+    });
   }
 
-  function getQuestions () {
+  function getQuestions() {
     return cortexApiService
       .get({
-        path: ['verifyregistrations', cortexApiService.scope, 'form']
-      })
-      .pluck('verification-questions')
-  }
-
-  function thatIsNotMe () {
-    return cortexApiService
-      .post({
         path: ['verifyregistrations', cortexApiService.scope, 'form'],
-        data: { 'that-is-not-me': 'true' },
-        followLocation: true
       })
+      .pluck('verification-questions');
   }
 
-  function submitAnswers (answers) {
-    return cortexApiService
-      .post({
-        path: ['verifyregistrations', cortexApiService.scope, 'form'],
-        data: { 'verification-questions': answers, 'that-is-not-me': 'false' },
-        followLocation: true
-      })
+  function thatIsNotMe() {
+    return cortexApiService.post({
+      path: ['verifyregistrations', cortexApiService.scope, 'form'],
+      data: { 'that-is-not-me': 'true' },
+      followLocation: true,
+    });
   }
 
-  function postDonorMatches () {
-    return cortexApiService
-      .post({
-        path: ['donormatches', cortexApiService.scope, 'form'],
-        data: {}
-      })
+  function submitAnswers(answers) {
+    return cortexApiService.post({
+      path: ['verifyregistrations', cortexApiService.scope, 'form'],
+      data: { 'verification-questions': answers, 'that-is-not-me': 'false' },
+      followLocation: true,
+    });
+  }
+
+  function postDonorMatches() {
+    return cortexApiService.post({
+      path: ['donormatches', cortexApiService.scope, 'form'],
+      data: {},
+    });
   }
 
   return {
@@ -62,12 +58,10 @@ const VerificationService = /* @ngInject */ function (cortexApiService) {
     getQuestions: getQuestions,
     submitAnswers: submitAnswers,
     thatIsNotMe: thatIsNotMe,
-    postDonorMatches: postDonorMatches
-  }
-}
+    postDonorMatches: postDonorMatches,
+  };
+};
 
 export default angular
-  .module(serviceName, [
-    cortexApiService.name
-  ])
-  .factory(serviceName, VerificationService)
+  .module(serviceName, [cortexApiService.name])
+  .factory(serviceName, VerificationService);

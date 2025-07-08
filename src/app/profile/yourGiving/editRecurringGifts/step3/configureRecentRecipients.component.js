@@ -1,22 +1,19 @@
-import angular from 'angular'
+import angular from 'angular';
 
-import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component'
-import giftUpdateView from 'common/components/giftViews/giftUpdateView/giftUpdateView.component'
+import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component';
+import giftUpdateView from 'common/components/giftViews/giftUpdateView/giftUpdateView.component';
 
-import template from './configureRecentRecipients.tpl.html'
+import template from './configureRecentRecipients.tpl.html';
 
-const componentName = 'step3ConfigureRecentRecipients'
+const componentName = 'step3ConfigureRecentRecipients';
 
 class ConfigureRecentRecipientsController {
   /* @ngInject */
-  constructor () /* eslint-disable-line no-useless-constructor */ {}
+  constructor() /* eslint-disable-line no-useless-constructor */ {}
 }
 
 export default angular
-  .module(componentName, [
-    giftListItem.name,
-    giftUpdateView.name
-  ])
+  .module(componentName, [giftListItem.name, giftUpdateView.name])
   .component(componentName, {
     controller: ConfigureRecentRecipientsController,
     templateUrl: template,
@@ -24,6 +21,6 @@ export default angular
       additions: '<',
       dismiss: '&',
       previous: '&',
-      next: '&'
-    }
-  })
+      next: '&',
+    },
+  });

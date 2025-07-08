@@ -1,15 +1,14 @@
-import angular from 'angular'
+import angular from 'angular';
 
-const controllerName = 'websiteCtrl'
+const controllerName = 'websiteCtrl';
 
 class ModalInstanceCtrl {
   /* @ngInject */
-  constructor (initialWebsite) {
-    this.website = initialWebsite
+  constructor(initialWebsite) {
+    this.website = initialWebsite;
   }
 }
 
 export default angular
-  .module(controllerName, [
-  ])
-  .controller(controllerName, ModalInstanceCtrl)
+  .module(controllerName, [])
+  .controller(controllerName, ModalInstanceCtrl);

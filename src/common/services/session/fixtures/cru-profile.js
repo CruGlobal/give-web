@@ -1,5 +1,4 @@
-const cruProfile = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmaXJzdF9uYW1lIjoiQ2hhcmxlcyIsImxhc3RfbmFtZSI6IlhhdmllciIsImVtYWlsIjoicHJvZmVzc29yeEB4YXZpZXIuZWR1In0.aw4MqxfDPdp1Ozc80bg-AAA_k6Dv4DR0epW6Sh5qTfM'
+const cruProfile =
+  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmaXJzdF9uYW1lIjoiQ2hhcmxlcyIsImxhc3RfbmFtZSI6IlhhdmllciIsImVtYWlsIjoicHJvZmVzc29yeEB4YXZpZXIuZWR1In0.aw4MqxfDPdp1Ozc80bg-AAA_k6Dv4DR0epW6Sh5qTfM';
 
-export {
-  cruProfile
-}
+export { cruProfile };

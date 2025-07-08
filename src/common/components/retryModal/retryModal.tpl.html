@@ -1,5 +1,11 @@
 <div class="modal-header">
-  <button id="closeButtonTop" type="button" class="close" ng-click="$ctrl.cancel()" aria-label="{{'Close' | translate}}">
+  <button
+    id="closeButtonTop"
+    type="button"
+    class="close"
+    ng-click="$ctrl.cancel()"
+    aria-label="{{'Close' | translate}}"
+  >
     <span aria-hidden="true">×</span>
   </button>
   <div class="container-fluid">
@@ -21,19 +27,24 @@
 
 <div class="modal-footer">
   <div class="col-xs-6">
-    <button type="button"
-            id="previousButton"
-            class="btn btn-default"
-            ng-click="$ctrl.previous()"
-            translate>Back
+    <button
+      type="button"
+      id="previousButton"
+      class="btn btn-default"
+      ng-click="$ctrl.previous()"
+      translate
+    >
+      Back
     </button>
   </div>
   <div class="col-xs-6 text-right">
-    <button type="button"
-            id="retryButton"
-            class="btn btn-primary"
-            ng-click="$ctrl.onRetry()"
-            translate>
+    <button
+      type="button"
+      id="retryButton"
+      class="btn btn-primary"
+      ng-click="$ctrl.onRetry()"
+      translate
+    >
       Retry
     </button>
   </div>

@@ -1,14 +1,20 @@
 <div class="panel panel-margin-bottom recent-recipient-row">
   <div class="panel-body">
-
     <!-- Historical Row -->
     <div class="row">
       <div class="col-md-2 col-full-height col-sm-12 col-xs-12 mb">
-        <img class="full-width" desig-src="{{$ctrl.gift['historical-donation-line']['designation-number']}}">
+        <img
+          class="full-width"
+          desig-src="{{$ctrl.gift['historical-donation-line']['designation-number']}}"
+        />
       </div>
       <div class="col-sm-12 col-md-7 col-full-height">
-        <h4 class="mb0">{{$ctrl.gift['historical-donation-line']['designation-name']}}</h4>
-        <small>#{{$ctrl.gift['historical-donation-line']['designation-number']}}</small>
+        <h4 class="mb0">
+          {{$ctrl.gift['historical-donation-line']['designation-name']}}
+        </h4>
+        <small
+          >#{{$ctrl.gift['historical-donation-line']['designation-number']}}</small
+        >
 
         <div class="row">
           <div class="col-sm-10 col-md-10">
@@ -16,20 +22,40 @@
               <ul class="list-unstyled list-recurring">
                 <li>
                   <h4>
-                    {{$ctrl.gift['historical-donation-line']['amount'] | currency:'$'}}
-                    <span ng-if="$ctrl.gift['recurringdonation']"> &mdash; {{$ctrl.gift['recurringdonation']['rate']['recurrence']['interval']}}</span>
+                    {{$ctrl.gift['historical-donation-line']['amount'] |
+                    currency:'$'}}
+                    <span ng-if="$ctrl.gift['recurringdonation']">
+                      &mdash;
+                      {{$ctrl.gift['recurringdonation']['rate']['recurrence']['interval']}}</span
+                    >
                   </h4>
                   <div class="meta">
-                    {{$ctrl.gift['historical-donation-line']['transaction-date']['display-value'] | date:'mediumDate'}} &mdash;&#32;
-                    <translate ng-if="!$ctrl.gift['historical-donation-line'].completed">Pending</translate>
-                    <translate ng-if="$ctrl.gift['historical-donation-line'].completed">Completed</translate>
-                    <translate ng-if="$ctrl.gift['historical-donation-line'].anonymous">, Anonymous</translate>
-                    <translate ng-if="$ctrl.gift['historical-donation-line']['pass-through'] || $ctrl.gift['historical-donation-line']['master-account']">, Given through {{$ctrl.gift['historical-donation-line']['given-through-description']}}</translate>
+                    {{$ctrl.gift['historical-donation-line']['transaction-date']['display-value']
+                    | date:'mediumDate'}} &mdash;&#32;
+                    <translate
+                      ng-if="!$ctrl.gift['historical-donation-line'].completed"
+                      >Pending</translate
+                    >
+                    <translate
+                      ng-if="$ctrl.gift['historical-donation-line'].completed"
+                      >Completed</translate
+                    >
+                    <translate
+                      ng-if="$ctrl.gift['historical-donation-line'].anonymous"
+                      >, Anonymous</translate
+                    >
+                    <translate
+                      ng-if="$ctrl.gift['historical-donation-line']['pass-through'] || $ctrl.gift['historical-donation-line']['master-account']"
+                      >, Given through
+                      {{$ctrl.gift['historical-donation-line']['given-through-description']}}</translate
+                    >
                   </div>
                 </li>
               </ul>
               <div class="radio-method">
-                <payment-method-display payment-method="$ctrl.gift['paymentmethod']"></payment-method-display>
+                <payment-method-display
+                  payment-method="$ctrl.gift['paymentmethod']"
+                ></payment-method-display>
               </div>
             </div>
           </div>
@@ -37,17 +63,23 @@
       </div>
 
       <div class="col-sm-4 col-md-3 col-full-height split-row">
-        <button type="button"
-                class="btn btn-primary btn-block split-col-left"
-                ng-click="$ctrl.giveNewGift()"
-                ng-if="$ctrl.gift['historical-donation-line']['designation-active']"
-                translate>Give a New Gift
+        <button
+          type="button"
+          class="btn btn-primary btn-block split-col-left"
+          ng-click="$ctrl.giveNewGift()"
+          ng-if="$ctrl.gift['historical-donation-line']['designation-active']"
+          translate
+        >
+          Give a New Gift
         </button>
-        <button type="button"
-                class="btn btn-subtle btn-block mt- split-col-right"
-                ng-if="$ctrl.gift['recurringdonation']"
-                ng-click="$ctrl.manageGift()"
-                translate>Manage Recurring Gift
+        <button
+          type="button"
+          class="btn btn-subtle btn-block mt- split-col-right"
+          ng-if="$ctrl.gift['recurringdonation']"
+          ng-click="$ctrl.manageGift()"
+          translate
+        >
+          Manage Recurring Gift
         </button>
       </div>
     </div>

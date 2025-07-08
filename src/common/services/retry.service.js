@@ -1,34 +1,34 @@
-import angular from 'angular'
+import angular from 'angular';
 
-const serviceName = 'retryService'
+const serviceName = 'retryService';
 
 class Retry {
   /* @ngInject */
-  constructor ($q, $timeout) {
-    this.$q = $q
-    this.$timeout = $timeout
+  constructor($q, $timeout) {
+    this.$q = $q;
+    this.$timeout = $timeout;
   }
 
-  executeWithRetries (execute, maxRetries, retryDelay) {
+  executeWithRetries(execute, maxRetries, retryDelay) {
     return this.$q((resolve, reject) => {
-      let attempts = 0
+      let attempts = 0;
       const attempt = () => {
-        ++attempts
+        ++attempts;
 
-        execute().then(resolve).catch((err) => {
-          if (attempts > maxRetries) {
-            reject(err)
-          } else {
-            this.$timeout(attempt, retryDelay)
-          }
-        })
-      }
+        execute()
+          .then(resolve)
+          .catch((err) => {
+            if (attempts > maxRetries) {
+              reject(err);
+            } else {
+              this.$timeout(attempt, retryDelay);
+            }
+          });
+      };
 
-      attempt()
-    })
+      attempt();
+    });
   }
 }
 
-export default angular
-  .module(serviceName, [])
-  .service(serviceName, Retry)
+export default angular.module(serviceName, []).service(serviceName, Retry);

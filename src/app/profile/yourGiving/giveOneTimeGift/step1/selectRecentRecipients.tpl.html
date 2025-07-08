@@ -1,5 +1,10 @@
 <div class="modal-header">
-  <button type="button" class="close" aria-label="Close" ng-click="$ctrl.dismiss()">
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    ng-click="$ctrl.dismiss()"
+  >
     <span aria-hidden="true">x</span>
   </button>
   <div class="container-fluid">
@@ -7,7 +12,9 @@
       <div class="col-xs-12">
         <div class="border-bottom-small">
           <h3 translate>Give an Extra One-Time Gift</h3>
-          <p translate>to any of your favorite missionaries, projects or ministries.</p>
+          <p translate>
+            to any of your favorite missionaries, projects or ministries.
+          </p>
         </div>
       </div>
     </div>
@@ -18,14 +25,25 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-xs-12">
-        <div ng-repeat="gift in $ctrl.recentRecipients" class="row repeating-row user-profile">
-          <gift-list-item gift="gift" selectable="checkbox" select-label="{{'Add' | translate}}"></gift-list-item>
+        <div
+          ng-repeat="gift in $ctrl.recentRecipients"
+          class="row repeating-row user-profile"
+        >
+          <gift-list-item
+            gift="gift"
+            selectable="checkbox"
+            select-label="{{'Add' | translate}}"
+          ></gift-list-item>
         </div>
       </div>
     </div>
     <div class="row">
       <div class="col-xs-12 text-right">
-        <button type="button" class="btn btn-default btn-xs" ng-click="$ctrl.gatherSelections(true)">
+        <button
+          type="button"
+          class="btn btn-default btn-xs"
+          ng-click="$ctrl.gatherSelections(true)"
+        >
           <i class="fa fa-search"></i>
           <span translate>Search for others</span>
         </button>
@@ -36,16 +54,16 @@
 
 <div class="modal-footer">
   <div class="col-xs-6">
-    <button class="btn btn-default"
-            ng-click="$ctrl.dismiss()"
-            translate>
+    <button class="btn btn-default" ng-click="$ctrl.dismiss()" translate>
       Cancel
     </button>
   </div>
   <div class="col-xs-6 text-right">
-    <button class="btn btn-primary"
-            ng-click="$ctrl.gatherSelections()"
-            translate>
+    <button
+      class="btn btn-primary"
+      ng-click="$ctrl.gatherSelections()"
+      translate
+    >
       Continue
     </button>
   </div>
