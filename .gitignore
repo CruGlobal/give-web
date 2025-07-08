@@ -11,10 +11,6 @@ coverage
 stats.json
 .vs
 
-# asdf
-.tool-versions
-
-
 # Okta sign in  assets
 src/assets/okta-sign-in/font
 src/assets/okta-sign-in/labels
