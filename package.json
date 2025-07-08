@@ -67,9 +67,9 @@
     "mini-css-extract-plugin": "^1.6.2",
     "moment-locales-webpack-plugin": "^1.1.0",
     "ngtemplate-loader": "^2.0.1",
+    "prettier": "^3.6.2",
     "sass": "^1.49.0",
     "sass-loader": "^10",
-    "standard": "^16.0.4",
     "style-loader": "^2.0.0",
     "stylelint": "^16.14.1",
     "stylelint-config-idiomatic-order": "^10.0.0",
@@ -91,20 +91,10 @@
     "test": "jest",
     "test:coverage": "jest --coverage=true",
     "test:log": "jest --silent=false",
-    "lint": "standard",
-    "lint:write": "standard --fix",
+    "prettier:check": "prettier . --list-different",
+    "prettier:write": "prettier . --write",
     "lint:ts": "tsc",
     "lint:styles": "stylelint 'src/**/*.{css,scss}' --quiet-deprecation-warnings"
-  },
-  "standard": {
-    "env": {
-      "jest": true,
-      "browser": true
-    },
-    "ignore": [
-      "**/*.spec.js",
-      "**/*.fixture.js"
-    ]
   },
   "resolutions": {
     "webpack-dev-server/**/spdy-transport": "^3.0.0"
