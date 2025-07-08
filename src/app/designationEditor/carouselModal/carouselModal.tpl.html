@@ -7,44 +7,63 @@
 
 <div class="modal-body">
   <div class="carousel-container">
-    <h3 ng-if="!$ctrl.selectedPhoto.length" translate>Photo carousel is empty.</h3>
-    <table class="table-condensed table-striped" ng-if="$ctrl.selectedPhoto.length">
+    <h3 ng-if="!$ctrl.selectedPhoto.length" translate>
+      Photo carousel is empty.
+    </h3>
+    <table
+      class="table-condensed table-striped"
+      ng-if="$ctrl.selectedPhoto.length"
+    >
       <tbody>
-      <tr ng-repeat="pic in $ctrl.selectedPhoto">
-        <td>
-          <div class="btn-group-vertical btn-group-sm" role="group">
-            <button class="btn btn-default"
-                    type="button"
-                    aria-label="Reorder higher"
-                    ng-disabled="$index == 0"
-                    ng-click="$ctrl.reorderImageInCarousel($index, $index-1)"><i class="fa fa-sort-up"></i>
+        <tr ng-repeat="pic in $ctrl.selectedPhoto">
+          <td>
+            <div class="btn-group-vertical btn-group-sm" role="group">
+              <button
+                class="btn btn-default"
+                type="button"
+                aria-label="Reorder higher"
+                ng-disabled="$index == 0"
+                ng-click="$ctrl.reorderImageInCarousel($index, $index-1)"
+              >
+                <i class="fa fa-sort-up"></i>
+              </button>
+              <button
+                class="btn btn-default"
+                type="button"
+                aria-label="Reorder lower"
+                ng-disabled="$index == $ctrl.selectedPhoto.length - 1"
+                ng-click="$ctrl.reorderImageInCarousel($index, $index+1)"
+              >
+                <i class="fa fa-sort-down"></i>
+              </button>
+            </div>
+          </td>
+          <td>
+            <img
+              desig-img-src="{{pic.url}}.transform/GiveDesignationThumbnail/img.jpg"
+            />
+          </td>
+          <td>
+            <button
+              class="btn btn-default"
+              type="button"
+              aria-label="Remove image"
+              ng-click="$ctrl.selectedPhoto.splice($index, 1); $ctrl.maxCarouselError = false;"
+            >
+              <i class="fa fa-trash"></i>
             </button>
-            <button class="btn btn-default"
-                    type="button"
-                    aria-label="Reorder lower"
-                    ng-disabled="$index == $ctrl.selectedPhoto.length - 1"
-                    ng-click="$ctrl.reorderImageInCarousel($index, $index+1)"><i class="fa fa-sort-down"></i>
-            </button>
-          </div>
-        </td>
-        <td>
-          <img desig-img-src="{{pic.url}}.transform/GiveDesignationThumbnail/img.jpg"/>
-        </td>
-        <td>
-          <button class="btn btn-default"
-                  type="button"
-                  aria-label="Remove image"
-                  ng-click="$ctrl.selectedPhoto.splice($index, 1); $ctrl.maxCarouselError = false;"><i class="fa fa-trash"></i>
-          </button>
-        </td>
-      </tr>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
 
   <hr />
 
-  <div class="give-available-photos-container" ng-if="$ctrl.photos.length || $ctrl.numProcessingPhotos > 0">
+  <div
+    class="give-available-photos-container"
+    ng-if="$ctrl.photos.length || $ctrl.numProcessingPhotos > 0"
+  >
     <h3 translate>Available Photos</h3>
     <h5 translate>Click + to add photos to the carousel.</h5>
     <div class="alert alert-danger" role="alert" ng-if="$ctrl.maxCarouselError">
@@ -60,7 +79,10 @@
         </div>
         <img desig-img-src="{{photo.thumbnail}}" />
       </div>
-      <div class="cover-thumb processing" ng-repeat="blobUrl in $ctrl.getProcessingPhotos() track by $index">
+      <div
+        class="cover-thumb processing"
+        ng-repeat="blobUrl in $ctrl.getProcessingPhotos() track by $index"
+      >
         <loading type="centered">Processing...</loading>
         <img ng-src="{{blobUrl}}" />
       </div>
@@ -71,20 +93,25 @@
 
   <div class="alert-info">
     <p translate>
-      <strong>Please Note:</strong> The image carousel works best with images that are the same size
-      and orientation (all horizontal or all vertical).
+      <strong>Please Note:</strong> The image carousel works best with images
+      that are the same size and orientation (all horizontal or all vertical).
     </p>
     <p>
-      Note: If you are experiencing a long wait time and issues seeing your image load,
-      please refresh the page and open the image screen again.
-      If needing help please contact <a href="mailto:dev.services@cru.org">dev.services@cru.org</a>.
+      Note: If you are experiencing a long wait time and issues seeing your
+      image load, please refresh the page and open the image screen again. If
+      needing help please contact
+      <a href="mailto:dev.services@cru.org">dev.services@cru.org</a>.
     </p>
   </div>
   <div class="upload-drag-target p mb">
     <div class="form-group text-center">
       <div ng-if="!$ctrl.uploading">
         <div><label translate>Select a Photo to Upload</label></div>
-        <div><label ng-if="$ctrl.invalidFileType" translate>Uploaded image must be a JPEG or a PNG file</label></div>
+        <div>
+          <label ng-if="$ctrl.invalidFileType" translate
+            >Uploaded image must be a JPEG or a PNG file</label
+          >
+        </div>
         <image-upload
           class="form-control"
           url="/bin/crugive/image.html?designationNumber={{$ctrl.designationNumber}}"
@@ -99,15 +126,28 @@
       <label ng-if="$ctrl.uploading" translate>Uploading...</label>
     </div>
   </div>
-
 </div>
 
 <div class="modal-footer">
-  <button id="usePhotosButton" type="button" class="btn btn-primary pull-right"
-          ng-click="$close({
+  <button
+    id="usePhotosButton"
+    type="button"
+    class="btn btn-primary pull-right"
+    ng-click="$close({
     selected: $ctrl.selectedPhoto,
     photos: $ctrl.photos
-  })" translate>Save Changes
+  })"
+    translate
+  >
+    Save Changes
   </button>
-  <button id="cancelPhotoButton" type="button" class="btn btn-default" ng-click="$dismiss()" translate>Cancel</button>
+  <button
+    id="cancelPhotoButton"
+    type="button"
+    class="btn btn-default"
+    ng-click="$dismiss()"
+    translate
+  >
+    Cancel
+  </button>
 </div>

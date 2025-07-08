@@ -99,8 +99,8 @@ export const titles = {
   Representative: 'Representative',
   'Rev Dr': 'Reverend Doctor',
   Senator: 'Senator',
-  Sister: 'Sister'
-}
+  Sister: 'Sister',
+};
 
 export const legacyTitles = {
   Alderman: 'Alderman',
@@ -128,5 +128,5 @@ export const legacyTitles = {
   Prof: 'Professor',
   RADM: 'Rear Admiral (NAVY,USCG)',
   '2nd Lt': 'Second Lieutenant (USAF,USMC)',
-  Supervisor: 'Supervisor'
-}
+  Supervisor: 'Supervisor',
+};

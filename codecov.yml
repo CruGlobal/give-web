@@ -1,5 +1,5 @@
 comment: off
 coverage:
   ignore:
-    - "src/app/analytics/*"
-    - "src/common/lib/*"
+    - 'src/app/analytics/*'
+    - 'src/common/lib/*'

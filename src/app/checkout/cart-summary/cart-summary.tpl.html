@@ -1,7 +1,10 @@
 <div class="panel loading-overlay-parent">
   <div class="panel-body">
     <h3 id="cart-summary-header" class="panel-name" translate>Cart Summary</h3>
-    <table class="table giftsum-table giftsum-table-cart" aria-labelledby="cart-summary-header">
+    <table
+      class="table giftsum-table giftsum-table-cart"
+      aria-labelledby="cart-summary-header"
+    >
       <thead>
         <tr>
           <th class="th-title-gift"></th>
@@ -14,7 +17,9 @@
             <span class="giftsum-person giftsum-title">{{i.displayName}}</span>
           </td>
           <td class="td-frequency">
-            <span class="giftsum-about giftsum-title">{{i.price | coverFeesFilter:i:'price'}}</span>
+            <span class="giftsum-about giftsum-title"
+              >{{i.price | coverFeesFilter:i:'price'}}</span
+            >
             <span class="giftsum-frequency giftsum-title">{{i.frequency}}</span>
           </td>
         </tr>
@@ -22,22 +27,31 @@
       <tfoot>
         <tr>
           <td colspan="2" class="text-right">
-            <display-rate-totals rate-totals="$ctrl.cartData.frequencyTotals"></display-rate-totals>
+            <display-rate-totals
+              rate-totals="$ctrl.cartData.frequencyTotals"
+            ></display-rate-totals>
           </td>
         </tr>
         <tr>
           <td colspan="2" class="text-right">
-            <a id="editCartButton" ng-href="{{$ctrl.buildCartUrl()}}" class="btn btn-subtle mt" translate>Edit Cart</a>
+            <a
+              id="editCartButton"
+              ng-href="{{$ctrl.buildCartUrl()}}"
+              class="btn btn-subtle mt"
+              translate
+              >Edit Cart</a
+            >
             <recaptcha-wrapper
-                ng-if="$ctrl.showSubmitBtn"
-                action="'checkout'"
-                on-success="$ctrl.onSubmit"
-                component-instance="$ctrl.componentReference"
-                button-id="'submitGiftButton'"
-                button-type="'submit'"
-                button-classes="'btn btn-primary mt'"
-                button-disabled="!$ctrl.enableSubmitBtn"
-                button-label="'SUBMIT_GIFT'"></recaptcha-wrapper>
+              ng-if="$ctrl.showSubmitBtn"
+              action="'checkout'"
+              on-success="$ctrl.onSubmit"
+              component-instance="$ctrl.componentReference"
+              button-id="'submitGiftButton'"
+              button-type="'submit'"
+              button-classes="'btn btn-primary mt'"
+              button-disabled="!$ctrl.enableSubmitBtn"
+              button-label="'SUBMIT_GIFT'"
+            ></recaptcha-wrapper>
           </td>
         </tr>
       </tfoot>

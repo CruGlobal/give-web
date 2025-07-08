@@ -1,11 +1,14 @@
 <div class="panel loading-overlay-parent">
   <div class="panel-body">
-    <h2 class="panel-name" translate>
-      {{'FINAL_THANK_YOU_HEADING'}}
-    </h2>
+    <h2 class="panel-name" translate>{{'FINAL_THANK_YOU_HEADING'}}</h2>
 
     <loading type="overlay" ng-if="$ctrl.loading"></loading>
-    <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingError" ng-switch="$ctrl.loadingError">
+    <div
+      class="alert alert-danger"
+      role="alert"
+      ng-if="$ctrl.loadingError"
+      ng-switch="$ctrl.loadingError"
+    >
       <p ng-switch-when="lastPurchaseLink missing" translate>
         {{'FINAL_GIFT_SUMMARY_EXPIRATION_ERROR'}}
       </p>
@@ -14,21 +17,23 @@
       </p>
     </div>
 
-    <p translate="FINAL_PROCESSING_GIFT" translate-value-useremail="{{$ctrl.email}}"></p>
+    <p
+      translate="FINAL_PROCESSING_GIFT"
+      translate-value-useremail="{{$ctrl.email}}"
+    ></p>
 
-    <p translate>
-      {{'FINAL_GIFT_THANK_YOU'}}
-    </p>
+    <p translate>{{'FINAL_GIFT_THANK_YOU'}}</p>
 
     <div ng-if="!$ctrl.loading && !$ctrl.loadingError">
       <div class="row mt">
         <div class="col-md-6">
           <div class="panel panel-default">
-            <div class="panel-heading" translate>
-              {{'PAYMENT_METHOD'}}
-            </div>
+            <div class="panel-heading" translate>{{'PAYMENT_METHOD'}}</div>
 
-            <div class="panel-body" ng-if="$ctrl.purchase.paymentInstruments['account-type']">
+            <div
+              class="panel-body"
+              ng-if="$ctrl.purchase.paymentInstruments['account-type']"
+            >
               <div class="form-group">
                 <label translate>{{'BANK_NAME'}}</label>
                 <p>{{$ctrl.purchase.paymentInstruments['bank-name']}}</p>
@@ -36,7 +41,10 @@
 
               <div class="form-group">
                 <label translate>{{'ACCOUNT_TYPE'}}</label>
-                <p>{{$ctrl.purchase.paymentInstruments['account-type'] | capitalize}}</p>
+                <p>
+                  {{$ctrl.purchase.paymentInstruments['account-type'] |
+                  capitalize}}
+                </p>
               </div>
 
               <div class="form-group">
@@ -46,11 +54,16 @@
 
               <div class="form-group">
                 <label translate>{{'ACCOUNT_NUM_FULL'}}</label>
-                <p>************{{$ctrl.purchase.paymentInstruments['display-account-number']}}</p>
+                <p>
+                  ************{{$ctrl.purchase.paymentInstruments['display-account-number']}}
+                </p>
               </div>
             </div>
 
-            <div class="panel-body" ng-if="$ctrl.purchase.paymentInstruments['card-type']">
+            <div
+              class="panel-body"
+              ng-if="$ctrl.purchase.paymentInstruments['card-type']"
+            >
               <div class="form-group">
                 <label translate>{{'CARD_NAME'}}</label>
                 <p>{{$ctrl.purchase.paymentInstruments['cardholder-name']}}</p>
@@ -58,7 +71,9 @@
 
               <div class="form-group">
                 <label translate>{{'CARD_NUM_FULL'}}</label>
-                <p>************{{$ctrl.purchase.paymentInstruments['last-four-digits']}}</p>
+                <p>
+                  ************{{$ctrl.purchase.paymentInstruments['last-four-digits']}}
+                </p>
               </div>
 
               <div class="form-group">
@@ -68,12 +83,17 @@
 
               <div class="form-group">
                 <label translate>{{'EXPIRES'}}</label>
-                <p>{{$ctrl.purchase.paymentInstruments['expiry-month']}}/{{$ctrl.purchase.paymentInstruments['expiry-year']}}</p><!-- TODO: deal with localization -->
+                <p>
+                  {{$ctrl.purchase.paymentInstruments['expiry-month']}}/{{$ctrl.purchase.paymentInstruments['expiry-year']}}
+                </p>
+                <!-- TODO: deal with localization -->
               </div>
 
               <div class="form-group">
                 <label translate>{{'BILLING_ADDRESS'}}</label>
-                <display-address address="$ctrl.purchase.paymentInstruments.address"></display-address>
+                <display-address
+                  address="$ctrl.purchase.paymentInstruments.address"
+                ></display-address>
               </div>
             </div>
           </div>
@@ -93,58 +113,85 @@
                   {{$ctrl.purchase.donorDetails.name['family-name']}}
                   {{$ctrl.purchase.donorDetails.name.suffix}}
                 </div>
-                <div ng-if="$ctrl.purchase.donorDetails['donor-type'] === 'Household'">
+                <div
+                  ng-if="$ctrl.purchase.donorDetails['donor-type'] === 'Household'"
+                >
                   {{$ctrl.purchase.donorDetails['spouse-name'].title}}
                   {{$ctrl.purchase.donorDetails['spouse-name']['given-name']}}
                   {{$ctrl.purchase.donorDetails['spouse-name']['middle-initial']}}
                   {{$ctrl.purchase.donorDetails['spouse-name']['family-name']}}
                   {{$ctrl.purchase.donorDetails['spouse-name'].suffix}}
                 </div>
-                <div ng-if="$ctrl.purchase.donorDetails['donor-type'] === 'Organization'">
+                <div
+                  ng-if="$ctrl.purchase.donorDetails['donor-type'] === 'Organization'"
+                >
                   {{$ctrl.purchase.donorDetails['organization-name']}}
                 </div>
-                <display-address address="$ctrl.purchase.donorDetails.mailingAddress"></display-address>
+                <display-address
+                  address="$ctrl.purchase.donorDetails.mailingAddress"
+                ></display-address>
               </div>
             </div>
           </div>
         </div>
-      </div><!-- // row -->
+      </div>
+      <!-- // row -->
 
       <div class="row">
         <div class="col-md-12">
           <div class="panel panel-default">
             <div class="panel-body">
-              <h4 id="thank-you-header" class="panel-name" translate>{{'GIFT_SUMMARY'}}</h4>
+              <h4 id="thank-you-header" class="panel-name" translate>
+                {{'GIFT_SUMMARY'}}
+              </h4>
 
-              <table class="table giftsum-table giftsum-table-cart" aria-labelledby="thank-you-header">
+              <table
+                class="table giftsum-table giftsum-table-cart"
+                aria-labelledby="thank-you-header"
+              >
                 <tbody>
-                <tr class="giftsum-gift-row" ng-repeat="item in $ctrl.purchase.lineItems" ng-init="$ctrl.loadFacebookPixel(item)">
-                  <td class="td-gift">
-                    <span class="giftsum-person giftsum-title">{{item.name}}</span>
-                    <p>#{{item.itemOfferCode.code}}</p>
-                  </td>
-                  <td class="td-frequency">
-                    <span class="giftsum-about giftsum-title">{{item.rate.display}}</span>
-                    <span class="giftsum-frequency giftsum-title">
-                                <span ng-if="item.rate.recurrence.interval !== 'NA'"><translate>{{'FIRST_GIFT'}}</translate> {{item.rate['start-date'].value | date:'mediumDate':'UTC'}}</span>
-                              </span>
-                  </td>
-                </tr>
+                  <tr
+                    class="giftsum-gift-row"
+                    ng-repeat="item in $ctrl.purchase.lineItems"
+                    ng-init="$ctrl.loadFacebookPixel(item)"
+                  >
+                    <td class="td-gift">
+                      <span class="giftsum-person giftsum-title"
+                        >{{item.name}}</span
+                      >
+                      <p>#{{item.itemOfferCode.code}}</p>
+                    </td>
+                    <td class="td-frequency">
+                      <span class="giftsum-about giftsum-title"
+                        >{{item.rate.display}}</span
+                      >
+                      <span class="giftsum-frequency giftsum-title">
+                        <span ng-if="item.rate.recurrence.interval !== 'NA'"
+                          ><translate>{{'FIRST_GIFT'}}</translate>
+                          {{item.rate['start-date'].value |
+                          date:'mediumDate':'UTC'}}</span
+                        >
+                      </span>
+                    </td>
+                  </tr>
                 </tbody>
 
                 <tfoot>
-                <tr>
-                  <td class="text-right" colspan="2">
-                    <display-rate-totals rate-totals="$ctrl.rateTotals"></display-rate-totals>
-                  </td>
-                </tr>
+                  <tr>
+                    <td class="text-right" colspan="2">
+                      <display-rate-totals
+                        rate-totals="$ctrl.rateTotals"
+                      ></display-rate-totals>
+                    </td>
+                  </tr>
                 </tfoot>
               </table>
             </div>
           </div>
         </div>
-      </div><!-- // row -->
+      </div>
+      <!-- // row -->
     </div>
-
   </div>
-</div><!-- // panel -->
+</div>
+<!-- // panel -->

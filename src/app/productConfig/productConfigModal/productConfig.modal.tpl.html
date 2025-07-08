@@ -1,5 +1,10 @@
 <div class="give-modal-header modal-header">
-  <button type="button" class="close" aria-label="Close" ng-click="$ctrl.dismiss()">
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    ng-click="$ctrl.dismiss()"
+  >
     <span aria-hidden="true">x</span>
   </button>
 </div>
@@ -14,35 +19,42 @@
       default-frequency="$ctrl.defaultFrequency"
       update-query-param="$ctrl.updateQueryParam(key, value)"
       submitted="$ctrl.submitted"
-      on-state-change="$ctrl.onStateChange(state)">
+      on-state-change="$ctrl.onStateChange(state)"
+    >
     </product-config-form>
   </div>
 </div>
 <div class="modal-footer">
   <div class="container-fluid">
-    <button class="btn btn-md btn-primary btn-block-xs pull-right"
-            type="button"
-            ng-if="$ctrl.state !== 'errorAlreadyInCart' && $ctrl.state != 'givingLinks'"
-            tabindex="-1"
-            ng-switch="$ctrl.isEdit"
-            ng-click="$ctrl.submitted = true"
-            ng-disabled="$ctrl.state === 'changingFrequency' || $ctrl.state === 'submitting' || $ctrl.state === 'errorLoading'">
+    <button
+      class="btn btn-md btn-primary btn-block-xs pull-right"
+      type="button"
+      ng-if="$ctrl.state !== 'errorAlreadyInCart' && $ctrl.state != 'givingLinks'"
+      tabindex="-1"
+      ng-switch="$ctrl.isEdit"
+      ng-click="$ctrl.submitted = true"
+      ng-disabled="$ctrl.state === 'changingFrequency' || $ctrl.state === 'submitting' || $ctrl.state === 'errorLoading'"
+    >
       <span ng-switch-when="true" translate>Update Gift</span>
       <span ng-switch-when="false" translate>Add to Gift Cart</span>
     </button>
-    <button class="btn btn-default btn-md btn-block-xs"
-            type="button"
-            ng-click="$ctrl.dismiss()"
-            tabindex="-1"
-            translate>
+    <button
+      class="btn btn-default btn-md btn-block-xs"
+      type="button"
+      ng-click="$ctrl.dismiss()"
+      tabindex="-1"
+      translate
+    >
       Cancel &amp; Return
     </button>
-    <button class="btn btn-md btn-primary btn-block-xs pull-right"
-            type="button"
-            tabindex="-1"
-            ng-if="$ctrl.state === 'errorAlreadyInCart'"
-            ng-click="$ctrl.close(); $ctrl.$window.location = $ctrl.buildCartUrl()"
-            translate>
+    <button
+      class="btn btn-md btn-primary btn-block-xs pull-right"
+      type="button"
+      tabindex="-1"
+      ng-if="$ctrl.state === 'errorAlreadyInCart'"
+      ng-click="$ctrl.close(); $ctrl.$window.location = $ctrl.buildCartUrl()"
+      translate
+    >
       View Cart
     </button>
   </div>

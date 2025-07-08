@@ -1,10 +1,14 @@
-<div class="alert alert-danger" role="alert" ng-if="$ctrl.errorMessage" ng-switch="$ctrl.errorMessage">
+<div
+  class="alert alert-danger"
+  role="alert"
+  ng-if="$ctrl.errorMessage"
+  ng-switch="$ctrl.errorMessage"
+>
   <span ng-switch-when="generic" translate>
-    An error has occurred. Please try again or contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
+    An error has occurred. Please try again or contact
+    <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
   </span>
-  <span ng-switch-default>
-    {{$ctrl.errorMessage | translate}}
-  </span>
+  <span ng-switch-default> {{$ctrl.errorMessage | translate}} </span>
 </div>
 <sign-in-button
   on-success="$ctrl.onSuccess()"
@@ -13,29 +17,59 @@
   error-message="$ctrl.errorMessage"
 ></sign-in-button>
 
-<p ng-if="!$ctrl.onSignInPage"><span translate>You will be taken to Okta,</span><br /><span translate>then back to this site.</span></p>
-<p ng-if="$ctrl.onSignInPage" translate>You will briefly be taken away from this site to login, then brought back right where you left off.</p>
+<p ng-if="!$ctrl.onSignInPage">
+  <span translate>You will be taken to Okta,</span><br /><span translate
+    >then back to this site.</span
+  >
+</p>
+<p ng-if="$ctrl.onSignInPage" translate>
+  You will briefly be taken away from this site to login, then brought back
+  right where you left off.
+</p>
 <hr />
-<p class="no-account" ng-if="!$ctrl.onSignInPage" translate>Don&rsquo;t have an account?</p>
-<button class="okta-signup-button" ng-if="!$ctrl.onSignInPage" ng-click="$ctrl.onSignUpWithOkta()">
+<p class="no-account" ng-if="!$ctrl.onSignInPage" translate>
+  Don&rsquo;t have an account?
+</p>
+<button
+  class="okta-signup-button"
+  ng-if="!$ctrl.onSignInPage"
+  ng-click="$ctrl.onSignUpWithOkta()"
+>
   <!-- Circular Okta aura inlined so that the color can be changed with CSS for the :hover and :focus states -->
   <svg width="24" height="24" viewBox="0 0 16 16" aria-label="Okta logo">
-    <circle cx="8" cy="8" r="5.25" stroke="currentColor" stroke-width="3.5" fill="none" />
+    <circle
+      cx="8"
+      cy="8"
+      r="5.25"
+      stroke="currentColor"
+      stroke-width="3.5"
+      fill="none"
+    />
   </svg>
   <span translate>Sign up with Okta</span>
 </button>
 <div class="details-wrapper">
   <details name="okta-help">
     <summary translate>Need help?</summary>
-    <p><a ng-click="$ctrl.onResetPassword()" href="javascript:void(0)" translate>Forgot your password?</a></p>
     <p>
-      <span translate>Call</span> <a href="tel:+18882787233">(888) 278-7233</a> <span translate>opt. 1, then 1.</span><br />
+      <a ng-click="$ctrl.onResetPassword()" href="javascript:void(0)" translate
+        >Forgot your password?</a
+      >
+    </p>
+    <p>
+      <span translate>Call</span> <a href="tel:+18882787233">(888) 278-7233</a>
+      <span translate>opt. 1, then 1.</span><br />
       <span translate>9:00 a.m. to 5:00 p.m. ET, Monday-Friday,</span><br />
-      <span translate>or email us at</span> <a href="mailto:eGift@cru.org">eGift@cru.org</a>.
+      <span translate>or email us at</span>
+      <a href="mailto:eGift@cru.org">eGift@cru.org</a>.
     </p>
   </details>
   <details name="okta-help">
     <summary translate>What is Okta?</summary>
-    <p translate>Okta is our preferred partner for protecting your personal information and keeping your access to Cru&rsquo;s websites secure. You will be redirected to Okta each time you log in.</p>
+    <p translate>
+      Okta is our preferred partner for protecting your personal information and
+      keeping your access to Cru&rsquo;s websites secure. You will be redirected
+      to Okta each time you log in.
+    </p>
   </details>
 </div>

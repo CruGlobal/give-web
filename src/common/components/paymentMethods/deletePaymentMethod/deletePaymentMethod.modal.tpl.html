@@ -1,14 +1,32 @@
 <div class="account-management">
   <div class="modal-header">
-    <button type="button" id="cancelButtonTop" class="close" aria-label="Close" ng-click="$ctrl.dismiss()">
+    <button
+      type="button"
+      id="cancelButtonTop"
+      class="close"
+      aria-label="Close"
+      ng-click="$ctrl.dismiss()"
+    >
       <span aria-hidden="true">×</span>
     </button>
     <div class="container-fluid">
       <div class="row">
         <div class="col-xs-12">
           <div class="border-bottom-small">
-            <h3 ng-if="$ctrl.view != 'addPaymentMethod'" class="text-center" translate>Delete Payment Method and Move Gifts</h3>
-            <h3 ng-if="$ctrl.view == 'addPaymentMethod'" class="text-center" translate>Add Payment Method</h3>
+            <h3
+              ng-if="$ctrl.view != 'addPaymentMethod'"
+              class="text-center"
+              translate
+            >
+              Delete Payment Method and Move Gifts
+            </h3>
+            <h3
+              ng-if="$ctrl.view == 'addPaymentMethod'"
+              class="text-center"
+              translate
+            >
+              Add Payment Method
+            </h3>
           </div>
         </div>
       </div>
@@ -20,41 +38,73 @@
       <div class="row">
         <div class="col-md-12 col-xs-12">
           <form>
-
-            <div ng-if="$ctrl.view != 'addPaymentMethod'" class="panel panel-default bg-danger">
+            <div
+              ng-if="$ctrl.view != 'addPaymentMethod'"
+              class="panel panel-default bg-danger"
+            >
               <div class="panel-body">
-                <payment-method-display payment-method="$ctrl.resolve.paymentMethod"></payment-method-display>
+                <payment-method-display
+                  payment-method="$ctrl.resolve.paymentMethod"
+                ></payment-method-display>
               </div>
             </div>
 
             <ng-switch on="$ctrl.view">
-
               <div class="mb--" ng-switch-when="manageDonations">
-                <h4 class="border-bottom-small visible" translate>Recurring Gifts Using this Payment Method</h4>
+                <h4 class="border-bottom-small visible" translate>
+                  Recurring Gifts Using this Payment Method
+                </h4>
 
-                <div class="row repeating-row select-recipient-row" ng-repeat="gift in $ctrl.resolve.paymentMethod.recurringGifts">
+                <div
+                  class="row repeating-row select-recipient-row"
+                  ng-repeat="gift in $ctrl.resolve.paymentMethod.recurringGifts"
+                >
                   <gift-list-item gift="gift">
                     <gift-summary-view gift="gift" />
                   </gift-list-item>
                 </div>
 
                 <div class="mb border-bottom-small">
-                  <h4 class="visible" translate>Select an action for these recurring gifts:</h4>
+                  <h4 class="visible" translate>
+                    Select an action for these recurring gifts:
+                  </h4>
                   <div class="form-group">
-                    <label ng-if="$ctrl.filteredPaymentMethods.length" class="radio u-textTransformNone radio-inline">
-                      <input ng-model="$ctrl.deleteOption" value="1" type="radio" name="optradio" translate>Move gifts to a different payment method
+                    <label
+                      ng-if="$ctrl.filteredPaymentMethods.length"
+                      class="radio u-textTransformNone radio-inline"
+                    >
+                      <input
+                        ng-model="$ctrl.deleteOption"
+                        value="1"
+                        type="radio"
+                        name="optradio"
+                        translate
+                      />Move gifts to a different payment method
                       <select
                         name="selectedPaymentMethod"
                         ng-model="$ctrl.selectedPaymentMethod"
                         ng-options="o as $ctrl.getPaymentMethodOptionLabel(o) for o in $ctrl.filteredPaymentMethods"
-                        class="form-control form-control-subtle">
-                      </select>
+                        class="form-control form-control-subtle"
+                      ></select>
                     </label>
                     <label class="radio u-textTransformNone">
-                      <input ng-model="$ctrl.deleteOption" value="2" type="radio" name="optradio" checked="{{$ctrl.filteredPaymentMethods.length==0}}" translate>Move gifts to a new payment method
+                      <input
+                        ng-model="$ctrl.deleteOption"
+                        value="2"
+                        type="radio"
+                        name="optradio"
+                        checked="{{$ctrl.filteredPaymentMethods.length==0}}"
+                        translate
+                      />Move gifts to a new payment method
                     </label>
                     <label class="radio u-textTransformNone">
-                      <input ng-model="$ctrl.deleteOption" value="3" type="radio" name="optradio" translate>Stop recurring gifts
+                      <input
+                        ng-model="$ctrl.deleteOption"
+                        value="3"
+                        type="radio"
+                        name="optradio"
+                        translate
+                      />Stop recurring gifts
                     </label>
                   </div>
                 </div>
@@ -62,27 +112,55 @@
                 <div class="mb0">
                   <div class="row">
                     <div class="col-xs-12">
-                      <button id="continueButton" class="btn btn-primary pull-right" ng-click="$ctrl.changeView()" translate>Continue</button>
-                      <button id="cancelButton" class="btn btn-default" ng-click="$ctrl.dismiss()" translate>Cancel</button>
+                      <button
+                        id="continueButton"
+                        class="btn btn-primary pull-right"
+                        ng-click="$ctrl.changeView()"
+                        translate
+                      >
+                        Continue
+                      </button>
+                      <button
+                        id="cancelButton"
+                        class="btn btn-default"
+                        ng-click="$ctrl.dismiss()"
+                        translate
+                      >
+                        Cancel
+                      </button>
                     </div>
                   </div>
                 </div>
-
               </div>
 
               <div class="mb--" ng-switch-when="addPaymentMethod">
-                <payment-method-form payment-form-state="$ctrl.paymentFormState" payment-form-error="$ctrl.paymentFormError" on-payment-form-state-change="$ctrl.onPaymentFormStateChange($event)" hide-cvv="true" mailing-address="$ctrl.resolve.mailingAddress"></payment-method-form>
+                <payment-method-form
+                  payment-form-state="$ctrl.paymentFormState"
+                  payment-form-error="$ctrl.paymentFormError"
+                  on-payment-form-state-change="$ctrl.onPaymentFormStateChange($event)"
+                  hide-cvv="true"
+                  mailing-address="$ctrl.resolve.mailingAddress"
+                ></payment-method-form>
                 <div class="mt">
                   <div class="row">
                     <div class="col-xs-6">
-                      <button id="backButton" class="btn btn-default" ng-click="$ctrl.changeView(true)" translate>Back</button>
+                      <button
+                        id="backButton"
+                        class="btn btn-default"
+                        ng-click="$ctrl.changeView(true)"
+                        translate
+                      >
+                        Back
+                      </button>
                     </div>
                     <div class="col-xs-6 text-right">
-                      <button id="addPaymentButton"
-                              class="btn btn-primary"
-                              ng-click="$ctrl.onPaymentFormStateChange({state: 'submitted'})"
-                              ng-disabled="$ctrl.paymentFormState === 'loading' || $ctrl.paymentFormState === 'encrypting'"
-                              translate>
+                      <button
+                        id="addPaymentButton"
+                        class="btn btn-primary"
+                        ng-click="$ctrl.onPaymentFormStateChange({state: 'submitted'})"
+                        ng-disabled="$ctrl.paymentFormState === 'loading' || $ctrl.paymentFormState === 'encrypting'"
+                        translate
+                      >
                         Add Payment Method
                       </button>
                     </div>
@@ -93,23 +171,47 @@
               <div class="mb--" ng-switch-when="confirm">
                 <div class="row">
                   <div class="col-sm-12">
-                    <div class="alert alert-danger" role="alert" ng-if="$ctrl.deletionError">
-                      <span ng-if="$ctrl.deletionError === 'updateGifts'" translate>There was an error updating the donations attached to this payment method.</span>
-                      <span ng-if="$ctrl.deletionError === 'delete'" translate>There was an error deleting your payment method.</span>
+                    <div
+                      class="alert alert-danger"
+                      role="alert"
+                      ng-if="$ctrl.deletionError"
+                    >
+                      <span
+                        ng-if="$ctrl.deletionError === 'updateGifts'"
+                        translate
+                        >There was an error updating the donations attached to
+                        this payment method.</span
+                      >
+                      <span ng-if="$ctrl.deletionError === 'delete'" translate
+                        >There was an error deleting your payment method.</span
+                      >
                     </div>
                     <ng-switch on="$ctrl.confirmText">
                       <p>
                         <small ng-switch-when="withTransfer" translate>
-                          You are deleting this payment method from your profile and moving all future recurring gifts previously associated with this payment method to
-                          <payment-method-display payment-method="$ctrl.selectedPaymentMethod"></payment-method-display>. Please click "Confirm Changes &amp; Delete" below to remove this payment method and move recurring gifts, or click "Back" to select a different option.
+                          You are deleting this payment method from your profile
+                          and moving all future recurring gifts previously
+                          associated with this payment method to
+                          <payment-method-display
+                            payment-method="$ctrl.selectedPaymentMethod"
+                          ></payment-method-display
+                          >. Please click "Confirm Changes &amp; Delete" below
+                          to remove this payment method and move recurring
+                          gifts, or click "Back" to select a different option.
                         </small>
                         <small ng-switch-when="withOutTransfer" translate>
-                          You are deleting this payment method from your profile and
+                          You are deleting this payment method from your profile
+                          and
                           <strong>stopping all future recurring gifts</strong>
-                          associated with this payment method. Please click "Confirm Delete" below to delete this payment method and stop associated recurring gifts, or click "Back" to select a different option.
+                          associated with this payment method. Please click
+                          "Confirm Delete" below to delete this payment method
+                          and stop associated recurring gifts, or click "Back"
+                          to select a different option.
                         </small>
                         <small ng-switch-default translate>
-                          If you do not want this payment method to be displayed in your list of payment options, click "Confirm Delete" below
+                          If you do not want this payment method to be displayed
+                          in your list of payment options, click "Confirm
+                          Delete" below
                         </small>
                       </p>
                     </ng-switch>
@@ -119,18 +221,39 @@
                 <div class="mb0">
                   <div class="row">
                     <div class="col-xs-12">
-                      <button id="saveChangesButton" class="btn btn-primary pull-right" ng-click="$ctrl.onSubmit()" ng-switch="$ctrl.confirmText">
-                        <translate ng-switch-when="withTransfer">Confirm Changes &amp; Delete</translate>
+                      <button
+                        id="saveChangesButton"
+                        class="btn btn-primary pull-right"
+                        ng-click="$ctrl.onSubmit()"
+                        ng-switch="$ctrl.confirmText"
+                      >
+                        <translate ng-switch-when="withTransfer"
+                          >Confirm Changes &amp; Delete</translate
+                        >
                         <translate ng-switch-default>Confirm Delete</translate>
                       </button>
-                      <button id="backButton" ng-if="$ctrl.confirmText" class="btn btn-default" ng-click="$ctrl.changeView(true)" translate>Back</button>
-                      <button id="cancelButton" ng-if="!$ctrl.confirmText" class="btn btn-default" ng-click="$ctrl.dismiss()" translate>Cancel</button>
+                      <button
+                        id="backButton"
+                        ng-if="$ctrl.confirmText"
+                        class="btn btn-default"
+                        ng-click="$ctrl.changeView(true)"
+                        translate
+                      >
+                        Back
+                      </button>
+                      <button
+                        id="cancelButton"
+                        ng-if="!$ctrl.confirmText"
+                        class="btn btn-default"
+                        ng-click="$ctrl.dismiss()"
+                        translate
+                      >
+                        Cancel
+                      </button>
                     </div>
                   </div>
                 </div>
-
               </div>
-
             </ng-switch>
           </form>
         </div>

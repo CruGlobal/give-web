@@ -2,23 +2,26 @@
 <div class="alert alert-danger" role="alert" ng-if="$ctrl.hasError">
   <div translate>You must choose one.</div>
 </div>
-<form name="$ctrl.identityForm" style="position: relative;">
+<form name="$ctrl.identityForm" style="position: relative">
   <div class="form-group">
-    <label class="radio"
-           ng-repeat="contact in $ctrl.contacts">
-      <input name="contact"
-             ng-model="$ctrl.contact"
-             ng-value="contact"
-             type="radio"
-             required>{{contact.name}}
+    <label class="radio" ng-repeat="contact in $ctrl.contacts">
+      <input
+        name="contact"
+        ng-model="$ctrl.contact"
+        ng-value="contact"
+        type="radio"
+        required
+      />{{contact.name}}
     </label>
     <label class="radio">
-      <input name="contact"
-             ng-model="$ctrl.contact"
-             ng-value="{}"
-             type="radio"
-             required
-             translate>None of the above. Please create a new account.
+      <input
+        name="contact"
+        ng-model="$ctrl.contact"
+        ng-value="{}"
+        type="radio"
+        required
+        translate
+      />None of the above. Please create a new account.
     </label>
   </div>
 </form>

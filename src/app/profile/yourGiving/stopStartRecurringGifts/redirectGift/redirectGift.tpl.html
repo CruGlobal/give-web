@@ -1,30 +1,46 @@
-<retry-modal ng-if="$ctrl.loadingRecurringGiftsError"
-             title="{{'Redirect A Gift' | translate}}"
-             on-retry="$ctrl.loadRecurringGifts()"
-             cancel="$ctrl.cancel()"
-             previous="$ctrl.previous()">
+<retry-modal
+  ng-if="$ctrl.loadingRecurringGiftsError"
+  title="{{'Redirect A Gift' | translate}}"
+  on-retry="$ctrl.loadRecurringGifts()"
+  cancel="$ctrl.cancel()"
+  previous="$ctrl.previous()"
+>
   <p translate>There was an error loading your recurring gifts.</p>
-  <p translate>You can use the retry button to try loading them again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
+  <p translate>
+    You can use the retry button to try loading them again. If you continue to
+    see this message, contact
+    <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
+  </p>
 </retry-modal>
 <div ng-switch="$ctrl.step">
-  <div style="height: 100px;" ng-switch-default ng-if="!$ctrl.loadingRecurringGiftsError"></div>
-  <redirect-gift-step-1 ng-switch-when="step-1"
-                        gifts="$ctrl.gifts"
-                        on-select-gift="$ctrl.selectGift(gift)"
-                        cancel="$ctrl.cancel()"
-                        previous="$ctrl.previous()">
+  <div
+    style="height: 100px"
+    ng-switch-default
+    ng-if="!$ctrl.loadingRecurringGiftsError"
+  ></div>
+  <redirect-gift-step-1
+    ng-switch-when="step-1"
+    gifts="$ctrl.gifts"
+    on-select-gift="$ctrl.selectGift(gift)"
+    cancel="$ctrl.cancel()"
+    previous="$ctrl.previous()"
+  >
   </redirect-gift-step-1>
-  <redirect-gift-step-2 ng-switch-when="step-2"
-                        on-select-result="$ctrl.selectResult(selected)"
-                        cancel="$ctrl.cancel()"
-                        previous="$ctrl.previous()">
+  <redirect-gift-step-2
+    ng-switch-when="step-2"
+    on-select-result="$ctrl.selectResult(selected)"
+    cancel="$ctrl.cancel()"
+    previous="$ctrl.previous()"
+  >
   </redirect-gift-step-2>
-  <redirect-gift-step-3 ng-switch-when="step-3"
-                        stop-gift="$ctrl.selectedGift"
-                        gift="$ctrl.redirectedGift"
-                        on-complete="$ctrl.complete()"
-                        on-cancel="$ctrl.cancel()"
-                        on-previous="$ctrl.previous()"
-                        set-loading="$ctrl.setLoading({loading: loading})">
+  <redirect-gift-step-3
+    ng-switch-when="step-3"
+    stop-gift="$ctrl.selectedGift"
+    gift="$ctrl.redirectedGift"
+    on-complete="$ctrl.complete()"
+    on-cancel="$ctrl.cancel()"
+    on-previous="$ctrl.previous()"
+    set-loading="$ctrl.setLoading({loading: loading})"
+  >
   </redirect-gift-step-3>
 </div>

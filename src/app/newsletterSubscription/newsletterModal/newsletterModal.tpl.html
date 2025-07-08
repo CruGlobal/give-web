@@ -15,31 +15,37 @@
       </div>
       <div class="form-group">
         <label for="nmFirstName">First Name</label>
-        <input name="firstName"
-               id="nmFirstName"
-               type="text"
-               class="form-control"
-               ng-model="$ctrl.attributes.first_name"
-               required>
+        <input
+          name="firstName"
+          id="nmFirstName"
+          type="text"
+          class="form-control"
+          ng-model="$ctrl.attributes.first_name"
+          required
+        />
       </div>
 
       <div class="form-group">
         <label for="nmLastName">Last Name</label>
-        <input name="lastName"
-               id="nmLastName"
-               type="text"
-               class="form-control"
-               ng-model="$ctrl.attributes.last_name"
-               required>
+        <input
+          name="lastName"
+          id="nmLastName"
+          type="text"
+          class="form-control"
+          ng-model="$ctrl.attributes.last_name"
+          required
+        />
       </div>
 
       <div class="form-group">
         <label for="nmSendNewletter" translate>Newsletter Preference</label>
-        <select name="sendNewletter"
-                id="nmSendNewletter"
-                class="form-control"
-                ng-model="$ctrl.attributes.send_newsletter"
-                required>
+        <select
+          name="sendNewletter"
+          id="nmSendNewletter"
+          class="form-control"
+          ng-model="$ctrl.attributes.send_newsletter"
+          required
+        >
           <option value="Email">Email</option>
           <option value="Physical">Physical</option>
           <option value="Both">Both</option>
@@ -53,49 +59,74 @@
       </div>
       <div class="form-group">
         <label for="nmEmail">Email Address</label>
-        <input name="email"
-               id="nmEmail"
-               type="email"
-               class="form-control"
-               ng-model="$ctrl.attributes.email"
-               required />
+        <input
+          name="email"
+          id="nmEmail"
+          type="email"
+          class="form-control"
+          ng-model="$ctrl.attributes.email"
+          required
+        />
       </div>
 
-      <address-form ng-if="$ctrl.includeAddressFields"
-                    parent-form="$ctrl.detailsForm"
-                    address="$ctrl.address"></address-form>
-
+      <address-form
+        ng-if="$ctrl.includeAddressFields"
+        parent-form="$ctrl.detailsForm"
+        address="$ctrl.address"
+      ></address-form>
     </div>
     <div ng-switch-when="3">
       <div class="jumbotron" ng-if="$ctrl.success">
         <h1>Congratulations!</h1>
-        <p>You've successfully signed up to receive the newsletter of {{$ctrl.displayName}}.</p>
         <p>
-          <button type="button" class="btn btn-primary btn-lg" ng-click="$dismiss()">Close</button>
+          You've successfully signed up to receive the newsletter of
+          {{$ctrl.displayName}}.
+        </p>
+        <p>
+          <button
+            type="button"
+            class="btn btn-primary btn-lg"
+            ng-click="$dismiss()"
+          >
+            Close
+          </button>
         </p>
       </div>
       <div ng-if="$ctrl.error">
         <h5>Something went wrong with your request.</h5>
-        <p>Check that the information you've entered is correct. If the problem persists, please contact <a href="mailto:apps@cru.org">apps@cru.org</a> for assistance.</p>
+        <p>
+          Check that the information you've entered is correct. If the problem
+          persists, please contact
+          <a href="mailto:apps@cru.org">apps@cru.org</a> for assistance.
+        </p>
       </div>
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button"
-            class="btn btn-default"
-            ng-click="$dismiss()"
-            translate>Cancel
+    <button
+      type="button"
+      class="btn btn-default"
+      ng-click="$dismiss()"
+      translate
+    >
+      Cancel
     </button>
     <div class="modal-navigation pull-right" ng-if="!$ctrl.success">
-      <button type="button"
-              class="btn btn-secondary"
-              ng-disabled="$ctrl.step == 1 || $ctrl.progress"
-              ng-click="$ctrl.prev()">Back
+      <button
+        type="button"
+        class="btn btn-secondary"
+        ng-disabled="$ctrl.step == 1 || $ctrl.progress"
+        ng-click="$ctrl.prev()"
+      >
+        Back
       </button>
-      <button type="button"
-              class="btn btn-primary"
-              ng-disabled="($ctrl.step == 1 && !$ctrl.identityForm.$valid) || ($ctrl.step == 2 && !$ctrl.detailsForm.$valid) || $ctrl.progress || $ctrl.error"
-              ng-click="$ctrl.next()">Next
+      <button
+        type="button"
+        class="btn btn-primary"
+        ng-disabled="($ctrl.step == 1 && !$ctrl.identityForm.$valid) || ($ctrl.step == 2 && !$ctrl.detailsForm.$valid) || $ctrl.progress || $ctrl.error"
+        ng-click="$ctrl.next()"
+      >
+        Next
       </button>
     </div>
   </div>

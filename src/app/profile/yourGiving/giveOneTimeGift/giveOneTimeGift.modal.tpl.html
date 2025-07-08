@@ -1,6 +1,15 @@
 <div ng-switch="$ctrl.state">
-  <div class="modal-header" ng-switch-when="loadingRecentRecipients|errorLoadingRecentRecipients" ng-switch-when-separator="|">
-    <button type="button" class="close" aria-label="Close" ng-click="$ctrl.dismiss()">
+  <div
+    class="modal-header"
+    ng-switch-when="loadingRecentRecipients|errorLoadingRecentRecipients"
+    ng-switch-when-separator="|"
+  >
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      ng-click="$ctrl.dismiss()"
+    >
       <span aria-hidden="true">x</span>
     </button>
     <div class="container-fluid">
@@ -8,7 +17,9 @@
         <div class="col-xs-12">
           <div class="border-bottom-small">
             <h3 translate>Loading recent recipients</h3>
-            <p translate>Looking up missionaries and ministries you have given to recently</p>
+            <p translate>
+              Looking up missionaries and ministries you have given to recently
+            </p>
           </div>
         </div>
       </div>
@@ -33,7 +44,9 @@
         <div class="col-md-12 col-xs-12">
           <div class="alert alert-danger">
             <p translate>There was an error loading your recent recipients.</p>
-            <p translate>You can try loading them again or continue and add a new gift.</p>
+            <p translate>
+              You can try loading them again or continue and add a new gift.
+            </p>
           </div>
         </div>
       </div>
@@ -41,14 +54,17 @@
   </div>
   <div class="modal-footer" ng-switch-when="errorLoadingRecentRecipients">
     <div class="col-xs-6">
-      <a class="btn btn-default"
-         ng-click="$ctrl.dismiss()"
-         translate>
+      <a class="btn btn-default" ng-click="$ctrl.dismiss()" translate>
         Cancel
       </a>
     </div>
     <div class="col-xs-6 text-right">
-      <a class="btn btn-primary" ng-click="$ctrl.loadRecentRecipients()" translate>Retry</a>
+      <a
+        class="btn btn-primary"
+        ng-click="$ctrl.loadRecentRecipients()"
+        translate
+        >Retry</a
+      >
       <a class="btn btn-default" ng-click="$ctrl.next()" translate>Continue</a>
     </div>
   </div>
@@ -57,14 +73,16 @@
     ng-switch-when="step1SelectRecentRecipients"
     recent-recipients="$ctrl.recentRecipients"
     dismiss="$ctrl.dismiss()"
-    next="$ctrl.next(selectedRecipients, search)">
+    next="$ctrl.next(selectedRecipients, search)"
+  >
   </step-1-select-recent-recipients>
 
   <step-1-search-recipients
     ng-switch-when="step1SearchRecipients"
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
-    next="$ctrl.next(null, null, additionalRecipients)">
+    next="$ctrl.next(null, null, additionalRecipients)"
+  >
   </step-1-search-recipients>
 
   <step-2-enter-amounts
@@ -74,6 +92,7 @@
     errors="$ctrl.errors"
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
-    next="$ctrl.next(selectedRecipients)">
+    next="$ctrl.next(selectedRecipients)"
+  >
   </step-2-enter-amounts>
 </div>

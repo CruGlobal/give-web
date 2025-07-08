@@ -1,5 +1,10 @@
 <div class="modal-header">
-  <button type="button" class="close" aria-label="Close" ng-click="$ctrl.dismiss()">
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    ng-click="$ctrl.dismiss()"
+  >
     <span aria-hidden="true">x</span>
   </button>
   <div class="container-fluid">
@@ -8,11 +13,17 @@
         <div class="border-bottom-small">
           <div ng-if="!$ctrl.paymentMethod">
             <h3>Add a Payment Method</h3>
-            <p>You must have at least one valid payment method to continue. Please add one below.</p>
+            <p>
+              You must have at least one valid payment method to continue.
+              Please add one below.
+            </p>
           </div>
           <div ng-if="$ctrl.paymentMethod">
             <h3>Edit your Payment Method</h3>
-            <p>You must have at least one valid payment method to continue. Please update it below.</p>
+            <p>
+              You must have at least one valid payment method to continue.
+              Please update it below.
+            </p>
           </div>
         </div>
       </div>
@@ -24,7 +35,14 @@
   <div class="container-fluid" tabindex="-1" role="dialog">
     <div class="row">
       <div class="col-md-12 col-xs-12">
-        <payment-method-form payment-form-state="$ctrl.paymentFormState" payment-form-error="$ctrl.paymentFormError" on-payment-form-state-change="$ctrl.onPaymentFormStateChange($event)" payment-method="$ctrl.paymentMethod" hide-cvv="true" mailing-address="$ctrl.mailingAddress"></payment-method-form>
+        <payment-method-form
+          payment-form-state="$ctrl.paymentFormState"
+          payment-form-error="$ctrl.paymentFormError"
+          on-payment-form-state-change="$ctrl.onPaymentFormStateChange($event)"
+          payment-method="$ctrl.paymentMethod"
+          hide-cvv="true"
+          mailing-address="$ctrl.mailingAddress"
+        ></payment-method-form>
       </div>
     </div>
   </div>
@@ -32,23 +50,29 @@
 
 <div class="modal-footer">
   <div class="col-xs-6" ng-switch="$ctrl.canGoBack">
-    <button class="btn btn-default"
-            ng-click="$ctrl.dismiss()"
-            ng-switch-when="false"
-            translate>
+    <button
+      class="btn btn-default"
+      ng-click="$ctrl.dismiss()"
+      ng-switch-when="false"
+      translate
+    >
       Cancel
     </button>
-    <button class="btn btn-default"
-            ng-click="$ctrl.previous()"
-            ng-switch-when="true"
-            translate>
+    <button
+      class="btn btn-default"
+      ng-click="$ctrl.previous()"
+      ng-switch-when="true"
+      translate
+    >
       Back
     </button>
   </div>
   <div class="col-xs-6 text-right">
-    <button class="btn btn-primary"
-            ng-click="$ctrl.onPaymentFormStateChange({state: 'submitted'})"
-            ng-disabled="$ctrl.paymentFormState === 'loading' || $ctrl.paymentFormState === 'encrypting'">
+    <button
+      class="btn btn-primary"
+      ng-click="$ctrl.onPaymentFormStateChange({state: 'submitted'})"
+      ng-disabled="$ctrl.paymentFormState === 'loading' || $ctrl.paymentFormState === 'encrypting'"
+    >
       <span ng-if="!$ctrl.paymentMethod" translate>Add and Continue</span>
       <span ng-if="$ctrl.paymentMethod" translate>Update and Continue</span>
     </button>

@@ -1,10 +1,14 @@
-import angular from 'angular'
-import OktaSignIn from '@okta/okta-signin-widget'
-import sessionService from 'common/services/session/session.service'
-import template from './resetPasswordModal.tpl.html'
-import { initializeFloatingLabels, injectBackButton, showVerificationCodeField } from 'common/lib/oktaSignInWidgetHelper/oktaSignInWidgetHelper'
+import angular from 'angular';
+import OktaSignIn from '@okta/okta-signin-widget';
+import sessionService from 'common/services/session/session.service';
+import template from './resetPasswordModal.tpl.html';
+import {
+  initializeFloatingLabels,
+  injectBackButton,
+  showVerificationCodeField,
+} from 'common/lib/oktaSignInWidgetHelper/oktaSignInWidgetHelper';
 
-const componentName = 'resetPasswordModal'
+const componentName = 'resetPasswordModal';
 
 class ResetPasswordModalController {
   // --------------------------------------
@@ -25,87 +29,87 @@ class ResetPasswordModalController {
   // --------------------------------------
 
   /* @ngInject */
-  constructor ($log, $scope, sessionService) {
-    this.$log = $log
-    this.$scope = $scope
-    this.sessionService = sessionService
+  constructor($log, $scope, sessionService) {
+    this.$log = $log;
+    this.$scope = $scope;
+    this.sessionService = sessionService;
   }
 
-  $onInit () {
-    this.initializeVariables()
-    this.setUpSignUpWidget()
+  $onInit() {
+    this.initializeVariables();
+    this.setUpSignUpWidget();
   }
 
-  $onDestroy () {
+  $onDestroy() {
     if (this.oktaSignInWidget) {
-      this.oktaSignInWidget.remove()
+      this.oktaSignInWidget.remove();
       // Unsubscribe all event listeners
-      this.oktaSignInWidget.off()
+      this.oktaSignInWidget.off();
     }
   }
 
-  ready () {
+  ready() {
     this.$scope.$apply(() => {
-      this.isLoading = false
-    })
+      this.isLoading = false;
+    });
   }
 
-  initializeVariables () {
-    this.isLoading = true
-    this.currentStep = 1
-    this.floatingLabelAbortControllers = []
+  initializeVariables() {
+    this.isLoading = true;
+    this.currentStep = 1;
+    this.floatingLabelAbortControllers = [];
   }
 
-  setUpSignUpWidget () {
-    this.currentStep = 1
+  setUpSignUpWidget() {
+    this.currentStep = 1;
 
     this.oktaSignInWidget = new OktaSignIn({
       ...this.sessionService.oktaSignInWidgetDefaultOptions,
       assets: {
-        baseUrl: '/assets/okta-sign-in/'
+        baseUrl: '/assets/okta-sign-in/',
       },
-      flow: 'resetPassword'
-    })
+      flow: 'resetPassword',
+    });
 
-    this.signIn()
+    this.signIn();
 
-    this.oktaSignInWidget.on('ready', this.ready.bind(this))
-    this.oktaSignInWidget.on('afterRender', this.afterRender.bind(this))
+    this.oktaSignInWidget.on('ready', this.ready.bind(this));
+    this.oktaSignInWidget.on('afterRender', this.afterRender.bind(this));
   }
 
-  afterRender (context) {
-    let step = this.currentStep
+  afterRender(context) {
+    let step = this.currentStep;
 
     switch (context.formName) {
       case 'identify':
-        step = 1
-        injectBackButton(this)
-        break
+        step = 1;
+        injectBackButton(this);
+        break;
       case 'select-authenticator-authenticate':
         //  Auth options: okta_email | google_otp | okta_verify | phone_number
-        step = 2
-        break
+        step = 2;
+        break;
       case 'authenticator-verification-data':
         // Only for auth options: okta_email | phone_number
-        step = 3
-        this.triggerNotificationClick()
-        break
+        step = 3;
+        this.triggerNotificationClick();
+        break;
       case 'challenge-authenticator':
         //  Auth options: okta_email | google_otp | okta_verify | phone_number
-        step = 4
-        break
+        step = 4;
+        break;
       case 'reset-authenticator':
-        step = 5
-        break
+        step = 5;
+        break;
     }
 
     this.$scope.$apply(() => {
-      this.currentStep = step
-    })
+      this.currentStep = step;
+    });
 
     if (context.formName === 'challenge-authenticator') {
       if (context.authenticatorKey === 'okta_email') {
-        showVerificationCodeField()
+        showVerificationCodeField();
       }
     }
 
@@ -116,66 +120,70 @@ class ResetPasswordModalController {
     // To avoid the error showing, we check if the context formName is 'terminal'. If it is, we know there was an error,
     // and we re-render the widget to refresh the widget.
     if (context.formName === 'terminal') {
-      this.reRenderWidget()
-      return
+      this.reRenderWidget();
+      return;
     }
 
     // This needs to be after showVerificationCodeField to ensure even the verification code field is styled correctly
-    initializeFloatingLabels(this)
+    initializeFloatingLabels(this);
   }
 
-  onBackButtonClick () {
+  onBackButtonClick() {
     this.$scope.$apply(() => {
-      this.onSignIn()
-    })
+      this.onSignIn();
+    });
   }
 
-  triggerNotificationClick () {
+  triggerNotificationClick() {
     // This step requires the user to click a button to trigger the notification to be sent to their email or phone.
     // We remove this step by clicking the button for the user.
     const verificationCodeButtonLink = document.querySelector(`
       .authenticator-verification-data--okta_email input.button[type="submit"],
       .authenticator-verification-data--phone_number input.button[type="submit"]
-    `)
-    verificationCodeButtonLink?.click()
+    `);
+    verificationCodeButtonLink?.click();
   }
 
-  reRenderWidget () {
+  reRenderWidget() {
     // Render the widget again to show new step
     // Unfortunately, this removes the error messages, which is why we inject them after rendering
-    this.oktaSignInWidget.remove()
+    this.oktaSignInWidget.remove();
     return this.oktaSignInWidget.renderEl(
       { el: '#osw-container' },
       null,
       (error) => {
-        const errorName = 'Okta Forgot Password: Error rendering Okta widget.'
-        console.error(errorName, error)
-        this.$log.error(errorName, error)
-      }
-    )
+        const errorName = 'Okta Forgot Password: Error rendering Okta widget.';
+        console.error(errorName, error);
+        this.$log.error(errorName, error);
+      },
+    );
   }
 
-  signIn () {
-    return this.oktaSignInWidget.showSignInAndRedirect({
-      el: '#osw-container'
-    }).then(tokens => {
-      this.oktaSignInWidget.authClient.handleLoginRedirect(tokens)
-    }).catch(error => {
-      this.$log.error('Okta Forgot Password: Error showing Okta sign in widget.', error)
-    })
+  signIn() {
+    return this.oktaSignInWidget
+      .showSignInAndRedirect({
+        el: '#osw-container',
+      })
+      .then((tokens) => {
+        this.oktaSignInWidget.authClient.handleLoginRedirect(tokens);
+      })
+      .catch((error) => {
+        this.$log.error(
+          'Okta Forgot Password: Error showing Okta sign in widget.',
+          error,
+        );
+      });
   }
 }
 
 export default angular
-  .module(componentName, [
-    sessionService.name
-  ])
+  .module(componentName, [sessionService.name])
   .component(componentName, {
     controller: ResetPasswordModalController,
     templateUrl: template,
     bindings: {
       // Called when the user clicks back to sign in link
       onSignIn: '&',
-      isInsideAnotherModal: '='
-    }
-  })
+      isInsideAnotherModal: '=',
+    },
+  });

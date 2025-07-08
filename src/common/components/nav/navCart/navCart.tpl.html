@@ -1,5 +1,4 @@
 <div class="container-fluid">
-
   <div class="row repeating-row" ng-if="$ctrl.loading">
     <div class="col-xs-12">
       <loading>
@@ -8,11 +7,12 @@
     </div>
   </div>
 
-  <div class="row repeating-row" ng-if="!$ctrl.hasItems && !$ctrl.loading && !$ctrl.error">
+  <div
+    class="row repeating-row"
+    ng-if="!$ctrl.hasItems && !$ctrl.loading && !$ctrl.error"
+  >
     <div class="col-xs-12">
-      <p class="text-center mt-" translate>
-        Your cart is empty
-      </p>
+      <p class="text-center mt-" translate>Your cart is empty</p>
     </div>
   </div>
 
@@ -20,7 +20,7 @@
     <div class="col-xs-12 text-center mt- text-warning">
       <p translate>
         There was an error loading your cart.
-      <br>
+        <br />
         You can <a href="" ng-click="$ctrl.loadCart()">try again</a>.
       </p>
     </div>
@@ -28,14 +28,28 @@
 
   <div class="row repeating-row top-row" ng-if="$ctrl.hasItems || $ctrl.error">
     <div class="col-xs-6">
-      <a id="mini-cart-view-cart" ng-href="{{$ctrl.buildCartUrl()}}" class="btn btn-default btn-cart" ng-class="{ 'btn-mobile': $ctrl.mobile }" translate>View Cart</a>
+      <a
+        id="mini-cart-view-cart"
+        ng-href="{{$ctrl.buildCartUrl()}}"
+        class="btn btn-default btn-cart"
+        ng-class="{ 'btn-mobile': $ctrl.mobile }"
+        translate
+        >View Cart</a
+      >
     </div>
     <div class="col-xs-6">
-      <i class="fal fa-bars fa-times close-cart" ng-click="$ctrl.isOpen = false"></i>
+      <i
+        class="fal fa-bars fa-times close-cart"
+        ng-click="$ctrl.isOpen = false"
+      ></i>
     </div>
   </div>
 
-  <div class="row" ng-class="{ 'desktop-cart-list': !$ctrl.mobile }" ng-if="$ctrl.hasItems">
+  <div
+    class="row"
+    ng-class="{ 'desktop-cart-list': !$ctrl.mobile }"
+    ng-if="$ctrl.hasItems"
+  >
     <div class="col-xs-12">
       <div class="row repeating-row" ng-repeat="i in $ctrl.cartData.items">
         <div class="col-xs-9">
@@ -63,14 +77,25 @@
       </p>
     </div>
     <div class="col-xs-3 text-right">
-      <p>{{$ctrl.cartData.cartTotal | coverFeesFilter:$ctrl.cartData:'cartTotal'}}</p>
+      <p>
+        {{$ctrl.cartData.cartTotal |
+        coverFeesFilter:$ctrl.cartData:'cartTotal'}}
+      </p>
     </div>
   </div>
 
-  <div class="row row-no-spacing" ng-if="$ctrl.hasItems || $ctrl.error"><!-- TODO: row-no-spacing not in nav css -->
+  <div class="row row-no-spacing" ng-if="$ctrl.hasItems || $ctrl.error">
+    <!-- TODO: row-no-spacing not in nav css -->
     <div class="col-xs-12">
-      <a id="mini-cart-checkout" href="" class="btn btn-primary btn-cart" ng-class="{ 'btn-mobile': $ctrl.mobile }" ng-click="$ctrl.checkout()" translate>Checkout</a>
+      <a
+        id="mini-cart-checkout"
+        href=""
+        class="btn btn-primary btn-cart"
+        ng-class="{ 'btn-mobile': $ctrl.mobile }"
+        ng-click="$ctrl.checkout()"
+        translate
+        >Checkout</a
+      >
     </div>
   </div>
-
 </div>

@@ -1,15 +1,36 @@
-<td class="date">{{$ctrl.gift['historical-donation-line']['transaction-date']['display-value'] | date:'mediumDate'}}</td>
-<td class="amount">{{$ctrl.gift['historical-donation-line']['amount'] | currency:'$'}}</td>
+<td class="date">
+  {{$ctrl.gift['historical-donation-line']['transaction-date']['display-value']
+  | date:'mediumDate'}}
+</td>
+<td class="amount">
+  {{$ctrl.gift['historical-donation-line']['amount'] | currency:'$'}}
+</td>
 <td class="method">
   <div class="radio-method">
-    <payment-method-display payment-method="$ctrl.gift['paymentmethod']"></payment-method-display>
-    <span ng-if="!$ctrl.gift['paymentmethod']">{{$ctrl.gift['historical-donation-line']['payment-type']}}</span>
+    <payment-method-display
+      payment-method="$ctrl.gift['paymentmethod']"
+    ></payment-method-display>
+    <span ng-if="!$ctrl.gift['paymentmethod']"
+      >{{$ctrl.gift['historical-donation-line']['payment-type']}}</span
+    >
   </div>
 </td>
-<td class="status"
-    ng-class="{ 'status-pending': !$ctrl.gift['historical-donation-line'].completed, 'status-complete': $ctrl.gift['historical-donation-line'].completed }">
-  <translate ng-if="!$ctrl.gift['historical-donation-line'].completed">Pending</translate>
-  <translate ng-if="$ctrl.gift['historical-donation-line'].completed">Completed</translate>
-  <translate ng-if="$ctrl.gift['historical-donation-line'].anonymous">, Anonymous</translate>
-  <translate ng-if="$ctrl.gift['historical-donation-line']['pass-through'] || $ctrl.gift['historical-donation-line']['master-account']">, Given through {{$ctrl.gift['historical-donation-line']['given-through-description']}}</translate>
+<td
+  class="status"
+  ng-class="{ 'status-pending': !$ctrl.gift['historical-donation-line'].completed, 'status-complete': $ctrl.gift['historical-donation-line'].completed }"
+>
+  <translate ng-if="!$ctrl.gift['historical-donation-line'].completed"
+    >Pending</translate
+  >
+  <translate ng-if="$ctrl.gift['historical-donation-line'].completed"
+    >Completed</translate
+  >
+  <translate ng-if="$ctrl.gift['historical-donation-line'].anonymous"
+    >, Anonymous</translate
+  >
+  <translate
+    ng-if="$ctrl.gift['historical-donation-line']['pass-through'] || $ctrl.gift['historical-donation-line']['master-account']"
+    >, Given through
+    {{$ctrl.gift['historical-donation-line']['given-through-description']}}</translate
+  >
 </td>

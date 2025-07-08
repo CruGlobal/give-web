@@ -1,51 +1,57 @@
-import angular from 'angular'
-import 'angular-mocks'
-import module from './signInModal.component'
+import angular from 'angular';
+import 'angular-mocks';
+import module from './signInModal.component';
 
-import { Roles } from 'common/services/session/session.service'
+import { Roles } from 'common/services/session/session.service';
 
 describe('signInModal', function () {
-  beforeEach(angular.mock.module(module.name))
-  let $ctrl, bindings, onStateChange = jest.fn()
+  beforeEach(angular.mock.module(module.name));
+  let $ctrl,
+    bindings,
+    onStateChange = jest.fn();
 
   beforeEach(inject(function (_$componentController_) {
     bindings = {
       modalTitle: '',
-      onSuccess: jest.fn()
-    }
-    $ctrl = _$componentController_(module.name, {}, bindings)
+      onSuccess: jest.fn(),
+    };
+    $ctrl = _$componentController_(module.name, {}, bindings);
     $ctrl.$window = {
-      location: 'https://give.cru.org/'
-    }
-  }))
+      location: 'https://give.cru.org/',
+    };
+  }));
 
   it('to be defined', function () {
-    expect($ctrl).toBeDefined()
-  })
+    expect($ctrl).toBeDefined();
+  });
 
   describe('$onInit', () => {
-    describe('with \'REGISTERED\' cortex-session', () => {
+    describe("with 'REGISTERED' cortex-session", () => {
       beforeEach(() => {
-        jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue(Roles.registered)
-        $ctrl.$onInit()
-      })
+        jest
+          .spyOn($ctrl.sessionService, 'getRole')
+          .mockReturnValue(Roles.registered);
+        $ctrl.$onInit();
+      });
 
       it('initializes signIn', () => {
-        expect($ctrl.modalTitle).toEqual('Sign In')
-        expect($ctrl.$window.location).toEqual('/checkout.html')
-      })
-    })
+        expect($ctrl.modalTitle).toEqual('Sign In');
+        expect($ctrl.$window.location).toEqual('/checkout.html');
+      });
+    });
 
-    describe('with \'PUBLIC\' cortex-session', () => {
+    describe("with 'PUBLIC' cortex-session", () => {
       beforeEach(() => {
-        jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue(Roles.public)
-        $ctrl.$onInit()
-      })
+        jest
+          .spyOn($ctrl.sessionService, 'getRole')
+          .mockReturnValue(Roles.public);
+        $ctrl.$onInit();
+      });
 
       it('initializes signIn', () => {
-        expect($ctrl.modalTitle).toEqual('Sign In')
-        expect($ctrl.$window.location).toEqual('https://give.cru.org/')
-      })
-    })
-  })
-})
+        expect($ctrl.modalTitle).toEqual('Sign In');
+        expect($ctrl.$window.location).toEqual('https://give.cru.org/');
+      });
+    });
+  });
+});

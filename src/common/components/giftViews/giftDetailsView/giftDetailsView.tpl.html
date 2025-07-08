@@ -1,18 +1,24 @@
-<h4 class="mt-- mb--">{{$ctrl.gift.amount | currency}} {{$ctrl.gift.frequency}}</h4>
+<h4 class="mt-- mb--">
+  {{$ctrl.gift.amount | currency}} {{$ctrl.gift.frequency}}
+</h4>
 <div class="modal-meta" ng-switch="$ctrl.gift.frequency">
   <div class="u-block" ng-switch-when="Monthly">
     On the {{$ctrl.gift.transactionDay | ordinal}} of each month
   </div>
   <div class="u-block" ng-switch-when="Quarterly">
-    On the {{$ctrl.gift.transactionDay | ordinal}} of {{$ctrl.quarterlyMonths(null, $ctrl.gift.nextGiftDate)}}
+    On the {{$ctrl.gift.transactionDay | ordinal}} of
+    {{$ctrl.quarterlyMonths(null, $ctrl.gift.nextGiftDate)}}
   </div>
   <div class="u-block" ng-switch-when="Annually">
-    On {{$ctrl.gift.nextGiftDate.format('MMMM')}} {{$ctrl.gift.transactionDay | ordinal}} of each year
+    On {{$ctrl.gift.nextGiftDate.format('MMMM')}} {{$ctrl.gift.transactionDay |
+    ordinal}} of each year
   </div>
   <div class="u-block">Next Gift: {{$ctrl.gift.nextGiftDate.format('ll')}}</div>
 </div>
 <div class="form-group">
   <div class="radio radio-method">
-    <payment-method-display payment-method="$ctrl.gift.paymentMethod"></payment-method-display>
+    <payment-method-display
+      payment-method="$ctrl.gift.paymentMethod"
+    ></payment-method-display>
   </div>
 </div>
