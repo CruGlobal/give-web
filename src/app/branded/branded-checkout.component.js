@@ -42,8 +42,7 @@ class BrandedCheckoutController {
   $onInit () {
     this.envService.data.vars[this.envService.get()].isBrandedCheckout = true
     if (this.apiUrl) { // set custom API url
-      const normalizedUrl = this.normalizeApiUrl(this.apiUrl)
-      this.envService.data.vars[this.envService.get()].apiUrl = normalizedUrl
+      this.envService.data.vars[this.envService.get()].apiUrl = this.normalizeApiUrl(this.apiUrl)
     }
     this.code = this.designationNumber
     this.tsysService.setDevice(this.tsysDevice)
@@ -65,19 +64,17 @@ class BrandedCheckoutController {
   }
 
   normalizeApiUrl (url) {
-    if (!url) return url
-
-    url = url.replace(/\/+$/, '')
-
-    if (url.startsWith('https://') || url.startsWith('http://')) {
-      return url.replace(/^https?:/, '')
+    if (!url) {
+      return url;
     }
 
-    if (!url.startsWith('//')) {
-      return '//' + url
-    }
+    // Remove trailing slashes
+    url = url.replace(/\/+$/, '');
 
-    return url
+     // Remove protocol if present
+    url = url.replace(/^https?:/, '');
+
+    return url.startsWith('//') ? url : '//' + url;
   }
 
   formatDonorDetails () {

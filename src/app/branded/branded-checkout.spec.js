@@ -115,6 +115,16 @@ describe('branded checkout', () => {
       const result = $ctrl.normalizeApiUrl('https://give.domain.com///')
       expect(result).toEqual('//give.domain.com')
     })
+
+    it('should preserve port in URL', () => {
+      const result = $ctrl.normalizeApiUrl('http://give.domain.com:3000/')
+      expect(result).toEqual('//give.domain.com:3000')
+    })
+
+    it('should preserve query parameters', () => {
+      const result = $ctrl.normalizeApiUrl('https://give.domain.com/?ref=abc')
+      expect(result).toEqual('//give.domain.com?ref=abc')
+    })
   })
 
   describe('formatDonorDetails', () => {
