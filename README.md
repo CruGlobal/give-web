@@ -196,7 +196,7 @@ Note: For session cookies to work correctly, add the below entries to your hosts
 ### Development Tasks
 
 - `yarn test` to run Jest tests
-- `yarn lint` to run StandardJS linter
+- `yarn prettier:write` to run prettier linter
 - `yarn lint:styles` to run StyleLint linter _(run with `--fix` to fix issues)._
 - `yarn build` to generate minified output files. These files are output to `/dist`. `common.js` must be included before any of the other JS files.
 - `yarn build:analyze` to open a visualization of bundle sizes after building

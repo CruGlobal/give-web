@@ -32,8 +32,8 @@ jobs:
       # --ignore-optional is used to avoid installing optional dependencies like fsevents which is not supported on Linux
         run: yarn install --immutable --immutable-cache --ignore-optional
 
-      - name: Lint Check (JS)
-        run: yarn lint
+      - name: Lint Check (Prettier)
+        run: yarn prettier:check
 
       - name: Lint Check (SCSS)
         run: yarn lint:styles

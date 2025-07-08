@@ -1,2 +1,2 @@
-# This project is currently using Standard JS for formatting. Running VS Code with format on save using Prettier makes tons of unintended changes. Disabling Prettier on all files until this project uses it.
-*
+*.css
+*.scss
