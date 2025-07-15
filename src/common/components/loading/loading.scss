@@ -13,45 +13,43 @@ loading {
 
   .loading1 {
     height: 26px;
-    animation: fade1 1s infinite;
+    animation: fade 1.2s infinite;
+    animation-delay: 0s;
   }
 
   .loading2 {
     height: 32px;
-    animation: fade2 1s infinite;
+    animation: fade 1.2s infinite;
+    animation-delay: 0.3s;
   }
 
   .loading3 {
     height: 32px;
-    animation: fade3 1s infinite;
+    animation: fade 1.2s infinite;
+    animation-delay: 0.6s;
   }
 
   .loading4 {
     height: 26px;
-    animation: fade4 1s infinite;
+    animation: fade 1.2s infinite;
+    animation-delay: 0.9s;
   }
 
-  @keyframes fade1 {
-    0% {
+  @keyframes fade {
+    0%, 100% {
+      background: #e0e0e0;
+    }
+
+    25% {
       background: #43B3C9;
     }
-  }
 
-  @keyframes fade2 {
-    33% {
+    50% {
       background: #F9B625;
     }
-  }
 
-  @keyframes fade3 {
-    66% {
+    75% {
       background: #DE8123;
-    }
-  }
-
-  @keyframes fade4 {
-    90% {
-      background: #007398;
     }
   }
 
