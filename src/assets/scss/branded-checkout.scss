@@ -1,6 +1,6 @@
 @use 'sass:math';
 
-branded-checkout{
+.branded-checkout{
   @import '../cru-scss/cru';
   @import 'give';
   @import 'form';
@@ -12,6 +12,7 @@ branded-checkout{
   @import 'mobile';
   @import 'directives/creditCardCvv';
 
+  display: block;
   background-color: $body-bg;
   color: $text-color;
   font-family: $data-font;
