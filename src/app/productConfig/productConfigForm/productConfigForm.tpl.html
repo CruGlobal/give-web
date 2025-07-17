@@ -12,21 +12,13 @@
         {{'GIVE_GIFT_HEADER'}}
       </h4>
     </div>
-    <div class="col-sm-6" ng-if="!$ctrl.loading && !$ctrl.errorLoading">
+    <div class="col-sm-6" >
       <div class="give-modal-recipient">
         <img class="recipient-image" desig-src="{{$ctrl.productData.designationNumber}}" campaign-page="{{$ctrl.itemConfig['campaign-page']}}">
         <span class="recipient-title" ng-bind-html="$ctrl.itemConfig['jcr-title']"></span>
         <span class="recipient-id" ng-bind-html="$ctrl.displayId()"></span>
       </div>
     </div>
-  </div>
-
-  <loading ng-if="$ctrl.loading">
-    <translate>{{'LOADING_GIFT_DETAILS'}}</translate>
-  </loading>
-
-  <div ng-if="$ctrl.errorLoading" class="alert alert-danger" role="alert">
-    <p translate='LOADING_ERROR' translate-values="{loadData: '$ctrl.loadData()'}" translate-compile></p>
   </div>
 
   <div class="panel panel-default panel-plain mt" ng-if="$ctrl.showGivingLinks">
@@ -53,7 +45,7 @@
     </div>
   </div>
 
-  <div ng-if="!$ctrl.loading && !$ctrl.errorLoading && !$ctrl.showGivingLinks">
+  <div ng-if="!$ctrl.errorLoading && !$ctrl.showGivingLinks">
     <div ng-class="{'give-selection-reverse-order': $ctrl.useV3}">
       <div class="panel panel-default panel-plain mt suggested-gift-amounts">
 
