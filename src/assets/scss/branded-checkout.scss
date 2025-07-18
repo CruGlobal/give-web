@@ -11,7 +11,9 @@ branded-checkout{
   @import 'account_management';
   @import 'mobile';
   @import 'directives/creditCardCvv';
+  @import 'components/loading';
 
+  display: block;
   background-color: $body-bg;
   color: $text-color;
   font-family: $data-font;

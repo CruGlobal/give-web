@@ -40,7 +40,7 @@
 
                     <!--Donor Details-->
                     <h4 id="name-heading" class="panel-title  border-bottom-small visible" translate>Your Name</h4>
-                    <div class="loading-overlay-parent">
+                    <div class="give-loading-overlay-parent">
                       <loading type="overlay" ng-if="$ctrl.donorDetailsLoading"></loading>
                       <ul class="list-unstyled people-fields">
                         <li>
@@ -142,7 +142,7 @@
                     <!--Email Address-->
                     <h4 class="panel-title  border-bottom-small visible mt" translate>Email Addresses</h4>
 
-                    <div class="loading-overlay-parent">
+                    <div class="give-loading-overlay-parent">
                       <loading type="overlay" ng-if="$ctrl.emailLoading"></loading>
                       <form name="$ctrl.donorEmailForm" novalidate>
                         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.donorEmailForm.donorsEmail | showErrors)}">
@@ -188,7 +188,7 @@
                     <!--Phone Numbers-->
                     <h4 class="panel-title  border-bottom-small visible mt" translate>Phone Numbers</h4>
 
-                    <div class="loading-overlay-parent">
+                    <div class="give-loading-overlay-parent">
                       <loading type="overlay" ng-if="$ctrl.phonesLoading"></loading>
                       <div ng-if="!$ctrl.phonesLoading">
                         <div ng-repeat="phone in $ctrl.phoneNumbers" ng-class="{'has-error': ($ctrl.phoneNumberForms[$index].phoneNumber | showErrors)}" class="form-group is-required phone-row" >
@@ -250,7 +250,7 @@
                       </div>
                     </div>
 
-                    <form name="$ctrl.mailingAddressForm" class="loading-overlay-parent" novalidate>
+                    <form name="$ctrl.mailingAddressForm" class="give-loading-overlay-parent" novalidate>
                       <loading type="overlay" ng-if="$ctrl.mailingAddressLoading"></loading>
                       <address-form ng-if="$ctrl.mailingAddress" address="$ctrl.mailingAddress.address" parent-form="$ctrl.mailingAddressForm" disabled="$ctrl.donorDetails.staff"></address-form>
                     </form>

@@ -1,18 +1,18 @@
 <div ng-class="{
-        'loading-centered': $ctrl.type === 'centered' || $ctrl.type === 'overlay' || $ctrl.type === 'fixed',
-        'loading-overlay': $ctrl.type === 'overlay' || $ctrl.type === 'fixed',
-        'loading-fixed': $ctrl.type === 'fixed',
-        'icon-first': $ctrl.iconFirst
+        'give-loading-centered': $ctrl.type === 'centered' || $ctrl.type === 'overlay' || $ctrl.type === 'fixed',
+        'give-loading-overlay': $ctrl.type === 'overlay' || $ctrl.type === 'fixed',
+        'give-loading-fixed': $ctrl.type === 'fixed',
+        'give-icon-first': $ctrl.iconFirst
       }">
   <div>
     <span ng-class="$ctrl.inline ? 'mr-' : 'center-block'">
       <ng-transclude></ng-transclude>
     </span>
-    <span class="loading-wrap">
-      <span class="loading-bar loading1"></span>
-      <span class="loading-bar loading2"></span>
-      <span class="loading-bar loading3"></span>
-      <span class="loading-bar loading4"></span>
+    <span class="give-loadingWrap">
+      <span class="give-loading-bar give-loading1"></span>
+      <span class="give-loading-bar give-loading2"></span>
+      <span class="give-loading-bar give-loading3"></span>
+      <span class="give-loading-bar give-loading4"></span>
     </span>
   </div>
 </div>
