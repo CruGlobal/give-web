@@ -42,7 +42,7 @@ class BrandedCheckoutController {
   $onInit () {
     this.envService.data.vars[this.envService.get()].isBrandedCheckout = true
     if (this.apiUrl) { // set custom API url
-      this.envService.data.vars[this.envService.get()].apiUrl = this.apiUrl
+      this.envService.data.vars[this.envService.get()].apiUrl = this.normalizeApiUrl(this.apiUrl)
     }
     this.code = this.designationNumber
     this.tsysService.setDevice(this.tsysDevice)
@@ -61,6 +61,23 @@ class BrandedCheckoutController {
     })
     this.$translate.use(this.language || 'en')
     this.checkoutService.initializeRecaptcha()
+  }
+
+  normalizeApiUrl (url) {
+    if (!url) {
+      return url
+    }
+
+    // Remove trailing slashes
+    url = url.replace(/\/+$/, '')
+
+    // Remove protocol if present
+    url = url.replace(/^https?:/, '')
+
+    // Remove slash before query parameters if present
+    url = url.replace(/\/\?/, '?')
+
+    return url.startsWith('//') ? url : '//' + url
   }
 
   formatDonorDetails () {
