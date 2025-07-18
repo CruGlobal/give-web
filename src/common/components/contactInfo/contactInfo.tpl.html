@@ -33,7 +33,7 @@
   </div>
 
   <div class="mb_x" ng-if="!$ctrl.nameFieldsDisabled">
-    <div class="row">
+    <div class="row cru-give-donor-type-row">
       <div class="col-md-6">
         <a id="householdTypeLink" href="" class="tab-btn btn btn-default btn-block" ng-click="$ctrl.donorDetails['donor-type'] = 'Household'" ng-class="{'on': $ctrl.donorDetails['donor-type'] === 'Household'}" translate>{{'GIVE_AS_INDIVIDUAL'}}</a>
       </div>
@@ -51,7 +51,7 @@
           <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.nameGivenName | showErrors)}">
             <label>
               <span translate>{{'FIRST_NAME'}}</span>
-              <input 
+              <input
                 type="text"
                 class="form-control  form-control-subtle"
                 name="nameGivenName"
@@ -119,7 +119,7 @@
             </label>
           </div>
         </div>
-        <div ng-if="$ctrl.donorDetails['donor-type'] === 'Household' && $ctrl.useV3">
+        <div id="cru-give-spouse-button-wrapper" ng-if="$ctrl.donorDetails['donor-type'] === 'Household' && $ctrl.useV3">
           <div class="col-sm-12 col-md-2">
             <div class="form-group">
               <label class="mb0 hidden-xs hidden-sm">

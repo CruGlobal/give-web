@@ -3,7 +3,7 @@
   submission-error="$ctrl.submissionError"
   submission-error-status="$ctrl.submissionErrorStatus">
 </checkout-error-messages>
-<div class="panel">
+<div id="cru-give-gift-details-wrapper" class="panel">
   <div class="panel-body loading-overlay-parent">
     <loading ng-if="$ctrl.loadingProductConfig">
       <translate>Loading gift details...</translate>
@@ -28,7 +28,7 @@
   </div>
 </div>
 <div ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig">
-  <div class="panel">
+  <div id="cru-give-contact-info-wrapper" class="panel">
     <div class="panel-body">
       <h3 ng-if="!$ctrl.useV3" class="panel-name" translate>{{'YOUR_INFORMATION'}}</h3>
       <contact-info
@@ -40,7 +40,7 @@
       </contact-info>
     </div>
   </div>
-  <div class="panel">
+  <div id="cru-give-payment-wrapper" class="panel">
     <div class="panel-body">
       <h3 class="panel-name" translate>{{'PAYMENT'}}</h3>
       <checkout-step-2 hide-buttons="true"
@@ -53,7 +53,7 @@
       </checkout-step-2>
     </div>
   </div>
-  <div class="panel" ng-if="$ctrl.premiumCode">
+  <div id="cru-give-premium-wrapper" class="panel" ng-if="$ctrl.premiumCode">
     <div class="panel-body">
       <h3 class="panel-name" translate>{{'CHOOSE_RESOURCE'}}</h3>
       <div class="row text-left">
