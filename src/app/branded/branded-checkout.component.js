@@ -65,16 +65,19 @@ class BrandedCheckoutController {
 
   normalizeApiUrl (url) {
     if (!url) {
-      return url;
+      return url
     }
 
     // Remove trailing slashes
-    url = url.replace(/\/+$/, '');
+    url = url.replace(/\/+$/, '')
 
-     // Remove protocol if present
-    url = url.replace(/^https?:/, '');
+    // Remove protocol if present
+    url = url.replace(/^https?:/, '')
 
-    return url.startsWith('//') ? url : '//' + url;
+    // Remove slash before query parameters if present
+    url = url.replace(/\/\?/, '?')
+
+    return url.startsWith('//') ? url : '//' + url
   }
 
   formatDonorDetails () {
