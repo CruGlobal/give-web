@@ -25,6 +25,7 @@ branded-checkout{
     display: block;
   }
 
+  // Prevents layout shifts when loading
   &:has(loading) {
     position: relative;
     display: block;
