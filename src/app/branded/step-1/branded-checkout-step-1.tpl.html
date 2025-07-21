@@ -3,114 +3,109 @@
   submission-error="$ctrl.submissionError"
   submission-error-status="$ctrl.submissionErrorStatus">
 </checkout-error-messages>
-  <loading ng-if="$ctrl.loading || $ctrl.loadingProductConfig || $ctrl.errorLoadingProductConfig">
-    <translate>{{'LOADING_GIFT_DETAILS'}}</translate>
-  </loading>
-<div ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig">
-  <div class="panel">
-    <div class="panel-body give-loading-overlay-parent">
-      <loading ng-if="$ctrl.loadingProductConfig">
-        <translate>Loading gift details...</translate>
-      </loading>
-      <product-config-form
-        code="$ctrl.code"
-        is-edit="$ctrl.isEdit"
-        item-config="$ctrl.itemConfig"
-        default-frequency="$ctrl.defaultFrequency"
-        uri="$ctrl.item.uri"
-        submitted="$ctrl.submitted"
-        on-state-change="$ctrl.onGiftConfigStateChange(state)"
-        disable-session-restart="true"
-        ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig"
-        hide-quarterly="$ctrl.hideQuarterly"
-        hide-annual="$ctrl.hideAnnual"
-        use-v3="$ctrl.useV3">
-      </product-config-form>
-      <div ng-if="$ctrl.errorLoadingProductConfig" class="alert alert-danger" role="alert">
-        <p translate='LOADING_ERROR' translate-values="{loadData: '$ctrl.loadData()'}" translate-compile></p>
-      </div>
+<div class="panel">
+  <div class="panel-body loading-overlay-parent">
+    <loading ng-if="$ctrl.loadingProductConfig">
+      <translate>Loading gift details...</translate>
+    </loading>
+    <product-config-form
+      code="$ctrl.code"
+      is-edit="$ctrl.isEdit"
+      item-config="$ctrl.itemConfig"
+      default-frequency="$ctrl.defaultFrequency"
+      uri="$ctrl.item.uri"
+      submitted="$ctrl.submitted"
+      on-state-change="$ctrl.onGiftConfigStateChange(state)"
+      disable-session-restart="true"
+      ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig"
+      hide-quarterly="$ctrl.hideQuarterly"
+      hide-annual="$ctrl.hideAnnual"
+      use-v3="$ctrl.useV3">
+    </product-config-form>
+    <div ng-if="$ctrl.errorLoadingProductConfig" class="alert alert-danger" role="alert">
+      <p translate='LOADING_ERROR' translate-values="{loadData: '$ctrl.loadData()'}" translate-compile></p>
     </div>
   </div>
-  <div>
-    <div class="panel">
-      <div class="panel-body">
-        <h3 ng-if="!$ctrl.useV3" class="panel-name" translate>{{'YOUR_INFORMATION'}}</h3>
-        <contact-info
-          submitted="$ctrl.submitted"
-          on-submit="$ctrl.onContactInfoSubmit(success)"
-          donor-details="$ctrl.donorDetails"
-          radio-station-api-url="$ctrl.radioStationApiUrl"
-          use-v3="$ctrl.useV3">
-        </contact-info>
-      </div>
+</div>
+<div ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig">
+  <div class="panel">
+    <div class="panel-body">
+      <h3 ng-if="!$ctrl.useV3" class="panel-name" translate>{{'YOUR_INFORMATION'}}</h3>
+      <contact-info
+        submitted="$ctrl.submitted"
+        on-submit="$ctrl.onContactInfoSubmit(success)"
+        donor-details="$ctrl.donorDetails"
+        radio-station-api-url="$ctrl.radioStationApiUrl"
+        use-v3="$ctrl.useV3">
+      </contact-info>
     </div>
-    <div class="panel">
-      <div class="panel-body">
-        <h3 class="panel-name" translate>{{'PAYMENT'}}</h3>
-        <checkout-step-2 hide-buttons="true"
-          submitted="$ctrl.submitted"
-          on-state-change="$ctrl.onPaymentStateChange(state)"
-          mailing-address="$ctrl.donorDetails.mailingAddress"
-          default-payment-type="$ctrl.defaultPaymentType"
-          hide-payment-type-options="$ctrl.hidePaymentTypeOptions"
-          branded-checkout-item="$ctrl.showCoverFees === 'true' ? $ctrl.itemConfig : undefined">
-        </checkout-step-2>
-      </div>
+  </div>
+  <div class="panel">
+    <div class="panel-body">
+      <h3 class="panel-name" translate>{{'PAYMENT'}}</h3>
+      <checkout-step-2 hide-buttons="true"
+        submitted="$ctrl.submitted"
+        on-state-change="$ctrl.onPaymentStateChange(state)"
+        mailing-address="$ctrl.donorDetails.mailingAddress"
+        default-payment-type="$ctrl.defaultPaymentType"
+        hide-payment-type-options="$ctrl.hidePaymentTypeOptions"
+        branded-checkout-item="$ctrl.showCoverFees === 'true' ? $ctrl.itemConfig : undefined">
+      </checkout-step-2>
     </div>
-    <div class="panel" ng-if="$ctrl.premiumCode">
-      <div class="panel-body">
-        <h3 class="panel-name" translate>{{'CHOOSE_RESOURCE'}}</h3>
-        <div class="row text-left">
-          <div class="col-sm-3">
-            <div class="row">
-              <label class="radio-inline">
-                <input
-                  type="radio"
-                  name="premiumSelect"
-                  ng-model="$ctrl.premiumSelected"
-                  ng-value="true"
-                  ng-change="$ctrl.onSelectPremiumOption()">
-                {{$ctrl.premiumName}}
-              </label>
-            </div>
-            <div class="row">
-              <label class="radio-inline">
-                <input
-                  type="radio"
-                  name="premiumSelect"
-                  ng-model="$ctrl.premiumSelected"
-                  ng-value="false"
-                  ng-change="$ctrl.onSelectPremiumOption()">
-                <translate>{{'NO_THANK_YOU'}}</translate>
-              </label>
-            </div>
+  </div>
+  <div class="panel" ng-if="$ctrl.premiumCode">
+    <div class="panel-body">
+      <h3 class="panel-name" translate>{{'CHOOSE_RESOURCE'}}</h3>
+      <div class="row text-left">
+        <div class="col-sm-3">
+          <div class="row">
+            <label class="radio-inline">
+              <input
+                type="radio"
+                name="premiumSelect"
+                ng-model="$ctrl.premiumSelected"
+                ng-value="true"
+                ng-change="$ctrl.onSelectPremiumOption()">
+              {{$ctrl.premiumName}}
+            </label>
           </div>
-          <div ng-if="$ctrl.premiumImageUrl" class="col-sm-4">
-            <img class="premium-thumbnail" ng-src="{{$ctrl.premiumImageUrl}}" />
+          <div class="row">
+            <label class="radio-inline">
+              <input
+                type="radio"
+                name="premiumSelect"
+                ng-model="$ctrl.premiumSelected"
+                ng-value="false"
+                ng-change="$ctrl.onSelectPremiumOption()">
+              <translate>{{'NO_THANK_YOU'}}</translate>
+            </label>
           </div>
+        </div>
+        <div ng-if="$ctrl.premiumImageUrl" class="col-sm-4">
+          <img class="premium-thumbnail" ng-src="{{$ctrl.premiumImageUrl}}" />
         </div>
       </div>
     </div>
-    <div class="panel">
-      <div class="panel-body text-right">
-        <div class="checkout-cta pull-right" ng-if="$ctrl.useV3">
-        <recaptcha-wrapper
-                action="'branded_checkout'"
-                on-success="$ctrl.submit"
-                component-instance="$ctrl"
-                button-id="'submitOrderButton'"
-                button-type="'submit'"
-                button-classes="'btn btn-primary btn-lg btn-block'"
-                button-disabled="$ctrl.errorLoadingProductConfig || !$ctrl.canSubmitOrder()"
-                button-label="'SUBMIT_GIFT'"></recaptcha-wrapper>
-          </div>
+  </div>
+  <div class="panel">
+    <div class="panel-body text-right">
+      <div class="checkout-cta pull-right" ng-if="$ctrl.useV3">
+       <recaptcha-wrapper
+              action="'branded_checkout'"
+              on-success="$ctrl.submit"
+              component-instance="$ctrl"
+              button-id="'submitOrderButton'"
+              button-type="'submit'"
+              button-classes="'btn btn-primary btn-lg btn-block'"
+              button-disabled="$ctrl.errorLoadingProductConfig || !$ctrl.canSubmitOrder()"
+              button-label="'SUBMIT_GIFT'"></recaptcha-wrapper>
+        </div>
 
-        <button ng-if="!$ctrl.useV3" class="btn btn-primary"
-                ng-click="$ctrl.submit()"
-                ng-disabled="$ctrl.errorLoadingProductConfig"
-                translate>{{'CONTINUE'}}</button>
-    </div>
-    </div>
+      <button ng-if="!$ctrl.useV3" class="btn btn-primary"
+              ng-click="$ctrl.submit()"
+              ng-disabled="$ctrl.errorLoadingProductConfig"
+              translate>{{'CONTINUE'}}</button>
+  </div>
   </div>
 </div>
 <loading type="fixed" ng-if="$ctrl.loadingAndSubmitting">
