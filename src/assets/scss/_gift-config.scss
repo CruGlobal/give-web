@@ -40,7 +40,7 @@ label.btn-radio {
   }
 
   input[type="radio"] ~ i.fa.fa-circle-o {
-    display: inline; 
+    display: inline;
     color: $colorGrayscale-pebble;
     font-size: 1em;
     transition-delay: 200ms;
@@ -225,15 +225,19 @@ label.btn.btn-default-form.active {
   flex-direction: column;
 
   & > .suggested-gift-amounts {
-    order: 3;
+    order: 4;
   }
 
   & > .gift-frequency {
     order: 1;
   }
-  
-  & > .special-instructions {
+
+  & > .gift-dates {
     order: 2;
+  }
+
+  & > .special-instructions {
+    order: 3;
   }
 }
 
