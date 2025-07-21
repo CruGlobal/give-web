@@ -32,7 +32,8 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         'uatpub.aws.cru.org',
         'uatdisp.aws.cru.org',
         'cru-givestage.s3.amazonaws.com',
-        'give-stage-static.cru.org'
+        'give-stage-static.cru.org',
+        'wp-stage.familylife.com'
       ],
       nonprod: [
         'give-stage2-next.cru.org',
