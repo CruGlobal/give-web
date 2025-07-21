@@ -7,14 +7,14 @@ loading {
     display: inline-block;
     width: 7px;
     border-radius: 10%;
-    transition: background .2s;
+    transition: background-color 0.2s;
     vertical-align: middle;
   }
 
   .give-loading1 {
     height: 26px;
     animation: give-fade 1.2s infinite;
-    animation-delay: 0s;
+    animation-delay: 0.0s;
   }
 
   .give-loading2 {
@@ -37,19 +37,19 @@ loading {
 
   @keyframes give-fade {
     0%, 100% {
-      background: #e0e0e0;
+      background: $colorGrayscale-background;
     }
 
     25% {
-      background: #43B3C9;
+      background: $colorCru-blueBright;
     }
 
     50% {
-      background: #F9B625;
+      background: $colorCru-gold;
     }
 
     75% {
-      background: #DE8123;
+      background: $colorCru-orange;
     }
   }
 
@@ -67,7 +67,7 @@ loading {
     height: 100%;
     align-items: center;
     justify-content: space-around;
-    background-color: rgb(255 255 255 / 70%);
+    background-color: rgba(255, 255, 255, 0.7);
   }
 
   .give-loading-fixed:first-child {

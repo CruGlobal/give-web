@@ -24,4 +24,32 @@ branded-checkout{
   .row {
     display: block;
   }
+
+  &:has(loading) {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    height: 200px;
+  }
+
+  & *:has(loading) {
+    position: static !important;
+  }
+
+  & loading {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: $body-bg;
+  }
+
+  & product-config-form loading {
+    z-index: 99;
+  }
+
+  & contact-info:has(loading) {
+    display: none;
+  }
 }
