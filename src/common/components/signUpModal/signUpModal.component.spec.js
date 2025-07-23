@@ -1,153 +1,160 @@
-import angular from 'angular'
-import 'angular-mocks'
-import { Observable } from 'rxjs/Observable'
-import 'rxjs/add/observable/from'
-import 'rxjs/add/observable/of'
-import module, { countryFieldSelector, inputFieldErrorSelectorPrefix, regionFieldSelector } from './signUpModal.component'
-import { Sessions } from 'common/services/session/session.service'
-import { cortexRole } from 'common/services/session/fixtures/cortex-role'
-import { giveSession } from 'common/services/session/fixtures/give-session'
-import { cruProfile } from 'common/services/session/fixtures/cru-profile'
-import { schema, user } from './signUpModal.component.mock'
-import { customFields } from './signUpFormCustomFields'
-import {showVerificationCodeField, injectBackButton} from '../../lib/oktaSignInWidgetHelper/oktaSignInWidgetHelper';
-import { before } from 'lodash'
+import angular from 'angular';
+import 'angular-mocks';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/from';
+import 'rxjs/add/observable/of';
+import module, {
+  countryFieldSelector,
+  inputFieldErrorSelectorPrefix,
+  regionFieldSelector,
+} from './signUpModal.component';
+import { Sessions } from 'common/services/session/session.service';
+import { cortexRole } from 'common/services/session/fixtures/cortex-role';
+import { giveSession } from 'common/services/session/fixtures/give-session';
+import { cruProfile } from 'common/services/session/fixtures/cru-profile';
+import { schema, user } from './signUpModal.component.mock';
+import { customFields } from './signUpFormCustomFields';
+import {
+  showVerificationCodeField,
+  injectBackButton,
+} from '../../lib/oktaSignInWidgetHelper/oktaSignInWidgetHelper';
+import { before } from 'lodash';
 
 jest.mock('../../lib/oktaSignInWidgetHelper/oktaSignInWidgetHelper');
-showVerificationCodeField.mockImplementation(() => {})
-injectBackButton.mockImplementation(() => {})
+showVerificationCodeField.mockImplementation(() => {});
+injectBackButton.mockImplementation(() => {});
 
 describe('signUpForm', function () {
-  beforeEach(angular.mock.module(module.name))
-  let $ctrl, bindings, $rootScope, $flushPendingTasks
+  beforeEach(angular.mock.module(module.name));
+  let $ctrl, bindings, $rootScope, $flushPendingTasks;
 
-  beforeEach(inject(function (_$rootScope_,  _$componentController_, _$flushPendingTasks_) {
-    $rootScope = _$rootScope_
-    $flushPendingTasks = _$flushPendingTasks_
+  beforeEach(inject(function (
+    _$rootScope_,
+    _$componentController_,
+    _$flushPendingTasks_,
+  ) {
+    $rootScope = _$rootScope_;
+    $flushPendingTasks = _$flushPendingTasks_;
     bindings = {
       onSignIn: jest.fn(),
       onSignUpError: jest.fn(),
       signUpForm: {
         $valid: false,
-        $setSubmitted: jest.fn()
+        $setSubmitted: jest.fn(),
       },
-    }
-    $ctrl = _$componentController_(module.name, {}, bindings)
-    $ctrl.loadTranslations()
-    $flushPendingTasks()
+    };
+    $ctrl = _$componentController_(module.name, {}, bindings);
+    $ctrl.loadTranslations();
+    $flushPendingTasks();
 
     // Prevent the actual Okta widget from being created in tests
-    jest.spyOn($ctrl, 'setUpSignUpWidget').mockImplementation(() => {})
+    jest.spyOn($ctrl, 'setUpSignUpWidget').mockImplementation(() => {});
 
-    jest.spyOn($ctrl.sessionService, 'signIn').mockReturnValue(Observable.of({}))
-  }))
+    jest
+      .spyOn($ctrl.sessionService, 'signIn')
+      .mockReturnValue(Observable.of({}));
+  }));
 
   it('to be defined', function () {
-    expect($ctrl).toBeDefined()
-  })
+    expect($ctrl).toBeDefined();
+  });
 
   describe('$onInit()', () => {
-
     it('should initialize variables and load data', () => {
-      jest.spyOn($ctrl, 'loadTranslations')
-      jest.spyOn($ctrl, 'loadDonorDetails')
-      $ctrl.$onInit()
+      jest.spyOn($ctrl, 'loadTranslations');
+      jest.spyOn($ctrl, 'loadDonorDetails');
+      $ctrl.$onInit();
 
-      expect($ctrl.currentStep).toEqual(1)
-      expect($ctrl.donorDetails).toEqual({})
-      expect($ctrl.signUpErrors).toEqual([])
-      expect($ctrl.isLoading).toEqual(true)
-      expect($ctrl.submitting).toEqual(false)
-    })
+      expect($ctrl.currentStep).toEqual(1);
+      expect($ctrl.donorDetails).toEqual({});
+      expect($ctrl.signUpErrors).toEqual([]);
+      expect($ctrl.isLoading).toEqual(true);
+      expect($ctrl.submitting).toEqual(false);
+    });
 
     it('should set up Okta Sign Up widget', (done) => {
-      jest.spyOn($ctrl, 'loadDonorDetails').mockReturnValue(Observable.of())
+      jest.spyOn($ctrl, 'loadDonorDetails').mockReturnValue(Observable.of());
 
-      $ctrl.$onInit()
+      $ctrl.$onInit();
 
       setTimeout(() => {
-        expect($ctrl.setUpSignUpWidget).toHaveBeenCalled()
-        done()
-      })
-    })
+        expect($ctrl.setUpSignUpWidget).toHaveBeenCalled();
+        done();
+      });
+    });
 
-
-    describe('with \'REGISTERED\' cortex-session', () => {
-      let $cookies
+    describe("with 'REGISTERED' cortex-session", () => {
+      let $cookies;
       beforeEach(inject(function (_$cookies_) {
-        $cookies = _$cookies_
-        $cookies.put(Sessions.role, cortexRole.registered)
-        $cookies.put(Sessions.give, giveSession)
-        $cookies.put(Sessions.profile, cruProfile)
-        $rootScope.$digest()
-      }))
+        $cookies = _$cookies_;
+        $cookies.put(Sessions.role, cortexRole.registered);
+        $cookies.put(Sessions.give, giveSession);
+        $cookies.put(Sessions.profile, cruProfile);
+        $rootScope.$digest();
+      }));
 
       afterEach(() => {
         [Sessions.role, Sessions.give, Sessions.profile].forEach((name) => {
-          $cookies.remove(name)
-        })
-      })
+          $cookies.remove(name);
+        });
+      });
 
       it('Redirects user to sign in modal', () => {
-        jest.spyOn($ctrl, 'onSignIn')
-        $ctrl.$onInit()
+        jest.spyOn($ctrl, 'onSignIn');
+        $ctrl.$onInit();
 
-        expect($ctrl.onSignIn).toHaveBeenCalled()
-      })
-    })
-  })
+        expect($ctrl.onSignIn).toHaveBeenCalled();
+      });
+    });
+  });
 
   describe('parseSchema()', () => {
     describe('getStep1Fields()', () => {
       const onSuccess = jest.fn();
-      let defaultData = [
-        schema[0],
-        schema[1],
-        schema[2],
-      ]
+      let defaultData = [schema[0], schema[1], schema[2]];
 
       beforeEach(() => {
         $ctrl.translations = {
           giveAsIndividual: 'Household',
           giveAsOrganization: 'Organization',
           organizationName: 'Organization Name',
-        }
+        };
         $ctrl.sessionService.session = {
           first_name: '',
           last_name: '',
-          email: ''
-        }
+          email: '',
+        };
         $ctrl.donorDetails = {
           name: {
             'given-name': '',
-            'family-name': ''
+            'family-name': '',
           },
           email: '',
-          'donor-type': ''
-        }
-        $ctrl.$scope = {}
-        defaultData= [
+          'donor-type': '',
+        };
+        $ctrl.$scope = {};
+        defaultData = [
           ...defaultData,
           {
             ...customFields.accountType,
             options: {
               Household: 'Household',
-              Organization: 'Organization'
+              Organization: 'Organization',
             },
-            value: 'Household'
+            value: 'Household',
           },
           {
             ...customFields.organizationName,
             label: 'Organization Name',
-            value: ''
-          }
-        ]
+            value: '',
+          },
+        ];
       });
 
       it('should default to Step 1 and return data correctly', () => {
         $ctrl.parseSchema(schema, onSuccess);
 
-        expect(onSuccess).toHaveBeenCalledWith(defaultData)
+        expect(onSuccess).toHaveBeenCalledWith(defaultData);
       });
 
       it('should use saved data from $scope', () => {
@@ -156,8 +163,8 @@ describe('signUpForm', function () {
           lastName: user.lastName,
           email: user.email,
           accountType: user.accountType,
-          organizationName: user.organizationName
-        }
+          organizationName: user.organizationName,
+        };
         $ctrl.parseSchema(schema, onSuccess);
 
         expect(onSuccess).toHaveBeenCalledWith([
@@ -175,26 +182,25 @@ describe('signUpForm', function () {
           },
           {
             ...defaultData[3],
-            value: $ctrl.$scope.accountType
+            value: $ctrl.$scope.accountType,
           },
           {
             ...defaultData[4],
-            value: $ctrl.$scope.organizationName
-          }
-        ])
-      })
+            value: $ctrl.$scope.organizationName,
+          },
+        ]);
+      });
 
       it('should use saved data from donorDetails', () => {
         $ctrl.donorDetails = {
           name: {
             'given-name': `${user.firstName} donor`,
-            'family-name': `${user.lastName} donor`
+            'family-name': `${user.lastName} donor`,
           },
           email: `${user.email} donor`,
           'donor-type': 'Organization',
-          'organization-name': `${user.organizationName} donor`
-
-        }
+          'organization-name': `${user.organizationName} donor`,
+        };
         $ctrl.parseSchema(schema, onSuccess);
 
         expect(onSuccess).toHaveBeenCalledWith([
@@ -212,21 +218,21 @@ describe('signUpForm', function () {
           },
           {
             ...defaultData[3],
-            value: $ctrl.donorDetails['donor-type']
+            value: $ctrl.donorDetails['donor-type'],
           },
           {
             ...defaultData[4],
-            value: $ctrl.donorDetails['organization-name']
-          }
-        ])
+            value: $ctrl.donorDetails['organization-name'],
+          },
+        ]);
       });
 
       it('should use saved data from the session', () => {
         $ctrl.sessionService.session = {
           first_name: `${user.firstName} session`,
           last_name: `${user.lastName} session`,
-          email: `${user.email} session`
-        }
+          email: `${user.email} session`,
+        };
         $ctrl.parseSchema(schema, onSuccess);
 
         expect(onSuccess).toHaveBeenCalledWith([
@@ -244,20 +250,19 @@ describe('signUpForm', function () {
           },
           {
             ...defaultData[3],
-            value: 'Household'
+            value: 'Household',
           },
           {
             ...defaultData[4],
-            value: ''
-          }
-        ])
+            value: '',
+          },
+        ]);
       });
     });
 
-
     describe('getStep2Fields()', () => {
       const onSuccess = jest.fn();
-      let defaultData = []
+      let defaultData = [];
       beforeEach(() => {
         $ctrl.currentStep = 2;
         $ctrl.translations = {
@@ -265,17 +270,17 @@ describe('signUpForm', function () {
           address: 'Street address',
           city: 'City',
           state: 'State',
-          zip:  'Zip code',
-        }
+          zip: 'Zip code',
+        };
         $ctrl.countryCodeOptions = {
           US: 'USA',
           UK: 'United Kingdom',
-          CA: 'Canada'
-        }
+          CA: 'Canada',
+        };
         $ctrl.stateOptions = {
           CA: 'California',
-          GA: 'Georgia'
-        }
+          GA: 'Georgia',
+        };
         $ctrl.donorDetails = {
           mailingAddress: {
             streetAddress: '',
@@ -286,44 +291,44 @@ describe('signUpForm', function () {
           },
           name: {
             'given-name': '',
-            'family-name': ''
+            'family-name': '',
           },
           email: '',
-          'donor-type': ''
-        }
+          'donor-type': '',
+        };
         $ctrl.$scope = {
           streetAddress: '',
           city: '',
           state: '',
           zipCode: '',
           countryCode: '',
-        }
+        };
 
         defaultData = [
           {
             ...customFields.countryCode,
             options: $ctrl.countryCodeOptions,
-            value: 'US'
+            value: 'US',
           },
           {
             ...customFields.streetAddress,
-            value: ''
+            value: '',
           },
           {
             ...customFields.streetAddressExtended,
-            value: ''
+            value: '',
           },
           {
             ...customFields.internationalAddressLine3,
-            value: ''
+            value: '',
           },
           {
             ...customFields.internationalAddressLine4,
-            value: ''
+            value: '',
           },
           {
             ...customFields.city,
-            value: ''
+            value: '',
           },
           {
             ...customFields.state,
@@ -331,18 +336,18 @@ describe('signUpForm', function () {
               '': '',
               ...$ctrl.stateOptions,
             },
-            value: ''
+            value: '',
           },
           {
             ...customFields.zipCode,
-            value: ''
+            value: '',
           },
-        ]
+        ];
       });
 
       it('should return step 2 using default data', () => {
         $ctrl.parseSchema(schema, onSuccess);
-        expect(onSuccess).toHaveBeenCalledWith(defaultData)
+        expect(onSuccess).toHaveBeenCalledWith(defaultData);
       });
 
       it('should use saved data from $scope', () => {
@@ -360,38 +365,38 @@ describe('signUpForm', function () {
         expect(onSuccess).toHaveBeenCalledWith([
           {
             ...defaultData[0],
-            value: $ctrl.$scope.countryCode
+            value: $ctrl.$scope.countryCode,
           },
           {
             ...defaultData[1],
-            value: $ctrl.$scope.streetAddress
+            value: $ctrl.$scope.streetAddress,
           },
           {
             ...defaultData[2],
-            value: $ctrl.$scope.streetAddressExtended
+            value: $ctrl.$scope.streetAddressExtended,
           },
           {
             ...defaultData[3],
-            value: 'internationalAddressLine3'
+            value: 'internationalAddressLine3',
           },
           {
             ...defaultData[4],
-            value: 'internationalAddressLine4'
+            value: 'internationalAddressLine4',
           },
           {
             ...defaultData[5],
-            value: $ctrl.$scope.city
+            value: $ctrl.$scope.city,
           },
           {
             ...defaultData[6],
-            value: $ctrl.$scope.state
+            value: $ctrl.$scope.state,
           },
           {
             ...defaultData[7],
-            value: $ctrl.$scope.zipCode
+            value: $ctrl.$scope.zipCode,
           },
-        ])
-      })
+        ]);
+      });
 
       it('should use saved data from donorDetails', () => {
         $ctrl.donorDetails.mailingAddress.country = `CA`;
@@ -408,37 +413,37 @@ describe('signUpForm', function () {
         expect(onSuccess).toHaveBeenCalledWith([
           {
             ...defaultData[0],
-            value: $ctrl.donorDetails.mailingAddress.country
+            value: $ctrl.donorDetails.mailingAddress.country,
           },
           {
             ...defaultData[1],
-            value: $ctrl.donorDetails.mailingAddress.streetAddress
+            value: $ctrl.donorDetails.mailingAddress.streetAddress,
           },
           {
             ...defaultData[2],
-            value: $ctrl.donorDetails.mailingAddress.extendedAddress
+            value: $ctrl.donorDetails.mailingAddress.extendedAddress,
           },
           {
             ...defaultData[3],
-            value: $ctrl.donorDetails.mailingAddress.intAddressLine3
+            value: $ctrl.donorDetails.mailingAddress.intAddressLine3,
           },
           {
             ...defaultData[4],
-            value: $ctrl.donorDetails.mailingAddress.intAddressLine4
+            value: $ctrl.donorDetails.mailingAddress.intAddressLine4,
           },
           {
             ...defaultData[5],
-            value: $ctrl.donorDetails.mailingAddress.locality
+            value: $ctrl.donorDetails.mailingAddress.locality,
           },
           {
             ...defaultData[6],
-            value: $ctrl.donorDetails.mailingAddress.region
+            value: $ctrl.donorDetails.mailingAddress.region,
           },
           {
             ...defaultData[7],
-            value: $ctrl.donorDetails.mailingAddress.postalCode
+            value: $ctrl.donorDetails.mailingAddress.postalCode,
           },
-        ])
+        ]);
       });
     });
   });
@@ -446,42 +451,49 @@ describe('signUpForm', function () {
   describe('loadCountries()', () => {
     const countries = [
       { name: 'US', 'display-name': 'USA' },
-      { name: 'UK', 'display-name': 'United Kingdom' }
+      { name: 'UK', 'display-name': 'United Kingdom' },
     ];
     beforeEach(() => {
-      $ctrl.countryCodeOptions = {}
-      $ctrl.countriesData = null
+      $ctrl.countryCodeOptions = {};
+      $ctrl.countriesData = null;
       $ctrl.$scope.countryCode = null;
       jest.spyOn($ctrl, 'refreshRegions').mockReturnValue(Observable.of(''));
-      jest.spyOn($ctrl.geographiesService, 'getCountries').mockReturnValue(Observable.of(countries));
+      jest
+        .spyOn($ctrl.geographiesService, 'getCountries')
+        .mockReturnValue(Observable.of(countries));
     });
 
     it('should set loadingCountriesError to false', () => {
       $ctrl.loadingCountriesError = true;
-      $ctrl.loadCountries({initial: false}).subscribe(() => {
+      $ctrl.loadCountries({ initial: false }).subscribe(() => {
         expect($ctrl.loadingCountriesError).toBe(false);
       });
     });
 
     it('should log an error if error occurs while calling getCountries()', (done) => {
       const error = new Error('Error loading countries');
-      $ctrl.geographiesService.getCountries.mockReturnValue(Observable.throw(error));
+      $ctrl.geographiesService.getCountries.mockReturnValue(
+        Observable.throw(error),
+      );
       jest.spyOn($ctrl.$log, 'error');
-      $ctrl.loadCountries({initial: false}).subscribe({
+      $ctrl.loadCountries({ initial: false }).subscribe({
         error: () => {
           expect($ctrl.loadingCountriesError).toBe(true);
-          expect($ctrl.$log.error).toHaveBeenCalledWith('Okta Sign up: Error loading countries.', error);
+          expect($ctrl.$log.error).toHaveBeenCalledWith(
+            'Okta Sign up: Error loading countries.',
+            error,
+          );
           done();
-        }
+        },
       });
     });
 
     it('should set countryCodeOptions & countriesData when data is found', (done) => {
       const expectedCountryCodeOptions = {
         US: 'USA',
-        UK: 'United Kingdom'
-      }
-      $ctrl.loadCountries({initial: false}).subscribe((data) => {
+        UK: 'United Kingdom',
+      };
+      $ctrl.loadCountries({ initial: false }).subscribe((data) => {
         expect($ctrl.countryCodeOptions).toEqual(expectedCountryCodeOptions);
         expect(data).toEqual(expectedCountryCodeOptions);
         expect($ctrl.countriesData).toEqual(countries);
@@ -490,23 +502,23 @@ describe('signUpForm', function () {
     });
 
     it('should not call refreshRegions()', (done) => {
-      $ctrl.loadCountries({initial: false}).subscribe(() => {
-        expect($ctrl.refreshRegions).not.toHaveBeenCalled()
+      $ctrl.loadCountries({ initial: false }).subscribe(() => {
+        expect($ctrl.refreshRegions).not.toHaveBeenCalled();
         done();
       });
     });
 
     it('should call refreshRegions() is this.$scope.countryCode is set', (done) => {
       $ctrl.$scope.countryCode = 'UK';
-      $ctrl.loadCountries({initial: false}).subscribe(() => {
-        expect($ctrl.refreshRegions).toHaveBeenCalledWith('UK')
+      $ctrl.loadCountries({ initial: false }).subscribe(() => {
+        expect($ctrl.refreshRegions).toHaveBeenCalledWith('UK');
         done();
       });
     });
 
     it('should call refreshRegions() when initial time running function', (done) => {
-      $ctrl.loadCountries({initial: true}).subscribe(() => {
-        expect($ctrl.refreshRegions).toHaveBeenCalledWith('US')
+      $ctrl.loadCountries({ initial: true }).subscribe(() => {
+        expect($ctrl.refreshRegions).toHaveBeenCalledWith('US');
         done();
       });
     });
@@ -514,11 +526,11 @@ describe('signUpForm', function () {
     it("should use donorDetails's country", (done) => {
       $ctrl.donorDetails = {
         mailingAddress: {
-          country: 'CA'
-        }
-      }
-      $ctrl.loadCountries({initial: true}).subscribe(() => {
-        expect($ctrl.refreshRegions).toHaveBeenCalledWith('CA')
+          country: 'CA',
+        },
+      };
+      $ctrl.loadCountries({ initial: true }).subscribe(() => {
+        expect($ctrl.refreshRegions).toHaveBeenCalledWith('CA');
         done();
       });
     });
@@ -532,25 +544,27 @@ describe('signUpForm', function () {
           name: 'country',
           regions: [
             { name: 'region1', 'display-name': 'Region 1' },
-            { name: 'region2', 'display-name': 'Region 2' }
+            { name: 'region2', 'display-name': 'Region 2' },
           ],
         },
         {
           name: 'country2',
           regions: [
             { name: 'region3', 'display-name': 'Region 3' },
-            { name: 'region4', 'display-name': 'Region 4' }
+            { name: 'region4', 'display-name': 'Region 4' },
           ],
         },
-      ]
-      jest.spyOn($ctrl.geographiesService, 'getRegions').mockReturnValue(Observable.of([]));
+      ];
+      jest
+        .spyOn($ctrl.geographiesService, 'getRegions')
+        .mockReturnValue(Observable.of([]));
     });
 
     it('should return null if selectedCountry is equal to country and forceRetry is false', (done) => {
       $ctrl.selectedCountry.name = 'country';
       $ctrl.refreshRegions('country').subscribe((data) => {
         expect(data).toBe(null);
-        done()
+        done();
       });
     });
 
@@ -559,7 +573,7 @@ describe('signUpForm', function () {
         error: (error) => {
           expect(error.message).toBe('Country not found');
           done();
-        }
+        },
       });
     });
 
@@ -579,17 +593,21 @@ describe('signUpForm', function () {
 
     it('should call geographiesService.getRegions with countryData', (done) => {
       $ctrl.refreshRegions('country').subscribe(() => {
-        expect($ctrl.geographiesService.getRegions).toHaveBeenCalledWith($ctrl.countriesData[0]);
+        expect($ctrl.geographiesService.getRegions).toHaveBeenCalledWith(
+          $ctrl.countriesData[0],
+        );
         done();
       });
     });
 
     it('should set stateOptions if data is found', (done) => {
-     $ctrl.geographiesService.getRegions.mockReturnValue(Observable.of($ctrl.countriesData[0].regions));
+      $ctrl.geographiesService.getRegions.mockReturnValue(
+        Observable.of($ctrl.countriesData[0].regions),
+      );
       $ctrl.refreshRegions('country').subscribe(() => {
         expect($ctrl.stateOptions).toEqual({
           region1: 'Region 1',
-          region2: 'Region 2'
+          region2: 'Region 2',
         });
         done();
       });
@@ -597,14 +615,19 @@ describe('signUpForm', function () {
 
     it('should handle error and set loadingRegionsError to true', (done) => {
       const error = new Error('Error loading regions');
-      $ctrl.geographiesService.getRegions.mockReturnValue(Observable.throw(error));
+      $ctrl.geographiesService.getRegions.mockReturnValue(
+        Observable.throw(error),
+      );
       jest.spyOn($ctrl.$log, 'error');
       $ctrl.refreshRegions('country').subscribe({
         error: () => {
           expect($ctrl.loadingRegionsError).toBe(true);
-          expect($ctrl.$log.error).toHaveBeenCalledWith('Okta Sign up: Error loading regions.', error);
+          expect($ctrl.$log.error).toHaveBeenCalledWith(
+            'Okta Sign up: Error loading regions.',
+            error,
+          );
           done();
-        }
+        },
       });
     });
   });
@@ -615,34 +638,36 @@ describe('signUpForm', function () {
     beforeEach(() => {
       jest.spyOn($ctrl, 'goToNextStep').mockImplementation(() => {});
       jest.spyOn($ctrl, 'injectErrorMessages').mockImplementation(() => {});
-      jest.spyOn($ctrl, 'clearInjectedErrorMessages').mockImplementation(() => {});
-    })
+      jest
+        .spyOn($ctrl, 'clearInjectedErrorMessages')
+        .mockImplementation(() => {});
+    });
 
     it('clears sign up errors', () => {
       $ctrl.signUpErrors = [
-        { property: 'accountType', errorSummary:  'accountTypeError' }
-      ]
+        { property: 'accountType', errorSummary: 'accountTypeError' },
+      ];
 
-      $ctrl.preSubmit({}, onSuccess)
+      $ctrl.preSubmit({}, onSuccess);
 
-      expect($ctrl.signUpErrors).toEqual([])
-      expect($ctrl.clearInjectedErrorMessages).toHaveBeenCalled()
-    })
+      expect($ctrl.signUpErrors).toEqual([]);
+      expect($ctrl.clearInjectedErrorMessages).toHaveBeenCalled();
+    });
 
     describe('saveStep1Data()', () => {
-      let postData = {}
+      let postData = {};
       const orgNameError = 'orgNameError';
 
       beforeEach(() => {
         $ctrl.currentStep = 1;
         $ctrl.translations = {
           orgNameError,
-        }
-        postData= {
+        };
+        postData = {
           userProfile: user,
           accountType: user.accountType,
           organizationName: user.organizationName,
-        }
+        };
       });
 
       it('saves Organisation account Information correctly', () => {
@@ -680,17 +705,16 @@ describe('signUpForm', function () {
         expect($ctrl.injectErrorMessages).toHaveBeenCalledWith([
           {
             property: 'organizationName',
-            errorSummary: orgNameError
-          }
-        ])
+            errorSummary: orgNameError,
+          },
+        ]);
         expect($ctrl.injectErrorMessages).toHaveBeenCalled();
         expect($ctrl.goToNextStep).not.toHaveBeenCalled();
       });
     });
 
-
     describe('saveStep2Data()', () => {
-      let postData = {}
+      let postData = {};
       const cityError = 'cityError';
       const selectStateError = 'selectStateError';
       const zipCodeError = 'zipCodeError';
@@ -702,12 +726,12 @@ describe('signUpForm', function () {
           cityError: cityError,
           selectStateError,
           zipCodeError,
-          invalidUSZipError
-        }
-        postData= {
+          invalidUSZipError,
+        };
+        postData = {
           userProfile: user,
           organizationName: user.organizationName,
-        }
+        };
       });
 
       describe('Saves Information', () => {
@@ -717,7 +741,9 @@ describe('signUpForm', function () {
 
         afterEach(() => {
           expect($ctrl.$scope.streetAddress).toEqual(user.streetAddress);
-          expect($ctrl.$scope.streetAddressExtended).toEqual(user.streetAddressExtended);
+          expect($ctrl.$scope.streetAddressExtended).toEqual(
+            user.streetAddressExtended,
+          );
           expect($ctrl.goToNextStep).toHaveBeenCalled();
           expect(onSuccess).not.toHaveBeenCalled();
         });
@@ -737,51 +763,57 @@ describe('signUpForm', function () {
           const internationalAddressLine3 = 'internationalAddressLine3';
           const internationalAddressLine4 = 'internationalAddressLine4';
           postData.userProfile.countryCode = 'UK';
-          postData.userProfile.internationalAddressLine3 = internationalAddressLine3;
-          postData.userProfile.internationalAddressLine4 = internationalAddressLine4;
+          postData.userProfile.internationalAddressLine3 =
+            internationalAddressLine3;
+          postData.userProfile.internationalAddressLine4 =
+            internationalAddressLine4;
           $ctrl.preSubmit(postData, onSuccess);
 
           expect($ctrl.$scope.city).toEqual('');
           expect($ctrl.$scope.state).toEqual('');
           expect($ctrl.$scope.zipCode).toEqual('');
           expect($ctrl.$scope.countryCode).toEqual('UK');
-          expect($ctrl.$scope.internationalAddressLine3).toEqual(internationalAddressLine3)
-          expect($ctrl.$scope.internationalAddressLine4).toEqual(internationalAddressLine4)
+          expect($ctrl.$scope.internationalAddressLine3).toEqual(
+            internationalAddressLine3,
+          );
+          expect($ctrl.$scope.internationalAddressLine4).toEqual(
+            internationalAddressLine4,
+          );
           postData.userProfile.countryCode = 'US';
         });
       });
 
       it('should handle no country error', () => {
-        postData.userProfile = {...postData.userProfile, city: ''};
+        postData.userProfile = { ...postData.userProfile, city: '' };
         $ctrl.preSubmit(postData, onSuccess);
         expect($ctrl.injectErrorMessages).toHaveBeenCalledWith([
           {
             property: 'userProfile.city',
-            errorSummary: cityError
-          }
-        ])
+            errorSummary: cityError,
+          },
+        ]);
       });
 
       it('should handle no state error', () => {
-        postData.userProfile = {...postData.userProfile, state: ''};
+        postData.userProfile = { ...postData.userProfile, state: '' };
         $ctrl.preSubmit(postData, onSuccess);
         expect($ctrl.injectErrorMessages).toHaveBeenCalledWith([
           {
             property: 'userProfile.state',
-            errorSummary: selectStateError
-          }
-        ])
+            errorSummary: selectStateError,
+          },
+        ]);
       });
 
       it('should handle no zipCode error', () => {
-        postData.userProfile = {...postData.userProfile, zipCode: ''};
+        postData.userProfile = { ...postData.userProfile, zipCode: '' };
         $ctrl.preSubmit(postData, onSuccess);
         expect($ctrl.injectErrorMessages).toHaveBeenCalledWith([
           {
             property: 'userProfile.zipCode',
-            errorSummary: zipCodeError
-          }
-        ])
+            errorSummary: zipCodeError,
+          },
+        ]);
       });
 
       describe('Valid US zipCodes', () => {
@@ -810,9 +842,9 @@ describe('signUpForm', function () {
           expect($ctrl.injectErrorMessages).toHaveBeenCalledWith([
             {
               property: 'userProfile.zipCode',
-              errorSummary: invalidUSZipError
-            }
-          ])
+              errorSummary: invalidUSZipError,
+            },
+          ]);
         });
 
         it('should ensure zipCode with letters is invalid', () => {
@@ -837,20 +869,19 @@ describe('signUpForm', function () {
       });
     });
 
-
     it('submitFinalData()', () => {
       const postData = {};
       $ctrl.currentStep = 3;
-      $ctrl.$scope.firstName = user.firstName
-      $ctrl.$scope.lastName = user.lastName
-      $ctrl.$scope.email = user.email
-      $ctrl.$scope.accountType = user.accountType
-      $ctrl.$scope.streetAddress = user.streetAddress
-      $ctrl.$scope.city = user.city
-      $ctrl.$scope.state = user.state
-      $ctrl.$scope.zipCode = user.zipCode
-      $ctrl.$scope.countryCode = user.countryCode
-      $ctrl.$scope.organizationName = user.organizationName
+      $ctrl.$scope.firstName = user.firstName;
+      $ctrl.$scope.lastName = user.lastName;
+      $ctrl.$scope.email = user.email;
+      $ctrl.$scope.accountType = user.accountType;
+      $ctrl.$scope.streetAddress = user.streetAddress;
+      $ctrl.$scope.city = user.city;
+      $ctrl.$scope.state = user.state;
+      $ctrl.$scope.zipCode = user.zipCode;
+      $ctrl.$scope.countryCode = user.countryCode;
+      $ctrl.$scope.organizationName = user.organizationName;
 
       $ctrl.preSubmit(postData, onSuccess);
 
@@ -859,34 +890,34 @@ describe('signUpForm', function () {
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email,
-        }
+        },
       });
     });
   });
 
   describe('postSubmit()', () => {
     it('should call onSuccess', () => {
-      const response = 'response'
-      const onSuccess = jest.fn()
-      $ctrl.postSubmit(response, onSuccess)
+      const response = 'response';
+      const onSuccess = jest.fn();
+      $ctrl.postSubmit(response, onSuccess);
 
-      expect(onSuccess).toHaveBeenCalledWith(response)
+      expect(onSuccess).toHaveBeenCalledWith(response);
     });
   });
 
   describe('Misc functions', () => {
     it('afterError() sets sign up errors and fixes sign up button text', () => {
-      const cause = { message: 'message', property: 'userProfile.email' }
+      const cause = { message: 'message', property: 'userProfile.email' };
       const error = {
         xhr: {
           responseJSON: {
-            errorCauses: [cause]
-          }
-        }
-      }
-      $ctrl.afterError(jest.fn(), error)
+            errorCauses: [cause],
+          },
+        },
+      };
+      $ctrl.afterError(jest.fn(), error);
 
-      expect($ctrl.signUpErrors).toEqual([cause])
+      expect($ctrl.signUpErrors).toEqual([cause]);
 
       // Simulate Okta changing the button text and adding the info box after the `afterError` completes
       document.body.innerHTML = `
@@ -899,50 +930,62 @@ describe('signUpForm', function () {
       `;
 
       // Wait for $timeout
-      $flushPendingTasks()
+      $flushPendingTasks();
 
-      expect(document.querySelector('.button-primary')).toHaveValue('Continue')
-      const errorText = document.querySelector('.okta-form-infobox-error').textContent
-      expect(errorText).toContain('There was an error')
-      expect(errorText).toContain('Please review the following fields: email.')
+      expect(document.querySelector('.button-primary')).toHaveValue('Continue');
+      const errorText = document.querySelector(
+        '.okta-form-infobox-error',
+      ).textContent;
+      expect(errorText).toContain('There was an error');
+      expect(errorText).toContain('Please review the following fields: email.');
     });
 
     describe('afterRender()', () => {
       beforeEach(() => {
-        jest.spyOn($ctrl, 'loadDonorDetails').mockReturnValue(Observable.of({}));
-        jest.spyOn($ctrl, 'updateSignUpButtonText').mockImplementation(() => {});
-        jest.spyOn($ctrl, 'resetCurrentStepOnRegistrationComplete').mockImplementation(() => {});
-        jest.spyOn($ctrl, 'redirectToSignInModalIfNeeded').mockImplementation(() => {});
+        jest
+          .spyOn($ctrl, 'loadDonorDetails')
+          .mockReturnValue(Observable.of({}));
+        jest
+          .spyOn($ctrl, 'updateSignUpButtonText')
+          .mockImplementation(() => {});
+        jest
+          .spyOn($ctrl, 'resetCurrentStepOnRegistrationComplete')
+          .mockImplementation(() => {});
+        jest
+          .spyOn($ctrl, 'redirectToSignInModalIfNeeded')
+          .mockImplementation(() => {});
         jest.spyOn($ctrl, 'injectErrorMessages').mockImplementation(() => {});
-        jest.spyOn($ctrl, 'skipOptionalMFAEnrollment').mockImplementation(() => {});
-        $ctrl.$onInit()
-      })
+        jest
+          .spyOn($ctrl, 'skipOptionalMFAEnrollment')
+          .mockImplementation(() => {});
+        $ctrl.$onInit();
+      });
 
       it('updates the form', () => {
-        $ctrl.currentStep = 2
-        $ctrl.afterRender({ formName: 'enroll-profile' })
+        $ctrl.currentStep = 2;
+        $ctrl.afterRender({ formName: 'enroll-profile' });
 
-        expect($ctrl.updateSignUpButtonText).toHaveBeenCalled()
-        expect($ctrl.resetCurrentStepOnRegistrationComplete).toHaveBeenCalled()
-        expect($ctrl.redirectToSignInModalIfNeeded).toHaveBeenCalled()
-        expect($ctrl.injectErrorMessages).toHaveBeenCalled()
-        expect(injectBackButton).toHaveBeenCalled()
-      })
+        expect($ctrl.updateSignUpButtonText).toHaveBeenCalled();
+        expect($ctrl.resetCurrentStepOnRegistrationComplete).toHaveBeenCalled();
+        expect($ctrl.redirectToSignInModalIfNeeded).toHaveBeenCalled();
+        expect($ctrl.injectErrorMessages).toHaveBeenCalled();
+        expect(injectBackButton).toHaveBeenCalled();
+      });
 
       it('moves to the email verification form', () => {
-        $ctrl.afterRender({ formName: 'enroll-authenticator' })
+        $ctrl.afterRender({ formName: 'enroll-authenticator' });
 
-        expect($ctrl.currentStep).toBe(4)
-        expect(showVerificationCodeField).toHaveBeenCalled()
-      })
+        expect($ctrl.currentStep).toBe(4);
+        expect(showVerificationCodeField).toHaveBeenCalled();
+      });
 
       it('shows the loading screen and skips the MFA enroll', () => {
-        $ctrl.afterRender({ formName: 'select-authenticator-enroll' })
+        $ctrl.afterRender({ formName: 'select-authenticator-enroll' });
 
-        expect($ctrl.currentStep).toBe(5)
-        expect($ctrl.isLoading).toBeTruthy()
-        expect($ctrl.skipOptionalMFAEnrollment).toHaveBeenCalled()
-      })
+        expect($ctrl.currentStep).toBe(5);
+        expect($ctrl.isLoading).toBeTruthy();
+        expect($ctrl.skipOptionalMFAEnrollment).toHaveBeenCalled();
+      });
     });
 
     describe('updateSignUpButtonText', () => {
@@ -951,42 +994,52 @@ describe('signUpForm', function () {
           <div class="o-form-button-bar">
             <input class="button button-primary" value="Sign up">
           <div>
-        `
-      })
+        `;
+      });
 
       it('updates the button text', () => {
-        $ctrl.currentStep = 1
-        $ctrl.updateSignUpButtonText()
+        $ctrl.currentStep = 1;
+        $ctrl.updateSignUpButtonText();
 
-        expect(document.querySelector('.button-primary')).toHaveDisplayValue('Continue')
-      })
+        expect(document.querySelector('.button-primary')).toHaveDisplayValue(
+          'Continue',
+        );
+      });
 
       it('updates to different text on step 3', () => {
-        $ctrl.currentStep = 3
-        $ctrl.updateSignUpButtonText()
+        $ctrl.currentStep = 3;
+        $ctrl.updateSignUpButtonText();
 
-        expect(document.querySelector('.button-primary')).toHaveDisplayValue('Create Account')
-      })
+        expect(document.querySelector('.button-primary')).toHaveDisplayValue(
+          'Create Account',
+        );
+      });
 
       it('does nothing on step 4', () => {
-        $ctrl.currentStep = 4
-        $ctrl.updateSignUpButtonText()
+        $ctrl.currentStep = 4;
+        $ctrl.updateSignUpButtonText();
 
-        expect(document.querySelector('.button-primary')).toHaveDisplayValue('Sign up')
-      })
-    })
+        expect(document.querySelector('.button-primary')).toHaveDisplayValue(
+          'Sign up',
+        );
+      });
+    });
 
     describe('resetCurrentStepOnRegistrationComplete()', () => {
       beforeEach(() => {
-        $ctrl.currentStep = 2
+        $ctrl.currentStep = 2;
       });
       it('resets the sign up form to the beginning', () => {
-        $ctrl.resetCurrentStepOnRegistrationComplete({controller: 'registration-complete'})
-        expect($ctrl.currentStep).toEqual(null)
+        $ctrl.resetCurrentStepOnRegistrationComplete({
+          controller: 'registration-complete',
+        });
+        expect($ctrl.currentStep).toEqual(null);
       });
       it('should not reset the sign up form', () => {
-        $ctrl.resetCurrentStepOnRegistrationComplete({controller: 'registration'})
-        expect($ctrl.currentStep).toEqual(2)
+        $ctrl.resetCurrentStepOnRegistrationComplete({
+          controller: 'registration',
+        });
+        expect($ctrl.currentStep).toEqual(2);
       });
     });
 
@@ -995,54 +1048,57 @@ describe('signUpForm', function () {
         jest.spyOn($ctrl, 'onSignIn').mockImplementation(() => {});
       });
       it('shows the login modal if the user navigates to the okta widget login form', () => {
-        $ctrl.redirectToSignInModalIfNeeded({controller: 'primary-auth'})
-        expect($ctrl.onSignIn).toHaveBeenCalled()
+        $ctrl.redirectToSignInModalIfNeeded({ controller: 'primary-auth' });
+        expect($ctrl.onSignIn).toHaveBeenCalled();
       });
       it('should not reset the sign up form', () => {
-        $ctrl.redirectToSignInModalIfNeeded({controller: 'registration'})
-        expect($ctrl.onSignIn).not.toHaveBeenCalled()
+        $ctrl.redirectToSignInModalIfNeeded({ controller: 'registration' });
+        expect($ctrl.onSignIn).not.toHaveBeenCalled();
       });
     });
 
     it('goToNextStep()', () => {
       jest.spyOn($ctrl, 'reRenderWidget').mockImplementation(() => {});
-      $ctrl.currentStep = 1
-      $ctrl.goToNextStep()
-      expect($ctrl.currentStep).toEqual(2)
-      expect($ctrl.reRenderWidget).toHaveBeenCalled()
+      $ctrl.currentStep = 1;
+      $ctrl.goToNextStep();
+      expect($ctrl.currentStep).toEqual(2);
+      expect($ctrl.reRenderWidget).toHaveBeenCalled();
 
-      $ctrl.goToNextStep()
-      expect($ctrl.currentStep).toEqual(3)
+      $ctrl.goToNextStep();
+      expect($ctrl.currentStep).toEqual(3);
     });
 
     it('goToPreviousStep()', () => {
       jest.spyOn($ctrl, 'reRenderWidget').mockImplementation(() => {});
-      $ctrl.currentStep = 2
-      $ctrl.goToPreviousStep()
-      expect($ctrl.currentStep).toEqual(1)
-      expect($ctrl.reRenderWidget).toHaveBeenCalled()
+      $ctrl.currentStep = 2;
+      $ctrl.goToPreviousStep();
+      expect($ctrl.currentStep).toEqual(1);
+      expect($ctrl.reRenderWidget).toHaveBeenCalled();
 
-      $ctrl.goToPreviousStep()
-      expect($ctrl.currentStep).toEqual(1)
+      $ctrl.goToPreviousStep();
+      expect($ctrl.currentStep).toEqual(1);
     });
 
     it('reRenderWidget()', (done) => {
-      const remove = jest.fn()
-      const renderEl = jest.fn()
+      const remove = jest.fn();
+      const renderEl = jest.fn();
       $ctrl.oktaSignInWidget = {
         remove,
-        renderEl
-      }
+        renderEl,
+      };
       jest.spyOn($ctrl.$log, 'error').mockImplementation(() => {});
-      $ctrl.reRenderWidget()
-      expect(remove).toHaveBeenCalled()
-      expect(renderEl).toHaveBeenCalled()
+      $ctrl.reRenderWidget();
+      expect(remove).toHaveBeenCalled();
+      expect(renderEl).toHaveBeenCalled();
 
       const error = new Error('Render error');
       renderEl.mockImplementation((_, __, callback) => callback(error));
-      $ctrl.reRenderWidget()
+      $ctrl.reRenderWidget();
       setTimeout(() => {
-        expect($ctrl.$log.error).toHaveBeenCalledWith('Okta Sign up: Error rendering Okta sign up widget.', error);
+        expect($ctrl.$log.error).toHaveBeenCalledWith(
+          'Okta Sign up: Error rendering Okta sign up widget.',
+          error,
+        );
         done();
       });
     });
@@ -1053,7 +1109,7 @@ describe('signUpForm', function () {
     window.handleClick = handleClick;
     beforeEach(() => {
       handleClick.mockClear();
-    })
+    });
 
     describe('skipOptionalMFAEnrollment()', () => {
       beforeEach(() => {
@@ -1063,52 +1119,54 @@ describe('signUpForm', function () {
               Continue
             </a>
           </div>
-        `
-      })
+        `;
+      });
 
       it('should start the countdown timer', () => {
-        $ctrl.skipOptionalMFAEnrollment()
-        expect(document.querySelector('.select-authenticator-enroll')).toHaveStyle({ display: 'none' })
+        $ctrl.skipOptionalMFAEnrollment();
+        expect(
+          document.querySelector('.select-authenticator-enroll'),
+        ).toHaveStyle({ display: 'none' });
 
-        expect($ctrl.oktaRedirectCountdown).toBe(10)
+        expect($ctrl.oktaRedirectCountdown).toBe(10);
 
-        $ctrl.$interval.flush(1000)
-        expect($ctrl.oktaRedirectCountdown).toBe(9)
+        $ctrl.$interval.flush(1000);
+        expect($ctrl.oktaRedirectCountdown).toBe(9);
 
-        $ctrl.$interval.flush(9000)
-        expect($ctrl.oktaRedirectCountdown).toBe(0)
-        expect($ctrl.oktaRedirectInterval).toBeUndefined()
+        $ctrl.$interval.flush(9000);
+        expect($ctrl.oktaRedirectCountdown).toBe(0);
+        expect($ctrl.oktaRedirectInterval).toBeUndefined();
         expect(handleClick).toHaveBeenCalled();
 
         // Test that the timer stopped
-        $ctrl.$interval.flush(10000)
-        expect($ctrl.oktaRedirectCountdown).toBe(0)
-      })
+        $ctrl.$interval.flush(10000);
+        expect($ctrl.oktaRedirectCountdown).toBe(0);
+      });
 
       it('should do nothing when the link is missing', () => {
-        document.body.innerHTML = ''
+        document.body.innerHTML = '';
 
-        $ctrl.skipOptionalMFAEnrollment()
-        expect($ctrl.oktaRedirectCountdown).toBeUndefined()
-      })
+        $ctrl.skipOptionalMFAEnrollment();
+        expect($ctrl.oktaRedirectCountdown).toBeUndefined();
+      });
 
       it('clicking the button should interrupt the countdown', () => {
-        $ctrl.skipOptionalMFAEnrollment()
-        expect($ctrl.oktaRedirectCountdown).toBe(10)
+        $ctrl.skipOptionalMFAEnrollment();
+        expect($ctrl.oktaRedirectCountdown).toBe(10);
 
-        $ctrl.$interval.flush(5000)
-        expect($ctrl.oktaRedirectCountdown).toBe(5)
-        $ctrl.completeRegistration()
+        $ctrl.$interval.flush(5000);
+        expect($ctrl.oktaRedirectCountdown).toBe(5);
+        $ctrl.completeRegistration();
 
-        expect($ctrl.oktaRedirectCountdown).toBe(0)
-        expect($ctrl.oktaRedirectInterval).toBeUndefined()
+        expect($ctrl.oktaRedirectCountdown).toBe(0);
+        expect($ctrl.oktaRedirectInterval).toBeUndefined();
         expect(handleClick).toHaveBeenCalled();
 
         // Test that the timer stopped
-        $ctrl.$interval.flush(10000)
-        expect($ctrl.oktaRedirectCountdown).toBe(0)
-      })
-    })
+        $ctrl.$interval.flush(10000);
+        expect($ctrl.oktaRedirectCountdown).toBe(0);
+      });
+    });
   });
 
   describe('Injecting error messages', () => {
@@ -1137,8 +1195,8 @@ describe('signUpForm', function () {
       });
 
       it('should not inject any errors as this.signUpErrors is empty', () => {
-        $ctrl.signUpErrors = []
-        $ctrl.injectErrorMessages()
+        $ctrl.signUpErrors = [];
+        $ctrl.injectErrorMessages();
 
         const field = document.querySelector(inputErrorFieldSelector);
         expect(field).toBeNull();
@@ -1149,19 +1207,23 @@ describe('signUpForm', function () {
         $ctrl.signUpErrors = [
           {
             property: 'accountType',
-            errorSummary
-          }
-        ]
-        $ctrl.injectErrorMessages()
+            errorSummary,
+          },
+        ];
+        $ctrl.injectErrorMessages();
 
         const field = document.querySelector(accountTypeFieldClass);
-        const errorElement = field.parentNode.querySelector(inputErrorFieldSelector);
+        const errorElement = field.parentNode.querySelector(
+          inputErrorFieldSelector,
+        );
         expect(errorElement).not.toBeNull();
         expect(errorElement.getAttribute('role')).toBe('alert');
         expect(errorElement.innerHTML).toContain(errorSummary);
         expect(field.parentNode.classList).toContain('o-form-has-errors');
         // Remove the dot from the selector
-        expect(errorElement.classList).toContain(inputErrorFieldSelector.slice(1));
+        expect(errorElement.classList).toContain(
+          inputErrorFieldSelector.slice(1),
+        );
         expect(errorElement.classList).toContain('o-form-input-error');
         expect(errorElement.classList).toContain('o-form-explain');
       });
@@ -1171,13 +1233,15 @@ describe('signUpForm', function () {
         $ctrl.signUpErrors = [
           {
             property: 'accountType',
-            errorSummary: [errorSummary, errorSummary]
-          }
-        ]
-        $ctrl.injectErrorMessages()
+            errorSummary: [errorSummary, errorSummary],
+          },
+        ];
+        $ctrl.injectErrorMessages();
 
         const errorElement = document.querySelector(inputErrorFieldSelector);
-        expect(errorElement.textContent).toBe(`${errorSummary} ${errorSummary}`);
+        expect(errorElement.textContent).toBe(
+          `${errorSummary} ${errorSummary}`,
+        );
       });
 
       it('should sanitize error messages', () => {
@@ -1185,10 +1249,10 @@ describe('signUpForm', function () {
         $ctrl.signUpErrors = [
           {
             property: 'accountType',
-            errorSummary
-          }
-        ]
-        $ctrl.injectErrorMessages()
+            errorSummary,
+          },
+        ];
+        $ctrl.injectErrorMessages();
 
         const errorElement = document.querySelector(inputErrorFieldSelector);
         expect(errorElement.innerHTML).not.toContain(errorSummary);
@@ -1199,24 +1263,29 @@ describe('signUpForm', function () {
         $ctrl.signUpErrors = [
           {
             property: 'accountType',
-            errorSummary: 'accountTypeError'
-          }
-        ]
+            errorSummary: 'accountTypeError',
+          },
+        ];
         $ctrl.injectErrorMessages([
           {
             property: 'userProfile.country',
-            errorSummary: 'countryError'
-          }
-        ])
+            errorSummary: 'countryError',
+          },
+        ]);
         // No error injected for field accountType
         const accountTypeField = document.querySelector(accountTypeFieldClass);
-        const accountTypeErrorElement = accountTypeField.parentNode.querySelector(inputErrorFieldSelector);
+        const accountTypeErrorElement =
+          accountTypeField.parentNode.querySelector(inputErrorFieldSelector);
         expect(accountTypeErrorElement).toBeNull();
 
         // Error injected for field userProfile.country
         // - also handling a class with a dot in the name
-        const countryTypeField = document.querySelector(`${inputFieldErrorSelectorPrefix}userProfile\\.country`);
-        const countryErrorElement = countryTypeField.parentNode.querySelector(inputErrorFieldSelector);
+        const countryTypeField = document.querySelector(
+          `${inputFieldErrorSelectorPrefix}userProfile\\.country`,
+        );
+        const countryErrorElement = countryTypeField.parentNode.querySelector(
+          inputErrorFieldSelector,
+        );
         expect(countryErrorElement).not.toBeNull();
       });
 
@@ -1224,97 +1293,111 @@ describe('signUpForm', function () {
         $ctrl.signUpErrors = [
           {
             property: 'accountType',
-            errorSummary: 'accountTypeError'
-          }
-        ]
-        $ctrl.injectErrorMessages()
+            errorSummary: 'accountTypeError',
+          },
+        ];
+        $ctrl.injectErrorMessages();
 
         const accountTypeField = document.querySelector(accountTypeFieldClass);
-        const accountTypeErrorElement = accountTypeField.parentNode.querySelector(inputErrorFieldSelector);
+        const accountTypeErrorElement =
+          accountTypeField.parentNode.querySelector(inputErrorFieldSelector);
         expect(accountTypeErrorElement).not.toBeNull();
 
-        $ctrl.injectErrorMessages()
-        $ctrl.injectErrorMessages()
+        $ctrl.injectErrorMessages();
+        $ctrl.injectErrorMessages();
 
-        const accountTypeErrorElements = accountTypeField.parentNode.querySelectorAll(inputErrorFieldSelector);
+        const accountTypeErrorElements =
+          accountTypeField.parentNode.querySelectorAll(inputErrorFieldSelector);
         expect(accountTypeErrorElements.length).toEqual(1);
       });
 
       describe('error box augmentation', () => {
-        let errorBox
+        let errorBox;
         beforeEach(() => {
           $ctrl.signUpErrors = [
             { message: 'Invalid field', property: 'userProfile.unknown' },
-            { message: 'Invalid first name', property: 'userProfile.firstName' },
+            {
+              message: 'Invalid first name',
+              property: 'userProfile.firstName',
+            },
             { message: 'Invalid last name', property: 'userProfile.lastName' },
             { message: 'Invalid email', property: 'userProfile.email' },
             { message: 'Invalid password', property: 'credentials.passcode' },
-          ]
+          ];
 
-          errorBox = document.querySelector('.okta-form-infobox-error')
-        })
+          errorBox = document.querySelector('.okta-form-infobox-error');
+        });
 
         afterEach(() => {
           // Ensure that the text provided by Okta is not removed
-          expect(errorBox.textContent).toContain('There was an error')
-        })
+          expect(errorBox.textContent).toContain('There was an error');
+        });
 
         it('notifies the user which fields had errors in the error box', () => {
-          $ctrl.injectErrorMessages()
+          $ctrl.injectErrorMessages();
 
-          expect(errorBox.textContent).toContain('Please review the following fields: first name, last name, email, password.')
-        })
+          expect(errorBox.textContent).toContain(
+            'Please review the following fields: first name, last name, email, password.',
+          );
+        });
 
         it('is skipped on the verify step', () => {
-          $ctrl.currentStep = 4
-          $ctrl.injectErrorMessages()
+          $ctrl.currentStep = 4;
+          $ctrl.injectErrorMessages();
 
-          expect(errorBox.textContent).not.toContain('Please review the following fields:')
-        })
+          expect(errorBox.textContent).not.toContain(
+            'Please review the following fields:',
+          );
+        });
 
         it('is skipped when no whitelisted fields have errors', () => {
-          $ctrl.signUpErrors = [$ctrl.signUpErrors[0]]
-          $ctrl.injectErrorMessages()
+          $ctrl.signUpErrors = [$ctrl.signUpErrors[0]];
+          $ctrl.injectErrorMessages();
 
-          expect(errorBox.textContent).not.toContain('Please review the following fields')
-        })
+          expect(errorBox.textContent).not.toContain(
+            'Please review the following fields',
+          );
+        });
 
         it('only creates error messages once', () => {
-          $ctrl.injectErrorMessages()
-          $ctrl.injectErrorMessages()
+          $ctrl.injectErrorMessages();
+          $ctrl.injectErrorMessages();
 
-          expect(errorBox.textContent.match(/Please review the following fields/g)?.length).toBe(1)
-        })
-      })
+          expect(
+            errorBox.textContent.match(/Please review the following fields/g)
+              ?.length,
+          ).toBe(1);
+        });
+      });
     });
 
     describe('load errors', () => {
       it('injectCountryLoadError()', () => {
         jest.spyOn($ctrl, 'injectLoadError').mockImplementation(() => {});
-        const countryListError  = 'countryListError'
+        const countryListError = 'countryListError';
         $ctrl.translations = {
-          countryListError
-        }
-        $ctrl.injectCountryLoadError()
+          countryListError,
+        };
+        $ctrl.injectCountryLoadError();
         expect($ctrl.injectLoadError).toBeCalledWith({
           fieldSelector: countryFieldSelector,
           errorMessage: countryListError,
-          retryCallback: expect.any(Function)
-        })
+          retryCallback: expect.any(Function),
+        });
       });
 
       it('injectRegionLoadError()', () => {
         jest.spyOn($ctrl, 'injectLoadError').mockImplementation(() => {});
-        const regionsLoadingError  = 'regionsLoadingError'
+        const regionsLoadingError = 'regionsLoadingError';
         $ctrl.translations = {
-          regionsLoadingError
-        }
-        $ctrl.injectRegionLoadError()
+          regionsLoadingError,
+        };
+        $ctrl.injectRegionLoadError();
         expect($ctrl.injectLoadError).toBeCalledWith({
           fieldSelector: regionFieldSelector,
           errorMessage: regionsLoadingError,
-          retryCallback: expect.any(Function)
-        })
+          retryCallback: expect.any(Function),
+        });
       });
 
       describe('injectLoadError()', () => {
@@ -1325,8 +1408,8 @@ describe('signUpForm', function () {
           errorMessage = 'errorMessage';
           retryCallback = jest.fn().mockReturnValue({
             finally: jest.fn().mockReturnValue({
-              subscribe: jest.fn()
-            })
+              subscribe: jest.fn(),
+            }),
           });
 
           document.body.innerHTML = `
@@ -1336,13 +1419,13 @@ describe('signUpForm', function () {
           `;
 
           $ctrl.translations = {
-            retry: 'Retry'
-          }
+            retry: 'Retry',
+          };
 
           $ctrl.injectLoadError({
             fieldSelector,
             errorMessage,
-            retryCallback
+            retryCallback,
           });
         });
 
@@ -1375,70 +1458,74 @@ describe('signUpForm', function () {
       injectBackButton.mockClear();
     });
     it('does not add back button on step 1', () => {
-      $ctrl.currentStep = 1
-      $ctrl.afterRender({ formName: 'enroll-profile' })
-      expect(injectBackButton).not.toHaveBeenCalled()
-    })
+      $ctrl.currentStep = 1;
+      $ctrl.afterRender({ formName: 'enroll-profile' });
+      expect(injectBackButton).not.toHaveBeenCalled();
+    });
 
-     it('should add back button on step 2', () => {
-      $ctrl.currentStep = 2
-      $ctrl.afterRender({ formName: 'enroll-profile' })
-      expect(injectBackButton).toHaveBeenCalled()
-    })
-
+    it('should add back button on step 2', () => {
+      $ctrl.currentStep = 2;
+      $ctrl.afterRender({ formName: 'enroll-profile' });
+      expect(injectBackButton).toHaveBeenCalled();
+    });
 
     it('does not add back button on step 4', () => {
-      $ctrl.currentStep = 4
-      $ctrl.afterRender({ formName: 'enroll-profile' })
-      expect(injectBackButton).not.toHaveBeenCalled()
-    })
-  })
+      $ctrl.currentStep = 4;
+      $ctrl.afterRender({ formName: 'enroll-profile' });
+      expect(injectBackButton).not.toHaveBeenCalled();
+    });
+  });
 
   describe('signIn()', () => {
     it('should authenticated and handle login', (done) => {
       jest.spyOn($ctrl.$log, 'error').mockImplementation(() => {});
-      const showSignInAndRedirect = jest.fn().mockImplementation(() => Promise.resolve({
-      token: 'token'
-      }));
+      const showSignInAndRedirect = jest.fn().mockImplementation(() =>
+        Promise.resolve({
+          token: 'token',
+        }),
+      );
       const handleLoginRedirect = jest.fn();
       $ctrl.oktaSignInWidget = {
         showSignInAndRedirect,
         authClient: {
-          handleLoginRedirect
-        }
-      }
+          handleLoginRedirect,
+        },
+      };
 
       $ctrl.signIn().then(() => {
-      expect(showSignInAndRedirect).toHaveBeenCalledWith({
-        el: '#osw-container'
-      })
-      expect(handleLoginRedirect).toHaveBeenCalledWith({
-        token: 'token'
-      })
-      expect($ctrl.$log.error).not.toHaveBeenCalled()
-      done()
+        expect(showSignInAndRedirect).toHaveBeenCalledWith({
+          el: '#osw-container',
+        });
+        expect(handleLoginRedirect).toHaveBeenCalledWith({
+          token: 'token',
+        });
+        expect($ctrl.$log.error).not.toHaveBeenCalled();
+        done();
       });
     });
 
     it('should handle an error with $log', (done) => {
-      const error = new Error('Error signing in')
-      jest.spyOn($ctrl.$log, 'error').mockImplementation(() => {})
-      const showSignInAndRedirect = jest.fn().mockRejectedValue(error)
-      const handleLoginRedirect = jest.fn()
+      const error = new Error('Error signing in');
+      jest.spyOn($ctrl.$log, 'error').mockImplementation(() => {});
+      const showSignInAndRedirect = jest.fn().mockRejectedValue(error);
+      const handleLoginRedirect = jest.fn();
       $ctrl.oktaSignInWidget = {
         showSignInAndRedirect,
         authClient: {
-          handleLoginRedirect
-        }
-      }
+          handleLoginRedirect,
+        },
+      };
 
       $ctrl.signIn().then(() => {
-        expect(handleLoginRedirect).not.toHaveBeenCalled()
-        expect($ctrl.$log.error).toHaveBeenCalledWith('Okta Sign up: Error showing Okta sign in widget.', error)
-        done()
-      }, done)
-    })
-  })
+        expect(handleLoginRedirect).not.toHaveBeenCalled();
+        expect($ctrl.$log.error).toHaveBeenCalledWith(
+          'Okta Sign up: Error showing Okta sign in widget.',
+          error,
+        );
+        done();
+      }, done);
+    });
+  });
 
   describe('loadDonorDetails()', () => {
     const signUpFormData = {
@@ -1455,64 +1542,69 @@ describe('signUpForm', function () {
         region: user.state,
         postalCode: user.zipCode,
         country: user.countryCode,
-      }
+      },
     };
 
     it('Inherits data from orderService', (done) => {
-      jest.spyOn($ctrl.orderService, 'getDonorDetails').mockImplementation(() => Observable.from(
-        [signUpFormData]
-      ))
+      jest
+        .spyOn($ctrl.orderService, 'getDonorDetails')
+        .mockImplementation(() => Observable.from([signUpFormData]));
       $ctrl.loadDonorDetails().subscribe((data) => {
-        expect(data).toEqual(signUpFormData)
-        done()
-      })
-    })
+        expect(data).toEqual(signUpFormData);
+        done();
+      });
+    });
 
     it('grabs data from orderService if data from both orderService and sessionService are set', (done) => {
-      jest.spyOn($ctrl, 'loadDonorDetails')
-      jest.spyOn($ctrl.orderService, 'getDonorDetails').mockImplementation(() => Observable.from(
-        [signUpFormData]
-      ))
+      jest.spyOn($ctrl, 'loadDonorDetails');
+      jest
+        .spyOn($ctrl.orderService, 'getDonorDetails')
+        .mockImplementation(() => Observable.from([signUpFormData]));
       $ctrl.sessionService.session.checkoutSavedData = {
         ...signUpFormData,
-        email: 'emailFromCheckoutSavedData@cru.org'
+        email: 'emailFromCheckoutSavedData@cru.org',
       };
 
       $ctrl.loadDonorDetails().subscribe((data) => {
         expect(data).toEqual({
           ...signUpFormData,
-        email: 'emailFromCheckoutSavedData@cru.org'
-        })
-        done()
-      })
-    })
+          email: 'emailFromCheckoutSavedData@cru.org',
+        });
+        done();
+      });
+    });
 
     it('should error and then set loadingDonorDetails to false', (done) => {
-      const error = { status: 404 }
-      jest.spyOn($ctrl.orderService, 'getDonorDetails').mockReturnValue(Observable.throw(error))
-      jest.spyOn($ctrl.$log, 'error')
-      $ctrl.loadingDonorDetails = true
+      const error = { status: 404 };
+      jest
+        .spyOn($ctrl.orderService, 'getDonorDetails')
+        .mockReturnValue(Observable.throw(error));
+      jest.spyOn($ctrl.$log, 'error');
+      $ctrl.loadingDonorDetails = true;
       $ctrl.loadDonorDetails().subscribe({
         error: () => {
-          expect($ctrl.$log.error).toHaveBeenCalledWith('Okta Sign up: Error loading donorDetails.', error)
-        }
-      })
+          expect($ctrl.$log.error).toHaveBeenCalledWith(
+            'Okta Sign up: Error loading donorDetails.',
+            error,
+          );
+        },
+      });
 
       // Observable.finally is fired after the test, this defers until it's called.
       // eslint-disable-next-line angular/timeout-service
       setTimeout(() => {
-        expect($ctrl.loadingDonorDetails).toEqual(false)
-        done()
-      })
-    })
+        expect($ctrl.loadingDonorDetails).toEqual(false);
+        done();
+      });
+    });
   });
 
   describe('saveDonorDetails()', () => {
-    const emailFormUri = '/emails/crugive'
+    const emailFormUri = '/emails/crugive';
     const signUpDonorDetails = {
       name: {
         'given-name': user.firstName,
-        'family-name': user.lastName
+        'family-name': user.lastName,
       },
       'donor-type': user.accountType,
       'organization-name': 'Organization Name',
@@ -1525,79 +1617,95 @@ describe('signUpForm', function () {
         locality: user.city,
         region: user.state,
         postalCode: '12345-678',
-        country: user.countryCode
-      }
-    }
+        country: user.countryCode,
+      },
+    };
     beforeEach(() => {
-      $ctrl.$scope.firstName = user.firstName
-      $ctrl.$scope.lastName = user.lastName
-      $ctrl.$scope.email = user.email
-      $ctrl.$scope.accountType = user.accountType
-      $ctrl.$scope.organizationName = 'Organization Name'
-      $ctrl.$scope.streetAddress = user.streetAddress
-      $ctrl.$scope.streetAddressExtended = 'extendedAddress'
-      $ctrl.$scope.internationalAddressLine3 = 'intAddressLine3'
-      $ctrl.$scope.internationalAddressLine4 = 'intAddressLine4'
-      $ctrl.$scope.city = user.city
-      $ctrl.$scope.state = user.state
-      $ctrl.$scope.zipCode = user.zipCode
-      $ctrl.$scope.countryCode = user.countryCode
+      $ctrl.$scope.firstName = user.firstName;
+      $ctrl.$scope.lastName = user.lastName;
+      $ctrl.$scope.email = user.email;
+      $ctrl.$scope.accountType = user.accountType;
+      $ctrl.$scope.organizationName = 'Organization Name';
+      $ctrl.$scope.streetAddress = user.streetAddress;
+      $ctrl.$scope.streetAddressExtended = 'extendedAddress';
+      $ctrl.$scope.internationalAddressLine3 = 'intAddressLine3';
+      $ctrl.$scope.internationalAddressLine4 = 'intAddressLine4';
+      $ctrl.$scope.city = user.city;
+      $ctrl.$scope.state = user.state;
+      $ctrl.$scope.zipCode = user.zipCode;
+      $ctrl.$scope.countryCode = user.countryCode;
 
-      jest.spyOn($ctrl.orderService, 'getDonorDetails').mockReturnValue(Observable.of({
-        'registration-state': 'NEW',
-        name: {
-          'given-name': 'Existing',
-          'family-name': 'Existing'
-        },
-        'donor-type': '',
-        email: 'existing.email@cru.org',
-        mailingAddress: {
-          streetAddress: '',
-          locality: '',
-          region: '',
-          postalCode: '',
-          country: 'CANADA'
-        },
-        emailFormUri
-      }))
-      jest.spyOn($ctrl.orderService, 'addEmail').mockImplementation(() => Observable.of({}))
-      jest.spyOn($ctrl, 'redirectToOktaForLogin')
-      jest.spyOn($ctrl, 'onSignUpError')
+      jest.spyOn($ctrl.orderService, 'getDonorDetails').mockReturnValue(
+        Observable.of({
+          'registration-state': 'NEW',
+          name: {
+            'given-name': 'Existing',
+            'family-name': 'Existing',
+          },
+          'donor-type': '',
+          email: 'existing.email@cru.org',
+          mailingAddress: {
+            streetAddress: '',
+            locality: '',
+            region: '',
+            postalCode: '',
+            country: 'CANADA',
+          },
+          emailFormUri,
+        }),
+      );
+      jest
+        .spyOn($ctrl.orderService, 'addEmail')
+        .mockImplementation(() => Observable.of({}));
+      jest.spyOn($ctrl, 'redirectToOktaForLogin');
+      jest.spyOn($ctrl, 'onSignUpError');
 
       $ctrl.oktaSignInWidget = {
         remove: jest.fn(),
         renderEl: jest.fn(),
-        off: jest.fn()
-      }
-    })
+        off: jest.fn(),
+      };
+    });
 
     it("should succeed updating the user's data, redirecting to Okta", () => {
-      jest.spyOn($ctrl.orderService, 'updateDonorDetails').mockImplementation(() => Observable.of({}))
-      $ctrl.isLoading = false
+      jest
+        .spyOn($ctrl.orderService, 'updateDonorDetails')
+        .mockImplementation(() => Observable.of({}));
+      $ctrl.isLoading = false;
 
-      $ctrl.saveDonorDetails()
+      $ctrl.saveDonorDetails();
 
-      expect($ctrl.isLoading).toEqual(true)
-      expect($ctrl.orderService.updateDonorDetails).toHaveBeenCalledWith(expect.objectContaining(signUpDonorDetails))
-      expect($ctrl.orderService.addEmail).toHaveBeenCalledWith(signUpDonorDetails.email, emailFormUri)
-      expect($ctrl.redirectToOktaForLogin).toHaveBeenCalled()
-      expect($ctrl.onSignUpError).not.toHaveBeenCalled()
-    })
+      expect($ctrl.isLoading).toEqual(true);
+      expect($ctrl.orderService.updateDonorDetails).toHaveBeenCalledWith(
+        expect.objectContaining(signUpDonorDetails),
+      );
+      expect($ctrl.orderService.addEmail).toHaveBeenCalledWith(
+        signUpDonorDetails.email,
+        emailFormUri,
+      );
+      expect($ctrl.redirectToOktaForLogin).toHaveBeenCalled();
+      expect($ctrl.onSignUpError).not.toHaveBeenCalled();
+    });
 
     it("should fail while updating the user's data, opening the contact info modal", () => {
-      jest.spyOn($ctrl.orderService, 'updateDonorDetails').mockImplementation(() => Observable.throw({}))
-      $ctrl.saveDonorDetails()
+      jest
+        .spyOn($ctrl.orderService, 'updateDonorDetails')
+        .mockImplementation(() => Observable.throw({}));
+      $ctrl.saveDonorDetails();
 
-      expect($ctrl.redirectToOktaForLogin).not.toHaveBeenCalled()
-      expect($ctrl.onSignUpError).toHaveBeenCalled()
-    })
+      expect($ctrl.redirectToOktaForLogin).not.toHaveBeenCalled();
+      expect($ctrl.onSignUpError).toHaveBeenCalled();
+    });
   });
 
   describe('redirectToOktaForLogin', () => {
     it('should call sessionService.signIn', () => {
-      $ctrl.$scope.email = user.email
-      $ctrl.redirectToOktaForLogin()
-      expect($ctrl.sessionService.signIn).toHaveBeenCalledWith($ctrl.lastPurchaseId, user.email)
-    })
-  })
-})
+      $ctrl.$scope.email = user.email;
+      $ctrl.redirectToOktaForLogin();
+      expect($ctrl.sessionService.signIn).toHaveBeenCalledWith(
+        $ctrl.lastPurchaseId,
+        user.email,
+      );
+    });
+  });
+});

@@ -1,24 +1,37 @@
-<retry-modal ng-if="$ctrl.loadingRecurringGiftsError"
-             title="{{'Stop a Gift' | translate }}"
-             on-retry="$ctrl.loadRecurringGifts()"
-             cancel="$ctrl.cancel()"
-             previous="$ctrl.previous()">
+<retry-modal
+  ng-if="$ctrl.loadingRecurringGiftsError"
+  title="{{'Stop a Gift' | translate }}"
+  on-retry="$ctrl.loadRecurringGifts()"
+  cancel="$ctrl.cancel()"
+  previous="$ctrl.previous()"
+>
   <p translate>There was an error loading your recurring gifts.</p>
-  <p translate>You can use the retry button to try loading them again. If you continue to see this message,
-    contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
+  <p translate>
+    You can use the retry button to try loading them again. If you continue to
+    see this message, contact
+    <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
+  </p>
 </retry-modal>
 <div ng-switch="$ctrl.step">
-  <div style="height: 100px;" ng-switch-default ng-if="!$ctrl.loadingRecurringGiftsError"></div>
-  <stop-gift-step-1 ng-switch-when="step-1"
-                    gifts="$ctrl.gifts"
-                    on-select-gifts="$ctrl.selectGifts(selectedGifts)"
-                    cancel="$ctrl.cancel()"
-                    previous="$ctrl.previous()">
+  <div
+    style="height: 100px"
+    ng-switch-default
+    ng-if="!$ctrl.loadingRecurringGiftsError"
+  ></div>
+  <stop-gift-step-1
+    ng-switch-when="step-1"
+    gifts="$ctrl.gifts"
+    on-select-gifts="$ctrl.selectGifts(selectedGifts)"
+    cancel="$ctrl.cancel()"
+    previous="$ctrl.previous()"
+  >
   </stop-gift-step-1>
-  <stop-gift-step-2 ng-switch-when="step-2"
-                    gifts="$ctrl.selectedGifts"
-                    on-confirm="$ctrl.confirmChanges()"
-                    cancel="$ctrl.cancel()"
-                    previous="$ctrl.previous()">
+  <stop-gift-step-2
+    ng-switch-when="step-2"
+    gifts="$ctrl.selectedGifts"
+    on-confirm="$ctrl.confirmChanges()"
+    cancel="$ctrl.cancel()"
+    previous="$ctrl.previous()"
+  >
   </stop-gift-step-2>
 </div>

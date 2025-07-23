@@ -1,26 +1,34 @@
 <div ng-switch="$ctrl.state" class="loading-overlay-parent">
-  <stop-start-step-0 ng-switch-when="step-0"
-                     gift-action="$ctrl.giftAction"
-                     change-state="$ctrl.changeState(state)"
-                     cancel="$ctrl.dismiss()">
+  <stop-start-step-0
+    ng-switch-when="step-0"
+    gift-action="$ctrl.giftAction"
+    change-state="$ctrl.changeState(state)"
+    cancel="$ctrl.dismiss()"
+  >
   </stop-start-step-0>
-  <stop-gift ng-switch-when="stop"
-             change-state="$ctrl.changeState(state)"
-             cancel="$ctrl.dismiss()"
-             complete="$ctrl.close()"
-             set-loading="$ctrl.setLoading(loading)">
+  <stop-gift
+    ng-switch-when="stop"
+    change-state="$ctrl.changeState(state)"
+    cancel="$ctrl.dismiss()"
+    complete="$ctrl.close()"
+    set-loading="$ctrl.setLoading(loading)"
+  >
   </stop-gift>
-  <redirect-gift ng-switch-when="redirect"
-                 change-state="$ctrl.changeState(state)"
-                 cancel="$ctrl.dismiss()"
-                 complete="$ctrl.close()"
-                 set-loading="$ctrl.setLoading(loading)">
+  <redirect-gift
+    ng-switch-when="redirect"
+    change-state="$ctrl.changeState(state)"
+    cancel="$ctrl.dismiss()"
+    complete="$ctrl.close()"
+    set-loading="$ctrl.setLoading(loading)"
+  >
   </redirect-gift>
-  <restart-gift ng-switch-when="restart"
-                change-state="$ctrl.changeState(state)"
-                cancel="$ctrl.dismiss()"
-                complete="$ctrl.close()"
-                set-loading="$ctrl.setLoading(loading)">
+  <restart-gift
+    ng-switch-when="restart"
+    change-state="$ctrl.changeState(state)"
+    cancel="$ctrl.dismiss()"
+    complete="$ctrl.close()"
+    set-loading="$ctrl.setLoading(loading)"
+  >
   </restart-gift>
   <loading type="overlay" ng-if="$ctrl.isLoading"></loading>
 </div>

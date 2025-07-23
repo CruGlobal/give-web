@@ -1,18 +1,32 @@
 <div>
   <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingGiftsError">
     <p translate>There was an error loading your historical giving.</p>
-    <p translate>You can use the retry button to try loading them again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
+    <p translate>
+      You can use the retry button to try loading them again. If you continue to
+      see this message, contact
+      <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
+    </p>
     <p>
-      <button type="button" class="btn btn-primary"
-              ng-click="$ctrl.$onChanges()" translate>Retry
+      <button
+        type="button"
+        class="btn btn-primary"
+        ng-click="$ctrl.$onChanges()"
+        translate
+      >
+        Retry
       </button>
     </p>
   </div>
-  <historical-gift ng-repeat="historicalGift in $ctrl.historicalGifts | orderBy:'designation-name'"
-                   gift="historicalGift"
-                   on-manage-gift="$ctrl.onManageGift({gift: gift})"></historical-gift>
+  <historical-gift
+    ng-repeat="historicalGift in $ctrl.historicalGifts | orderBy:'designation-name'"
+    gift="historicalGift"
+    on-manage-gift="$ctrl.onManageGift({gift: gift})"
+  ></historical-gift>
 
-  <div class="panel panel-margin-bottom recent-recipient-row" ng-if="$ctrl.historicalGifts && $ctrl.historicalGifts.length == 0">
+  <div
+    class="panel panel-margin-bottom recent-recipient-row"
+    ng-if="$ctrl.historicalGifts && $ctrl.historicalGifts.length == 0"
+  >
     <div class="panel-body">
       <div class="row">
         <div class="col-xs-12 mb">

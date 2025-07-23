@@ -1,33 +1,33 @@
-import angular from 'angular'
+import angular from 'angular';
 
-import cortexApiService from '../cortexApi.service'
+import cortexApiService from '../cortexApi.service';
 
-const serviceName = 'tsysService'
+const serviceName = 'tsysService';
 
 class Tsys {
   /* @ngInject */
-  constructor (cortexApiService) {
-    this.cortexApiService = cortexApiService
-    this.device = ''
+  constructor(cortexApiService) {
+    this.cortexApiService = cortexApiService;
+    this.device = '';
   }
 
-  setDevice (device) {
-    this.device = device
+  setDevice(device) {
+    this.device = device;
   }
 
-  getDevice () {
-    return this.device
+  getDevice() {
+    return this.device;
   }
 
-  getManifest () {
+  getManifest() {
     return this.cortexApiService.get({
-      path: this.device ? ['tsys', 'manifest', this.device] : ['tsys', 'manifest']
-    })
+      path: this.device
+        ? ['tsys', 'manifest', this.device]
+        : ['tsys', 'manifest'],
+    });
   }
 }
 
 export default angular
-  .module(serviceName, [
-    cortexApiService.name
-  ])
-  .service(serviceName, Tsys)
+  .module(serviceName, [cortexApiService.name])
+  .service(serviceName, Tsys);

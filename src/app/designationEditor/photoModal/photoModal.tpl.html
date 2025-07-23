@@ -2,23 +2,40 @@
   <button id="closeButton" type="button" class="close" ng-click="$dismiss()">
     <span aria-hidden="true">×</span>
   </button>
-  <h3 class="modal-title text-center" ng-if="$ctrl.photoLocation === 'coverPhoto'" translate>Add Cover Photo</h3>
-  <h3 class="modal-title text-center" ng-if="$ctrl.photoLocation === 'signatureImage'" translate>Add Signature Photo</h3>
+  <h3
+    class="modal-title text-center"
+    ng-if="$ctrl.photoLocation === 'coverPhoto'"
+    translate
+  >
+    Add Cover Photo
+  </h3>
+  <h3
+    class="modal-title text-center"
+    ng-if="$ctrl.photoLocation === 'signatureImage'"
+    translate
+  >
+    Add Signature Photo
+  </h3>
 </div>
 
 <div class="modal-body">
   <div class="alert alert-info">
     <p>
-      Note: If you are experiencing a long wait time and issues seeing your image load,
-      please refresh the page and open the image screen again.
-      If needing help please contact <a href="mailto:dev.services@cru.org">dev.services@cru.org</a>.
+      Note: If you are experiencing a long wait time and issues seeing your
+      image load, please refresh the page and open the image screen again. If
+      needing help please contact
+      <a href="mailto:dev.services@cru.org">dev.services@cru.org</a>.
     </p>
   </div>
   <div class="upload-drag-target p mb">
     <div class="form-group text-center">
       <div ng-if="!$ctrl.uploading">
         <div><label translate>Select a Photo to Upload</label></div>
-        <div><label ng-if="$ctrl.invalidFileType" translate>Uploaded image must be a JPEG or a PNG file</label></div>
+        <div>
+          <label ng-if="$ctrl.invalidFileType" translate
+            >Uploaded image must be a JPEG or a PNG file</label
+          >
+        </div>
         <image-upload
           class="form-control"
           url="/bin/crugive/image.html?designationNumber={{$ctrl.designationNumber}}"
@@ -34,7 +51,10 @@
     </div>
   </div>
 
-  <div class="give-available-photos-container" ng-if="$ctrl.photos.length || $ctrl.numProcessingPhotos > 0">
+  <div
+    class="give-available-photos-container"
+    ng-if="$ctrl.photos.length || $ctrl.numProcessingPhotos > 0"
+  >
     <div class="give-thumbs-container">
       <div class="cover-thumb" ng-repeat="photo in $ctrl.photos">
         <input
@@ -47,7 +67,10 @@
           <img desig-img-src="{{photo.thumbnail}}" />
         </label>
       </div>
-      <div class="cover-thumb processing" ng-repeat="blobUrl in $ctrl.getProcessingPhotos() track by $index">
+      <div
+        class="cover-thumb processing"
+        ng-repeat="blobUrl in $ctrl.getProcessingPhotos() track by $index"
+      >
         <img ng-src="{{blobUrl}}" />
         <loading type="centered">Processing...</loading>
       </div>
@@ -75,9 +98,25 @@
   </div>
 </div>
 <div class="modal-footer">
-  <button id="usePhotoButton" type="button" class="btn btn-primary pull-right" ng-click="$close({
+  <button
+    id="usePhotoButton"
+    type="button"
+    class="btn btn-primary pull-right"
+    ng-click="$close({
     selected: $ctrl.selectedPhoto,
     photos: $ctrl.photos
-  })" translate>Use Photo</button>
-  <button id="cancelPhotoButton" type="button" class="btn btn-default" ng-click="$dismiss()" translate>Cancel</button>
+  })"
+    translate
+  >
+    Use Photo
+  </button>
+  <button
+    id="cancelPhotoButton"
+    type="button"
+    class="btn btn-default"
+    ng-click="$dismiss()"
+    translate
+  >
+    Cancel
+  </button>
 </div>

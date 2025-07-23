@@ -29,11 +29,11 @@ jobs:
           node-version-file: .tool-versions
 
       - name: Install Dependencies
-      # --ignore-optional is used to avoid installing optional dependencies like fsevents which is not supported on Linux
+        # --ignore-optional is used to avoid installing optional dependencies like fsevents which is not supported on Linux
         run: yarn install --immutable --immutable-cache --ignore-optional
 
-      - name: Lint Check (JS)
-        run: yarn lint
+      - name: Lint Check (Prettier)
+        run: yarn prettier:check
 
       - name: Lint Check (SCSS)
         run: yarn lint:styles
@@ -78,7 +78,6 @@ jobs:
           ROLLBAR_ACCESS_TOKEN: ${{ secrets.ROLLBAR_ACCESS_TOKEN }}
           DATADOG_RUM_CLIENT_TOKEN: ${{ secrets.DATADOG_RUM_CLIENT_TOKEN }}
         run: yarn run build
-
 
   deploy:
     name: 🚀 Deploy app

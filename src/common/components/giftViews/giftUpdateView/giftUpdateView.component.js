@@ -1,36 +1,36 @@
-import angular from 'angular'
-import moment from 'moment'
+import angular from 'angular';
+import moment from 'moment';
 
-import showErrors from 'common/filters/showErrors.filter'
-import { startDate, quarterlyMonths, possibleTransactionDays } from 'common/services/giftHelpers/giftDates.service'
+import showErrors from 'common/filters/showErrors.filter';
+import {
+  startDate,
+  quarterlyMonths,
+  possibleTransactionDays,
+} from 'common/services/giftHelpers/giftDates.service';
 
-import template from './giftUpdateView.tpl.html'
+import template from './giftUpdateView.tpl.html';
 
-const componentName = 'giftUpdateView'
+const componentName = 'giftUpdateView';
 
 class GiftUpdateViewController {
   /* @ngInject */
-  constructor () {
-    this.startDate = startDate
-    this.quarterlyMonths = quarterlyMonths
-    this.possibleTransactionDays = possibleTransactionDays
-    this.possibleMonths = moment.months()
+  constructor() {
+    this.startDate = startDate;
+    this.quarterlyMonths = quarterlyMonths;
+    this.possibleTransactionDays = possibleTransactionDays;
+    this.possibleMonths = moment.months();
   }
 
-  $onInit () {
-
-  }
+  $onInit() {}
 }
 
 export default angular
-  .module(componentName, [
-    showErrors.name
-  ])
+  .module(componentName, [showErrors.name])
   .component(componentName, {
     controller: GiftUpdateViewController,
     templateUrl: template,
     bindings: {
       gift: '=',
-      singleGift: '@'
-    }
-  })
+      singleGift: '@',
+    },
+  });

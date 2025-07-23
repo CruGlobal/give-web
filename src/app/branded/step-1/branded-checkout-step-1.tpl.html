@@ -1,7 +1,8 @@
 <checkout-error-messages
   needinfo-errors="$ctrl.needinfoErrors"
   submission-error="$ctrl.submissionError"
-  submission-error-status="$ctrl.submissionErrorStatus">
+  submission-error-status="$ctrl.submissionErrorStatus"
+>
 </checkout-error-messages>
 <div id="cru-give-gift-details-wrapper" class="panel">
   <div class="panel-body loading-overlay-parent">
@@ -20,36 +21,50 @@
       ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig"
       hide-quarterly="$ctrl.hideQuarterly"
       hide-annual="$ctrl.hideAnnual"
-      use-v3="$ctrl.useV3">
+      use-v3="$ctrl.useV3"
+    >
     </product-config-form>
-    <div ng-if="$ctrl.errorLoadingProductConfig" class="alert alert-danger" role="alert">
-      <p translate='LOADING_ERROR' translate-values="{loadData: '$ctrl.loadData()'}" translate-compile></p>
+    <div
+      ng-if="$ctrl.errorLoadingProductConfig"
+      class="alert alert-danger"
+      role="alert"
+    >
+      <p
+        translate="LOADING_ERROR"
+        translate-values="{loadData: '$ctrl.loadData()'}"
+        translate-compile
+      ></p>
     </div>
   </div>
 </div>
 <div ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig">
   <div id="cru-give-contact-info-wrapper" class="panel">
     <div class="panel-body">
-      <h3 ng-if="!$ctrl.useV3" class="panel-name" translate>{{'YOUR_INFORMATION'}}</h3>
+      <h3 ng-if="!$ctrl.useV3" class="panel-name" translate>
+        {{'YOUR_INFORMATION'}}
+      </h3>
       <contact-info
         submitted="$ctrl.submitted"
         on-submit="$ctrl.onContactInfoSubmit(success)"
         donor-details="$ctrl.donorDetails"
         radio-station-api-url="$ctrl.radioStationApiUrl"
-        use-v3="$ctrl.useV3">
+        use-v3="$ctrl.useV3"
+      >
       </contact-info>
     </div>
   </div>
   <div id="cru-give-payment-wrapper" class="panel">
     <div class="panel-body">
       <h3 class="panel-name" translate>{{'PAYMENT'}}</h3>
-      <checkout-step-2 hide-buttons="true"
+      <checkout-step-2
+        hide-buttons="true"
         submitted="$ctrl.submitted"
         on-state-change="$ctrl.onPaymentStateChange(state)"
         mailing-address="$ctrl.donorDetails.mailingAddress"
         default-payment-type="$ctrl.defaultPaymentType"
         hide-payment-type-options="$ctrl.hidePaymentTypeOptions"
-        branded-checkout-item="$ctrl.showCoverFees === 'true' ? $ctrl.itemConfig : undefined">
+        branded-checkout-item="$ctrl.showCoverFees === 'true' ? $ctrl.itemConfig : undefined"
+      >
       </checkout-step-2>
     </div>
   </div>
@@ -65,7 +80,8 @@
                 name="premiumSelect"
                 ng-model="$ctrl.premiumSelected"
                 ng-value="true"
-                ng-change="$ctrl.onSelectPremiumOption()">
+                ng-change="$ctrl.onSelectPremiumOption()"
+              />
               {{$ctrl.premiumName}}
             </label>
           </div>
@@ -76,7 +92,8 @@
                 name="premiumSelect"
                 ng-model="$ctrl.premiumSelected"
                 ng-value="false"
-                ng-change="$ctrl.onSelectPremiumOption()">
+                ng-change="$ctrl.onSelectPremiumOption()"
+              />
               <translate>{{'NO_THANK_YOU'}}</translate>
             </label>
           </div>
@@ -90,22 +107,28 @@
   <div class="panel">
     <div class="panel-body text-right">
       <div class="checkout-cta pull-right" ng-if="$ctrl.useV3">
-       <recaptcha-wrapper
-              action="'branded_checkout'"
-              on-success="$ctrl.submit"
-              component-instance="$ctrl"
-              button-id="'submitOrderButton'"
-              button-type="'submit'"
-              button-classes="'btn btn-primary btn-lg btn-block'"
-              button-disabled="$ctrl.errorLoadingProductConfig || !$ctrl.canSubmitOrder()"
-              button-label="'SUBMIT_GIFT'"></recaptcha-wrapper>
-        </div>
+        <recaptcha-wrapper
+          action="'branded_checkout'"
+          on-success="$ctrl.submit"
+          component-instance="$ctrl"
+          button-id="'submitOrderButton'"
+          button-type="'submit'"
+          button-classes="'btn btn-primary btn-lg btn-block'"
+          button-disabled="$ctrl.errorLoadingProductConfig || !$ctrl.canSubmitOrder()"
+          button-label="'SUBMIT_GIFT'"
+        ></recaptcha-wrapper>
+      </div>
 
-      <button ng-if="!$ctrl.useV3" class="btn btn-primary"
-              ng-click="$ctrl.submit()"
-              ng-disabled="$ctrl.errorLoadingProductConfig"
-              translate>{{'CONTINUE'}}</button>
-  </div>
+      <button
+        ng-if="!$ctrl.useV3"
+        class="btn btn-primary"
+        ng-click="$ctrl.submit()"
+        ng-disabled="$ctrl.errorLoadingProductConfig"
+        translate
+      >
+        {{'CONTINUE'}}
+      </button>
+    </div>
   </div>
 </div>
 <loading type="fixed" ng-if="$ctrl.loadingAndSubmitting">

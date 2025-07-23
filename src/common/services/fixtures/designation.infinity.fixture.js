@@ -11,11 +11,16 @@ export default {
     customized: true,
     'jcr:versionHistory': '671c8c7b-74af-47d4-8f6d-3a53e103ae3e',
     'cq:template': '/apps/Give/templates/campaign',
-    secondaryPhoto: '/content/dam/give/designations/0/1/2/3/4/0123456/CMS1_085319.jpg',
+    secondaryPhoto:
+      '/content/dam/give/designations/0/1/2/3/4/0123456/CMS1_085319.jpg',
     psText: '',
     givingLinks: {
       'jcr:primaryType': 'nt:unstructured',
-      item0: { 'jcr:primaryType': 'nt:unstructured', url: 'https://example.com', name: 'Name' }
+      item0: {
+        'jcr:primaryType': 'nt:unstructured',
+        url: 'https://example.com',
+        name: 'Name',
+      },
     },
     organizationId: '1-103-1',
     parentDesignationNumber: '',
@@ -36,6 +41,15 @@ export default {
     defaultCampaign: '867EM1',
     suggestedAmounts: { 'jcr:primaryType': 'nt:unstructured' },
     facebookPixelId: '123456',
-    "design-controller":       {"carousel": {"image": {"fileReference": "/content/dam/give/designations/0/1/2/3/4/0123456/CMS1_085319.jpg", "sling:resourceType": "Give/components/content/image", "jcr:primaryType": "nt:unstructured"}}}
-  }
-}
+    'design-controller': {
+      carousel: {
+        image: {
+          fileReference:
+            '/content/dam/give/designations/0/1/2/3/4/0123456/CMS1_085319.jpg',
+          'sling:resourceType': 'Give/components/content/image',
+          'jcr:primaryType': 'nt:unstructured',
+        },
+      },
+    },
+  },
+};

@@ -5,5 +5,5 @@ export const giveGiftParams = {
   frequency: 'f',
   day: 'dd',
   month: 'm',
-  campaignCode: 'CampaignCode'
-}
+  campaignCode: 'CampaignCode',
+};

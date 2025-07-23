@@ -1,49 +1,46 @@
-import angular from 'angular'
-import commonModule from 'common/common.module'
-import sessionService, { Roles } from 'common/services/session/session.service'
-import template from './signOut.tpl.html'
+import angular from 'angular';
+import commonModule from 'common/common.module';
+import sessionService, { Roles } from 'common/services/session/session.service';
+import template from './signOut.tpl.html';
 
-const componentName = 'signOut'
+const componentName = 'signOut';
 
 class SignOutController {
   /* @ngInject */
-  constructor ($window, sessionService) {
-    this.$window = $window
-    this.sessionService = sessionService
+  constructor($window, sessionService) {
+    this.$window = $window;
+    this.sessionService = sessionService;
   }
 
-  $onInit () {
-    this.redirectToPreviousLocation = false
+  $onInit() {
+    this.redirectToPreviousLocation = false;
     if (this.sessionService.getRole() !== Roles.public) {
-      this.redirectToPreviousLocation = false
-      this.redirectToHomepage()
+      this.redirectToPreviousLocation = false;
+      this.redirectToHomepage();
     } else {
-      this.redirectToLocationPriorToSignOut()
+      this.redirectToLocationPriorToSignOut();
     }
   }
 
-  redirectToHomepage () {
-    this.$window.location.href = '/'
+  redirectToHomepage() {
+    this.$window.location.href = '/';
   }
 
-  redirectToLocationPriorToSignOut () {
-    const locationToReturnUser = this.sessionService.getRedirectLocation()
+  redirectToLocationPriorToSignOut() {
+    const locationToReturnUser = this.sessionService.getRedirectLocation();
     if (locationToReturnUser) {
-      this.redirectToPreviousLocation = true
-      this.sessionService.clearRedirectLocation()
-      this.$window.location.href = locationToReturnUser
+      this.redirectToPreviousLocation = true;
+      this.sessionService.clearRedirectLocation();
+      this.$window.location.href = locationToReturnUser;
     } else {
-      this.redirectToHomepage()
+      this.redirectToHomepage();
     }
   }
 }
 
 export default angular
-  .module(componentName, [
-    commonModule.name,
-    sessionService.name
-  ])
+  .module(componentName, [commonModule.name, sessionService.name])
   .component(componentName, {
     controller: SignOutController,
-    templateUrl: template
-  })
+    templateUrl: template,
+  });
