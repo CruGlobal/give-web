@@ -1,15 +1,34 @@
-<contact-info submitted="$ctrl.submitted" on-submit="$ctrl.onSubmit(success)"></contact-info>
+<contact-info
+  submitted="$ctrl.submitted"
+  on-submit="$ctrl.onSubmit(success)"
+></contact-info>
 
 <div class="closer">
   <div class="row">
     <div class="col-sm-5 hidden-xs">
-      <a id="returnToCartButton1" ng-href="{{$ctrl.buildCartUrl()}}" class="btn btn-default" translate>Return to Cart</a>
+      <a
+        id="returnToCartButton1"
+        ng-href="{{$ctrl.buildCartUrl()}}"
+        class="btn btn-default"
+        translate
+        >Return to Cart</a
+      >
     </div>
     <div class="col-sm-5 col-sm-offset-2">
-      <button id="continueToPaymentMethodsButton" type="button" class="btn btn-primary pull-right btn-block-mobile" ng-click="$ctrl.submitted = true" translate>
+      <button
+        id="continueToPaymentMethodsButton"
+        type="button"
+        class="btn btn-primary pull-right btn-block-mobile"
+        ng-click="$ctrl.submitted = true"
+        translate
+      >
         Continue
       </button>
-      <a id="returnToCartButton2" ng-href="{{$ctrl.buildCartUrl()}}" class="btn btn-link btn-block visible-xs">
+      <a
+        id="returnToCartButton2"
+        ng-href="{{$ctrl.buildCartUrl()}}"
+        class="btn btn-link btn-block visible-xs"
+      >
         <i class="fa fa-angle-left"></i>
         <translate>Return to Cart</translate>
       </a>

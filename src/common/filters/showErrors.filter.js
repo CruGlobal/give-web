@@ -1,13 +1,12 @@
-import angular from 'angular'
+import angular from 'angular';
 
-const filterName = 'showErrors'
+const filterName = 'showErrors';
 
-function ShowErrors () {
-  return (ngModelController) => ngModelController !== undefined && (ngModelController.$touched || ngModelController.$$parentForm.$submitted) && ngModelController.$invalid
+function ShowErrors() {
+  return (ngModelController) =>
+    ngModelController !== undefined &&
+    (ngModelController.$touched || ngModelController.$$parentForm.$submitted) &&
+    ngModelController.$invalid;
 }
 
-export default angular
-  .module(filterName, [
-
-  ])
-  .filter(filterName, ShowErrors)
+export default angular.module(filterName, []).filter(filterName, ShowErrors);

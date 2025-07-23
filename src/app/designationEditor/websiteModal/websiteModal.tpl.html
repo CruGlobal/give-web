@@ -2,12 +2,35 @@
   <div class="form-group">
     <label>
       Website Address
-      <input name="website" type="text" class="form-control" placeholder="https://" aria-describedby="website-help" ng-model="$ctrl.website">
+      <input
+        name="website"
+        type="text"
+        class="form-control"
+        placeholder="https://"
+        aria-describedby="website-help"
+        ng-model="$ctrl.website"
+      />
     </label>
-    <span id="website-help" class="help-block">Fill in this field to add a website link.</span>
+    <span id="website-help" class="help-block"
+      >Fill in this field to add a website link.</span
+    >
   </div>
 </div>
 <div class="modal-footer">
-  <button id="saveChangesButton" type="button" class="btn btn-primary pull-right" ng-click="$close($ctrl.website)">Save &amp; Close</button>
-  <button id="cancelChangesButton" type="button" class="btn btn-default" ng-click="$dismiss()">Cancel</button>
+  <button
+    id="saveChangesButton"
+    type="button"
+    class="btn btn-primary pull-right"
+    ng-click="$close($ctrl.website)"
+  >
+    Save &amp; Close
+  </button>
+  <button
+    id="cancelChangesButton"
+    type="button"
+    class="btn btn-default"
+    ng-click="$dismiss()"
+  >
+    Cancel
+  </button>
 </div>

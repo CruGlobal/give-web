@@ -1,4 +1,10 @@
-import { showVerificationCodeField, injectBackButton, initializeFloatingLabels, backButtonId, backButtonText } from "./oktaSignInWidgetHelper";
+import {
+  showVerificationCodeField,
+  injectBackButton,
+  initializeFloatingLabels,
+  backButtonId,
+  backButtonText,
+} from './oktaSignInWidgetHelper';
 
 describe('oktaSignInWidgetHelper', () => {
   describe('showVerificationCodeField()', () => {
@@ -6,7 +12,7 @@ describe('oktaSignInWidgetHelper', () => {
     window.handleClick = handleClick;
     beforeEach(() => {
       handleClick.mockClear();
-    })
+    });
 
     it('should call handleClick when button link is rendered', () => {
       document.body.innerHTML = `
@@ -17,7 +23,7 @@ describe('oktaSignInWidgetHelper', () => {
         </div>
       `;
 
-      showVerificationCodeField()
+      showVerificationCodeField();
       expect(handleClick).toHaveBeenCalled();
     });
 
@@ -26,13 +32,13 @@ describe('oktaSignInWidgetHelper', () => {
         <div>Something else</div>
       `;
 
-      showVerificationCodeField()
+      showVerificationCodeField();
       expect(handleClick).not.toHaveBeenCalled();
     });
   });
 
   describe('injectBackButton', () => {
-    const onBackButtonClickSpy = jest.fn()
+    const onBackButtonClickSpy = jest.fn();
     const thisComponent = {
       onBackButtonClick: onBackButtonClickSpy,
       $scope: {
@@ -40,11 +46,11 @@ describe('oktaSignInWidgetHelper', () => {
           if (typeof functionCallback === 'function') {
             functionCallback();
           }
-        }
-      }
-    }
+        },
+      },
+    };
     beforeEach(() => {
-     document.body.innerHTML = `
+      document.body.innerHTML = `
         <div class="o-form-button-bar">
           <button class="button">
             Continue
@@ -53,7 +59,7 @@ describe('oktaSignInWidgetHelper', () => {
       `;
     });
 
-    it("should render the back button in the HTML", () => {
+    it('should render the back button in the HTML', () => {
       injectBackButton(thisComponent);
 
       const backButton = document.querySelector(`#${backButtonId}`);
@@ -61,7 +67,7 @@ describe('oktaSignInWidgetHelper', () => {
       expect(backButton.textContent).toBe(backButtonText);
     });
 
-    it("should not add the back button if it already exists", () => {
+    it('should not add the back button if it already exists', () => {
       // Add the back button manually
       document.querySelector('.o-form-button-bar').innerHTML = `
       <button id="${backButtonId}" class="btn btn-secondary" type="button">${backButtonText}</button>
@@ -73,7 +79,7 @@ describe('oktaSignInWidgetHelper', () => {
       expect(buttons.length).toBe(1); // Ensure only one button exists
     });
 
-    it("should call the functionCallback when the back button is clicked", () => {
+    it('should call the functionCallback when the back button is clicked', () => {
       injectBackButton(thisComponent);
 
       const backButton = document.querySelector(`#${backButtonId}`);
@@ -82,7 +88,7 @@ describe('oktaSignInWidgetHelper', () => {
       expect(onBackButtonClickSpy).toHaveBeenCalled();
     });
 
-    it("should not render the back button if the button bar is not present", () => {
+    it('should not render the back button if the button bar is not present', () => {
       document.body.innerHTML = `
       <div>Something else</div>
       `;
@@ -92,12 +98,12 @@ describe('oktaSignInWidgetHelper', () => {
       const backButton = document.querySelector(`#${backButtonId}`);
       expect(backButton).toBeNull();
     });
-  })
+  });
 
   describe('initializeFloatingLabels', () => {
     const thisComponent = {
-      floatingLabelAbortControllers: []
-    }
+      floatingLabelAbortControllers: [],
+    };
     beforeEach(() => {
       document.body.innerHTML = `
       <div class="o-form-content">
@@ -110,13 +116,12 @@ describe('oktaSignInWidgetHelper', () => {
       </div>
       `;
     });
-    
+
     it('should update floatingLabelAbortControllers variable', () => {
       expect(thisComponent.floatingLabelAbortControllers.length).toEqual(0);
       initializeFloatingLabels(thisComponent);
       expect(thisComponent.floatingLabelAbortControllers.length).toEqual(1);
     });
-
 
     it('should add the "active" class to the label when input is focused', () => {
       initializeFloatingLabels(thisComponent);

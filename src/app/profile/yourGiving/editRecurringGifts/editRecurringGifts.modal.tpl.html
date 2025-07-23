@@ -1,6 +1,15 @@
 <div ng-switch="$ctrl.state">
-  <div class="modal-header" ng-switch-when="loading|error" ng-switch-when-separator="|">
-    <button type="button" class="close" aria-label="Close" ng-click="$ctrl.dismiss()">
+  <div
+    class="modal-header"
+    ng-switch-when="loading|error"
+    ng-switch-when-separator="|"
+  >
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      ng-click="$ctrl.dismiss()"
+    >
       <span aria-hidden="true">x</span>
     </button>
     <div class="container-fluid">
@@ -8,7 +17,9 @@
         <div class="col-xs-12">
           <div class="border-bottom-small">
             <h3 translate>Checking Payment Methods</h3>
-            <p translate>You must have at least one valid payment method to continue</p>
+            <p translate>
+              You must have at least one valid payment method to continue
+            </p>
           </div>
         </div>
       </div>
@@ -33,8 +44,13 @@
         <div class="col-md-12 col-xs-12">
           <div class="text-center" translate>
             <div class="alert alert-danger">
-              <p class="text-left" translate>There was an error loading your payment methods.</p>
-              <p class="text-left" translate>You can try loading them again or continue and add a new payment method.</p>
+              <p class="text-left" translate>
+                There was an error loading your payment methods.
+              </p>
+              <p class="text-left" translate>
+                You can try loading them again or continue and add a new payment
+                method.
+              </p>
             </div>
           </div>
         </div>
@@ -43,9 +59,7 @@
   </div>
   <div class="modal-footer" ng-switch-when="error">
     <div class="col-xs-6">
-      <a class="btn btn-default"
-         ng-click="$ctrl.dismiss()"
-         translate>
+      <a class="btn btn-default" ng-click="$ctrl.dismiss()" translate>
         Cancel
       </a>
     </div>
@@ -55,13 +69,13 @@
     </div>
   </div>
 
-
   <step-0-payment-method-list
     ng-switch-when="step0PaymentMethodList"
     payment-methods="$ctrl.paymentMethods"
     dismiss="$ctrl.dismiss()"
     next="$ctrl.next(paymentMethod)"
-    ng-init="$ctrl.analyticsFactory.track('ga-edit-recurring-select-payment-method')">
+    ng-init="$ctrl.analyticsFactory.track('ga-edit-recurring-select-payment-method')"
+  >
   </step-0-payment-method-list>
 
   <step-0-add-update-payment-method
@@ -71,7 +85,8 @@
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
     next="$ctrl.next(paymentMethod)"
-    ng-init="$ctrl.analyticsFactory.track($ctrl.paymentMethod ? 'ga-edit-recurring-edit-payment-method' : 'ga-edit-recurring-add-payment-method')">
+    ng-init="$ctrl.analyticsFactory.track($ctrl.paymentMethod ? 'ga-edit-recurring-edit-payment-method' : 'ga-edit-recurring-add-payment-method')"
+  >
   </step-0-add-update-payment-method>
 
   <step-1-edit-recurring-gifts
@@ -79,7 +94,8 @@
     recurring-gifts="$ctrl.recurringGifts"
     dismiss="$ctrl.dismiss()"
     next="$ctrl.next(null, recurringGifts)"
-    ng-init="$ctrl.analyticsFactory.track('ga-edit-recurring-configure')">
+    ng-init="$ctrl.analyticsFactory.track('ga-edit-recurring-configure')"
+  >
   </step-1-edit-recurring-gifts>
 
   <step-2-add-recent-recipients
@@ -91,7 +107,8 @@
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
     next="$ctrl.next(null, null, additions)"
-    ng-init="$ctrl.analyticsFactory.track('ga-edit-recurring-add-recent')">
+    ng-init="$ctrl.analyticsFactory.track('ga-edit-recurring-add-recent')"
+  >
   </step-2-add-recent-recipients>
 
   <step-2-search-recipients
@@ -99,7 +116,8 @@
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
     next="$ctrl.next(null, null, additions)"
-    ng-init="$ctrl.analyticsFactory.track('ga-edit-recurring-search')">
+    ng-init="$ctrl.analyticsFactory.track('ga-edit-recurring-search')"
+  >
   </step-2-search-recipients>
 
   <step-3-configure-recent-recipients
@@ -108,7 +126,8 @@
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
     next="$ctrl.next(null, null, additions)"
-    ng-init="$ctrl.analyticsFactory.track('ga-edit-recurring-configure-new-gifts')">
+    ng-init="$ctrl.analyticsFactory.track('ga-edit-recurring-configure-new-gifts')"
+  >
   </step-3-configure-recent-recipients>
 
   <step-4-confirm
@@ -118,6 +137,7 @@
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
     next="$ctrl.next()"
-    ng-init="$ctrl.analyticsFactory.track('ga-edit-recurring-review')">
+    ng-init="$ctrl.analyticsFactory.track('ga-edit-recurring-review')"
+  >
   </step-4-confirm>
 </div>

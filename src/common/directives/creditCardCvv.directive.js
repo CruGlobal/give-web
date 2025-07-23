@@ -1,9 +1,8 @@
-import angular from 'angular'
+import angular from 'angular';
 
-const directiveName = 'creditCardCvv'
+const directiveName = 'creditCardCvv';
 
-const template =
-`<div class="credit-card-cvv-container form-group" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.securityCode | showErrors), 'is-required': !$ctrl.paymentMethod}">
+const template = `<div class="credit-card-cvv-container form-group" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.securityCode | showErrors), 'is-required': !$ctrl.paymentMethod}">
   <label>
     <span class="credit-card-cvv-label" translate>{{'SEC_CODE'}}</span>
     <input type="text" 
@@ -23,16 +22,16 @@ const template =
     <translate ng-if="isAmex">{{'LOCATION_OF_CODE_AMEX'}}</translate>
     </div>
   </div>
-</div>`
+</div>`;
 
 const creditCardCvv = /* @ngInject */ () => {
   const directiveDefinitionObject = {
     restrict: 'E',
-    template
-  }
-  return directiveDefinitionObject
-}
+    template,
+  };
+  return directiveDefinitionObject;
+};
 
 export default angular
   .module(directiveName, [])
-  .directive(directiveName, creditCardCvv)
+  .directive(directiveName, creditCardCvv);

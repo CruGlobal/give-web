@@ -2,64 +2,130 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-
         <div ng-if="$ctrl.hasError()" class="alert alert-danger" role="alert">
           <p ng-switch="$ctrl.donorDetailsError">
-            <translate ng-switch-when="loading">There was an error loading your profile information</translate>
-            <translate ng-switch-when="updating">There was an error updating your profile information</translate>
-            <translate ng-switch-when="saving spouse">There was an error updating your spouse's information</translate>
+            <translate ng-switch-when="loading"
+              >There was an error loading your profile information</translate
+            >
+            <translate ng-switch-when="updating"
+              >There was an error updating your profile information</translate
+            >
+            <translate ng-switch-when="saving spouse"
+              >There was an error updating your spouse's information</translate
+            >
           </p>
           <p ng-switch="$ctrl.emailAddressError">
-            <translate ng-switch-when="loading">There was an error loading your email(s)</translate>
-            <translate ng-switch-when="updating">There was an error updating your email(s)</translate>
+            <translate ng-switch-when="loading"
+              >There was an error loading your email(s)</translate
+            >
+            <translate ng-switch-when="updating"
+              >There was an error updating your email(s)</translate
+            >
           </p>
           <p ng-switch="$ctrl.phoneNumberError">
-            <translate ng-switch-when="loading">There was an error loading your phone numbers</translate>
-            <translate ng-switch-when="updating">There was an error updating your phone numbers</translate>
-            <translate ng-switch-when="duplicate">There was an error updating your phone numbers. You appear to have entered duplicate phone numbers. Please verify that all of your phone numbers are unique.</translate>
+            <translate ng-switch-when="loading"
+              >There was an error loading your phone numbers</translate
+            >
+            <translate ng-switch-when="updating"
+              >There was an error updating your phone numbers</translate
+            >
+            <translate ng-switch-when="duplicate"
+              >There was an error updating your phone numbers. You appear to
+              have entered duplicate phone numbers. Please verify that all of
+              your phone numbers are unique.</translate
+            >
           </p>
           <p ng-switch="$ctrl.mailingAddressError">
-            <translate ng-switch-when="loading">There was an error loading your mailing address</translate>
-            <translate ng-switch-when="updating">There was an error updating your mailing address</translate>
+            <translate ng-switch-when="loading"
+              >There was an error loading your mailing address</translate
+            >
+            <translate ng-switch-when="updating"
+              >There was an error updating your mailing address</translate
+            >
           </p>
         </div>
 
-        <div ng-if="$ctrl.success && !$ctrl.touched() && !$ctrl.hasError()" class="alert alert-success" role="alert">
+        <div
+          ng-if="$ctrl.success && !$ctrl.touched() && !$ctrl.hasError()"
+          class="alert alert-success"
+          role="alert"
+        >
           <translate>Profile information was successfully updated.</translate>
         </div>
 
         <div class="panel panel-margin-bottom">
           <div class="panel-body">
-            <loading inline="true" class="pull-right" ng-if="$ctrl.loading()"></loading>
+            <loading
+              inline="true"
+              class="pull-right"
+              ng-if="$ctrl.loading()"
+            ></loading>
             <h2 class="mb_x" translate>Your Profile</h2>
             <div class="row mb_x">
               <div class="col-lg-10 col-lg-offset-1">
-
                 <div class="row">
                   <div class="col-md-7 mb">
-
                     <!--Donor Details-->
-                    <h4 id="name-heading" class="panel-title  border-bottom-small visible" translate>Your Name</h4>
+                    <h4
+                      id="name-heading"
+                      class="panel-title border-bottom-small visible"
+                      translate
+                    >
+                      Your Name
+                    </h4>
                     <div class="loading-overlay-parent">
-                      <loading type="overlay" ng-if="$ctrl.donorDetailsLoading"></loading>
+                      <loading
+                        type="overlay"
+                        ng-if="$ctrl.donorDetailsLoading"
+                      ></loading>
                       <ul class="list-unstyled people-fields">
                         <li>
                           <form name="$ctrl.donorDetailsForm" novalidate>
-                            <div class="form-group is-required person-row" ng-class="{'has-error': ($ctrl.donorDetailsForm.nameMiddleInitial | showErrors) }">
+                            <div
+                              class="form-group is-required person-row"
+                              ng-class="{'has-error': ($ctrl.donorDetailsForm.nameMiddleInitial | showErrors) }"
+                            >
                               <i class="fa fa-lock"></i>
 
-                              <select name="nameTitle"
-                                      class="form-control form-control-subtle prefix"
-                                      aria-label="Your name title"
-                                      ng-model="$ctrl.donorDetails.name.title"
-                                      ng-options="value as label for (value , label) in $ctrl.availableTitles">
-                              </select>
+                              <select
+                                name="nameTitle"
+                                class="form-control form-control-subtle prefix"
+                                aria-label="Your name title"
+                                ng-model="$ctrl.donorDetails.name.title"
+                                ng-options="value as label for (value , label) in $ctrl.availableTitles"
+                              ></select>
 
-                              <input name="nameGivenName" type="text" class="form-control  form-control-subtle first" disabled aria-label="Your given name" ng-model="$ctrl.donorDetails.name['given-name']">
-                              <input name="nameMiddleInitial" type="text" class="form-control  form-control-subtle middle" aria-label="Your middle initial" ng-model="$ctrl.donorDetails.name['middle-initial']" ng-maxlength="15">
-                              <input name="nameFamilyName" type="text" class="form-control  form-control-subtle last" disabled  aria-label="Your family name" ng-model="$ctrl.donorDetails.name['family-name']">
+                              <input
+                                name="nameGivenName"
+                                type="text"
+                                class="form-control form-control-subtle first"
+                                disabled
+                                aria-label="Your given name"
+                                ng-model="$ctrl.donorDetails.name['given-name']"
+                              />
+                              <input
+                                name="nameMiddleInitial"
+                                type="text"
+                                class="form-control form-control-subtle middle"
+                                aria-label="Your middle initial"
+                                ng-model="$ctrl.donorDetails.name['middle-initial']"
+                                ng-maxlength="15"
+                              />
+                              <input
+                                name="nameFamilyName"
+                                type="text"
+                                class="form-control form-control-subtle last"
+                                disabled
+                                aria-label="Your family name"
+                                ng-model="$ctrl.donorDetails.name['family-name']"
+                              />
 
-                              <select name="nameSuffix" class="form-control form-control-subtle suffix" aria-label="Your name suffix" ng-model="$ctrl.donorDetails.name.suffix">
+                              <select
+                                name="nameSuffix"
+                                class="form-control form-control-subtle suffix"
+                                aria-label="Your name suffix"
+                                ng-model="$ctrl.donorDetails.name.suffix"
+                              >
                                 <option value=""></option>
                                 <option value="Jr." translate>Jr</option>
                                 <option value="Sr." translate>Sr</option>
@@ -74,28 +140,73 @@
 
                               <div class="clear"></div>
 
-                              <div role="alert" ng-messages="$ctrl.donorDetailsForm.nameMiddleInitial.$error" ng-if="($ctrl.donorDetailsForm.nameMiddleInitial | showErrors)">
-                                <div class="help-block" ng-message="maxlength" translate>Middle name cannot be longer than 15 characters</div>
+                              <div
+                                role="alert"
+                                ng-messages="$ctrl.donorDetailsForm.nameMiddleInitial.$error"
+                                ng-if="($ctrl.donorDetailsForm.nameMiddleInitial | showErrors)"
+                              >
+                                <div
+                                  class="help-block"
+                                  ng-message="maxlength"
+                                  translate
+                                >
+                                  Middle name cannot be longer than 15
+                                  characters
+                                </div>
                               </div>
                             </div>
                           </form>
                         </li>
                         <li ng-show="$ctrl.addingSpouse || $ctrl.hasSpouse">
                           <form name="$ctrl.spouseDetailsForm" novalidate>
-                            <div class="form-group is-required person-row" ng-class="{'has-error': ($ctrl.spouseDetailsForm.spouseName | showErrors) || ($ctrl.spouseDetailsForm.spouseLastName | showErrors) || ($ctrl.spouseDetailsForm.spouseInitial | showErrors) }">
+                            <div
+                              class="form-group is-required person-row"
+                              ng-class="{'has-error': ($ctrl.spouseDetailsForm.spouseName | showErrors) || ($ctrl.spouseDetailsForm.spouseLastName | showErrors) || ($ctrl.spouseDetailsForm.spouseInitial | showErrors) }"
+                            >
                               <i class="fa fa-lock"></i>
-                              <select name="title"
-                                      class="form-control form-control-subtle prefix"
-                                      aria-label="Spouse's name title"
-                                      ng-model="$ctrl.donorDetails['spouse-name'].title"
-                                      ng-options="value as label for (value , label) in $ctrl.availableTitles">
-                              </select>
+                              <select
+                                name="title"
+                                class="form-control form-control-subtle prefix"
+                                aria-label="Spouse's name title"
+                                ng-model="$ctrl.donorDetails['spouse-name'].title"
+                                ng-options="value as label for (value , label) in $ctrl.availableTitles"
+                              ></select>
 
-                              <input name="spouseName" type="text" class="form-control form-control-subtle first" aria-label="Spouse's given name" ng-model="$ctrl.donorDetails['spouse-name']['given-name']" ng-maxlength="50" ng-disabled="$ctrl.hasSpouse" ng-required="$ctrl.addingSpouse">
-                              <input name="spouseInitial" type="text" class="form-control form-control-subtle middle" aria-label="Spouse's middle initial" ng-model="$ctrl.donorDetails['spouse-name']['middle-initial']" ng-maxlength="15">
-                              <input name="spouseLastName" type="text" class="form-control form-control-subtle last" aria-label="Spouse's family name" ng-model="$ctrl.donorDetails['spouse-name']['family-name']" ng-maxlength="50" ng-disabled="$ctrl.hasSpouse" ng-required="$ctrl.addingSpouse">
+                              <input
+                                name="spouseName"
+                                type="text"
+                                class="form-control form-control-subtle first"
+                                aria-label="Spouse's given name"
+                                ng-model="$ctrl.donorDetails['spouse-name']['given-name']"
+                                ng-maxlength="50"
+                                ng-disabled="$ctrl.hasSpouse"
+                                ng-required="$ctrl.addingSpouse"
+                              />
+                              <input
+                                name="spouseInitial"
+                                type="text"
+                                class="form-control form-control-subtle middle"
+                                aria-label="Spouse's middle initial"
+                                ng-model="$ctrl.donorDetails['spouse-name']['middle-initial']"
+                                ng-maxlength="15"
+                              />
+                              <input
+                                name="spouseLastName"
+                                type="text"
+                                class="form-control form-control-subtle last"
+                                aria-label="Spouse's family name"
+                                ng-model="$ctrl.donorDetails['spouse-name']['family-name']"
+                                ng-maxlength="50"
+                                ng-disabled="$ctrl.hasSpouse"
+                                ng-required="$ctrl.addingSpouse"
+                              />
 
-                              <select name="suffix" class="form-control form-control-subtle suffix" aria-label="Spouse's name suffix" ng-model="$ctrl.donorDetails['spouse-name'].suffix">
+                              <select
+                                name="suffix"
+                                class="form-control form-control-subtle suffix"
+                                aria-label="Spouse's name suffix"
+                                ng-model="$ctrl.donorDetails['spouse-name'].suffix"
+                              >
                                 <option value=""></option>
                                 <option value="Jr." translate>Jr</option>
                                 <option value="Sr." translate>Sr</option>
@@ -110,170 +221,401 @@
 
                               <div class="clear"></div>
 
-                              <div role="alert" ng-messages="$ctrl.spouseDetailsForm.spouseName.$error" ng-if="($ctrl.spouseDetailsForm.spouseName | showErrors)">
-                                <div class="help-block" ng-message="required" translate>First name must not be empty</div>
-                                <div class="help-block" ng-message="maxlength" translate>First name cannot be longer than 50 characters</div>
+                              <div
+                                role="alert"
+                                ng-messages="$ctrl.spouseDetailsForm.spouseName.$error"
+                                ng-if="($ctrl.spouseDetailsForm.spouseName | showErrors)"
+                              >
+                                <div
+                                  class="help-block"
+                                  ng-message="required"
+                                  translate
+                                >
+                                  First name must not be empty
+                                </div>
+                                <div
+                                  class="help-block"
+                                  ng-message="maxlength"
+                                  translate
+                                >
+                                  First name cannot be longer than 50 characters
+                                </div>
                               </div>
-                              <div role="alert" ng-messages="$ctrl.spouseDetailsForm.spouseInitial.$error" ng-if="($ctrl.spouseDetailsForm.spouseInitial | showErrors)">
-                                <div class="help-block" ng-message="maxlength" translate>Middle name cannot be longer than 15 characters</div>
+                              <div
+                                role="alert"
+                                ng-messages="$ctrl.spouseDetailsForm.spouseInitial.$error"
+                                ng-if="($ctrl.spouseDetailsForm.spouseInitial | showErrors)"
+                              >
+                                <div
+                                  class="help-block"
+                                  ng-message="maxlength"
+                                  translate
+                                >
+                                  Middle name cannot be longer than 15
+                                  characters
+                                </div>
                               </div>
-                              <div role="alert" ng-messages="$ctrl.spouseDetailsForm.spouseLastName.$error" ng-if="($ctrl.spouseDetailsForm.spouseLastName | showErrors)">
-                                <div class="help-block" ng-message="required" translate>Last name must not be empty</div>
-                                <div class="help-block" ng-message="maxlength" translate>Last name cannot be longer than 50 characters</div>
+                              <div
+                                role="alert"
+                                ng-messages="$ctrl.spouseDetailsForm.spouseLastName.$error"
+                                ng-if="($ctrl.spouseDetailsForm.spouseLastName | showErrors)"
+                              >
+                                <div
+                                  class="help-block"
+                                  ng-message="required"
+                                  translate
+                                >
+                                  Last name must not be empty
+                                </div>
+                                <div
+                                  class="help-block"
+                                  ng-message="maxlength"
+                                  translate
+                                >
+                                  Last name cannot be longer than 50 characters
+                                </div>
                               </div>
-
                             </div>
                           </form>
                         </li>
 
-                        <li ng-if="$ctrl.donorDetails['donor-type'] === 'Household' && !$ctrl.hasSpouse && !$ctrl.donorDetails.staff">
-                          <a id="addSpouseLink" ng-if="!$ctrl.addingSpouse" href="" ng-click="$ctrl.addingSpouse = true" translate>+ Add Your Spouse</a>
-                          <a id="removeSpouseLink" ng-if="$ctrl.addingSpouse" href="" ng-click="$ctrl.addingSpouse = false" translate>- Remove Spouse</a>
+                        <li
+                          ng-if="$ctrl.donorDetails['donor-type'] === 'Household' && !$ctrl.hasSpouse && !$ctrl.donorDetails.staff"
+                        >
+                          <a
+                            id="addSpouseLink"
+                            ng-if="!$ctrl.addingSpouse"
+                            href=""
+                            ng-click="$ctrl.addingSpouse = true"
+                            translate
+                            >+ Add Your Spouse</a
+                          >
+                          <a
+                            id="removeSpouseLink"
+                            ng-if="$ctrl.addingSpouse"
+                            href=""
+                            ng-click="$ctrl.addingSpouse = false"
+                            translate
+                            >- Remove Spouse</a
+                          >
                         </li>
 
                         <li>
-                          <strong translate>To change your name, please email us at <a href="mailto:egift@cru.org?subject=Name change request">eGift@cru.org</a> or call us at <a href="tel:(888)278-7233">(888)278-7233</a> from 9:00 a.m. to 5:00 p.m. ET, Monday-Friday.</strong>
+                          <strong translate
+                            >To change your name, please email us at
+                            <a
+                              href="mailto:egift@cru.org?subject=Name change request"
+                              >eGift@cru.org</a
+                            >
+                            or call us at
+                            <a href="tel:(888)278-7233">(888)278-7233</a> from
+                            9:00 a.m. to 5:00 p.m. ET, Monday-Friday.</strong
+                          >
                         </li>
-
                       </ul>
-                      </form>
                     </div>
 
                     <!--Email Address-->
-                    <h4 class="panel-title  border-bottom-small visible mt" translate>Email Addresses</h4>
+                    <h4
+                      class="panel-title border-bottom-small visible mt"
+                      translate
+                    >
+                      Email Addresses
+                    </h4>
 
                     <div class="loading-overlay-parent">
-                      <loading type="overlay" ng-if="$ctrl.emailLoading"></loading>
+                      <loading
+                        type="overlay"
+                        ng-if="$ctrl.emailLoading"
+                      ></loading>
                       <form name="$ctrl.donorEmailForm" novalidate>
-                        <div class="form-group is-required" ng-class="{'has-error': ($ctrl.donorEmailForm.donorsEmail | showErrors)}">
+                        <div
+                          class="form-group is-required"
+                          ng-class="{'has-error': ($ctrl.donorEmailForm.donorsEmail | showErrors)}"
+                        >
                           <label>
-                            <span>{{$ctrl.donorDetails.name['given-name'] + ' ' + $ctrl.donorDetails.name['family-name']}} Email</span>
-                            <input type="email"
-                                  name="donorsEmail"
-                                  class="form-control  form-control-subtle"
-                                  ng-model="$ctrl.donorEmail.email"
-                                  maxlength="100"
-                                  required
-                                  ng-disabled="$ctrl.donorDetails.staff">
+                            <span
+                              >{{$ctrl.donorDetails.name['given-name'] + ' ' +
+                              $ctrl.donorDetails.name['family-name']}}
+                              Email</span
+                            >
+                            <input
+                              type="email"
+                              name="donorsEmail"
+                              class="form-control form-control-subtle"
+                              ng-model="$ctrl.donorEmail.email"
+                              maxlength="100"
+                              required
+                              ng-disabled="$ctrl.donorDetails.staff"
+                            />
                           </label>
-                          <div role="alert" ng-messages="$ctrl.donorEmailForm.$error" ng-if="($ctrl.donorEmailForm.donorsEmail | showErrors)">
-                            <div class="help-block" ng-message="required" translate>You must enter an email address</div>
-                            <div class="help-block" ng-message="email" translate>You must enter a valid email address</div>
-                            <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 100 characters</div>
+                          <div
+                            role="alert"
+                            ng-messages="$ctrl.donorEmailForm.$error"
+                            ng-if="($ctrl.donorEmailForm.donorsEmail | showErrors)"
+                          >
+                            <div
+                              class="help-block"
+                              ng-message="required"
+                              translate
+                            >
+                              You must enter an email address
+                            </div>
+                            <div
+                              class="help-block"
+                              ng-message="email"
+                              translate
+                            >
+                              You must enter a valid email address
+                            </div>
+                            <div
+                              class="help-block"
+                              ng-message="maxlength"
+                              translate
+                            >
+                              This field cannot be longer than 100 characters
+                            </div>
                           </div>
-                          <a id="donorEmailPreferences" href="" ng-if="$ctrl.profilePKey" ng-click="$ctrl.linkToAdobeCampaign($ctrl.profilePKey)" translate>Edit Email Preferences</a>
+                          <a
+                            id="donorEmailPreferences"
+                            href=""
+                            ng-if="$ctrl.profilePKey"
+                            ng-click="$ctrl.linkToAdobeCampaign($ctrl.profilePKey)"
+                            translate
+                            >Edit Email Preferences</a
+                          >
                         </div>
                       </form>
 
-                      <form name="$ctrl.spouseEmailForm" novalidate ng-if="$ctrl.donorDetails['donor-type'] === 'Household' && ($ctrl.hasSpouse || $ctrl.addingSpouse)">
-                        <div class="form-group" ng-class="{'has-error': ($ctrl.spouseEmailForm.spouseEmail | showErrors)}">
+                      <form
+                        name="$ctrl.spouseEmailForm"
+                        novalidate
+                        ng-if="$ctrl.donorDetails['donor-type'] === 'Household' && ($ctrl.hasSpouse || $ctrl.addingSpouse)"
+                      >
+                        <div
+                          class="form-group"
+                          ng-class="{'has-error': ($ctrl.spouseEmailForm.spouseEmail | showErrors)}"
+                        >
                           <label>
-                            <span translate>{{$ctrl.hasSpouse ? ($ctrl.donorDetails['spouse-name']['given-name'] + ' ' + $ctrl.donorDetails['spouse-name']['family-name']) : 'Spouse'}} Email</span>
-                            <input type="email"
-                                  name="spouseEmail"
-                                  class="form-control  form-control-subtle"
-                                  ng-model="$ctrl.spouseEmail.email"
-                                  maxlength="100"
-                                  ng-disabled="$ctrl.donorDetails.staff">
+                            <span translate
+                              >{{$ctrl.hasSpouse ?
+                              ($ctrl.donorDetails['spouse-name']['given-name'] +
+                              ' ' +
+                              $ctrl.donorDetails['spouse-name']['family-name'])
+                              : 'Spouse'}} Email</span
+                            >
+                            <input
+                              type="email"
+                              name="spouseEmail"
+                              class="form-control form-control-subtle"
+                              ng-model="$ctrl.spouseEmail.email"
+                              maxlength="100"
+                              ng-disabled="$ctrl.donorDetails.staff"
+                            />
                           </label>
-                          <div role="alert" ng-messages="$ctrl.spouseEmailForm.spouseEmail.$error" ng-if="($ctrl.spouseEmailForm.spouseEmail | showErrors)">
-                            <div class="help-block" ng-message="email" translate>You must enter a valid email address</div>
-                            <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 100 characters</div>
+                          <div
+                            role="alert"
+                            ng-messages="$ctrl.spouseEmailForm.spouseEmail.$error"
+                            ng-if="($ctrl.spouseEmailForm.spouseEmail | showErrors)"
+                          >
+                            <div
+                              class="help-block"
+                              ng-message="email"
+                              translate
+                            >
+                              You must enter a valid email address
+                            </div>
+                            <div
+                              class="help-block"
+                              ng-message="maxlength"
+                              translate
+                            >
+                              This field cannot be longer than 100 characters
+                            </div>
                           </div>
-                          <a id="spouseEmailPreferences" href="" ng-if="$ctrl.spousePKey" ng-click="$ctrl.linkToAdobeCampaign($ctrl.spousePKey)" translate>Edit Email Preferences</a>
+                          <a
+                            id="spouseEmailPreferences"
+                            href=""
+                            ng-if="$ctrl.spousePKey"
+                            ng-click="$ctrl.linkToAdobeCampaign($ctrl.spousePKey)"
+                            translate
+                            >Edit Email Preferences</a
+                          >
                         </div>
                       </form>
                     </div>
 
                     <!--Phone Numbers-->
-                    <h4 class="panel-title  border-bottom-small visible mt" translate>Phone Numbers</h4>
+                    <h4
+                      class="panel-title border-bottom-small visible mt"
+                      translate
+                    >
+                      Phone Numbers
+                    </h4>
 
                     <div class="loading-overlay-parent">
-                      <loading type="overlay" ng-if="$ctrl.phonesLoading"></loading>
+                      <loading
+                        type="overlay"
+                        ng-if="$ctrl.phonesLoading"
+                      ></loading>
                       <div ng-if="!$ctrl.phonesLoading">
-                        <div ng-repeat="phone in $ctrl.phoneNumbers" ng-class="{'has-error': ($ctrl.phoneNumberForms[$index].phoneNumber | showErrors)}" class="form-group is-required phone-row" >
-                          <form name="$ctrl.phoneNumberForms[{{$index}}]" ng-hide="phone.delete" novalidate>
-                            <select name="phoneNumberType"
-                                    class="form-control form-control-subtle"
-                                    aria-label="Phone number type"
-                                    ng-model="phone['phone-number-type']"
-                                    ng-disabled="$ctrl.donorDetails.staff">
+                        <div
+                          ng-repeat="phone in $ctrl.phoneNumbers"
+                          ng-class="{'has-error': ($ctrl.phoneNumberForms[$index].phoneNumber | showErrors)}"
+                          class="form-group is-required phone-row"
+                        >
+                          <form
+                            name="$ctrl.phoneNumberForms[{{$index}}]"
+                            ng-hide="phone.delete"
+                            novalidate
+                          >
+                            <select
+                              name="phoneNumberType"
+                              class="form-control form-control-subtle"
+                              aria-label="Phone number type"
+                              ng-model="phone['phone-number-type']"
+                              ng-disabled="$ctrl.donorDetails.staff"
+                            >
                               <option translate>Home</option>
                               <option translate>Mobile</option>
                               <option translate>Work</option>
                               <option translate>Unknown</option>
                             </select>
-                            <input name="phoneNumber"
-                                   type="tel"
-                                   class="form-control form-control-subtle"
-                                   aria-label="Phone number"
-                                   ng-model="phone['phone-number']"
-                                   required
-                                   ng-disabled="$ctrl.donorDetails.staff">
-                            <select name="spousePhoneNumber"
-                                    class="form-control form-control-subtle"
-                                    aria-label="Phone number person"
-                                    ng-model="phone['is-spouse']"
-                                    ng-change="phone.ownerChanged = !phone.ownerChanged"
-                                    ng-disabled="!$ctrl.hasSpouse || $ctrl.donorDetails.staff">
-                              <option ng-value="true">{{$ctrl.donorDetails['spouse-name']['given-name']}}</option>
-                              <option ng-value="false">{{$ctrl.donorDetails.name['given-name']}}</option>
+                            <input
+                              name="phoneNumber"
+                              type="tel"
+                              class="form-control form-control-subtle"
+                              aria-label="Phone number"
+                              ng-model="phone['phone-number']"
+                              required
+                              ng-disabled="$ctrl.donorDetails.staff"
+                            />
+                            <select
+                              name="spousePhoneNumber"
+                              class="form-control form-control-subtle"
+                              aria-label="Phone number person"
+                              ng-model="phone['is-spouse']"
+                              ng-change="phone.ownerChanged = !phone.ownerChanged"
+                              ng-disabled="!$ctrl.hasSpouse || $ctrl.donorDetails.staff"
+                            >
+                              <option ng-value="true">
+                                {{$ctrl.donorDetails['spouse-name']['given-name']}}
+                              </option>
+                              <option ng-value="false">
+                                {{$ctrl.donorDetails.name['given-name']}}
+                              </option>
                             </select>
-                            <a id="removeSpousePhoneNumberLink" href="" aria-label="Delete phone number" ng-click="$ctrl.deletePhoneNumber(phone, $index)" ng-if="!$ctrl.donorDetails.staff">
-                              <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                            <a
+                              id="removeSpousePhoneNumberLink"
+                              href=""
+                              aria-label="Delete phone number"
+                              ng-click="$ctrl.deletePhoneNumber(phone, $index)"
+                              ng-if="!$ctrl.donorDetails.staff"
+                            >
+                              <i
+                                class="fa fa-minus-circle"
+                                aria-hidden="true"
+                              ></i>
                             </a>
                           </form>
-                          <div role="alert" ng-messages="$ctrl.phoneNumberForms[$index].phoneNumber.$error" ng-if="($ctrl.phoneNumberForms[$index].phoneNumber | showErrors)">
-                            <div class="help-block" ng-message="required" translate>You must enter a phone number</div>
-                            <div class="help-block" ng-message="phone" translate>The phone number entered is invalid</div>
+                          <div
+                            role="alert"
+                            ng-messages="$ctrl.phoneNumberForms[$index].phoneNumber.$error"
+                            ng-if="($ctrl.phoneNumberForms[$index].phoneNumber | showErrors)"
+                          >
+                            <div
+                              class="help-block"
+                              ng-message="required"
+                              translate
+                            >
+                              You must enter a phone number
+                            </div>
+                            <div
+                              class="help-block"
+                              ng-message="phone"
+                              translate
+                            >
+                              The phone number entered is invalid
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <a id="addPhoneNumberLink" href="" ng-if="!$ctrl.donorDetails.staff" ng-click="$ctrl.addPhoneNumber()" translate>+ Add Phone Number</a>
+                      <a
+                        id="addPhoneNumberLink"
+                        href=""
+                        ng-if="!$ctrl.donorDetails.staff"
+                        ng-click="$ctrl.addPhoneNumber()"
+                        translate
+                        >+ Add Phone Number</a
+                      >
                     </div>
-
                   </div>
 
                   <div class="col-md-5">
-
                     <!--Mailing Address-->
-                    <h4 class="panel-title  border-bottom-small visible" translate>Your Mailing Address</h4>
+                    <h4
+                      class="panel-title border-bottom-small visible"
+                      translate
+                    >
+                      Your Mailing Address
+                    </h4>
 
-                    <div class="row" ng-if="$ctrl.donorDetails['donor-type'] == 'Organization'">
+                    <div
+                      class="row"
+                      ng-if="$ctrl.donorDetails['donor-type'] == 'Organization'"
+                    >
                       <div class="col-sm-12">
                         <div class="form-group">
                           <label>
                             <span translate>Organization Name</span>
-                            <input type="text" class="form-control form-control-subtle" ng-model="$ctrl.donorDetails['organization-name']" disabled>
+                            <input
+                              type="text"
+                              class="form-control form-control-subtle"
+                              ng-model="$ctrl.donorDetails['organization-name']"
+                              disabled
+                            />
                           </label>
                         </div>
                       </div>
                     </div>
 
-                    <form name="$ctrl.mailingAddressForm" class="loading-overlay-parent" novalidate>
-                      <loading type="overlay" ng-if="$ctrl.mailingAddressLoading"></loading>
-                      <address-form ng-if="$ctrl.mailingAddress" address="$ctrl.mailingAddress.address" parent-form="$ctrl.mailingAddressForm" disabled="$ctrl.donorDetails.staff"></address-form>
+                    <form
+                      name="$ctrl.mailingAddressForm"
+                      class="loading-overlay-parent"
+                      novalidate
+                    >
+                      <loading
+                        type="overlay"
+                        ng-if="$ctrl.mailingAddressLoading"
+                      ></loading>
+                      <address-form
+                        ng-if="$ctrl.mailingAddress"
+                        address="$ctrl.mailingAddress.address"
+                        parent-form="$ctrl.mailingAddressForm"
+                        disabled="$ctrl.donorDetails.staff"
+                      ></address-form>
                     </form>
-
                   </div>
-
                 </div>
 
                 <div class="row">
                   <div class="col-sm-12">
                     <div class="border-bottom-small"></div>
-                    <button id="saveChangesButton"
-                            type="submit"
-                            class="btn btn-primary btn-lg pull-right"
-                            ng-click="$ctrl.onSubmit()"
-                            ng-disabled="!$ctrl.touched() || $ctrl.invalid() || $ctrl.loading()"
-                            ng-switch="$ctrl.loading()">
-                      <translate ng-switch-when="true">Loading&hellip;</translate>
+                    <button
+                      id="saveChangesButton"
+                      type="submit"
+                      class="btn btn-primary btn-lg pull-right"
+                      ng-click="$ctrl.onSubmit()"
+                      ng-disabled="!$ctrl.touched() || $ctrl.invalid() || $ctrl.loading()"
+                      ng-switch="$ctrl.loading()"
+                    >
+                      <translate ng-switch-when="true"
+                        >Loading&hellip;</translate
+                      >
                       <translate ng-switch-default>Update My Profile</translate>
                     </button>
                   </div>
                 </div>
-
               </div>
             </div>
           </div>

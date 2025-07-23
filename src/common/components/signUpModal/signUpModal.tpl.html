@@ -15,7 +15,10 @@
         />
       </div>
       <span class="between-steps">
-        <img ng-src="{{$ctrl.imgDomain}}/assets/img/okta-sign-up-steps/dots.svg" alt="" />
+        <img
+          ng-src="{{$ctrl.imgDomain}}/assets/img/okta-sign-up-steps/dots.svg"
+          alt=""
+        />
       </span>
       <div class="step">
         <img
@@ -31,7 +34,10 @@
         />
       </div>
       <span class="between-steps">
-        <img ng-src="{{$ctrl.imgDomain}}/assets/img/okta-sign-up-steps/dots.svg" alt="" />
+        <img
+          ng-src="{{$ctrl.imgDomain}}/assets/img/okta-sign-up-steps/dots.svg"
+          alt=""
+        />
       </span>
       <div class="step">
         <img
@@ -44,15 +50,24 @@
 
     <div ng-if="$ctrl.currentStep === 5" class="welcome-message">
       <loading class="redirect-loading" inline="true" icon-first="true">
-        <div ng-if="$ctrl.oktaRedirectCountdown > 0" class="loading-message"
+        <div
+          ng-if="$ctrl.oktaRedirectCountdown > 0"
+          class="loading-message"
           translate="OKTA_REDIRECTING_IN"
-          translate-value-seconds='{{$ctrl.oktaRedirectCountdown}}'>
-        </div>
-        <div ng-if="$ctrl.oktaRedirectCountdown === 0" class="loading-message" translate>
+          translate-value-seconds="{{$ctrl.oktaRedirectCountdown}}"
+        ></div>
+        <div
+          ng-if="$ctrl.oktaRedirectCountdown === 0"
+          class="loading-message"
+          translate
+        >
           OKTA_REDIRECTING_NOW
         </div>
       </loading>
-      <h3 translate="OKTA_WELCOME" translate-value-name="{{$ctrl.$scope.firstName}}"></h3>
+      <h3
+        translate="OKTA_WELCOME"
+        translate-value-name="{{$ctrl.$scope.firstName}}"
+      ></h3>
       <p translate>OKTA_ACCOUNT_CREATED</p>
       <p translate>OKTA_REDIRECT_EXPLANATION</p>
       <p class="okta-url">https://signon.okta.com</p>
@@ -60,7 +75,9 @@
         type="button"
         class="btn btn-primary"
         ng-click="$ctrl.completeRegistration()"
-        translate>OKTA_REDIRECT_NOW
+        translate
+      >
+        OKTA_REDIRECT_NOW
       </button>
     </div>
 

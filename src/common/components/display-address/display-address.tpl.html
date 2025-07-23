@@ -1,14 +1,24 @@
 <p ng-if="$ctrl.address && $ctrl.address.country === 'US'">
-  <span ng-if="$ctrl.address.streetAddress">{{$ctrl.address.streetAddress}}<br/></span>
-  <span ng-if="$ctrl.address.extendedAddress">{{$ctrl.address.extendedAddress}}<br/></span>
+  <span ng-if="$ctrl.address.streetAddress"
+    >{{$ctrl.address.streetAddress}}<br
+  /></span>
+  <span ng-if="$ctrl.address.extendedAddress"
+    >{{$ctrl.address.extendedAddress}}<br
+  /></span>
   <span ng-if="$ctrl.address.locality">{{$ctrl.address.locality}},</span>
-  {{$ctrl.address.region}}
-  {{$ctrl.address.postalCode}}
+  {{$ctrl.address.region}} {{$ctrl.address.postalCode}}
 </p>
 <p ng-if="$ctrl.address && $ctrl.address.country !== 'US'">
-  {{$ctrl.address.streetAddress}}<br/>
-  <span ng-if="$ctrl.address.extendedAddress">{{$ctrl.address.extendedAddress}}<br/></span>
-  <span ng-if="$ctrl.address.intAddressLine3">{{$ctrl.address.intAddressLine3}}<br/></span>
-  <span ng-if="$ctrl.address.intAddressLine4">{{$ctrl.address.intAddressLine4}}<br/></span>
-  {{$ctrl.countries[$ctrl.address.country]['display-name'] || $ctrl.address.country}}
+  {{$ctrl.address.streetAddress}}<br />
+  <span ng-if="$ctrl.address.extendedAddress"
+    >{{$ctrl.address.extendedAddress}}<br
+  /></span>
+  <span ng-if="$ctrl.address.intAddressLine3"
+    >{{$ctrl.address.intAddressLine3}}<br
+  /></span>
+  <span ng-if="$ctrl.address.intAddressLine4"
+    >{{$ctrl.address.intAddressLine4}}<br
+  /></span>
+  {{$ctrl.countries[$ctrl.address.country]['display-name'] ||
+  $ctrl.address.country}}
 </p>

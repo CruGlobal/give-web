@@ -1,6 +1,15 @@
 <div class="cart">
-  <div uib-dropdown on-toggle="$ctrl.cartOpened()" is-open="$ctrl.cartOpen" auto-close="outsideClick">
-    <a uib-dropdown-toggle class="nav-cart-icon nav-cart-icon-desktop" ng-click="$ctrl.miniCartViewAnalyticsEvent()">
+  <div
+    uib-dropdown
+    on-toggle="$ctrl.cartOpened()"
+    is-open="$ctrl.cartOpen"
+    auto-close="outsideClick"
+  >
+    <a
+      uib-dropdown-toggle
+      class="nav-cart-icon nav-cart-icon-desktop"
+      ng-click="$ctrl.miniCartViewAnalyticsEvent()"
+    >
       <span class="fal fa-shopping-cart">
         <span class="cart-item-count" ng-if="!$ctrl.cartOpen"></span>
       </span>

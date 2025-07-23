@@ -1,91 +1,200 @@
-<form novalidate name="$ctrl.bankPaymentForm" ng-keyup="$event.key === 'Enter' && $ctrl.savePayment()">
-
-  <div class="mb_x panel panel-default" style="padding: 11px;">
+<form
+  novalidate
+  name="$ctrl.bankPaymentForm"
+  ng-keyup="$event.key === 'Enter' && $ctrl.savePayment()"
+>
+  <div class="mb_x panel panel-default" style="padding: 11px">
     <div class="border-bottom-small">
       <h4 class="panel-title visible" translate>{{'BANK_ACCOUNT_PAYMENT'}}</h4>
-      <span class="u-floatRight" style="margin-top:-16px">
+      <span class="u-floatRight" style="margin-top: -16px">
         Secure
         <i class="fas fa-lock ml--"></i>
       </span>
     </div>
 
-
     <div class="row">
       <div class="col-sm-6">
-        <div class="form-group form-group-default is-required" ng-class="{'has-error': ($ctrl.bankPaymentForm.bankName | showErrors)}">
+        <div
+          class="form-group form-group-default is-required"
+          ng-class="{'has-error': ($ctrl.bankPaymentForm.bankName | showErrors)}"
+        >
           <label>
             <span translate>{{'BANK_NAME'}}</span>
-            <input type="text" class="form-control form-control-subtle" name="bankName" ng-model="$ctrl.bankPayment.bankName" ng-maxlength="30" required/>
+            <input
+              type="text"
+              class="form-control form-control-subtle"
+              name="bankName"
+              ng-model="$ctrl.bankPayment.bankName"
+              ng-maxlength="30"
+              required
+            />
           </label>
-          <div role="alert" ng-messages="$ctrl.bankPaymentForm.bankName.$error" ng-if="($ctrl.bankPaymentForm.bankName | showErrors)">
-            <div class="help-block" ng-message="required" translate>{{'BANK_NAME_ERROR'}}</div>
-            <div class="help-block" ng-message="maxlength" translate>{{'MAX_LENGTH_BANK_NAME_ERROR'}}</div>
+          <div
+            role="alert"
+            ng-messages="$ctrl.bankPaymentForm.bankName.$error"
+            ng-if="($ctrl.bankPaymentForm.bankName | showErrors)"
+          >
+            <div class="help-block" ng-message="required" translate>
+              {{'BANK_NAME_ERROR'}}
+            </div>
+            <div class="help-block" ng-message="maxlength" translate>
+              {{'MAX_LENGTH_BANK_NAME_ERROR'}}
+            </div>
           </div>
         </div>
       </div>
       <div class="col-sm-6">
-        <div class="form-group form-group-default form-group-inline text-left" ng-class="{'has-error': ($ctrl.bankPaymentForm.accountType | showErrors)}">
+        <div
+          class="form-group form-group-default form-group-inline text-left"
+          ng-class="{'has-error': ($ctrl.bankPaymentForm.accountType | showErrors)}"
+        >
           <label class="label-block" translate>{{'ACCOUNT_TYPE'}}</label>
           <label class="radio-inline">
-            <input type="radio" name="accountType" ng-model="$ctrl.bankPayment.accountType" value="Checking" required> <translate>{{'CHECKING'}}</translate>
+            <input
+              type="radio"
+              name="accountType"
+              ng-model="$ctrl.bankPayment.accountType"
+              value="Checking"
+              required
+            />
+            <translate>{{'CHECKING'}}</translate>
           </label>
           <label class="radio-inline">
-            <input type="radio" name="accountType" ng-model="$ctrl.bankPayment.accountType" value="Savings" required> <translate>{{'SAVINGS'}}</translate>
+            <input
+              type="radio"
+              name="accountType"
+              ng-model="$ctrl.bankPayment.accountType"
+              value="Savings"
+              required
+            />
+            <translate>{{'SAVINGS'}}</translate>
           </label>
-          <div role="alert" ng-messages="$ctrl.bankPaymentForm.accountType.$error" ng-if="($ctrl.bankPaymentForm.accountType | showErrors)">
-            <div class="help-block" ng-message="required" translate>{{'ACCOUNT_TYPE_ERROR'}}</div>
+          <div
+            role="alert"
+            ng-messages="$ctrl.bankPaymentForm.accountType.$error"
+            ng-if="($ctrl.bankPaymentForm.accountType | showErrors)"
+          >
+            <div class="help-block" ng-message="required" translate>
+              {{'ACCOUNT_TYPE_ERROR'}}
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-
     <div class="row">
       <div class="col-sm-4">
-        <div class="form-group is-required" ng-class="{'has-error': ($ctrl.bankPaymentForm.routingNumber | showErrors)}">
+        <div
+          class="form-group is-required"
+          ng-class="{'has-error': ($ctrl.bankPaymentForm.routingNumber | showErrors)}"
+        >
           <label>
             <span translate>{{'ROUTING'}}</span>
-            <input type="text" class="form-control  form-control-subtle" name="routingNumber" autocomplete="off" ng-model="$ctrl.bankPayment.routingNumber" required>
-            <div role="alert" ng-messages="$ctrl.bankPaymentForm.routingNumber.$error" ng-if="($ctrl.bankPaymentForm.routingNumber | showErrors)">
-              <div class="help-block" ng-message="required" translate>{{'ROUTING_NUM_ERROR'}}</div>
-              <div class="help-block" ng-message="length" translate>{{'MIN_LENGTH_ROUTING_ERROR'}}</div>
-              <div class="help-block" ng-message="routingNumber" translate>{{'ROUTING_INVALID_ERROR'}}</div>
+            <input
+              type="text"
+              class="form-control form-control-subtle"
+              name="routingNumber"
+              autocomplete="off"
+              ng-model="$ctrl.bankPayment.routingNumber"
+              required
+            />
+            <div
+              role="alert"
+              ng-messages="$ctrl.bankPaymentForm.routingNumber.$error"
+              ng-if="($ctrl.bankPaymentForm.routingNumber | showErrors)"
+            >
+              <div class="help-block" ng-message="required" translate>
+                {{'ROUTING_NUM_ERROR'}}
+              </div>
+              <div class="help-block" ng-message="length" translate>
+                {{'MIN_LENGTH_ROUTING_ERROR'}}
+              </div>
+              <div class="help-block" ng-message="routingNumber" translate>
+                {{'ROUTING_INVALID_ERROR'}}
+              </div>
             </div>
           </label>
         </div>
       </div>
       <div class="col-sm-4">
-        <div class="form-group is-required" ng-class="{'has-error': ($ctrl.bankPaymentForm.accountNumber | showErrors)}">
+        <div
+          class="form-group is-required"
+          ng-class="{'has-error': ($ctrl.bankPaymentForm.accountNumber | showErrors)}"
+        >
           <label>
             <span translate>{{'ACCOUNT_NUM'}}</span>
-            <input type="text" class="form-control  form-control-subtle" name="accountNumber" autocomplete="off" ng-model="$ctrl.bankPayment.accountNumber" ng-attr-placeholder="************{{$ctrl.bankPayment.accountNumberPlaceholder}}" ng-required="!$ctrl.paymentMethod || $ctrl.bankPayment.accountNumber">
-            <div role="alert" ng-messages="$ctrl.bankPaymentForm.accountNumber.$error" ng-if="($ctrl.bankPaymentForm.accountNumber | showErrors)">
-              <div class="help-block" ng-message="required" translate>{{'ACCOUNT_NUM_ERROR'}}</div>
-              <div class="help-block" ng-message="minlength" translate>{{'MIN_LENGTH_ACCOUNT_ERROR'}}</div>
-              <div class="help-block" ng-message="maxlength" translate>{{'MAX_LENGTH_ACCOUNT_ERROR'}}</div>
+            <input
+              type="text"
+              class="form-control form-control-subtle"
+              name="accountNumber"
+              autocomplete="off"
+              ng-model="$ctrl.bankPayment.accountNumber"
+              ng-attr-placeholder="************{{$ctrl.bankPayment.accountNumberPlaceholder}}"
+              ng-required="!$ctrl.paymentMethod || $ctrl.bankPayment.accountNumber"
+            />
+            <div
+              role="alert"
+              ng-messages="$ctrl.bankPaymentForm.accountNumber.$error"
+              ng-if="($ctrl.bankPaymentForm.accountNumber | showErrors)"
+            >
+              <div class="help-block" ng-message="required" translate>
+                {{'ACCOUNT_NUM_ERROR'}}
+              </div>
+              <div class="help-block" ng-message="minlength" translate>
+                {{'MIN_LENGTH_ACCOUNT_ERROR'}}
+              </div>
+              <div class="help-block" ng-message="maxlength" translate>
+                {{'MAX_LENGTH_ACCOUNT_ERROR'}}
+              </div>
             </div>
           </label>
         </div>
       </div>
       <div class="col-sm-4">
-        <div class="form-group is-required no-wrap" ng-class="{'has-error': ($ctrl.bankPaymentForm.verifyAccountNumber | showErrors)}">
+        <div
+          class="form-group is-required no-wrap"
+          ng-class="{'has-error': ($ctrl.bankPaymentForm.verifyAccountNumber | showErrors)}"
+        >
           <label>
             <span translate>{{'RETYPE_ACCOUNT_NUM'}}</span>
-            <input type="text" class="form-control  form-control-subtle" name="verifyAccountNumber" autocomplete="off" ng-model="$ctrl.bankPayment.verifyAccountNumber" ng-attr-placeholder="************{{$ctrl.bankPayment.accountNumberPlaceholder}}" ng-required="$ctrl.bankPayment.accountNumber">
-            <div role="alert" ng-messages="$ctrl.bankPaymentForm.verifyAccountNumber.$error" ng-if="($ctrl.bankPaymentForm.verifyAccountNumber | showErrors)">
-              <div class="help-block" ng-message="required" translate>{{'RETYPE_ACCT_NUM'}}</div>
-              <div class="help-block" ng-message="verifyAccountNumber" translate>{{'ACCT_NUM_MISMATCH'}}</div>
+            <input
+              type="text"
+              class="form-control form-control-subtle"
+              name="verifyAccountNumber"
+              autocomplete="off"
+              ng-model="$ctrl.bankPayment.verifyAccountNumber"
+              ng-attr-placeholder="************{{$ctrl.bankPayment.accountNumberPlaceholder}}"
+              ng-required="$ctrl.bankPayment.accountNumber"
+            />
+            <div
+              role="alert"
+              ng-messages="$ctrl.bankPaymentForm.verifyAccountNumber.$error"
+              ng-if="($ctrl.bankPaymentForm.verifyAccountNumber | showErrors)"
+            >
+              <div class="help-block" ng-message="required" translate>
+                {{'RETYPE_ACCT_NUM'}}
+              </div>
+              <div
+                class="help-block"
+                ng-message="verifyAccountNumber"
+                translate
+              >
+                {{'ACCT_NUM_MISMATCH'}}
+              </div>
             </div>
           </label>
         </div>
       </div>
-
     </div>
 
     <div class="row">
       <div class="col-sm-12">
         <translate>{{'LOCATE_ROUTING_ACCT'}}</translate>
-        <a href="" class="circle-it bank-explain-trigger" ng-click="$ctrl.showBankExplain = !$ctrl.showBankExplain">
+        <a
+          href=""
+          class="circle-it bank-explain-trigger"
+          ng-click="$ctrl.showBankExplain = !$ctrl.showBankExplain"
+        >
           <i class="fa fa-question"></i>
         </a>
       </div>
@@ -93,12 +202,18 @@
 
     <div class="row">
       <div class="col-sm-12">
-        <div class="bank-explain-wrap" ng-class="{ 'on': $ctrl.showBankExplain }">
+        <div
+          class="bank-explain-wrap"
+          ng-class="{ 'on': $ctrl.showBankExplain }"
+        >
           <div class="panel panel-default panel-secondary">
             <div class="panel-body">
               <div class="row">
                 <div class="col-sm-8">
-                  <img ng-src="{{$ctrl.imgDomain}}/assets/img/check-sample.png" alt="Sample Check"/>
+                  <img
+                    ng-src="{{$ctrl.imgDomain}}/assets/img/check-sample.png"
+                    alt="Sample Check"
+                  />
                 </div>
                 <div class="col-sm-4">
                   <h4 translate>{{'WHERE_TO_FIND_BANK_NUMS_TITLE'}}</h4>
@@ -113,7 +228,9 @@
   </div>
 
   <div>
-    <h4 class="panel-title  border-bottom-small  visible" translate>{{'BANK_AGREEMENT'}}</h4>
+    <h4 class="panel-title border-bottom-small visible" translate>
+      {{'BANK_AGREEMENT'}}
+    </h4>
     <div class="row">
       <div class="col-sm-12">
         <div class="panel panel-default">
@@ -122,18 +239,31 @@
           </div>
         </div>
 
-        <div class="form-group is-required mb0" ng-class="{'has-error': ($ctrl.bankPaymentForm.acceptedAgreement | showErrors)}">
+        <div
+          class="form-group is-required mb0"
+          ng-class="{'has-error': ($ctrl.bankPaymentForm.acceptedAgreement | showErrors)}"
+        >
           <label class="checkbox-inline">
-            <input type="checkbox" name="acceptedAgreement" ng-model="$ctrl.bankPayment.acceptedAgreement" required value="true"> <translate>{{'I_AGREE'}}</translate>
+            <input
+              type="checkbox"
+              name="acceptedAgreement"
+              ng-model="$ctrl.bankPayment.acceptedAgreement"
+              required
+              value="true"
+            />
+            <translate>{{'I_AGREE'}}</translate>
           </label>
-          <div role="alert" ng-messages="$ctrl.bankPaymentForm.acceptedAgreement.$error" ng-if="($ctrl.bankPaymentForm.acceptedAgreement | showErrors)">
-            <div class="help-block" ng-message="required" translate>{{'MUST_AGREE_BANK_ACCT'}}</div>
+          <div
+            role="alert"
+            ng-messages="$ctrl.bankPaymentForm.acceptedAgreement.$error"
+            ng-if="($ctrl.bankPaymentForm.acceptedAgreement | showErrors)"
+          >
+            <div class="help-block" ng-message="required" translate>
+              {{'MUST_AGREE_BANK_ACCT'}}
+            </div>
           </div>
         </div>
-
       </div>
     </div>
-
   </div>
-
 </form>

@@ -1,234 +1,259 @@
-import angular from 'angular'
-import 'angular-gettext'
-import profileService from 'common/services/api/profile.service'
-import verificationService from 'common/services/api/verification.service'
-import userMatchIdentity from './userMatchIdentity/userMatchIdentity.component'
-import userMatchQuestion from './userMatchQuestion/userMatchQuestion.component'
-import analyticsFactory from 'app/analytics/analytics.factory'
-import template from './userMatchModal.tpl.html'
-import find from 'lodash/find'
-import failedVerificationModal from 'common/components/failedVerificationModal/failedVerificationModal.component'
+import angular from 'angular';
+import 'angular-gettext';
+import profileService from 'common/services/api/profile.service';
+import verificationService from 'common/services/api/verification.service';
+import userMatchIdentity from './userMatchIdentity/userMatchIdentity.component';
+import userMatchQuestion from './userMatchQuestion/userMatchQuestion.component';
+import analyticsFactory from 'app/analytics/analytics.factory';
+import template from './userMatchModal.tpl.html';
+import find from 'lodash/find';
+import failedVerificationModal from 'common/components/failedVerificationModal/failedVerificationModal.component';
 
-const componentName = 'userMatchModal'
+const componentName = 'userMatchModal';
 
 class UserMatchModalController {
   /* @ngInject */
-  constructor ($log, $window, gettext, profileService, verificationService, analyticsFactory) {
-    this.$log = $log
-    this.$window = $window
-    this.gettext = gettext
-    this.profileService = profileService
-    this.verificationService = verificationService
-    this.analyticsFactory = analyticsFactory
-    this.stepCount = 6 // 5 questions, and success
-    this.identitySubmitted = false
-    this.answerSubmitted = false
+  constructor(
+    $log,
+    $window,
+    gettext,
+    profileService,
+    verificationService,
+    analyticsFactory,
+  ) {
+    this.$log = $log;
+    this.$window = $window;
+    this.gettext = gettext;
+    this.profileService = profileService;
+    this.verificationService = verificationService;
+    this.analyticsFactory = analyticsFactory;
+    this.stepCount = 6; // 5 questions, and success
+    this.identitySubmitted = false;
+    this.answerSubmitted = false;
   }
 
-  $onInit () {
-    this.setLoading({ loading: true })
-    this.loadingDonorDetailsError = false
-    this.skippedQuestions = false
-    this.modalTitle = this.gettext('Activate Your Account')
-    this.profileService.getDonorDetails().subscribe((donorDetails) => {
-      if (angular.isDefined(donorDetails['registration-state'])) {
-        if (donorDetails['registration-state'] === 'COMPLETED') {
-          this.skippedQuestions = true
-          this.changeMatchState('success')
-        } else if (donorDetails['registration-state'] === 'NEW') {
-          // Do donor matching if
-          this.postDonorMatch()
-        } else if (donorDetails['registration-state'] === 'FAILED') {
-          this.changeMatchState('failure')
-        } else {
-          this.loadContacts()
+  $onInit() {
+    this.setLoading({ loading: true });
+    this.loadingDonorDetailsError = false;
+    this.skippedQuestions = false;
+    this.modalTitle = this.gettext('Activate Your Account');
+    this.profileService.getDonorDetails().subscribe(
+      (donorDetails) => {
+        if (angular.isDefined(donorDetails['registration-state'])) {
+          if (donorDetails['registration-state'] === 'COMPLETED') {
+            this.skippedQuestions = true;
+            this.changeMatchState('success');
+          } else if (donorDetails['registration-state'] === 'NEW') {
+            // Do donor matching if
+            this.postDonorMatch();
+          } else if (donorDetails['registration-state'] === 'FAILED') {
+            this.changeMatchState('failure');
+          } else {
+            this.loadContacts();
+          }
         }
-      }
-    },
-    error => {
-      this.setLoading({ loading: false })
-      this.loadingDonorDetailsError = true
-      this.$log.error('Error loading donorDetails.', error)
-    })
+      },
+      (error) => {
+        this.setLoading({ loading: false });
+        this.loadingDonorDetailsError = true;
+        this.$log.error('Error loading donorDetails.', error);
+      },
+    );
   }
 
-  getCurrentStep () {
+  getCurrentStep() {
     if (this.matchState === 'question') {
-      return this.questionIndex - 1 // questionIndex is 1-indexed, otherwise this would be + 0
+      return this.questionIndex - 1; // questionIndex is 1-indexed, otherwise this would be + 0
     } else if (this.matchState === 'success') {
-      return 5
+      return 5;
     } else {
-      return 0
+      return 0;
     }
   }
 
-  getQuestion () {
-    return this.questions[this.questionIndex - 1]
+  getQuestion() {
+    return this.questions[this.questionIndex - 1];
   }
 
-  postDonorMatch () {
-    this.setLoading({ loading: true })
+  postDonorMatch() {
+    this.setLoading({ loading: true });
     this.verificationService.postDonorMatches().subscribe({
       next: () => {
         // Donor match success, get contacts
-        this.loadContacts()
+        this.loadContacts();
       },
       error: () => {
         // Donor Match failed, user match not required
-        this.skippedQuestions = true
-        this.changeMatchState('success')
-      }
-    })
+        this.skippedQuestions = true;
+        this.changeMatchState('success');
+      },
+    });
   }
 
-  loadContacts () {
+  loadContacts() {
     if (this.contacts) {
       // The user picked a contact then went back, so don't load the contacts again because there
       // probably won't even be any
-      this.changeMatchState('identity')
-      return
+      this.changeMatchState('identity');
+      return;
     }
 
-    this.setLoading({ loading: true })
-    this.verificationService.getContacts().subscribe((contacts) => {
-      if (find(contacts, { selected: true })) {
-        this.changeMatchState('activate')
-      } else {
-        this.contacts = contacts
-        this.changeMatchState('identity')
-      }
-    },
-    error => {
-      this.setLoading({ loading: false })
-      this.loadingDonorDetailsError = true
-      this.$log.error('Error loading verification contacts.', error)
-    })
+    this.setLoading({ loading: true });
+    this.verificationService.getContacts().subscribe(
+      (contacts) => {
+        if (find(contacts, { selected: true })) {
+          this.changeMatchState('activate');
+        } else {
+          this.contacts = contacts;
+          this.changeMatchState('identity');
+        }
+      },
+      (error) => {
+        this.setLoading({ loading: false });
+        this.loadingDonorDetailsError = true;
+        this.$log.error('Error loading verification contacts.', error);
+      },
+    );
   }
 
-  changeMatchState (state) {
+  changeMatchState(state) {
     switch (state) {
       case 'success':
-        this.modalTitle = this.gettext('Success!')
-        this.onSuccess()
-        break
+        this.modalTitle = this.gettext('Success!');
+        this.onSuccess();
+        break;
       default:
-        this.modalTitle = this.gettext('Activate Your Account')
-        break
+        this.modalTitle = this.gettext('Activate Your Account');
+        break;
     }
-    this.matchState = state
-    this.setLoading({ loading: false })
+    this.matchState = state;
+    this.setLoading({ loading: false });
   }
 
-  onSelectContact (success, contact) {
+  onSelectContact(success, contact) {
     // If the user-match-identity selection was invalid, success will be false, but we still need to
     // reset identitySubmitted so that we can set it to true later when the user tries to submit again
-    this.identitySubmitted = false
+    this.identitySubmitted = false;
     if (!success) {
-      return
+      return;
     }
 
-    this.setLoading({ loading: true })
-    this.selectContactError = false
+    this.setLoading({ loading: true });
+    this.selectContactError = false;
     if (angular.isDefined(contact)) {
-      this.verificationService.selectContact(contact).subscribe(() => {
-        this.changeMatchState('activate')
-      },
-      error => {
-        this.setLoading({ loading: false })
-        this.selectContactError = true
-        this.$log.error('Error selecting verification contact.', error)
-      })
+      this.verificationService.selectContact(contact).subscribe(
+        () => {
+          this.changeMatchState('activate');
+        },
+        (error) => {
+          this.setLoading({ loading: false });
+          this.selectContactError = true;
+          this.$log.error('Error selecting verification contact.', error);
+        },
+      );
     } else {
-      this.verificationService.thatIsNotMe().subscribe(() => {
-        this.skippedQuestions = true
-        this.changeMatchState('success')
-      },
-      error => {
-        this.setLoading({ loading: false })
-        this.selectContactError = true
-        this.$log.error('Error selecting \'that-is-not-me\' verification contact', error)
-      })
+      this.verificationService.thatIsNotMe().subscribe(
+        () => {
+          this.skippedQuestions = true;
+          this.changeMatchState('success');
+        },
+        (error) => {
+          this.setLoading({ loading: false });
+          this.selectContactError = true;
+          this.$log.error(
+            "Error selecting 'that-is-not-me' verification contact",
+            error,
+          );
+        },
+      );
     }
   }
 
   // Request that the user-match-identity component submit the form because the user clicked next
-  requestIdentitySubmit () {
+  requestIdentitySubmit() {
     // Changing this will trigger $onChanges in user-match-identity, which will ultimately call
     // onSelectContact in this controller
-    this.identitySubmitted = true
+    this.identitySubmitted = true;
   }
 
   // Request that the user-match-question component submit the form because the user clicked next
-  requestAnswerSubmit () {
+  requestAnswerSubmit() {
     // Changing this will trigger $onChanges in user-match-question, which will ultimately call
     // onQuestionAnswer in this controller
-    this.answerSubmitted = true
+    this.answerSubmitted = true;
   }
 
-  loadQuestions () {
-    this.setLoading({ loading: true })
-    this.loadingQuestionsError = false
-    this.verificationService.getQuestions().subscribe((questions) => {
-      this.questions = questions
-      this.questionIndex = 1
-      this.questionCount = this.questions.length
-      this.changeMatchState('question')
-    },
-    error => {
-      this.setLoading({ loading: false })
-      this.loadingQuestionsError = true
-      this.$log.error('Error loading verification questions.', error)
-    })
+  loadQuestions() {
+    this.setLoading({ loading: true });
+    this.loadingQuestionsError = false;
+    this.verificationService.getQuestions().subscribe(
+      (questions) => {
+        this.questions = questions;
+        this.questionIndex = 1;
+        this.questionCount = this.questions.length;
+        this.changeMatchState('question');
+      },
+      (error) => {
+        this.setLoading({ loading: false });
+        this.loadingQuestionsError = true;
+        this.$log.error('Error loading verification questions.', error);
+      },
+    );
   }
 
-  onQuestionAnswer (success, question, answer) {
+  onQuestionAnswer(success, question, answer) {
     // If the user-match-question selection was invalid, success will be false, but we still need to
     // reset answerSubmitted so that we can set it to true later when the user tries to submit again
-    this.answerSubmitted = false
+    this.answerSubmitted = false;
     if (!success) {
-      return
+      return;
     }
 
-    this.setLoading({ loading: true })
-    question.answer = answer
+    this.setLoading({ loading: true });
+    question.answer = answer;
     if (this.questionIndex < this.questions.length) {
-      this.questionIndex++
-      this.changeMatchState('question')
+      this.questionIndex++;
+      this.changeMatchState('question');
     } else {
-      const answers = this.questions.map(({ key, answer }) => ({ key, answer }))
-      this.verificationService.submitAnswers(answers).subscribe(() => {
-        this.changeMatchState('success')
-      },
-      error => {
-        this.setLoading({ loading: false })
-        this.$log.debug('Failed verification questions', error)
-        this.changeMatchState('failure')
-      })
+      const answers = this.questions.map(({ key, answer }) => ({
+        key,
+        answer,
+      }));
+      this.verificationService.submitAnswers(answers).subscribe(
+        () => {
+          this.changeMatchState('success');
+        },
+        (error) => {
+          this.setLoading({ loading: false });
+          this.$log.debug('Failed verification questions', error);
+          this.changeMatchState('failure');
+        },
+      );
     }
   }
 
-  onFailure () {
-    this.$window.location = '/'
+  onFailure() {
+    this.$window.location = '/';
   }
 
-  back () {
+  back() {
     if (this.questionIndex === 1) {
-      this.changeMatchState('identity')
+      this.changeMatchState('identity');
     } else {
-      this.questionIndex--
+      this.questionIndex--;
     }
   }
 
-  continueCheckout () {
-    this.$window.location = '/checkout.html'
+  continueCheckout() {
+    this.$window.location = '/checkout.html';
   }
 
-  goToOpportunities () {
-    this.$window.location = '/'
+  goToOpportunities() {
+    this.$window.location = '/';
   }
 
-  goToGivingDashboard () {
-    this.$window.location = '/your-giving.html'
+  goToGivingDashboard() {
+    this.$window.location = '/your-giving.html';
   }
 }
 
@@ -240,7 +265,7 @@ export default angular
     userMatchIdentity.name,
     userMatchQuestion.name,
     analyticsFactory.name,
-    failedVerificationModal.name
+    failedVerificationModal.name,
   ])
   .component(componentName, {
     controller: UserMatchModalController,
@@ -250,6 +275,6 @@ export default angular
       modalTitle: '=',
       setLoading: '&',
       onStateChange: '&',
-      onSuccess: '&'
-    }
-  })
+      onSuccess: '&',
+    },
+  });

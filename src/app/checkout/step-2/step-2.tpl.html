@@ -1,12 +1,23 @@
-<div class="alert alert-warning" role="alert" ng-if="$ctrl.loadingExistingPaymentError">
-  <p ng-if="$ctrl.loadingExistingPaymentError" ng-switch="$ctrl.loadingExistingPaymentError">
+<div
+  class="alert alert-warning"
+  role="alert"
+  ng-if="$ctrl.loadingExistingPaymentError"
+>
+  <p
+    ng-if="$ctrl.loadingExistingPaymentError"
+    ng-switch="$ctrl.loadingExistingPaymentError"
+  >
     <span ng-switch-default translate>
-      We ran into a problem trying to load your saved payment methods. Please enter your payment details below. Sorry for the inconvenience.
+      We ran into a problem trying to load your saved payment methods. Please
+      enter your payment details below. Sorry for the inconvenience.
     </span>
   </p>
 </div>
 <div class="loading-overlay-parent">
-  <loading type="overlay" ng-if="$ctrl.loadingPaymentMethods || $ctrl.paymentFormState === 'loading' || $ctrl.paymentFormState === 'encrypting'"></loading>
+  <loading
+    type="overlay"
+    ng-if="$ctrl.loadingPaymentMethods || $ctrl.paymentFormState === 'loading' || $ctrl.paymentFormState === 'encrypting'"
+  ></loading>
   <div ng-if="!$ctrl.existingPaymentMethods">
     <payment-method-form
       payment-form-state="$ctrl.paymentFormState"
@@ -16,7 +27,8 @@
       default-payment-type="$ctrl.defaultPaymentType"
       hide-payment-type-options="$ctrl.hidePaymentTypeOptions"
       cart-data="$ctrl.cartData"
-      branded-checkout-item="$ctrl.brandedCheckoutItem">
+      branded-checkout-item="$ctrl.brandedCheckoutItem"
+    >
     </payment-method-form>
   </div>
 
@@ -32,7 +44,8 @@
       hide-payment-type-options="$ctrl.hidePaymentTypeOptions"
       cart-data="$ctrl.cartData"
       branded-checkout-item="$ctrl.brandedCheckoutItem"
-      enable-continue="$ctrl.enableContinue($event)">
+      enable-continue="$ctrl.enableContinue($event)"
+    >
     </checkout-existing-payment-methods>
   </div>
 </div>
@@ -40,13 +53,30 @@
 <div class="mt" ng-if="!$ctrl.hideButtons">
   <div class="row">
     <div class="col-sm-5 hidden-xs">
-      <button id="previousStepButton1" class="btn btn-default" ng-click="$ctrl.changeStep({newStep: 'contact'})">Previous Step</button>
+      <button
+        id="previousStepButton1"
+        class="btn btn-default"
+        ng-click="$ctrl.changeStep({newStep: 'contact'})"
+      >
+        Previous Step
+      </button>
     </div>
     <div class="col-sm-5 col-sm-offset-2">
-      <button id="continueCheckoutButton" class="btn btn-primary pull-right btn-block-mobile" ng-click="$ctrl.submit()" ng-disabled="$ctrl.isContinueDisabled()">
+      <button
+        id="continueCheckoutButton"
+        class="btn btn-primary pull-right btn-block-mobile"
+        ng-click="$ctrl.submit()"
+        ng-disabled="$ctrl.isContinueDisabled()"
+      >
         Continue
       </button>
-      <button id="previousStepButton2" class="btn btn-link btn-block visible-xs" ng-click="$ctrl.changeStep({newStep: 'contact'})"><i class="fa fa-angle-left"></i> Previous Step</button>
+      <button
+        id="previousStepButton2"
+        class="btn btn-link btn-block visible-xs"
+        ng-click="$ctrl.changeStep({newStep: 'contact'})"
+      >
+        <i class="fa fa-angle-left"></i> Previous Step
+      </button>
     </div>
   </div>
 </div>

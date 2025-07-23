@@ -1,32 +1,32 @@
-import angular from 'angular'
-import { react2angular } from 'react2angular'
-import React, { useCallback, useEffect, useState } from 'react'
+import angular from 'angular';
+import { react2angular } from 'react2angular';
+import React, { useCallback, useEffect, useState } from 'react';
 
-const componentName = 'recaptcha'
+const componentName = 'recaptcha';
 
 declare global {
   interface Window {
-      grecaptcha: any;
+    grecaptcha: any;
   }
 }
 
 export enum ButtonType {
   Submit = 'submit',
   Reset = 'reset',
-  Button = 'button'
+  Button = 'button',
 }
 
 interface RecaptchaProps {
-  action: string
-  onSuccess: () => void
-  buttonId: string
-  buttonType?: ButtonType
-  buttonClasses: string
-  buttonDisabled: boolean
-  buttonLabel: string
-  $translate: any
-  $log: any
-  recaptchaKey: string
+  action: string;
+  onSuccess: () => void;
+  buttonId: string;
+  buttonType?: ButtonType;
+  buttonClasses: string;
+  buttonDisabled: boolean;
+  buttonLabel: string;
+  $translate: any;
+  $log: any;
+  recaptchaKey: string;
 }
 
 export const Recaptcha = ({
@@ -41,52 +41,57 @@ export const Recaptcha = ({
   $log,
   recaptchaKey,
 }: RecaptchaProps): JSX.Element => {
-
-  const [ready, setReady] = useState(false)
-  const [grecaptcha, setGrecaptcha] = useState(window.grecaptcha)
-  let timesIntervalRun = 0
+  const [ready, setReady] = useState(false);
+  const [grecaptcha, setGrecaptcha] = useState(window.grecaptcha);
+  let timesIntervalRun = 0;
 
   useEffect(() => {
     const updateRecaptcha = (intervalId: NodeJS.Timer) => {
-      setGrecaptcha(window.grecaptcha)
+      setGrecaptcha(window.grecaptcha);
       if (timesIntervalRun >= 20 || grecaptcha) {
-        clearInterval(intervalId)
+        clearInterval(intervalId);
       }
-      timesIntervalRun++
-    }
+      timesIntervalRun++;
+    };
 
-    const intervalId = setInterval(() => updateRecaptcha(intervalId), 100)
-    setReady(!!grecaptcha)
+    const intervalId = setInterval(() => updateRecaptcha(intervalId), 100);
+    setReady(!!grecaptcha);
     return () => clearInterval(intervalId);
-  }, [grecaptcha, buttonId])
+  }, [grecaptcha, buttonId]);
 
   const handleReCaptchaVerify = useCallback(async () => {
     if (!ready) {
-      $log.info('Execute recaptcha not yet available')
-      return
+      $log.info('Execute recaptcha not yet available');
+      return;
     }
 
     grecaptcha.enterprise.ready(async () => {
       try {
-        const token = await grecaptcha.enterprise.execute(recaptchaKey, { action: action })
-        window.sessionStorage.setItem('recaptchaToken', token)
-        window.sessionStorage.setItem('recaptchaAction', action)
-        onSuccess()
+        const token = await grecaptcha.enterprise.execute(recaptchaKey, {
+          action: action,
+        });
+        window.sessionStorage.setItem('recaptchaToken', token);
+        window.sessionStorage.setItem('recaptchaAction', action);
+        onSuccess();
       } catch (error) {
-        $log.error(`Failed to verify recaptcha, continuing on: ${error}`)
-        onSuccess()
+        $log.error(`Failed to verify recaptcha, continuing on: ${error}`);
+        onSuccess();
       }
-    })
-  }, [grecaptcha, buttonId, ready])
+    });
+  }, [grecaptcha, buttonId, ready]);
 
   return (
-    <button id={buttonId}
-            type={buttonType}
-            onClick={handleReCaptchaVerify}
-            className={buttonClasses}
-            disabled={buttonDisabled || !ready}>{$translate.instant(buttonLabel)}</button>
-  )
-}
+    <button
+      id={buttonId}
+      type={buttonType}
+      onClick={handleReCaptchaVerify}
+      className={buttonClasses}
+      disabled={buttonDisabled || !ready}
+    >
+      {$translate.instant(buttonLabel)}
+    </button>
+  );
+};
 
 export default angular
   .module(componentName, [])
@@ -102,7 +107,8 @@ export default angular
         'buttonClasses',
         'buttonDisabled',
         'buttonLabel',
-        'recaptchaKey'
+        'recaptchaKey',
       ],
-      ['$translate', '$log']))
-
+      ['$translate', '$log'],
+    ),
+  );

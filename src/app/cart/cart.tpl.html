@@ -3,98 +3,196 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-
           <!-- Cart Summary -->
           <div class="panel loading-overlay-parent">
             <div class="panel-body">
               <div class="row">
                 <div class="col-sm-6">
-                  <h3 id="cart-header" class="panel-name" translate>Your Gift Cart</h3>
+                  <h3 id="cart-header" class="panel-name" translate>
+                    Your Gift Cart
+                  </h3>
                 </div>
                 <div class="col-sm-6 text-right">
-                  <loading inline="true" class="text-right" ng-if="$ctrl.updating">
+                  <loading
+                    inline="true"
+                    class="text-right"
+                    ng-if="$ctrl.updating"
+                  >
                     <translate>Updating cart...</translate>
                   </loading>
                 </div>
               </div>
               <div class="alert alert-danger" role="alert" ng-if="$ctrl.error">
-                <p ng-if="$ctrl.error.loading" translate>Error loading your cart. <a id="retryLoadButton" href="" ng-click="$ctrl.loadCart()">Retry</a></p>
-                <p ng-if="$ctrl.error.updating" translate>Error loading your updated cart. <a id="retryUpdateButton" href="" ng-click="$ctrl.loadCart(true)">Retry</a></p>
+                <p ng-if="$ctrl.error.loading" translate>
+                  Error loading your cart.
+                  <a id="retryLoadButton" href="" ng-click="$ctrl.loadCart()"
+                    >Retry</a
+                  >
+                </p>
+                <p ng-if="$ctrl.error.updating" translate>
+                  Error loading your updated cart.
+                  <a
+                    id="retryUpdateButton"
+                    href=""
+                    ng-click="$ctrl.loadCart(true)"
+                    >Retry</a
+                  >
+                </p>
               </div>
               <loading ng-if="$ctrl.loading">
                 <translate>Loading your gifts...</translate>
               </loading>
-              <p ng-if="$ctrl.cartData && !$ctrl.cartData.items.length" translate>
+              <p
+                ng-if="$ctrl.cartData && !$ctrl.cartData.items.length"
+                translate
+              >
                 Your cart is empty
               </p>
               <form ng-if="$ctrl.cartData.items.length">
-                <table class="table giftsum-table" aria-labelledby="cart-header">
+                <table
+                  class="table giftsum-table"
+                  aria-labelledby="cart-header"
+                >
                   <thead>
-                  <tr>
-                    <th class="th-title-gift" translate>Gift</th>
-                    <th class="th-title-frequency" translate>Frequency</th>
-                    <th class="th-title-amount" translate>Amount</th><th class="th-title-actions"></th>
-                  </tr>
+                    <tr>
+                      <th class="th-title-gift" translate>Gift</th>
+                      <th class="th-title-frequency" translate>Frequency</th>
+                      <th class="th-title-amount" translate>Amount</th>
+                      <th class="th-title-actions"></th>
+                    </tr>
                   </thead>
                   <tbody>
-                  <tr class="giftsum-gift-row" ng-repeat="i in $ctrl.cartData.items">
-                    <td class="td-gift">
-                      <img desig-src="{{i.designationNumber}}" class="giftsum-profile pull-left" width="90" height="51">
-                      <span id="cart-{{$index}}" class="giftsum-person giftsum-title"><a ng-href="/{{i.designationNumber}}">{{i.displayName}}</a></span>
-                      <span class="giftsum-accountnum giftsum-detail">#{{i.designationNumber}}</span>
-                    </td>
-                    <td class="td-frequency">
-                      <span class="giftsum-frequency giftsum-title">{{i.frequency}}</span>
-                      <span class="giftsum-date giftsum-detail" ng-if="i.frequency !== 'Single'">
+                    <tr
+                      class="giftsum-gift-row"
+                      ng-repeat="i in $ctrl.cartData.items"
+                    >
+                      <td class="td-gift">
+                        <img
+                          desig-src="{{i.designationNumber}}"
+                          class="giftsum-profile pull-left"
+                          width="90"
+                          height="51"
+                        />
+                        <span
+                          id="cart-{{$index}}"
+                          class="giftsum-person giftsum-title"
+                          ><a ng-href="/{{i.designationNumber}}"
+                            >{{i.displayName}}</a
+                          ></span
+                        >
+                        <span class="giftsum-accountnum giftsum-detail"
+                          >#{{i.designationNumber}}</span
+                        >
+                      </td>
+                      <td class="td-frequency">
+                        <span class="giftsum-frequency giftsum-title"
+                          >{{i.frequency}}</span
+                        >
+                        <span
+                          class="giftsum-date giftsum-detail"
+                          ng-if="i.frequency !== 'Single'"
+                        >
                           <span translate>Starts on:</span>
                           {{i.giftStartDate.format('ll')}}
-                          <i class="fa fa-warning" ng-if="i.giftStartDateWarning"
-                            title="This gift will begin {{i.giftStartDateDaysFromNow}} days in the future."></i>
+                          <i
+                            class="fa fa-warning"
+                            ng-if="i.giftStartDateWarning"
+                            title="This gift will begin {{i.giftStartDateDaysFromNow}} days in the future."
+                          ></i>
                         </span>
-                    </td>
-                    <td class="td-amount">
-                      <span class="giftsum-about giftsum-title">{{i.price | coverFeesFilter:i:'price'}}</span>
-                      <span class="giftsum-detail"><span class=" visible-xs" translate>Gift Amount</span></span>
-                    </td>
-                    <td class="td-actions giftsum-actions text-sm-right" ng-if="!i.removing">
-                      <a href="" class="btn btn-link btn-giftsum-action" ng-click="$ctrl.editItem(i)" aria-describedby="cart-{{$index}}" translate>Edit</a>
-                      <span class="sep"> | </span>
-                      <a href="" class="btn btn-link btn-giftsum-action" ng-click="$ctrl.removeItem(i)" aria-describedby="cart-{{$index}}" translate>Remove</a>
-                      <div class="text-danger" role="alert" ng-if="i.removingError">
-                        <span translate>Error removing</span>
-                        <span class="hidden-xs hidden-sm" translate>gift</span>
-                      </div>
-                    </td>
-                    <td class="td-actions giftsum-actions" ng-if="i.removing">
-                      <loading inline="true" class="text-right">
-                        <translate>Removing...</translate>
-                      </loading>
-                    </td>
-                  </tr>
+                      </td>
+                      <td class="td-amount">
+                        <span class="giftsum-about giftsum-title"
+                          >{{i.price | coverFeesFilter:i:'price'}}</span
+                        >
+                        <span class="giftsum-detail"
+                          ><span class="visible-xs" translate
+                            >Gift Amount</span
+                          ></span
+                        >
+                      </td>
+                      <td
+                        class="td-actions giftsum-actions text-sm-right"
+                        ng-if="!i.removing"
+                      >
+                        <a
+                          href=""
+                          class="btn btn-link btn-giftsum-action"
+                          ng-click="$ctrl.editItem(i)"
+                          aria-describedby="cart-{{$index}}"
+                          translate
+                          >Edit</a
+                        >
+                        <span class="sep"> | </span>
+                        <a
+                          href=""
+                          class="btn btn-link btn-giftsum-action"
+                          ng-click="$ctrl.removeItem(i)"
+                          aria-describedby="cart-{{$index}}"
+                          translate
+                          >Remove</a
+                        >
+                        <div
+                          class="text-danger"
+                          role="alert"
+                          ng-if="i.removingError"
+                        >
+                          <span translate>Error removing</span>
+                          <span class="hidden-xs hidden-sm" translate
+                            >gift</span
+                          >
+                        </div>
+                      </td>
+                      <td class="td-actions giftsum-actions" ng-if="i.removing">
+                        <loading inline="true" class="text-right">
+                          <translate>Removing...</translate>
+                        </loading>
+                      </td>
+                    </tr>
                   </tbody>
                   <tfoot>
-                  <tr ng-if="$ctrl.donorCoveredFees">
-                    <td colspan="4">
-                      <p class="alert alert-info">
-                        Gift amount includes previously selected option to help cover credit/debit card processing fees.
-                        This option can be adjusted again during checkout.
-                      </p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colspan="4">
-                      <loading inline="true" class="mb-- text-right" ng-if="$ctrl.updating">
-                        <translate>Updating cart...</translate>
-                      </loading>
-                      <div class="checkout-cart-summary pull-left">
-                        <display-rate-totals rate-totals="$ctrl.cartData.frequencyTotals"></display-rate-totals>
-                      </div>
-                      <div class="checkout-cta pull-right">
-                        <a id="proceedToCheckoutButton" href="" ng-click="$ctrl.checkout()" class="btn btn-primary btn-lg btn-block" translate>Proceed to Checkout</a>
-                        <a ng-href="{{$ctrl.continueBrowsingUrl}}" class="btn btn-default btn-lg btn-block visible-xs" ng-if="$ctrl.continueBrowsingUrl" translate>Continue Browsing</a>
-                      </div>
-                    </td>
-                  </tr>
+                    <tr ng-if="$ctrl.donorCoveredFees">
+                      <td colspan="4">
+                        <p class="alert alert-info">
+                          Gift amount includes previously selected option to
+                          help cover credit/debit card processing fees. This
+                          option can be adjusted again during checkout.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="4">
+                        <loading
+                          inline="true"
+                          class="mb-- text-right"
+                          ng-if="$ctrl.updating"
+                        >
+                          <translate>Updating cart...</translate>
+                        </loading>
+                        <div class="checkout-cart-summary pull-left">
+                          <display-rate-totals
+                            rate-totals="$ctrl.cartData.frequencyTotals"
+                          ></display-rate-totals>
+                        </div>
+                        <div class="checkout-cta pull-right">
+                          <a
+                            id="proceedToCheckoutButton"
+                            href=""
+                            ng-click="$ctrl.checkout()"
+                            class="btn btn-primary btn-lg btn-block"
+                            translate
+                            >Proceed to Checkout</a
+                          >
+                          <a
+                            ng-href="{{$ctrl.continueBrowsingUrl}}"
+                            class="btn btn-default btn-lg btn-block visible-xs"
+                            ng-if="$ctrl.continueBrowsingUrl"
+                            translate
+                            >Continue Browsing</a
+                          >
+                        </div>
+                      </td>
+                    </tr>
                   </tfoot>
                 </table>
               </form>
@@ -104,5 +202,7 @@
         </div>
       </div>
     </div>
-  </div><!-- //blank wrapper -->
-</div><!-- //screenContent -->
+  </div>
+  <!-- //blank wrapper -->
+</div>
+<!-- //screenContent -->

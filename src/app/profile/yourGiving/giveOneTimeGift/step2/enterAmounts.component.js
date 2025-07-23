@@ -1,33 +1,34 @@
-import angular from 'angular'
+import angular from 'angular';
 
-import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component'
-import giftUpdateView from 'common/components/giftViews/giftUpdateView/giftUpdateView.component'
-import analyticsFactory from 'app/analytics/analytics.factory'
+import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component';
+import giftUpdateView from 'common/components/giftViews/giftUpdateView/giftUpdateView.component';
+import analyticsFactory from 'app/analytics/analytics.factory';
 
-import template from './enterAmounts.tpl.html'
+import template from './enterAmounts.tpl.html';
 
-const componentName = 'step2EnterAmounts'
+const componentName = 'step2EnterAmounts';
 
 class EnterAmountsController {
   /* @ngInject */
-  constructor (analyticsFactory) {
-    this.analyticsFactory = analyticsFactory
-    this.addingToCart = false
+  constructor(analyticsFactory) {
+    this.analyticsFactory = analyticsFactory;
+    this.addingToCart = false;
   }
 
-  $onInit () {
-    this.hasSelectedRecipients = this.selectedRecipients && this.selectedRecipients.length > 0
+  $onInit() {
+    this.hasSelectedRecipients =
+      this.selectedRecipients && this.selectedRecipients.length > 0;
   }
 
-  $onChanges (changes) {
+  $onChanges(changes) {
     if (changes.submitted && changes.submitted.currentValue === true) {
-      this.addingToCart = false
+      this.addingToCart = false;
     }
   }
 
-  addToCart () {
-    this.addingToCart = true
-    this.next({ selectedRecipients: this.selectedRecipients })
+  addToCart() {
+    this.addingToCart = true;
+    this.next({ selectedRecipients: this.selectedRecipients });
   }
 }
 
@@ -35,7 +36,7 @@ export default angular
   .module(componentName, [
     giftListItem.name,
     giftUpdateView.name,
-    analyticsFactory.name
+    analyticsFactory.name,
   ])
   .component(componentName, {
     controller: EnterAmountsController,
@@ -46,6 +47,6 @@ export default angular
       errors: '<',
       dismiss: '&',
       previous: '&',
-      next: '&'
-    }
-  })
+      next: '&',
+    },
+  });
