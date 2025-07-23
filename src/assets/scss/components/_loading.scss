@@ -3,76 +3,74 @@ loading {
   display: block;
   text-align: center;
 
-  .loading-bar {
+  .give-loading-bar {
     display: inline-block;
     width: 7px;
     border-radius: 10%;
-    transition: background .2s;
+    transition: background-color 0.2s;
     vertical-align: middle;
   }
 
-  .loading1 {
+  .give-loading1 {
     height: 26px;
-    animation: fade1 1s infinite;
+    animation: give-fade 1.2s infinite;
+    animation-delay: 0.0s;
   }
 
-  .loading2 {
+  .give-loading2 {
     height: 32px;
-    animation: fade2 1s infinite;
+    animation: give-fade 1.2s infinite;
+    animation-delay: 0.3s;
   }
 
-  .loading3 {
+  .give-loading3 {
     height: 32px;
-    animation: fade3 1s infinite;
+    animation: give-fade 1.2s infinite;
+    animation-delay: 0.6s;
   }
 
-  .loading4 {
+  .give-loading4 {
     height: 26px;
-    animation: fade4 1s infinite;
+    animation: give-fade 1.2s infinite;
+    animation-delay: 0.9s;
   }
 
-  @keyframes fade1 {
-    0% {
-      background: #43B3C9;
+  @keyframes give-fade {
+    0%, 100% {
+      background: $colorGrayscale-background;
+    }
+
+    25% {
+      background: $colorCru-blueBright;
+    }
+
+    50% {
+      background: $colorCru-gold;
+    }
+
+    75% {
+      background: $colorCru-orange;
     }
   }
 
-  @keyframes fade2 {
-    33% {
-      background: #F9B625;
-    }
-  }
-
-  @keyframes fade3 {
-    66% {
-      background: #DE8123;
-    }
-  }
-
-  @keyframes fade4 {
-    90% {
-      background: #007398;
-    }
-  }
-
-  .loading-centered {
+  .give-loading-centered {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
   }
 
-  .loading-overlay {
+  .give-loading-overlay {
     z-index: 2;
     display: flex;
     width: 100%;
     height: 100%;
     align-items: center;
     justify-content: space-around;
-    background-color: rgb(255 255 255 / 70%);
+    background-color: rgba(255, 255, 255, 0.7);
   }
 
-  .loading-fixed:first-child {
+  .give-loading-fixed:first-child {
     position: fixed;
     z-index: 2;
     top: 50%; 
@@ -80,16 +78,16 @@ loading {
   }
 
   /* stylelint-disable-next-line selector-class-pattern */
-  .loadingWrap{
+  .give-loadingWrap{
     display: inline-block
   }
 }
 
-.loading-overlay-parent{
+.give-loading-overlay-parent{
   position: relative;
 }
 
-.icon-first > div {
+.give-icon-first > div {
   display: flex;
   width: 100%;
   flex-direction: row-reverse;
