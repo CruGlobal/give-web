@@ -43,7 +43,7 @@ sign-in-form {
   }
 
   .okta-signup-button {
-    $okta-brand: #007dc1;
+    $okta-brand: $colorCru-gray;
 
     display: flex;
     width: 100%;
@@ -57,11 +57,13 @@ sign-in-form {
     font-weight: bold;
     gap: 0.5rem;
     padding-block: 20px;
+    transition: cubic-bezier(1, 0, 0, 1) 0.3s;
 
     &:hover {
       border-color: $okta-brand;
       background-color: $okta-brand;
       color: $colorCru-white;
+      transition: cubic-bezier(1, 0, 0, 1) 0.3s;
     }
 
     &:focus {
