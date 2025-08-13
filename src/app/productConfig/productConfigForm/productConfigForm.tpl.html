@@ -136,8 +136,8 @@
                   name="suggestedAmount"
                   id="sa-{{$index}}"
                   ng-click="$ctrl.changeAmount(suggested.amount)"
-                  ng-class=" {'active': !$ctrl.customInputActive && $ctrl.itemConfig.AMOUNT === suggested.amount}"
-                  ng-checked="$first"
+                  ng-class="{'active': !$ctrl.customInputActive && $ctrl.itemConfig.AMOUNT === suggested.amount}"
+                  ng-checked="$ctrl.itemConfig.AMOUNT === suggested.amount"
                 />
                 <label for="sa-{{$index}}">
                   <span class="amount-box"
