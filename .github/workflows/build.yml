@@ -38,6 +38,9 @@ jobs:
       - name: Lint Check (SCSS)
         run: yarn lint:styles
 
+      - name: Lint Check (TypeScript)
+        run: yarn lint:ts
+
   test:
     name: ✅ Tests
     runs-on: ubuntu-latest
