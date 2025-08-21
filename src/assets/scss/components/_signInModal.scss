@@ -22,6 +22,8 @@ sign-in-modal {
 
   sign-in-button .btn-primary {
     @include button-variant(black, $btn-primary-bg, $btn-primary-border);
+    
+    font-size: $btn-font-size + 2px;
   }
 
   .okta-button {
