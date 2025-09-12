@@ -147,14 +147,14 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
       email: 'email@example.com'
   };
   ```
-- `show-cover-fees` - true if you want to show the checkbox that allows donors to cover processing fees, otherwise leave the attribute off.
+- `show-cover-fees` - `true` if you want to show the checkbox that allows donors to cover processing fees, otherwise leave the attribute off.
 - `on-order-completed` - an Angular expression that is executed when the order was submitted successfully - _Optional_ - provides 2 variables:
   - `$event.$window` - Provides access to the browser's global `window` object. This allows you to call a custom callback function like `onOrderCompleted` in the example.
   - `$event.purchase` - contains the order's details that are loaded for the thank you page
 - `radio-station-api-url` - Provides a URL path for fetching a list of radio stations in the donor's vicinity. If you plan to use this feature, contact Cru's Digital Products and Services (DPS) department ([help@cru.org](mailto:help@cru.org)) to have your URL domain whitelisted to interact with our API - _Optional_
 - `hide-annual` - Hides the annual frequency option. If you don't want this feature, do not add this attribute at all. - _Optional_
 - `hide-quarterly` - Hides the quarterly frequency option. If you don't want this feature, do not add this attribute at all. - _Optional_
-- `use-v3` - Version 3 removes the review page from the checkout flow and makes UX improvements on the form. - _Optional_
+- `use-v3` - `true` if you want to enable version 3. Version 3 removes the review page from the checkout flow and makes UX improvements on the form. - _Optional_
 
 #### Server-side configuration for a new branded checkout domain
 
@@ -191,6 +191,10 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
    <script src="https://give-static.cru.org/branded-checkout.v2.js"></script>
    ```
 9. If you go to this page in a browser, you should see the `<branded-checkout>` tag fill with content. There should also be no errors in the browser's console. If you see errors that appear to be caused by branded checkout please contact us at [help@cru.org](mailto:help@cru.org).
+
+#### Updates
+
+It is recommended that you subscribe to this repository's GitHub releases to receive updates about major changes and improvements to Branded Checkout. Go to https://github.com/CruGlobal/give-web and select Watch > Custom > Releases.
 
 ## Development
 
