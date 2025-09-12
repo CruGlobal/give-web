@@ -54,7 +54,10 @@ export const Recaptcha = ({
       timesIntervalRun++;
     };
 
-    const intervalId = setInterval(() => updateRecaptcha(intervalId), 100);
+    const intervalId: NodeJS.Timer = setInterval(
+      () => updateRecaptcha(intervalId),
+      100,
+    );
     setReady(!!grecaptcha);
     return () => clearInterval(intervalId);
   }, [grecaptcha, buttonId]);
