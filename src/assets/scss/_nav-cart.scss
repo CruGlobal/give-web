@@ -165,3 +165,9 @@ $color-white: #fff;
     }
   }
 }
+
+.nav-cart-icon:hover {
+  .material-icons-outlined {
+    color: $colorCru-gold;
+  }
+}
