@@ -23,7 +23,7 @@ $brand-warning: lighten($colorCru-orange, 10%);
 //** Background color for `<body>`.
 $body-bg:          #f7f7f7;
 //** Global text color on `<body>`.
-$text-color:       $colorGrayscale-text;
+$text-color:       $colorGrayscale-black;
 
 //** Global textual link color.
 $link-color:       $colorCru-blueDeep;
@@ -38,7 +38,7 @@ $link-hover-color: darken($link-color, 10%);
 //== Typography
 //
 //## Font, line-height, and color for body text, headings, and more.
-$font-family-base:     "Source Sans Pro", "Helvetica Neue", Arial, Helvetica, sans-serif;
+$font-family-base:     "Inter", sans-serif;
 
 $font-size-h1:         48px;
 $font-size-h2:         32px;
