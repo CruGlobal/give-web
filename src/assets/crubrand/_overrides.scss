@@ -119,9 +119,9 @@ $btn-default-color:  #6d6e71;
 $btn-default-bg:     rgba(229, 229, 229, 0.35);
 $btn-default-border: rgba(216, 216, 216, 0.35);
 
-$btn-primary-color:  #fff;
+$btn-primary-color:  #000;
 $btn-primary-bg:     $brand-primary;
-$btn-primary-border: darken($btn-primary-bg, 5%);
+$btn-primary-border: $btn-primary-bg;
 
 
 
