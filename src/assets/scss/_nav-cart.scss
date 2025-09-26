@@ -85,6 +85,7 @@ $color-white: #fff;
 
   p {
     font-weight: 600;
+    text-transform: none;
   }
 
   .heading,
@@ -190,12 +191,18 @@ $color-white: #fff;
   }
 }
 
+#cru-header #nav-cart-dropdown .btn-cart {
+  padding-right: 24px;
+  padding-left: 24px;
+  line-height: 20px;
+}
+
 .nav-cart-icon.dropdown-toggle {
   cursor: pointer;
 
   &:hover {
     text-decoration: none;
-    
+
     .material-icons-outlined {
       color: $colorCru-gold;
     }
