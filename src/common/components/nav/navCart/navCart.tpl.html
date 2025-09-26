@@ -27,21 +27,8 @@
   </div>
 
   <div class="row repeating-row top-row" ng-if="$ctrl.hasItems || $ctrl.error">
-    <div class="col-xs-6">
-      <a
-        id="mini-cart-view-cart"
-        ng-href="{{$ctrl.buildCartUrl()}}"
-        class="btn btn-default btn-cart"
-        ng-class="{ 'btn-mobile': $ctrl.mobile }"
-        translate
-        >View Cart</a
-      >
-    </div>
-    <div class="col-xs-6">
-      <i
-        class="fal fa-bars fa-times close-cart"
-        ng-click="$ctrl.isOpen = false"
-      ></i>
+    <div class="col-xs-12">
+      <p class="heading">My Giving</p>
     </div>
   </div>
 
@@ -52,41 +39,36 @@
   >
     <div class="col-xs-12">
       <div class="row repeating-row" ng-repeat="i in $ctrl.cartData.items">
-        <div class="col-xs-9">
+        <div class="col-xs-12 giving-display-name">
+          <img
+            desig-src="{{i.designationNumber}}"
+            class="giftsum-profile"
+            width="55"
+          />
           <p class="title">{{i.displayName}}</p>
-          <p class="designation-number">#{{i.designationNumber}}</p>
         </div>
-        <div class="col-xs-3 text-right">
-          <p class="price">{{i.price | coverFeesFilter:i:'price'}}</p>
-          <p class="frequency">{{i.frequency}}</p>
+        <div class="col-xs-12">
+          <p class="designation-number price">
+            #{{i.designationNumber}} | {{i.price | coverFeesFilter:i:'price'}}
+            {{i.frequency}}
+          </p>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="row repeating-row sub-total" ng-if="$ctrl.hasItems">
-    <div class="col-xs-9">
-      <p>
-        <ng-pluralize
-          count="$ctrl.cartData.items.length"
-          when="{'0': 'TOTAL (0 Items)',
-                     'one': 'TOTAL (1 Item)',
-                     'other': 'TOTAL ({} Items)'}"
-        >
-        </ng-pluralize>
-      </p>
+  <div class="row" ng-if="$ctrl.hasItems || $ctrl.error">
+    <div class="col-xs-6">
+      <a
+        id="mini-cart-view-cart2"
+        ng-href="{{$ctrl.buildCartUrl()}}"
+        class="btn btn-default btn-cart"
+        ng-class="{ 'btn-mobile': $ctrl.mobile }"
+        translate
+        >View Cart</a
+      >
     </div>
-    <div class="col-xs-3 text-right">
-      <p>
-        {{$ctrl.cartData.cartTotal |
-        coverFeesFilter:$ctrl.cartData:'cartTotal'}}
-      </p>
-    </div>
-  </div>
-
-  <div class="row row-no-spacing" ng-if="$ctrl.hasItems || $ctrl.error">
-    <!-- TODO: row-no-spacing not in nav css -->
-    <div class="col-xs-12">
+    <div class="col-xs-6">
       <a
         id="mini-cart-checkout"
         href=""
