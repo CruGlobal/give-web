@@ -19,7 +19,7 @@
     white-space: nowrap;
     text-decoration: none;
 
-    @include button-size($padding-base-vertical, $padding-base-horizontal, $btn-font-size, $line-height-base, $border-radius-base);
+    @include button-size(8px, 24px, $btn-font-size, $line-height-base, $border-radius-base);
     @include user-select(none);
     @include transition(all 0.2s ease);
 
