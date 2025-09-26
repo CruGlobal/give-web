@@ -194,6 +194,8 @@ $color-white: #fff;
   cursor: pointer;
 
   &:hover {
+    text-decoration: none;
+    
     .material-icons-outlined {
       color: $colorCru-gold;
     }
