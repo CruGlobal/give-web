@@ -44,23 +44,57 @@ $cru-tango-alt: #f5a055;
 $cru-tango-dark: #d77328;
 $color-white: #fff;
 
+@media (min-width: 1200px) {
+  nav-cart-icon .dropdown.open {
+    &::before {
+      position: absolute;
+      top: 62px;
+      left: 12%;
+      width: 20px;
+      height: 20px;
+      box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.25);
+      content: "";
+      transform: rotate(45deg);
+    }
 
-
+    &::after {
+      position: absolute;
+      z-index: 101;
+      top: 48px;
+      left: 12%;
+      border-width: 10px;
+      border-style: solid;
+      border-color: transparent transparent $colorCru-white transparent;
+      content: "";
+    }
+  }
+}
 
 #nav-cart-dropdown {
-  top: 0;
-  right: 0;
+  top: 64px;
+  right: -8px;
   left: auto;
-  width: 360px;
-  padding: 0;
+  width: 320px;
+  padding: 15px;
   border: none;
+  border-radius: 5px;
   margin: 0;
-  background-color: $cru-scorpion-light;
-  color: $cru-scorpion;
+  background-color: $colorCru-white;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  color: $colorGrayscale-black;
+
+  p {
+    font-weight: 600;
+  }
+
+  .heading,
+  .title {
+    font-family: Sora, sans-serif;
+  }
 
   .repeating-row {
-    padding: 28px 0;
     border-top: 1px solid $colorCru-white;
+    margin-bottom: 24px;
 
     &:first-child {
       border-top: 0;
@@ -83,6 +117,7 @@ $color-white: #fff;
   .top-row {
     padding: 12px 0;
     border-bottom: 1px solid $colorCru-white;
+    margin-bottom: 0;
 
     .col-xs-6 {
       padding-right: 18px;
@@ -109,29 +144,28 @@ $color-white: #fff;
     overflow-y: auto;
   }
 
-  .title, .price {
-    font-weight: 600;
+  .giving-display-name {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
   }
 
-  .designation-number, .frequency {
-    font-weight: 400 !important;
+  .designation-number.price {
+    letter-spacing: 0.72px;
   }
 
   .btn-cart {
-    width: 100%;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    font-weight: 500;
-    letter-spacing: 1px;
+    letter-spacing: 0.65px;
     text-transform: uppercase;
 
     &.btn-default {
-      border-color: $cru-scorpion;
+      border-color: $colorCru-gold;
       background-color: transparent;
+      color: $colorGrayscale-black;
 
       &:hover {
-        background-color: $cru-scorpion;
-        color: $colorCru-white;
+        background-color: $colorCru-gold;
       }
     }
 
@@ -154,20 +188,14 @@ $color-white: #fff;
     padding-right: 28px;
     padding-left: 14px;
   }
-
-  .btn-primary {
-    border-color: transparent;
-    background-color: $cru-buttercup;
-    color: $colorCru-white;
-
-    &:hover {
-      background-color: $cru-buttercup-dark;
-    }
-  }
 }
 
-.nav-cart-icon:hover {
-  .material-icons-outlined {
-    color: $colorCru-gold;
+.nav-cart-icon {
+  cursor: pointer;
+
+  &:hover {
+    .material-icons-outlined {
+      color: $colorCru-gold;
+    }
   }
 }
