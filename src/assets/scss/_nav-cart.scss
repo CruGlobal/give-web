@@ -82,6 +82,7 @@ $color-white: #fff;
   background-color: $colorCru-white;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
   color: $colorGrayscale-black;
+  cursor: auto;
 
   p {
     font-weight: 600;
@@ -157,6 +158,7 @@ $color-white: #fff;
   }
 
   .btn-cart {
+    color: $colorGrayscale-black;
     letter-spacing: 0.65px;
     text-transform: uppercase;
 
@@ -199,10 +201,9 @@ $color-white: #fff;
 
 .nav-cart-icon.dropdown-toggle {
   cursor: pointer;
+  text-decoration: none;
 
   &:hover {
-    text-decoration: none;
-
     .material-icons-outlined {
       color: $colorCru-gold;
     }
