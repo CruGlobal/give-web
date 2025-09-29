@@ -56,7 +56,25 @@
       </div>
     </div>
   </div>
-
+  <div class="row repeating-row sub-total" ng-if="$ctrl.hasItems">
+    <div class="col-xs-9">
+      <p>
+        <ng-pluralize
+          count="$ctrl.cartData.items.length"
+          when="{'0': 'TOTAL (0 Items)',
+                     'one': 'TOTAL (1 Item)',
+                     'other': 'TOTAL ({} Items)'}"
+        >
+        </ng-pluralize>
+      </p>
+    </div>
+    <div class="col-xs-3 text-right">
+      <p>
+        {{$ctrl.cartData.cartTotal |
+        coverFeesFilter:$ctrl.cartData:'cartTotal'}}
+      </p>
+    </div>
+  </div>
   <div class="row" ng-if="$ctrl.hasItems || $ctrl.error">
     <div class="col-xs-6">
       <a
