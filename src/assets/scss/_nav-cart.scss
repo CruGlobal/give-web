@@ -74,8 +74,8 @@ $color-white: #fff;
   top: 64px;
   right: -8px;
   left: auto;
-  width: 320px;
-  padding: 15px;
+  width: 330px;
+  padding: 20px 10px;
   border: none;
   border-radius: 5px;
   margin: 0;
@@ -94,9 +94,14 @@ $color-white: #fff;
     font-family: Sora, sans-serif;
   }
 
+  .row {
+    margin-right: 0;
+    margin-left: 0;
+  }
+
   .repeating-row {
     border-top: 1px solid $colorCru-white;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
 
     &:first-child {
       border-top: 0;
@@ -111,8 +116,24 @@ $color-white: #fff;
     }
 
     &.sub-total {
+      padding-top: 20px;
+      border-top: 1px solid $colorGrayscale-black;
       font-weight: 600;
       text-transform: uppercase;
+
+      ng-pluralize {
+        font-weight: 400;
+      }
+    }
+  }
+
+  .actions {
+    .col-xs-6:first-child {
+      padding-right: 5px;
+    }
+
+    .col-xs-6:last-child {
+      padding-left: 5px;
     }
   }
 
@@ -139,6 +160,14 @@ $color-white: #fff;
     cursor: pointer;
     float: right;
     font-size: 150%;
+  }
+
+  .col-xs-3,
+  .col-xs-6,
+  .col-xs-9,
+  .col-xs-12 {
+    padding-right: 0;
+    padding-left: 0;
   }
 
   .desktop-cart-list {
@@ -180,15 +209,6 @@ $color-white: #fff;
     &:not(.btn-default) {
       border-radius: 0;
     }
-  }
-
-  .col-xs-9 {
-    padding-right: 14px;
-  }
-
-  .col-xs-3 {
-    padding-right: 28px;
-    padding-left: 14px;
   }
 }
 
