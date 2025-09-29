@@ -59,11 +59,12 @@
   <div class="row repeating-row sub-total" ng-if="$ctrl.hasItems">
     <div class="col-xs-9">
       <p>
+        Total
         <ng-pluralize
           count="$ctrl.cartData.items.length"
-          when="{'0': 'TOTAL (0 Items)',
-                     'one': 'TOTAL (1 Item)',
-                     'other': 'TOTAL ({} Items)'}"
+          when="{'0': '(0 Items)',
+                     'one': '(1 Item)',
+                     'other': '({} Items)'}"
         >
         </ng-pluralize>
       </p>
@@ -75,7 +76,7 @@
       </p>
     </div>
   </div>
-  <div class="row" ng-if="$ctrl.hasItems || $ctrl.error">
+  <div class="row actions" ng-if="$ctrl.hasItems || $ctrl.error">
     <div class="col-xs-6">
       <a
         id="mini-cart-view-cart"
