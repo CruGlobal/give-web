@@ -170,11 +170,11 @@
       }
     }
   }
+}
 
-  .panel--payment-info p,
-  .account-management span {
-    font-feature-settings: "calt" 0; // Disabling OpenType features so that masking account numbers shows up properly (known issue with Inter font)
-  }
+.panel--payment-info p,
+payment-method-display span {
+  font-feature-settings: "calt" 0; // Disabling OpenType features so that masking account numbers shows up properly (known issue with Inter font)
 }
 
 .confirm-billing-info {
