@@ -351,6 +351,17 @@
   .is-row-meta {
     flex: 1;
 
+    a {
+      text-decoration: none;
+
+      &:hover {
+        .is-row-title,
+        .is-row-num {
+          color: $colorCru-gold;
+        }
+      }
+    }
+
     span {
       display: block;
     }
