@@ -262,3 +262,7 @@
 .existing-payment-method payment-method-display {
   font-size: 14px;
 }
+
+.form-group .number {
+  font-feature-settings: "calt" 0;
+}
