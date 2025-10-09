@@ -14,6 +14,7 @@ register-account-modal:has(sign-up-modal, reset-password-modal) {
 
 .modal-dialog:has(register-account-modal sign-in-modal, register-account-modal sign-up-modal, register-account-modal reset-password-modal) {
   width: calc(min(100vw, 400px) - 20px);
+  max-width: unset; // used to override cruorgaem6 modal max width
 
   @media (min-width: $screen-md-min) {
     &:has(.user-state[data-new-user="true"]) {
