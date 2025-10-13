@@ -340,7 +340,7 @@
       &:hover {
         .is-row-title,
         .is-row-num {
-          color: $colorCru-gold;
+          color: $link-hover-color;
         }
       }
     }
@@ -350,7 +350,7 @@
     }
 
     .is-row-title {
-      color: $colorCru-gray;
+      color: $colorGrayscale-black;
       font-size: 115%;
       font-weight: 500;
       line-height: 120%;
