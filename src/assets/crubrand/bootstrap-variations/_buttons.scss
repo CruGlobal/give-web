@@ -18,8 +18,9 @@
     border: $btn-border-size solid transparent;
     white-space: nowrap;
     text-decoration: none;
+    text-transform: uppercase;
 
-    @include button-size(8px, $padding-large-horizontal, $btn-font-size, $line-height-base, $border-radius-base);
+    @include button-size(8px, $padding-large-horizontal, $btn-font-size, $line-height-base, $border-radius-buttons);
     @include user-select(none);
     @include transition(all 0.2s ease);
 
@@ -144,12 +145,12 @@ a.cmp-button:hover {
 
 .btn-lg {
     // line-height: ensure even-numbered height of button next to large input
-    @include button-size($padding-large-vertical, $padding-large-horizontal, $font-size-base, $line-height-large, $border-radius-large);
+    @include button-size($padding-large-vertical, $padding-large-horizontal, $font-size-base, $line-height-large, $border-radius-buttons);
 }
 .btn-sm,
 .btn-xs {
     // line-height: ensure proper height of button next to small input
-    @include button-size($padding-small-vertical, $padding-small-horizontal, $font-size-base, $line-height-small, $border-radius-small);
+    @include button-size($padding-small-vertical, $padding-small-horizontal, $font-size-base, $line-height-small, $border-radius-buttons);
 }
 
 
