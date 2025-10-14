@@ -9,7 +9,12 @@
         />
       </div>
       <div class="col-sm-12 col-md-7 col-full-height">
-        <h4 class="mb0">{{$ctrl.recipient['designation-name']}}</h4>
+        <h4
+          class="mb0"
+          ng-attr-id="{{ 'recipientName-' + $ctrl.recipient['designation-number']}}"
+        >
+          {{$ctrl.recipient['designation-name']}}
+        </h4>
         <small>#{{$ctrl.recipient['designation-number']}}</small>
 
         <div class="row">
@@ -73,6 +78,9 @@
           class="btn btn-primary btn-block split-col-left"
           ng-click="$ctrl.giveNewGift()"
           ng-if="$ctrl.recipient['designation-active']"
+          ng-attr-aria-describedby="{{
+            'recipientName-' +$ctrl.recipient['designation-number']
+          }}"
           translate
         >
           Give a New Gift
