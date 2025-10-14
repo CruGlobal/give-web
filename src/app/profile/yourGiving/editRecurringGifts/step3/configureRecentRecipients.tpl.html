@@ -38,11 +38,19 @@
 
 <div class="modal-footer">
   <div class="col-xs-6">
-    <a class="btn btn-default" ng-click="$ctrl.previous()" translate> Back </a>
+    <button
+      class="btn btn-default"
+      type="button"
+      ng-click="$ctrl.previous()"
+      translate
+    >
+      Back
+    </button>
   </div>
   <div class="col-xs-6 text-right">
     <button
       class="btn btn-primary"
+      type="button"
       ng-click="$ctrl.next({ additions: $ctrl.additions })"
       translate
     >
