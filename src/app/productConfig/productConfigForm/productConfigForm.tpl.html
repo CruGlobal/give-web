@@ -304,11 +304,14 @@
                   ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
                   ng-focus="$ctrl.customInputActive = true;"
                   placeholder="{{'Other' | translate}}"
+                  ng-attr-aria-invalid="{{$ctrl.itemConfigForm.amount | showErrors}}"
+                  ng-attr-aria-errormessage="{{ ($ctrl.itemConfigForm.amount | showErrors) ? 'amountErrors' : undefined }}"
                   required
                 />
               </div>
             </label>
             <div
+              id="amountErrors"
               role="alert"
               ng-messages="$ctrl.itemConfigForm.amount.$error"
               ng-if="($ctrl.itemConfigForm.amount | showErrors)"
