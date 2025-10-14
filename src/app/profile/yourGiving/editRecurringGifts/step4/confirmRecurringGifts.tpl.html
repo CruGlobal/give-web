@@ -112,6 +112,13 @@
     >
       <span ng-if="!$ctrl.saving" translate>Confirm Changes</span>
       <span ng-if="$ctrl.saving" translate>Saving...</span>
+      <span
+        class="sr-only"
+        aria-live="polite"
+        aria-atomic="true"
+        ng-bind="$ctrl.saving ? ('Saving...' | translate) : ''"
+      >
+      </span>
     </button>
   </div>
 </div>
