@@ -19,6 +19,7 @@
     white-space: nowrap;
     text-decoration: none;
     text-transform: uppercase;
+    letter-spacing: 0.05em;
 
     @include button-size(8px, $padding-large-horizontal, $btn-font-size, $line-height-base, $border-radius-buttons);
     @include user-select(none);
