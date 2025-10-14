@@ -175,6 +175,12 @@ $color-white: #fff;
     overflow-y: auto;
   }
 
+  .giftsum-profile {
+    width: 55px;
+    height: 55px;
+    object-fit: cover;
+  }
+
   .giving-display-name {
     display: flex;
     align-items: center;
