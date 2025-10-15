@@ -27,17 +27,6 @@
 <div class="modal-footer">
   <div class="container-fluid">
     <button
-      class="btn btn-md btn-primary btn-block-xs pull-right"
-      type="button"
-      ng-if="$ctrl.state !== 'errorAlreadyInCart' && $ctrl.state != 'givingLinks'"
-      ng-switch="$ctrl.isEdit"
-      ng-click="$ctrl.submitted = true"
-      ng-disabled="$ctrl.state === 'changingFrequency' || $ctrl.state === 'submitting' || $ctrl.state === 'errorLoading'"
-    >
-      <span ng-switch-when="true" translate>Update Gift</span>
-      <span ng-switch-when="false" translate>Add to Gift Cart</span>
-    </button>
-    <button
       class="btn btn-default btn-md btn-block-xs"
       type="button"
       ng-click="$ctrl.dismiss()"
@@ -53,6 +42,17 @@
       translate
     >
       View Cart
+    </button>
+    <button
+      class="btn btn-md btn-primary btn-block-xs pull-right"
+      type="button"
+      ng-if="$ctrl.state !== 'errorAlreadyInCart' && $ctrl.state != 'givingLinks'"
+      ng-switch="$ctrl.isEdit"
+      ng-click="$ctrl.submitted = true"
+      ng-disabled="$ctrl.state === 'changingFrequency' || $ctrl.state === 'submitting' || $ctrl.state === 'errorLoading'"
+    >
+      <span ng-switch-when="true" translate>Update Gift</span>
+      <span ng-switch-when="false" translate>Add to Gift Cart</span>
     </button>
   </div>
 </div>

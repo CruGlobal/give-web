@@ -175,18 +175,29 @@
                     <ul class="dropdown-menu" uib-dropdown-menu role="menu">
                       <li
                         ng-class="{active: $ctrl.recipientFilter == 'recent'}"
-                        tabindex="0"
+                        role="none"
                       >
-                        <a ng-click="$ctrl.recipientFilter = 'recent'" translate
+                        <a
+                          role="menuitem"
+                          tabindex="0"
+                          href=""
+                          ng-click="$ctrl.recipientFilter = 'recent'"
+                          translate
                           >Your Recent Gifts</a
                         >
                       </li>
                       <li
                         ng-repeat="year in $ctrl.years"
                         ng-class="{active: $ctrl.recipientFilter == year}"
-                        tabindex="0"
+                        role="none"
                       >
-                        <a ng-click="$ctrl.recipientFilter = year">{{year}}</a>
+                        <a
+                          role="menuitem"
+                          tabindex="0"
+                          href=""
+                          ng-click="$ctrl.recipientFilter = year"
+                          >{{year}}</a
+                        >
                       </li>
                     </ul>
                   </div>

@@ -13,14 +13,11 @@
           id="changeContactButton"
           class="btn btn-default btn-panel-head pull-right"
           ng-click="$ctrl.changeStep({newStep: 'contact'})"
-          aria-describedby="contact-info"
+          aria-label="Update contact info"
           translate
         >
           {{'CHANGE'}}
         </button>
-        <span id="contact-info" class="sr-only">
-          Click "Change" to update your contact information.
-        </span>
       </div>
       <div class="panel-body">
         <div class="row">
@@ -65,14 +62,11 @@
           id="changePaymentButton"
           class="btn btn-default btn-panel-head pull-right"
           ng-click="$ctrl.changeStep({newStep: 'payment'})"
-          aria-describedby="payment-info"
+          aria-label="Update payment method"
           translate
         >
           {{'CHANGE'}}
         </button>
-        <span id="payment-info" class="sr-only">
-          Click "Change" to update your payment information.
-        </span>
       </div>
       <div class="panel-body">
         <div class="row">
@@ -158,14 +152,11 @@
           id="changePremiumButton"
           class="btn btn-default btn-panel-head pull-right"
           ng-click="$ctrl.changeStep({newStep: 'premium'})"
-          aria-describedby="premium-info"
+          aria-label="Update resource selection"
           translate
         >
           {{'CHANGE'}}
         </button>
-        <span id="premium-info" class="sr-only">
-          Click "Change" to update your resource selection.
-        </span>
       </div>
       <div class="panel-body">
         <div class="row">
@@ -183,14 +174,11 @@
           id="changeCartButton"
           class="btn btn-default btn-panel-head pull-right"
           ng-click="$ctrl.changeStep({newStep: 'cart'})"
-          aria-describedby="gift-info"
+          aria-label="Update gift selections"
           translate
         >
           {{'CHANGE'}}
         </button>
-        <span id="gift-info" class="sr-only">
-          Click "Change" to update your gift selections.
-        </span>
       </div>
       <div class="panel-body">
         <loading ng-if="!$ctrl.cartData"></loading>
