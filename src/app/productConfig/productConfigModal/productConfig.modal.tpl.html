@@ -30,7 +30,6 @@
       class="btn btn-md btn-primary btn-block-xs pull-right"
       type="button"
       ng-if="$ctrl.state !== 'errorAlreadyInCart' && $ctrl.state != 'givingLinks'"
-      tabindex="-1"
       ng-switch="$ctrl.isEdit"
       ng-click="$ctrl.submitted = true"
       ng-disabled="$ctrl.state === 'changingFrequency' || $ctrl.state === 'submitting' || $ctrl.state === 'errorLoading'"
@@ -42,7 +41,6 @@
       class="btn btn-default btn-md btn-block-xs"
       type="button"
       ng-click="$ctrl.dismiss()"
-      tabindex="-1"
       translate
     >
       Cancel &amp; Return
@@ -50,7 +48,6 @@
     <button
       class="btn btn-md btn-primary btn-block-xs pull-right"
       type="button"
-      tabindex="-1"
       ng-if="$ctrl.state === 'errorAlreadyInCart'"
       ng-click="$ctrl.close(); $ctrl.$window.location = $ctrl.buildCartUrl()"
       translate
