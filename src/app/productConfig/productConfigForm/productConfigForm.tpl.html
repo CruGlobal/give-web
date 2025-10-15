@@ -273,20 +273,30 @@
               </div>
             </div>
           </div>
-
           <div
             data-toggle="buttons"
             ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}"
             ng-if="!$ctrl.useSuggestedAmounts"
           >
-            <label
-              class="btn btn-radio"
-              ng-click="$ctrl.changeAmount(a)"
-              ng-class="{'active': $ctrl.itemConfig.AMOUNT === a && !$ctrl.customInputActive}"
+            <div
               ng-repeat-start="a in $ctrl.selectableAmounts"
+              style="display: inline"
             >
-              <span class="number">&dollar;{{a}}</span>
-            </label>
+              <input
+                type="radio"
+                name="selectableAmount"
+                id="sa-{{$index}}"
+                ng-click="$ctrl.changeAmount(a)"
+                ng-checked="$ctrl.itemConfig.AMOUNT === a && !$ctrl.customInputActive"
+              />
+              <label
+                class="btn btn-radio"
+                for="sa-{{$index}}"
+                ng-class="{'active': $ctrl.itemConfig.AMOUNT === a && !$ctrl.customInputActive}"
+              >
+                <span class="number">&dollar;{{a}}</span>
+              </label>
+            </div>
             <span ng-repeat-end></span>
             <label
               ng-class="{active: $ctrl.customInputActive}"
@@ -336,6 +346,7 @@
               ></div>
             </div>
           </div>
+          <!-- End of selectableAmounts container -->
         </div>
         <!-- // panel-body -->
       </div>
@@ -346,18 +357,29 @@
         </h4>
         <div class="panel-body">
           <div data-toggle="buttons">
-            <label
-              class="btn btn-radio btn-wide"
+            <div
               ng-repeat-start="f in $ctrl.productData.frequencies | orderBy: $ctrl.frequencyOrder track by $index"
               ng-if="f.name !== 'SEMIANNUAL'"
-              ng-class="{'active': f.name === $ctrl.productData.frequency}"
-              ng-click="$ctrl.changeFrequency(f)"
+              style="display: inline"
             >
-              <span class="giftsum-about giftsum-title" ng-switch="f.name">
-                <span ng-switch-when="NA" translate>{{'SINGLE_GIFT'}}</span>
-                <span ng-switch-default>{{f.display}}</span>
-              </span>
-            </label>
+              <input
+                type="radio"
+                name="giftFrequency"
+                id="freq-{{$index}}"
+                ng-click="$ctrl.changeFrequency(f)"
+                ng-checked="f.name === $ctrl.productData.frequency"
+              />
+              <label
+                class="btn btn-radio btn-wide"
+                for="freq-{{$index}}"
+                ng-class="{'active': f.name === $ctrl.productData.frequency}"
+              >
+                <span class="giftsum-about giftsum-title" ng-switch="f.name">
+                  <span ng-switch-when="NA" translate>{{'SINGLE_GIFT'}}</span>
+                  <span ng-switch-default>{{f.display}}</span>
+                </span>
+              </label>
+            </div>
             <span ng-repeat-end></span>
           </div>
           <loading
@@ -435,10 +457,13 @@
               id="sendMessageButton"
               class="btn btn-link"
               ng-click="$ctrl.showRecipientComments = !$ctrl.showRecipientComments"
+              aria-expanded="{{$ctrl.showRecipientComments}}"
+              aria-controls="recipientComments"
               translate="SEND_MESSAGE_TO"
               translate-values="{ministry: $ctrl.productData.displayName}"
             ></button>
             <textarea
+              id="recipientComments"
               class="staff-comments give-modal-comments"
               name="recipientComments"
               rows="3"
@@ -455,11 +480,14 @@
               id="sendHandlingButton"
               class="btn btn-link"
               ng-click="$ctrl.showDSComments = !$ctrl.showDSComments"
+              aria-expanded="{{$ctrl.showDSComments}}"
+              aria-controls="donationServicesComments"
               translate
             >
               {{'SPECIAL_INSTRUCTIONS'}}
             </button>
             <textarea
+              id="donationServicesComments"
               class="cru-comments give-modal-comments"
               name="donationServicesComments"
               rows="3"
