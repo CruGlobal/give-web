@@ -274,28 +274,42 @@
             </div>
           </div>
 
-          <div
-            data-toggle="buttons"
+          <fieldset
+            class="button-group amount-radios"
             ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}"
             ng-if="!$ctrl.useSuggestedAmounts"
+            aria-label="{{'GIFT_AMOUNT' | translate}}"
           >
-            <label
-              class="btn btn-radio"
-              ng-click="$ctrl.changeAmount(a)"
-              ng-class="{'active': $ctrl.itemConfig.AMOUNT === a && !$ctrl.customInputActive}"
-              ng-repeat-start="a in $ctrl.selectableAmounts"
-            >
-              <span class="number">&dollar;{{a}}</span>
-            </label>
-            <span ng-repeat-end></span>
-            <label
-              ng-class="{active: $ctrl.customInputActive}"
-              class="btn btn-default-form u-textLeft custom-amount"
-            >
-              <div class="form-group form-group-default u-inline">
+            <div ng-repeat="a in $ctrl.selectableAmounts">
+              <input
+                type="radio"
+                name="selectableAmount"
+                id="amount-{{$index}}"
+                ng-click="$ctrl.changeAmount(a)"
+                ng-checked="$ctrl.itemConfig.AMOUNT === a && !$ctrl.customInputActive"
+              />
+              <label
+                for="amount-{{$index}}"
+                class="btn btn-radio"
+                ng-class="{'active': $ctrl.itemConfig.AMOUNT === a && !$ctrl.customInputActive}"
+              >
+                <span class="number">&dollar;{{a}}</span>
+              </label>
+            </div>
+            <div class="custom-amount-button">
+              <div class="input-prepend">
+                <span class="input-prepend-text">$</span>
+              </div>
+              <label for="customAmountNonSuggested">
+                <input
+                  name="selectableAmount"
+                  type="radio"
+                  ng-checked="$ctrl.customInputActive"
+                />
                 <input
                   class="form-control form-control-subtle number"
                   name="amount"
+                  id="customAmountNonSuggested"
                   type="text"
                   step="1"
                   ng-required="$ctrl.customInputActive"
@@ -306,8 +320,8 @@
                   placeholder="{{'Other' | translate}}"
                   required
                 />
-              </div>
-            </label>
+              </label>
+            </div>
             <div
               role="alert"
               ng-messages="$ctrl.itemConfigForm.amount.$error"
@@ -332,7 +346,7 @@
                 translate-values="{currencyLimit: (10000000 | currency)}"
               ></div>
             </div>
-          </div>
+          </fieldset>
         </div>
         <!-- // panel-body -->
       </div>
