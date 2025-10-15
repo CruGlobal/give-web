@@ -175,6 +175,7 @@
                     <ul class="dropdown-menu" uib-dropdown-menu role="menu">
                       <li
                         ng-class="{active: $ctrl.recipientFilter == 'recent'}"
+                        tabindex="0"
                       >
                         <a ng-click="$ctrl.recipientFilter = 'recent'" translate
                           >Your Recent Gifts</a
@@ -183,6 +184,7 @@
                       <li
                         ng-repeat="year in $ctrl.years"
                         ng-class="{active: $ctrl.recipientFilter == year}"
+                        tabindex="0"
                       >
                         <a ng-click="$ctrl.recipientFilter = year">{{year}}</a>
                       </li>
