@@ -70,6 +70,13 @@
     >
       <span ng-if="$ctrl.addingToCart" translate>Adding to Cart...</span>
       <span ng-if="!$ctrl.addingToCart" translate>Add to Cart</span>
+      <span
+        class="sr-only"
+        aria-live="polite"
+        aria-atomic="true"
+        ng-bind="$ctrl.addingToCart ? ('Adding to Cart...' | translate) : ''"
+      >
+      </span>
     </button>
   </div>
 </div>

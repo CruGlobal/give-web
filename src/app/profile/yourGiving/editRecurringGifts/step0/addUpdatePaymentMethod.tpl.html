@@ -52,6 +52,7 @@
   <div class="col-xs-6" ng-switch="$ctrl.canGoBack">
     <button
       class="btn btn-default"
+      type="button"
       ng-click="$ctrl.dismiss()"
       ng-switch-when="false"
       translate
@@ -60,6 +61,7 @@
     </button>
     <button
       class="btn btn-default"
+      type="button"
       ng-click="$ctrl.previous()"
       ng-switch-when="true"
       translate

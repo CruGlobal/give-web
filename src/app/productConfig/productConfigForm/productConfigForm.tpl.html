@@ -304,11 +304,14 @@
                   ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
                   ng-focus="$ctrl.customInputActive = true;"
                   placeholder="{{'Other' | translate}}"
+                  ng-attr-aria-invalid="{{$ctrl.itemConfigForm.amount | showErrors}}"
+                  ng-attr-aria-errormessage="{{ ($ctrl.itemConfigForm.amount | showErrors) ? 'amountErrors' : undefined }}"
                   required
                 />
               </div>
             </label>
             <div
+              id="amountErrors"
               role="alert"
               ng-messages="$ctrl.itemConfigForm.amount.$error"
               ng-if="($ctrl.itemConfigForm.amount | showErrors)"
@@ -431,7 +434,6 @@
               type="button"
               id="sendMessageButton"
               class="btn btn-link"
-              tabindex="-1"
               ng-click="$ctrl.showRecipientComments = !$ctrl.showRecipientComments"
               translate="SEND_MESSAGE_TO"
               translate-values="{ministry: $ctrl.productData.displayName}"
@@ -444,7 +446,6 @@
               aria-labelledby="sendMessageButton"
               ng-model="$ctrl.itemConfig.RECIPIENT_COMMENTS"
               ng-if="$ctrl.showRecipientComments"
-              tabindex="-1"
               style="display: block"
             ></textarea>
           </li>
@@ -453,7 +454,6 @@
               type="button"
               id="sendHandlingButton"
               class="btn btn-link"
-              tabindex="-1"
               ng-click="$ctrl.showDSComments = !$ctrl.showDSComments"
               translate
             >
@@ -467,7 +467,6 @@
               aria-labelledby="sendHandlingButton"
               ng-model="$ctrl.itemConfig.DONATION_SERVICES_COMMENTS"
               ng-if="$ctrl.showDSComments"
-              tabindex="-1"
               placeholder="{{'MESSAGE_EXAMPLE' | translate}}"
               style="display: block"
             ></textarea>

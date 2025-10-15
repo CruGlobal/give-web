@@ -58,7 +58,14 @@
 
 <div class="modal-footer" ng-if="!$ctrl.loading">
   <div class="col-xs-6">
-    <a class="btn btn-default" ng-click="$ctrl.dismiss()" translate> Cancel </a>
+    <button
+      class="btn btn-default"
+      type="button"
+      ng-click="$ctrl.dismiss()"
+      translate
+    >
+      Cancel
+    </button>
   </div>
   <div class="col-xs-6 text-right">
     <a
@@ -68,14 +75,15 @@
       translate
       >Retry</a
     >
-    <a
+    <button
       class="btn btn-primary"
+      type="button"
       ng-if="!$ctrl.loadingError"
       ng-click="$ctrl.next({ recurringGifts: $ctrl.recurringGifts })"
       ng-disabled="!$ctrl.allPaymentMethodsValid()"
       translate
     >
       Continue
-    </a>
+    </button>
   </div>
 </div>
