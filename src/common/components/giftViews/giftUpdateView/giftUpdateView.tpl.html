@@ -3,7 +3,8 @@
     <div class="col-sm-6">
       <div
         class="form-group"
-        ng-class="{'has-error': ($ctrl.giftForm.amount | showErrors)}">
+        ng-class="{'has-error': ($ctrl.giftForm.amount | showErrors)}"
+      >
         <label>
           <span translate>Amount</span>
           <input
@@ -23,7 +24,8 @@
           id="amountErrors"
           role="alert"
           ng-messages="$ctrl.giftForm.amount.$error"
-          ng-if="($ctrl.giftForm.amount | showErrors)">
+          ng-if="($ctrl.giftForm.amount | showErrors)"
+        >
           <div class="help-block" ng-message="required" translate>
             You must enter an amount
           </div>
@@ -47,7 +49,8 @@
       <div
         class="form-group"
         ng-switch-default
-        ng-class="{'has-error': !$ctrl.gift.paymentMethod}">
+        ng-class="{'has-error': !$ctrl.gift.paymentMethod}"
+      >
         <label>
           <span translate>Payment Method</span>
           <select
@@ -58,10 +61,14 @@
             required
             aria-required="true"
             aria-invalid="{{!$ctrl.gift.paymentMethod ? 'true' : 'false'}}"
-            aria-describedby="paymentMethodError">
-          </select>
+            aria-describedby="paymentMethodError"
+          ></select>
         </label>
-        <div id="paymentMethodError" role="alert" ng-if="!$ctrl.gift.paymentMethod">
+        <div
+          id="paymentMethodError"
+          role="alert"
+          ng-if="!$ctrl.gift.paymentMethod"
+        >
           <div class="help-block" translate>
             You must choose a valid payment method
           </div>
@@ -78,14 +85,16 @@
             <select
               name="frequency"
               class="form-control form-control-subtle"
-              ng-model="$ctrl.gift.frequency">
+              ng-model="$ctrl.gift.frequency"
+            >
               <option value="Monthly" translate>Monthly</option>
               <option value="Quarterly" translate>Quarterly</option>
               <option value="Annual" translate>Annually</option>
               <option
                 value="Semi-Annual"
                 ng-if="$ctrl.gift.parentDonation['rate']['recurrence']['interval'] === 'Semi-Annual'"
-                translate>
+                translate
+              >
                 Semi-Annually
               </option>
             </select>
@@ -100,22 +109,27 @@
               name="transactionDay"
               class="form-control form-control-subtle"
               ng-model="$ctrl.gift.transactionDay"
-              ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays()">
-            </select>
+              ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays()"
+            ></select>
           </label>
         </div>
       </div>
     </div>
 
     <div ng-if="$ctrl.gift.frequency === 'Quarterly'">
-      <p id="quarterlyInstructions">
+      <p id="quarterlyInstructions-{{$ctrl.gift.designationNumber}}">
         <span translate>You have selected </span>
         <strong translate>quarterly </strong>
-        <span translate>as a frequency. Please tell
-        us in which months you would like your quarterly gifts to be made</span>
+        <span translate
+          >as a frequency. Please tell us in which months you would like your
+          quarterly gifts to be made</span
+        >
       </p>
 
-      <fieldset class="form-group" aria-describedby="quarterlyInstructions">
+      <fieldset
+        class="form-group"
+        aria-describedby="quarterlyInstructions-{{$ctrl.gift.designationNumber}}"
+      >
         <legend class="sr-only">Quarterly gift months</legend>
         <label class="radio">
           <input
@@ -151,11 +165,13 @@
     </div>
 
     <div ng-if="$ctrl.gift.frequency === 'Annual'">
-      <p id="annualInstructions">
+      <p id="annualInstructions-{{$ctrl.gift.designationNumber}}">
         <span translate>You have selected </span>
         <strong translate>annually </strong>
-        <span translate>as a frequency. Please tell
-        us in which months you would like your annual gifts to be made.</span>
+        <span translate
+          >as a frequency. Please tell us in which months you would like your
+          annual gifts to be made.</span
+        >
       </p>
 
       <div class="row">
@@ -168,8 +184,8 @@
                 class="form-control form-control-subtle"
                 ng-model="$ctrl.gift.startMonth"
                 ng-options="(idx*1+1).toString() as month for (idx, month) in $ctrl.possibleMonths"
-                aria-describedby="annualInstructions">
-              </select>
+                aria-describedby="annualInstructions-{{$ctrl.gift.designationNumber}}"
+              ></select>
             </label>
           </div>
         </div>
