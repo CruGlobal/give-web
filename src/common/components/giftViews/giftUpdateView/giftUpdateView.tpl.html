@@ -3,8 +3,7 @@
     <div class="col-sm-6">
       <div
         class="form-group"
-        ng-class="{'has-error': ($ctrl.giftForm.amount | showErrors)}"
-      >
+        ng-class="{'has-error': ($ctrl.giftForm.amount | showErrors)}">
         <label for="giftAmount" translate>Amount</label>
         <input
           id="giftAmount"
@@ -13,8 +12,7 @@
           class="form-control form-control-subtle"
           ng-model="$ctrl.gift.amount"
           required
-          aria-required="true"
-          aria-invalid="{{($ctrl.giftForm.amount | showErrors) ? 'true' : 'false'}}"
+          aria-invalid="{{ $ctrl.giftForm.amount | showErrors }}"
           ng-min="1"
           ng-max="10000000"
           ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/"
@@ -24,8 +22,7 @@
           id="amountErrors"
           role="alert"
           ng-messages="$ctrl.giftForm.amount.$error"
-          ng-if="($ctrl.giftForm.amount | showErrors)"
-        >
+          ng-if="($ctrl.giftForm.amount | showErrors)">
           <div class="help-block" ng-message="required" translate>
             You must enter an amount
           </div>
@@ -49,8 +46,7 @@
       <div
         class="form-group"
         ng-switch-default
-        ng-class="{'has-error': !$ctrl.gift.paymentMethod}"
-      >
+        ng-class="{'has-error': !$ctrl.gift.paymentMethod}">
         <label for="paymentMethod" translate>Payment Method</label>
         <select
           id="paymentMethod"
@@ -61,8 +57,8 @@
           required
           aria-required="true"
           aria-invalid="{{!$ctrl.gift.paymentMethod ? 'true' : 'false'}}"
-          aria-describedby="paymentMethodError"
-        ></select>
+          aria-describedby="paymentMethodError">
+        </select>
         <div id="paymentMethodError" role="alert" ng-if="!$ctrl.gift.paymentMethod">
           <div class="help-block" translate>
             You must choose a valid payment method
@@ -80,16 +76,14 @@
             id="giftFrequency"
             name="frequency"
             class="form-control form-control-subtle"
-            ng-model="$ctrl.gift.frequency"
-          >
+            ng-model="$ctrl.gift.frequency">
             <option value="Monthly" translate>Monthly</option>
             <option value="Quarterly" translate>Quarterly</option>
             <option value="Annual" translate>Annually</option>
             <option
               value="Semi-Annual"
               ng-if="$ctrl.gift.parentDonation['rate']['recurrence']['interval'] === 'Semi-Annual'"
-              translate
-            >
+              translate>
               Semi-Annually
             </option>
           </select>
@@ -103,8 +97,8 @@
             name="transactionDay"
             class="form-control form-control-subtle"
             ng-model="$ctrl.gift.transactionDay"
-            ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays()"
-          ></select>
+            ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays()">
+          </select>
         </div>
       </div>
     </div>
@@ -118,10 +112,9 @@
       </p>
 
       <fieldset class="form-group">
-        <legend class="sr-only">Select quarterly gift months</legend>
-        <label class="radio" for="quarterlyMonth1">
+        <legend class="sr-only">Quarterly gift months</legend>
+        <label class="radio">
           <input
-            id="quarterlyMonth1"
             type="radio"
             name="quarterlyStartMonth"
             ng-model="$ctrl.gift.startMonth"
@@ -130,9 +123,8 @@
           {{ $ctrl.quarterlyMonths($ctrl.gift.transactionDay,
           $ctrl.gift.nextDrawDate) }}
         </label>
-        <label class="radio" for="quarterlyMonth2">
+        <label class="radio">
           <input
-            id="quarterlyMonth2"
             type="radio"
             name="quarterlyStartMonth"
             ng-model="$ctrl.gift.startMonth"
@@ -141,9 +133,8 @@
           {{ $ctrl.quarterlyMonths($ctrl.gift.transactionDay,
           $ctrl.gift.nextDrawDate, 1) }}
         </label>
-        <label class="radio" for="quarterlyMonth3">
+        <label class="radio">
           <input
-            id="quarterlyMonth3"
             type="radio"
             name="quarterlyStartMonth"
             ng-model="$ctrl.gift.startMonth"
@@ -166,14 +157,14 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label for="annualStartMonth" class="sr-only" translate>Select annual gift month</label>
+            <label for="annualStartMonth" class="sr-only" translate>Annual gift month</label>
             <select
               id="annualStartMonth"
               name="annualStartMonth"
               class="form-control form-control-subtle"
               ng-model="$ctrl.gift.startMonth"
-              ng-options="(idx*1+1).toString() as month for (idx, month) in $ctrl.possibleMonths"
-            ></select>
+              ng-options="(idx*1+1).toString() as month for (idx, month) in $ctrl.possibleMonths">
+            </select>
           </div>
         </div>
       </div>
