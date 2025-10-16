@@ -4,20 +4,21 @@
       <div
         class="form-group"
         ng-class="{'has-error': ($ctrl.giftForm.amount | showErrors)}">
-        <label for="giftAmount" translate>Amount</label>
-        <input
-          id="giftAmount"
-          type="number"
-          name="amount"
-          class="form-control form-control-subtle"
-          ng-model="$ctrl.gift.amount"
-          required
-          aria-invalid="{{ $ctrl.giftForm.amount | showErrors }}"
-          ng-min="1"
-          ng-max="10000000"
-          ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/"
-          aria-describedby="amountErrors"
-        />
+        <label>
+          <span translate>Amount</span>
+          <input
+            type="number"
+            name="amount"
+            class="form-control form-control-subtle"
+            ng-model="$ctrl.gift.amount"
+            required
+            aria-invalid="{{ $ctrl.giftForm.amount | showErrors }}"
+            ng-min="1"
+            ng-max="10000000"
+            ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/"
+            aria-describedby="amountErrors"
+          />
+        </label>
         <div
           id="amountErrors"
           role="alert"
@@ -47,18 +48,19 @@
         class="form-group"
         ng-switch-default
         ng-class="{'has-error': !$ctrl.gift.paymentMethod}">
-        <label for="paymentMethod" translate>Payment Method</label>
-        <select
-          id="paymentMethod"
-          name="paymentMethod"
-          class="form-control form-control-subtle"
-          ng-model="$ctrl.gift.paymentMethodId"
-          ng-options="paymentMethod.self.uri.split('/').pop() as ((paymentMethod['bank-name'] || paymentMethod['card-type']) + ' ****' + (paymentMethod['display-account-number'] || paymentMethod['last-four-digits'])) for paymentMethod in $ctrl.gift.paymentMethods"
-          required
-          aria-required="true"
-          aria-invalid="{{!$ctrl.gift.paymentMethod ? 'true' : 'false'}}"
-          aria-describedby="paymentMethodError">
-        </select>
+        <label>
+          <span translate>Payment Method</span>
+          <select
+            name="paymentMethod"
+            class="form-control form-control-subtle"
+            ng-model="$ctrl.gift.paymentMethodId"
+            ng-options="paymentMethod.self.uri.split('/').pop() as ((paymentMethod['bank-name'] || paymentMethod['card-type']) + ' ****' + (paymentMethod['display-account-number'] || paymentMethod['last-four-digits'])) for paymentMethod in $ctrl.gift.paymentMethods"
+            required
+            aria-required="true"
+            aria-invalid="{{!$ctrl.gift.paymentMethod ? 'true' : 'false'}}"
+            aria-describedby="paymentMethodError">
+          </select>
+        </label>
         <div id="paymentMethodError" role="alert" ng-if="!$ctrl.gift.paymentMethod">
           <div class="help-block" translate>
             You must choose a valid payment method
@@ -71,34 +73,36 @@
     <div class="row">
       <div class="col-sm-6">
         <div class="form-group">
-          <label for="giftFrequency" translate>Frequency</label>
-          <select
-            id="giftFrequency"
-            name="frequency"
-            class="form-control form-control-subtle"
-            ng-model="$ctrl.gift.frequency">
-            <option value="Monthly" translate>Monthly</option>
-            <option value="Quarterly" translate>Quarterly</option>
-            <option value="Annual" translate>Annually</option>
-            <option
-              value="Semi-Annual"
-              ng-if="$ctrl.gift.parentDonation['rate']['recurrence']['interval'] === 'Semi-Annual'"
-              translate>
-              Semi-Annually
-            </option>
-          </select>
+          <label>
+            <span translate>Frequency</span>
+            <select
+              name="frequency"
+              class="form-control form-control-subtle"
+              ng-model="$ctrl.gift.frequency">
+              <option value="Monthly" translate>Monthly</option>
+              <option value="Quarterly" translate>Quarterly</option>
+              <option value="Annual" translate>Annually</option>
+              <option
+                value="Semi-Annual"
+                ng-if="$ctrl.gift.parentDonation['rate']['recurrence']['interval'] === 'Semi-Annual'"
+                translate>
+                Semi-Annually
+              </option>
+            </select>
+          </label>
         </div>
       </div>
       <div class="col-sm-6">
         <div class="form-group">
-          <label for="transactionDay" translate>Transaction Day</label>
-          <select
-            id="transactionDay"
-            name="transactionDay"
-            class="form-control form-control-subtle"
-            ng-model="$ctrl.gift.transactionDay"
-            ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays()">
-          </select>
+          <label>
+            <span translate>Transaction Day</span>
+            <select
+              name="transactionDay"
+              class="form-control form-control-subtle"
+              ng-model="$ctrl.gift.transactionDay"
+              ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays()">
+            </select>
+          </label>
         </div>
       </div>
     </div>
@@ -157,14 +161,15 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label for="annualStartMonth" class="sr-only" translate>Annual gift month</label>
-            <select
-              id="annualStartMonth"
-              name="annualStartMonth"
-              class="form-control form-control-subtle"
-              ng-model="$ctrl.gift.startMonth"
-              ng-options="(idx*1+1).toString() as month for (idx, month) in $ctrl.possibleMonths">
-            </select>
+            <label for="annualStartMonth" class="sr-only">
+              <span translate>Annual gift month</span>
+              <select
+                name="annualStartMonth"
+                class="form-control form-control-subtle"
+                ng-model="$ctrl.gift.startMonth"
+                ng-options="(idx*1+1).toString() as month for (idx, month) in $ctrl.possibleMonths">
+              </select>
+            </label>
           </div>
         </div>
       </div>
