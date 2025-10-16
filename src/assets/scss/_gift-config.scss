@@ -93,12 +93,54 @@ label.btn-radio {
   }
 }
 
-div[data-toggle="buttons"] label.active{
+fieldset.amount-radios,
+fieldset.gift-frequency-radios {
+  display: flex;
+  flex-flow: row wrap;
+
+  @include mq(768, max) {
+    flex-flow:column;
+  }
+
+  label.btn-radio {
+    display: inline-block;
+    padding-top: 10px;
+    padding-bottom: 9px;
+    margin: 0;
+
+    @include mq(768, max) {
+      display: block;
+    }
+
+    span {
+      margin: 0;
+    }
+  }
+}
+
+
+fieldset.amount-radios {
+  gap: 5px;
+
+  label.btn-radio {
+    min-width: 80px;
+  }
+
+  div[role="alert"], .help-block {
+    width: 100%;
+  }
+}
+
+fieldset.gift-frequency-radios {
+  gap: 10px;
+}
+
+fieldset.button-group label.active{
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
   color: #7aa3cc;
 }
 
-div[data-toggle="buttons"] label {
+fieldset.button-group label {
   margin-bottom: 10px;
   font-weight: 600;
   transition-delay: 100ms;
@@ -113,21 +155,18 @@ div[data-toggle="buttons"] label {
 
 
 @include mq(768, max) {
-  div[data-toggle="buttons"] label {
-    display: block;
-  }
   .give-modal-panel .custom-amount {width: 100% !important;}
   .number {text-align: center;}
 }
 
-div[data-toggle="buttons"] label:hover {
+fieldset.button-group label:hover {
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
   background: #f9f9f9;
   color: $colorText;
 }
 
-div[data-toggle="buttons"] label:active,
-div[data-toggle="buttons"] label.active {
+fieldset.button-group label:active,
+fieldset.button-group label.active {
   border-color: $colorGrayscale-text;
   background-color: $colorGrayscale-text;
   box-shadow: none;
