@@ -1,3 +1,12 @@
+product-config-form {
+  .btn:focus, 
+  .btn:active:focus, 
+  input[type="radio"]:focus + .btn-radio.active {
+    border-color: $colorCru-blueBright; 
+    outline: 0;
+  }
+}
+
 .btn-radio, .custom-amount{
   min-width: 85px;
   padding: 1% 15px 1% 15px;
@@ -18,6 +27,16 @@
   }
 
 }
+
+// Hide radio buttons visually but keep them keyboard accessible
+div[data-toggle="buttons"] input[type="radio"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
 
 label.custom-amount {
   width: auto;
