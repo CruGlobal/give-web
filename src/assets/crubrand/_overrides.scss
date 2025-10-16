@@ -23,13 +23,13 @@ $brand-warning: lighten($colorCru-orange, 10%);
 //** Background color for `<body>`.
 $body-bg:          #f7f7f7;
 //** Global text color on `<body>`.
-$text-color:       $colorGrayscale-text;
+$text-color:       $colorGrayscale-black;
 
 //** Global textual link color.
-$link-color:       $colorCru-blueDeep;
+$link-color:       $colorGrayscale-black;
 
 //** Link hover color set via `darken()` function.
-$link-hover-color: darken($link-color, 10%);
+$link-hover-color: $colorCru-blueDeep;
 
 
 
@@ -38,7 +38,7 @@ $link-hover-color: darken($link-color, 10%);
 //== Typography
 //
 //## Font, line-height, and color for body text, headings, and more.
-$font-family-base:     "Source Sans Pro", "Helvetica Neue", Arial, Helvetica, sans-serif;
+$font-family-base:     "Inter", sans-serif;
 
 $font-size-h1:         48px;
 $font-size-h2:         32px;
@@ -80,6 +80,7 @@ $padding-xs-horizontal:     floor(math.div($line-height-pixel, 4));
 $border-radius-base:      2px;
 $border-radius-large:     3px;
 $border-radius-small:     1px;
+$border-radius-buttons:   0px;
 
 
 
@@ -119,9 +120,9 @@ $btn-default-color:  #6d6e71;
 $btn-default-bg:     rgba(229, 229, 229, 0.35);
 $btn-default-border: rgba(216, 216, 216, 0.35);
 
-$btn-primary-color:  #fff;
+$btn-primary-color:  #000;
 $btn-primary-bg:     $brand-primary;
-$btn-primary-border: darken($btn-primary-bg, 5%);
+$btn-primary-border: $btn-primary-bg;
 
 
 
