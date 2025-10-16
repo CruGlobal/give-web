@@ -93,25 +93,46 @@ label.btn-radio {
   }
 }
 
-fieldset.amount-radios {
+fieldset.amount-radios,
+fieldset.gift-frequency-radios {
   display: flex;
   flex-flow: row wrap;
-  gap: 5px;
+
+  @include mq(768, max) {
+    flex-flow:column;
+  }
 
   label.btn-radio {
     display: inline-block;
-    min-width: 80px;
-    padding: 10px 0 9px;
+    padding-top: 10px;
+    padding-bottom: 9px;
     margin: 0;
 
-    span {
-      margin: 0
+    @include mq(768, max) {
+      display: block;
     }
+
+    span {
+      margin: 0;
+    }
+  }
+}
+
+
+fieldset.amount-radios {
+  gap: 5px;
+
+  label.btn-radio {
+    min-width: 80px;
   }
 
   div[role="alert"], .help-block {
     width: 100%;
   }
+}
+
+fieldset.gift-frequency-radios {
+  gap: 10px;
 }
 
 fieldset.button-group label.active{
@@ -134,9 +155,6 @@ fieldset.button-group label {
 
 
 @include mq(768, max) {
-  fieldset.button-group label {
-    display: block;
-  }
   .give-modal-panel .custom-amount {width: 100% !important;}
   .number {text-align: center;}
 }

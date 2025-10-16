@@ -356,21 +356,33 @@
           {{'GIFT_FREQUENCY'}}
         </h4>
         <div class="panel-body">
-          <div data-toggle="buttons">
-            <label
-              class="btn btn-radio btn-wide"
-              ng-repeat-start="f in $ctrl.productData.frequencies | orderBy: $ctrl.frequencyOrder track by $index"
+          <fieldset
+            class="button-group gift-frequency-radios"
+            aria-label="{{'GIFT_FREQUENCY' | translate}}"
+          >
+            <div
+              ng-repeat="f in $ctrl.productData.frequencies | orderBy: $ctrl.frequencyOrder track by $index"
               ng-if="f.name !== 'SEMIANNUAL'"
-              ng-class="{'active': f.name === $ctrl.productData.frequency}"
-              ng-click="$ctrl.changeFrequency(f)"
             >
-              <span class="giftsum-about giftsum-title" ng-switch="f.name">
-                <span ng-switch-when="NA" translate>{{'SINGLE_GIFT'}}</span>
-                <span ng-switch-default>{{f.display}}</span>
-              </span>
-            </label>
-            <span ng-repeat-end></span>
-          </div>
+              <input
+                type="radio"
+                name="giftFrequency"
+                id="frequency-{{$index}}"
+                ng-click="$ctrl.changeFrequency(f)"
+                ng-checked="f.name === $ctrl.productData.frequency"
+              />
+              <label
+                for="frequency-{{$index}}"
+                class="btn btn-radio btn-wide"
+                ng-class="{'active': f.name === $ctrl.productData.frequency}"
+              >
+                <span class="giftsum-about giftsum-title" ng-switch="f.name">
+                  <span ng-switch-when="NA" translate>{{'SINGLE_GIFT'}}</span>
+                  <span ng-switch-default>{{f.display}}</span>
+                </span>
+              </label>
+            </div>
+          </fieldset>
           <loading
             inline="true"
             ng-if="$ctrl.changingFrequency"
