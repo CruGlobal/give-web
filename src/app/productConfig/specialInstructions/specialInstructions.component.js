@@ -1,5 +1,4 @@
 import angular from 'angular';
-import 'angular-sanitize';
 import template from './specialInstructions.tpl.html';
 
 const componentName = 'specialInstructions';
@@ -11,13 +10,11 @@ class SpecialInstructionsController {
   $onInit() {}
 }
 
-export default angular
-  .module(componentName, ['ngSanitize'])
-  .component(componentName, {
-    controller: SpecialInstructionsController,
-    templateUrl: template,
-    bindings: {
-      productData: '<',
-      itemConfig: '=',
-    },
-  });
+export default angular.module(componentName, []).component(componentName, {
+  controller: SpecialInstructionsController,
+  templateUrl: template,
+  bindings: {
+    productData: '<',
+    itemConfig: '=',
+  },
+});
