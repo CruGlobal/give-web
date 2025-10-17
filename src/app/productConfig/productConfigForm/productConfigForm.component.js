@@ -30,6 +30,8 @@ import { giveGiftParams } from '../giveGiftParams';
 import loading from 'common/components/loading/loading.component';
 import analyticsFactory from 'app/analytics/analytics.factory';
 import brandedAnalyticsFactory from 'app/branded/analytics/branded-analytics.factory';
+import giftPanels from '../giftPanels/giftPanels.component';
+import specialInstructions from '../specialInstructions/specialInstructions.component';
 import template from './productConfigForm.tpl.html';
 
 export const brandedCoverFeeCheckedEvent = 'brandedCoverFeeCheckedEvent';
@@ -73,6 +75,13 @@ class ProductConfigFormController {
     this.amountChanged = false;
 
     this.selectableAmounts = [50, 100, 250, 500, 1000, 5000];
+
+    // Bind methods to maintain 'this' context when called from child components
+    this.changeFrequency = this.changeFrequency.bind(this);
+    this.changeAmount = this.changeAmount.bind(this);
+    this.changeCustomAmount = this.changeCustomAmount.bind(this);
+    this.changeStartDay = this.changeStartDay.bind(this);
+    this.suggestedAmount = this.suggestedAmount.bind(this);
   }
 
   $onInit() {
@@ -524,6 +533,8 @@ export default angular
     loading.name,
     analyticsFactory.name,
     brandedAnalyticsFactory.name,
+    giftPanels.name,
+    specialInstructions.name,
   ])
   .component(componentName, {
     controller: ProductConfigFormController,
