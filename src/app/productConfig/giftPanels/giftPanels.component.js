@@ -50,7 +50,7 @@ export default angular
       suggestedAmount: '&',
       itemConfigForm: '<',
       customAmount: '<',
-      changeCustomAmount: '&',
+      changeCustomAmount: '<',
       selectableAmounts: '<',
     },
   });
