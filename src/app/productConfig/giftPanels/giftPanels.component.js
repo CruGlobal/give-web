@@ -45,7 +45,7 @@ export default angular
       suggestedAmounts: '<',
       changeAmount: '<',
       customInputActive: '<',
-      suggestedAmount: '&',
+      suggestedAmount: '<',
       itemConfigForm: '<',
       customAmount: '<',
       changeCustomAmount: '<',
