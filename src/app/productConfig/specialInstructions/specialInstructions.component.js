@@ -6,10 +6,7 @@ const componentName = 'specialInstructions';
 
 class SpecialInstructionsController {
   /* @ngInject */
-  constructor() {
-    this.showRecipientComments = false;
-    this.showDSComments = false;
-  }
+  constructor() {}
 
   $onInit() {}
 }
