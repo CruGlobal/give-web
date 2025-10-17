@@ -535,63 +535,6 @@
           </div>
         </div>
       </div>
-      <div class="panel panel-default give-modal-panel special-instructions">
-        <h4 class="panel-title border-bottom-small mt" translate>
-          {{'OPTIONAL'}}
-        </h4>
-        <div class="panel-body pt0">
-          <ul class="list-unstyled">
-            <li>
-              <button
-                type="button"
-                id="sendMessageButton"
-                class="btn btn-link"
-                ng-click="$ctrl.showRecipientComments = !$ctrl.showRecipientComments"
-                aria-expanded="{{$ctrl.showRecipientComments}}"
-                aria-controls="recipientComments"
-                translate="SEND_MESSAGE_TO"
-                translate-values="{ministry: $ctrl.productData.displayName}"
-              ></button>
-              <textarea
-                id="recipientComments"
-                class="staff-comments give-modal-comments"
-                name="recipientComments"
-                rows="3"
-                maxlength="250"
-                aria-labelledby="sendMessageButton"
-                ng-model="$ctrl.itemConfig.RECIPIENT_COMMENTS"
-                ng-if="$ctrl.showRecipientComments"
-                style="display: block"
-              ></textarea>
-            </li>
-            <li>
-              <button
-                type="button"
-                id="sendHandlingButton"
-                class="btn btn-link"
-                ng-click="$ctrl.showDSComments = !$ctrl.showDSComments"
-                aria-expanded="{{$ctrl.showDSComments}}"
-                aria-controls="donationServicesComments"
-                translate
-              >
-                {{'SPECIAL_INSTRUCTIONS'}}
-              </button>
-              <textarea
-                id="donationServicesComments"
-                class="cru-comments give-modal-comments"
-                name="donationServicesComments"
-                rows="3"
-                maxlength="250"
-                aria-labelledby="sendHandlingButton"
-                ng-model="$ctrl.itemConfig.DONATION_SERVICES_COMMENTS"
-                ng-if="$ctrl.showDSComments"
-                placeholder="{{'MESSAGE_EXAMPLE' | translate}}"
-                style="display: block"
-              ></textarea>
-            </li>
-          </ul>
-        </div>
-      </div>
       <div class="panel panel-default panel-plain mt suggested-gift-amounts">
         <div
           ng-if="$ctrl.errorChangingFrequency"
@@ -858,6 +801,63 @@
           </div>
           <!-- End of selectableAmounts container -->
         </div>
+      </div>
+    </div>
+    <div class="panel panel-default give-modal-panel special-instructions">
+      <h4 class="panel-title border-bottom-small mt" translate>
+        {{'OPTIONAL'}}
+      </h4>
+      <div class="panel-body pt0">
+        <ul class="list-unstyled">
+          <li>
+            <button
+              type="button"
+              id="sendMessageButton"
+              class="btn btn-link"
+              ng-click="$ctrl.showRecipientComments = !$ctrl.showRecipientComments"
+              aria-expanded="{{$ctrl.showRecipientComments}}"
+              aria-controls="recipientComments"
+              translate="SEND_MESSAGE_TO"
+              translate-values="{ministry: $ctrl.productData.displayName}"
+            ></button>
+            <textarea
+              id="recipientComments"
+              class="staff-comments give-modal-comments"
+              name="recipientComments"
+              rows="3"
+              maxlength="250"
+              aria-labelledby="sendMessageButton"
+              ng-model="$ctrl.itemConfig.RECIPIENT_COMMENTS"
+              ng-if="$ctrl.showRecipientComments"
+              style="display: block"
+            ></textarea>
+          </li>
+          <li>
+            <button
+              type="button"
+              id="sendHandlingButton"
+              class="btn btn-link"
+              ng-click="$ctrl.showDSComments = !$ctrl.showDSComments"
+              aria-expanded="{{$ctrl.showDSComments}}"
+              aria-controls="donationServicesComments"
+              translate
+            >
+              {{'SPECIAL_INSTRUCTIONS'}}
+            </button>
+            <textarea
+              id="donationServicesComments"
+              class="cru-comments give-modal-comments"
+              name="donationServicesComments"
+              rows="3"
+              maxlength="250"
+              aria-labelledby="sendHandlingButton"
+              ng-model="$ctrl.itemConfig.DONATION_SERVICES_COMMENTS"
+              ng-if="$ctrl.showDSComments"
+              placeholder="{{'MESSAGE_EXAMPLE' | translate}}"
+              style="display: block"
+            ></textarea>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
