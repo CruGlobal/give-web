@@ -1,7 +1,6 @@
 import angular from 'angular';
 import 'angular-messages';
 import 'angular-ordinal';
-import 'angular-sanitize';
 import loading from 'common/components/loading/loading.component';
 import showErrors from 'common/filters/showErrors.filter';
 import template from './giftPanels.tpl.html';
@@ -19,7 +18,6 @@ export default angular
   .module(componentName, [
     'ngMessages',
     'ordinal',
-    'ngSanitize',
     loading.name,
     showErrors.name,
   ])
