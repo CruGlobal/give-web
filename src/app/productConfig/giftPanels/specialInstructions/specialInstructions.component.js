@@ -3,12 +3,7 @@ import template from './specialInstructions.tpl.html';
 
 const componentName = 'specialInstructions';
 
-class SpecialInstructionsController {
-  /* @ngInject */
-  constructor() {}
-
-  $onInit() {}
-}
+class SpecialInstructionsController {}
 
 export default angular.module(componentName, []).component(componentName, {
   controller: SpecialInstructionsController,

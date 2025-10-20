@@ -30,8 +30,10 @@ import { giveGiftParams } from '../giveGiftParams';
 import loading from 'common/components/loading/loading.component';
 import analyticsFactory from 'app/analytics/analytics.factory';
 import brandedAnalyticsFactory from 'app/branded/analytics/branded-analytics.factory';
-import giftPanels from '../giftPanels/giftPanels.component';
-import specialInstructions from '../specialInstructions/specialInstructions.component';
+import suggestedGiftAmounts from '../giftPanels/suggestedGiftAmounts/suggestedGiftAmounts.component';
+import giftFrequency from '../giftPanels/giftFrequency/giftFrequency.component';
+import giftDates from '../giftPanels/giftDates/giftDates.component';
+import specialInstructions from '../giftPanels/specialInstructions/specialInstructions.component';
 import template from './productConfigForm.tpl.html';
 
 export const brandedCoverFeeCheckedEvent = 'brandedCoverFeeCheckedEvent';
@@ -533,7 +535,9 @@ export default angular
     loading.name,
     analyticsFactory.name,
     brandedAnalyticsFactory.name,
-    giftPanels.name,
+    suggestedGiftAmounts.name,
+    giftFrequency.name,
+    giftDates.name,
     specialInstructions.name,
   ])
   .component(componentName, {

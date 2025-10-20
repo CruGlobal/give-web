@@ -77,38 +77,93 @@
   </div>
 
   <div ng-if="!$ctrl.loading && !$ctrl.errorLoading && !$ctrl.showGivingLinks">
-    <gift-panels
-      use-v3="$ctrl.useV3"
-      product-data="$ctrl.productData"
-      frequency-order="$ctrl.frequencyOrder"
-      change-frequency="$ctrl.changeFrequency"
-      changing-frequency="$ctrl.changingFrequency"
-      item-config="$ctrl.itemConfig"
-      possible-transaction-months="$ctrl.possibleTransactionMonths"
-      next-draw-date="$ctrl.nextDrawDate"
-      change-start-day="$ctrl.changeStartDay"
-      possible-transaction-days="$ctrl.possibleTransactionDays"
-      start-month="$ctrl.startMonth"
-      error-changing-frequency="$ctrl.errorChangingFrequency"
-      error-saving-generic="$ctrl.errorSavingGeneric"
-      amount-format-error="$ctrl.amountFormatError"
-      error-already-in-cart="$ctrl.errorAlreadyInCart"
-      error-forced-user-to-logout="$ctrl.errorForcedUserToLogout"
-      use-suggested-amounts="$ctrl.useSuggestedAmounts"
-      suggested-amounts="$ctrl.suggestedAmounts"
-      change-amount="$ctrl.changeAmount"
-      custom-input-active="$ctrl.customInputActive"
-      suggested-amount="$ctrl.suggestedAmount"
-      custom-amount="$ctrl.customAmount"
-      change-custom-amount="$ctrl.changeCustomAmount"
-      selectable-amounts="$ctrl.selectableAmounts"
-      item-config-form="$ctrl.itemConfigForm"
-    ></gift-panels>
+    <!-- V3 order: frequency → dates → amounts -->
+    <div ng-if="$ctrl.useV3">
+      <gift-frequency
+        product-data="$ctrl.productData"
+        frequency-order="$ctrl.frequencyOrder"
+        change-frequency="$ctrl.changeFrequency"
+        changing-frequency="$ctrl.changingFrequency"
+      ></gift-frequency>
 
-    <special-instructions
-      product-data="$ctrl.productData"
-      item-config="$ctrl.itemConfig"
-    ></special-instructions>
+      <gift-dates
+        product-data="$ctrl.productData"
+        item-config="$ctrl.itemConfig"
+        possible-transaction-months="$ctrl.possibleTransactionMonths"
+        next-draw-date="$ctrl.nextDrawDate"
+        change-start-day="$ctrl.changeStartDay"
+        possible-transaction-days="$ctrl.possibleTransactionDays"
+        start-month="$ctrl.startMonth"
+      ></gift-dates>
+
+      <special-instructions
+        product-data="$ctrl.productData"
+        item-config="$ctrl.itemConfig"
+      ></special-instructions>
+
+      <suggested-gift-amounts
+        use-v3="$ctrl.useV3"
+        error-changing-frequency="$ctrl.errorChangingFrequency"
+        error-saving-generic="$ctrl.errorSavingGeneric"
+        amount-format-error="$ctrl.amountFormatError"
+        error-already-in-cart="$ctrl.errorAlreadyInCart"
+        error-forced-user-to-logout="$ctrl.errorForcedUserToLogout"
+        use-suggested-amounts="$ctrl.useSuggestedAmounts"
+        suggested-amounts="$ctrl.suggestedAmounts"
+        change-amount="$ctrl.changeAmount"
+        custom-input-active="$ctrl.customInputActive"
+        item-config="$ctrl.itemConfig"
+        suggested-amount="$ctrl.suggestedAmount"
+        item-config-form="$ctrl.itemConfigForm"
+        custom-amount="$ctrl.customAmount"
+        change-custom-amount="$ctrl.changeCustomAmount"
+        selectable-amounts="$ctrl.selectableAmounts"
+      ></suggested-gift-amounts>
+    </div>
+
+    <!-- Non-V3 order: amounts → frequency → dates -->
+    <div ng-if="!$ctrl.useV3">
+      <suggested-gift-amounts
+        use-v3="$ctrl.useV3"
+        error-changing-frequency="$ctrl.errorChangingFrequency"
+        error-saving-generic="$ctrl.errorSavingGeneric"
+        amount-format-error="$ctrl.amountFormatError"
+        error-already-in-cart="$ctrl.errorAlreadyInCart"
+        error-forced-user-to-logout="$ctrl.errorForcedUserToLogout"
+        use-suggested-amounts="$ctrl.useSuggestedAmounts"
+        suggested-amounts="$ctrl.suggestedAmounts"
+        change-amount="$ctrl.changeAmount"
+        custom-input-active="$ctrl.customInputActive"
+        item-config="$ctrl.itemConfig"
+        suggested-amount="$ctrl.suggestedAmount"
+        item-config-form="$ctrl.itemConfigForm"
+        custom-amount="$ctrl.customAmount"
+        change-custom-amount="$ctrl.changeCustomAmount"
+        selectable-amounts="$ctrl.selectableAmounts"
+      ></suggested-gift-amounts>
+
+      <gift-frequency
+        product-data="$ctrl.productData"
+        frequency-order="$ctrl.frequencyOrder"
+        change-frequency="$ctrl.changeFrequency"
+        changing-frequency="$ctrl.changingFrequency"
+      ></gift-frequency>
+
+      <gift-dates
+        product-data="$ctrl.productData"
+        item-config="$ctrl.itemConfig"
+        possible-transaction-months="$ctrl.possibleTransactionMonths"
+        next-draw-date="$ctrl.nextDrawDate"
+        change-start-day="$ctrl.changeStartDay"
+        possible-transaction-days="$ctrl.possibleTransactionDays"
+        start-month="$ctrl.startMonth"
+      ></gift-dates>
+
+      <special-instructions
+        product-data="$ctrl.productData"
+        item-config="$ctrl.itemConfig"
+      ></special-instructions>
+    </div>
   </div>
 </form>
 
