@@ -5,7 +5,12 @@
 <div
   ng-class="{'col-xs-12 col-sm-9': !$ctrl.selectable, 'col-xs-7 col-sm-6': $ctrl.selectable}"
 >
-  <h4 class="recipient-name">{{$ctrl.gift.designationName}}</h4>
+  <h4
+    class="recipient-name"
+    id="recipient-name-{{$ctrl.gift.designationNumber}}"
+  >
+    {{$ctrl.gift.designationName}}
+  </h4>
   <span class="modal-meta">#{{$ctrl.gift.designationNumber}}</span>
   <ng-transclude />
 </div>
@@ -23,6 +28,7 @@
         name="selectedGift"
         ng-model="$ctrl.gift._selectedGift"
         ng-change="$ctrl.onSelected({gift: $ctrl.gift, selected: $ctrl.gift._selectedGift})"
+        aria-describedby="recipient-name-{{$ctrl.gift.designationNumber}}"
       />
     </label>
     <label ng-switch-when="radio"
@@ -33,6 +39,7 @@
         ng-model="$ctrl.gift._selectedGift"
         ng-value="true"
         ng-change="$ctrl.onSelected({gift: $ctrl.gift, selected: true})"
+        aria-describedby="recipient-name-{{$ctrl.gift.designationNumber}}"
       />
     </label>
   </div>
