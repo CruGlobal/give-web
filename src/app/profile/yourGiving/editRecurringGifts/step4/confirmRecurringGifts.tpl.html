@@ -94,16 +94,31 @@
 
 <div class="modal-footer" ng-if="!$ctrl.loading">
   <div class="col-xs-6">
-    <a class="btn btn-default" ng-click="$ctrl.previous()" translate> Back </a>
+    <button
+      class="btn btn-default"
+      type="button"
+      ng-click="$ctrl.previous()"
+      translate
+    >
+      Back
+    </button>
   </div>
   <div class="col-xs-6 text-right">
     <button
       class="btn btn-primary"
+      type="button"
       ng-click="$ctrl.saveChanges()"
       ng-disabled="$ctrl.saving || !$ctrl.hasChanges"
     >
       <span ng-if="!$ctrl.saving" translate>Confirm Changes</span>
       <span ng-if="$ctrl.saving" translate>Saving...</span>
+      <span
+        class="sr-only"
+        aria-live="polite"
+        aria-atomic="true"
+        ng-bind="$ctrl.saving ? ('Saving...' | translate) : ''"
+      >
+      </span>
     </button>
   </div>
 </div>
