@@ -33,6 +33,7 @@
 
   <h4 class="panel-title border-bottom-small" translate>{{'GIFT_AMOUNT'}}</h4>
   <div class="panel-body pt0">
+    <!-- V3  -->
     <div ng-if="$ctrl.useSuggestedAmounts && $ctrl.useV3">
       <fieldset
         class="button-group"
@@ -111,6 +112,8 @@
         </div>
       </fieldset>
     </div>
+
+    <!-- Not V3  -->
     <div ng-if="$ctrl.useSuggestedAmounts && !$ctrl.useV3">
       <div
         class="radio radio-custom-amount"
@@ -180,6 +183,7 @@
         </div>
       </div>
     </div>
+
     <div
       data-toggle="buttons"
       ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}"
