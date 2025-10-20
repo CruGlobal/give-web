@@ -17,7 +17,7 @@
             ng-min="1"
             ng-max="10000000"
             ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/"
-            aria-describedby="amountErrors"
+            aria-describedby="recipient-name-{{$ctrl.gift.designationNumber}} amountErrors"
           />
         </label>
         <div
@@ -61,7 +61,7 @@
             required
             aria-required="true"
             aria-invalid="{{!$ctrl.gift.paymentMethod ? 'true' : 'false'}}"
-            aria-describedby="paymentMethodError"
+            aria-describedby="recipient-name-{{$ctrl.gift.designationNumber}} paymentMethodError"
           ></select>
         </label>
         <div
@@ -86,6 +86,7 @@
               name="frequency"
               class="form-control form-control-subtle"
               ng-model="$ctrl.gift.frequency"
+              aria-describedby="recipient-name-{{$ctrl.gift.designationNumber}}"
             >
               <option value="Monthly" translate>Monthly</option>
               <option value="Quarterly" translate>Quarterly</option>
@@ -110,6 +111,7 @@
               class="form-control form-control-subtle"
               ng-model="$ctrl.gift.transactionDay"
               ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays()"
+              aria-describedby="recipient-name-{{$ctrl.gift.designationNumber}}"
             ></select>
           </label>
         </div>
@@ -137,6 +139,7 @@
             name="quarterlyStartMonth"
             ng-model="$ctrl.gift.startMonth"
             ng-value="$ctrl.startDate($ctrl.gift.transactionDay, $ctrl.gift.nextDrawDate).format('M')"
+            aria-describedby="recipient-name-{{$ctrl.gift.designationNumber}} quarterlyInstructions-{{$ctrl.gift.designationNumber}}"
           />
           {{ $ctrl.quarterlyMonths($ctrl.gift.transactionDay,
           $ctrl.gift.nextDrawDate) }}
@@ -147,6 +150,7 @@
             name="quarterlyStartMonth"
             ng-model="$ctrl.gift.startMonth"
             ng-value="$ctrl.startDate($ctrl.gift.transactionDay, $ctrl.gift.nextDrawDate, 1).format('M')"
+            aria-describedby="recipient-name-{{$ctrl.gift.designationNumber}} quarterlyInstructions-{{$ctrl.gift.designationNumber}}"
           />
           {{ $ctrl.quarterlyMonths($ctrl.gift.transactionDay,
           $ctrl.gift.nextDrawDate, 1) }}
@@ -157,6 +161,7 @@
             name="quarterlyStartMonth"
             ng-model="$ctrl.gift.startMonth"
             ng-value="$ctrl.startDate($ctrl.gift.transactionDay, $ctrl.gift.nextDrawDate, 2).format('M')"
+            aria-describedby="recipient-name-{{$ctrl.gift.designationNumber}} quarterlyInstructions-{{$ctrl.gift.designationNumber}}"
           />
           {{ $ctrl.quarterlyMonths($ctrl.gift.transactionDay,
           $ctrl.gift.nextDrawDate, 2) }}
