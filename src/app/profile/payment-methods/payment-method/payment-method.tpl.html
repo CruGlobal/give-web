@@ -65,6 +65,7 @@
                 type="button"
                 class="btn btn-default btn-block"
                 ng-click="$ctrl.editPaymentMethod()"
+                aria-describedby="payment-method-{{$ctrl.model.self.uri.split('/').pop()}}"
               >
                 Edit Payment Method
               </button>
@@ -74,6 +75,7 @@
                 type="button"
                 class="btn btn-default btn-block"
                 ng-click="$ctrl.deletePaymentMethod()"
+                aria-describedby="payment-method-{{$ctrl.model.self.uri.split('/').pop()}}"
               >
                 Delete Payment Method
               </button>
