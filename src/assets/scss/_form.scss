@@ -49,7 +49,7 @@ label:not(:has(input[type="checkbox"])) {
   label > span::after, label > translate::after {
     display: inline-block;
     margin-left: 6px;
-    content: "*";
+    content: "*" / "";
     font-family: fontawesome, "Font Awesome 5 Pro", sans-serif;
     font-size: 115%;
     line-height: 0;

@@ -7,36 +7,19 @@
       <div class="panel-body loading-overlay-parent">
         <div class="row">
           <div class="col-md-12">
-            <h3>Receipts</h3>
+            <h3 translate>Receipts</h3>
 
             <form class="form-inline mt">
               <div class="form-group">
-                <span class="pr-">View My Receipts:</span>
-              </div>
-              <div class="input-group">
-                <div class="btn-group" uib-dropdown>
-                  <button
-                    ng-click="$ctrl.toggle = !$ctrl.toggle"
-                    class="btn btn-default dropdown-toggle"
-                    uib-dropdown-toggle
-                  >
-                    <span class="hidden-xs"
-                      >{{$ctrl.currentYear}} <span class="caret"></span
-                    ></span>
-                    <span class="visible-xs"
-                      ><span class="fa fa-filter"></span
-                    ></span>
-                  </button>
-                  <ul
-                    ng-click="$ctrl.toggle = false"
-                    class="dropdown-menu"
-                    uib-dropdown-menu
-                  >
-                    <li ng-repeat="year in $ctrl.getListYears()">
-                      <a ng-click="$ctrl.setYear(year)" href="">{{year}}</a>
-                    </li>
-                  </ul>
-                </div>
+                <label>
+                  <span class="pr-" translate>View My Receipts:</span>
+                  <select
+                    class="form-control"
+                    ng-model="$ctrl.currentYear"
+                    ng-change="$ctrl.setYear($ctrl.currentYear)"
+                    ng-options="year for year in $ctrl.getListYears()"
+                  ></select>
+                </label>
               </div>
             </form>
           </div>
@@ -48,7 +31,10 @@
             class="col-md-12"
           >
             <div class="table-responsive">
-              <table class="table table-striped table-striped-dark borderless">
+              <table
+                class="table table-striped table-striped-dark borderless"
+                aria-label="Donation receipts"
+              >
                 <thead>
                   <tr>
                     <th scope="col">Receipt Date</th>
