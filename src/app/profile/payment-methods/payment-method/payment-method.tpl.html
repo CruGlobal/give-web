@@ -17,13 +17,24 @@
           ></payment-method-display>
         </div>
         <div class="col-sm-3 text-right payment-details-link">
-          <button class="btn trigger">Details</button>
+          <button
+            class="btn trigger"
+            aria-controls="payment-method-details-{{$ctrl.model.self.uri.split('/').pop()}}"
+            aria-expanded="{{!$ctrl.isCollapsed}}"
+          >
+            Details
+          </button>
         </div>
       </div>
     </div>
   </div>
 
-  <div uib-collapse="$ctrl.isCollapsed" role="tabpanel" class="panel-collapse">
+  <div
+    uib-collapse="$ctrl.isCollapsed"
+    role="tabpanel"
+    class="panel-collapse"
+    id="payment-method-details-{{$ctrl.model.self.uri.split('/').pop()}}"
+  >
     <div class="panel-body">
       <div class="container-fluid">
         <div class="row panel--payment-info">
