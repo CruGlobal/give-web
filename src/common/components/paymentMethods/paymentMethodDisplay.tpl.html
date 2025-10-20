@@ -28,8 +28,11 @@
         ng-switch-when="Diners Club"
       />
     </span>
-    <strong>{{$ctrl.paymentMethod['card-type']}}</strong>
-    <span>ends in ****{{$ctrl.paymentMethod['last-four-digits']}}</span>
+    <strong
+      id="payment-method-{{$ctrl.paymentMethod.self.uri.split('/').pop()}}"
+      >{{$ctrl.paymentMethod['card-type']}} ends in
+      ****{{$ctrl.paymentMethod['last-four-digits']}}</strong
+    >
     <small class="number" ng-class="{'text-danger': $ctrl.expired}">
       <span class="hidden-xs" ng-if="!$ctrl.expired" translate>EXPIRES</span>
       <span class="hidden-xs" ng-if="$ctrl.expired" translate>EXPIRED</span>
@@ -44,10 +47,12 @@
       class="payment-icon hidden-xs"
       ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/bank-curved-128px.png"
     />
-    <strong>
+    <strong
+      id="payment-method-{{$ctrl.paymentMethod.self.uri.split('/').pop()}}"
+    >
       {{$ctrl.paymentMethod['bank-name']}} -
-      {{$ctrl.paymentMethod['account-type']}}
+      {{$ctrl.paymentMethod['account-type']}} ends in
+      ****{{$ctrl.paymentMethod['display-account-number']}}
     </strong>
-    <span>ends in ****{{$ctrl.paymentMethod['display-account-number']}}</span>
   </span>
 </span>
