@@ -1,4 +1,7 @@
-<div class="panel panel-default panel-with-gray-background">
+<div
+  class="panel panel-default panel-with-gray-background"
+  ng-init="paymentMethodId = $ctrl.model.self.uri.split('/').pop()"
+>
   <div
     ng-click="$ctrl.isCollapsed = !$ctrl.isCollapsed"
     class="panel-heading"
@@ -19,7 +22,7 @@
         <div class="col-sm-3 text-right payment-details-link">
           <button
             class="btn trigger"
-            aria-controls="payment-method-details-{{$ctrl.model.self.uri.split('/').pop()}}"
+            aria-controls="payment-method-details-{{paymentMethodId}}"
             aria-expanded="{{!$ctrl.isCollapsed}}"
           >
             Details
@@ -33,7 +36,7 @@
     uib-collapse="$ctrl.isCollapsed"
     role="tabpanel"
     class="panel-collapse"
-    id="payment-method-details-{{$ctrl.model.self.uri.split('/').pop()}}"
+    id="payment-method-details-{{paymentMethodId}}"
   >
     <div class="panel-body">
       <div class="container-fluid">
@@ -76,7 +79,7 @@
                 type="button"
                 class="btn btn-default btn-block"
                 ng-click="$ctrl.editPaymentMethod()"
-                aria-describedby="payment-method-{{$ctrl.model.self.uri.split('/').pop()}}"
+                aria-describedby="payment-method-{{paymentMethodId}}"
               >
                 Edit Payment Method
               </button>
@@ -86,7 +89,7 @@
                 type="button"
                 class="btn btn-default btn-block"
                 ng-click="$ctrl.deletePaymentMethod()"
-                aria-describedby="payment-method-{{$ctrl.model.self.uri.split('/').pop()}}"
+                aria-describedby="payment-method-{{paymentMethodId}}"
               >
                 Delete Payment Method
               </button>
