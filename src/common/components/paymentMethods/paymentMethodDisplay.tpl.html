@@ -1,4 +1,7 @@
-<span class="account-management">
+<span
+  class="account-management"
+  ng-init="paymentMethodId = $ctrl.paymentMethod.self.uri.split('/').pop()"
+>
   <span ng-if="$ctrl.paymentMethod['card-type']">
     <span ng-switch="$ctrl.paymentMethod['card-type']">
       &nbsp;
@@ -28,11 +31,10 @@
         ng-switch-when="Diners Club"
       />
     </span>
-    <strong
-      id="payment-method-{{$ctrl.paymentMethod.self.uri.split('/').pop()}}"
-      >{{$ctrl.paymentMethod['card-type']}} ends in
-      ****{{$ctrl.paymentMethod['last-four-digits']}}</strong
-    >
+    <span id="payment-method-{{paymentMethodId}}">
+      <strong>{{$ctrl.paymentMethod['card-type']}}</strong>
+      <span> ends in ****{{$ctrl.paymentMethod['last-four-digits']}}</span>
+    </span>
     <small class="number" ng-class="{'text-danger': $ctrl.expired}">
       <span class="hidden-xs" ng-if="!$ctrl.expired" translate>EXPIRES</span>
       <span class="hidden-xs" ng-if="$ctrl.expired" translate>EXPIRED</span>
@@ -47,12 +49,14 @@
       class="payment-icon hidden-xs"
       ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/bank-curved-128px.png"
     />
-    <strong
-      id="payment-method-{{$ctrl.paymentMethod.self.uri.split('/').pop()}}"
-    >
-      {{$ctrl.paymentMethod['bank-name']}} -
-      {{$ctrl.paymentMethod['account-type']}} ends in
-      ****{{$ctrl.paymentMethod['display-account-number']}}
-    </strong>
+    <span id="payment-method-{{paymentMethodId}}">
+      <strong
+        >{{$ctrl.paymentMethod['bank-name']}} -
+        {{$ctrl.paymentMethod['account-type']}}</strong
+      >
+      <span>
+        ends in ****{{$ctrl.paymentMethod['display-account-number']}}</span
+      >
+    </span>
   </span>
 </span>

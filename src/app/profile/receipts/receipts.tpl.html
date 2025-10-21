@@ -12,13 +12,14 @@
             <form class="form-inline mt">
               <div class="form-group">
                 <label>
-                  <span class="pr-" translate>View My Receipts:</span>
-                  <select
-                    class="form-control"
-                    ng-model="$ctrl.currentYear"
-                    ng-change="$ctrl.setYear($ctrl.currentYear)"
-                    ng-options="year for year in $ctrl.getListYears()"
-                  ></select>
+                  <div>
+                    <span class="pr-" translate>View My Receipts:</span>
+                    <select
+                      class="form-control"
+                      ng-model="$ctrl.currentYear"
+                      ng-options="year for year in $ctrl.getListYears()"
+                    ></select>
+                  </div>
                 </label>
               </div>
             </form>
