@@ -20,6 +20,12 @@
     text-decoration: underline;
   }
 
+  h2 {
+    background: $colorCru-gold;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
   .search-term {
     display: inline-block;
     font-weight: 600;
@@ -112,6 +118,10 @@
       transition: 0.25s all;
     }
   }
+}
+
+.search-results-header {
+  text-decoration: underline;
 }
 
 .search-section-head {
