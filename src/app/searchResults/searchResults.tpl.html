@@ -266,11 +266,13 @@
                     <a
                       ng-href="{{$ctrl.buildVanity(r.path)}}"
                       class="is-row-link"
+                      aria-labelledby="result-{{$index}}"
                     >
                       <div class="is-row-thumb">
                         <img
                           desig-src="{{r.designationNumber}}"
                           campaign-page="{{r.campaignPage}}"
+                          alt="{{r.name}}"
                         />
                       </div>
                       <div class="is-row-meta">
