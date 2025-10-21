@@ -124,7 +124,7 @@ describe('ReceiptsComponent', function () {
   describe('onYearChange()', () => {
     it('sets year to display and resets the max shown items value', () => {
       jest.spyOn($ctrl, 'getReceipts').mockImplementation(() => {});
-      $ctrl.onYearChange('2014');
+      $ctrl.onYearChange();
 
       expect($ctrl.maxShow).toBe(25);
       expect($ctrl.getReceipts).toHaveBeenCalled();
