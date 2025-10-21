@@ -265,21 +265,21 @@
                   <div class="is-row" ng-repeat-end ng-repeat="r in hits">
                     <a
                       ng-href="{{$ctrl.buildVanity(r.path)}}"
-                      class="is-row-thumb"
+                      class="is-row-link"
                     >
-                      <img
-                        desig-src="{{r.designationNumber}}"
-                        campaign-page="{{r.campaignPage}}"
-                      />
-                    </a>
-                    <div class="is-row-meta">
-                      <a ng-href="{{$ctrl.buildVanity(r.path)}}">
+                      <div class="is-row-thumb">
+                        <img
+                          desig-src="{{r.designationNumber}}"
+                          campaign-page="{{r.campaignPage}}"
+                        />
+                      </div>
+                      <div class="is-row-meta">
                         <span id="result-{{$index}}" class="is-row-title"
                           >{{r.name}}</span
                         >
                         <span class="is-row-num">#{{r.designationNumber}}</span>
-                      </a>
-                    </div>
+                      </div>
+                    </a>
                     <div class="is-row-actions hidden-xs">
                       <product-config
                         product-code="{{r.designationNumber}}"
