@@ -17,7 +17,7 @@
             ng-min="1"
             ng-max="10000000"
             ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/"
-            aria-describedby="recipient-name-{{$ctrl.gift.designationNumber}} amountErrors"
+            aria-describedby="recipient-name-{{$ctrl.gift.designationNumber}} amount-errors-{{$ctrl.gift.designationNumber}"
           />
         </label>
         <div
@@ -61,11 +61,11 @@
             required
             aria-required="true"
             aria-invalid="{{!$ctrl.gift.paymentMethod ? 'true' : 'false'}}"
-            aria-describedby="recipient-name-{{$ctrl.gift.designationNumber}} paymentMethodError"
+            aria-describedby="recipient-name-{{$ctrl.gift.designationNumber}} paymentMethodError-{{$ctrl.gift.designationNumber}}"
           ></select>
         </label>
         <div
-          id="paymentMethodError"
+          id="paymentMethodError-{{$ctrl.gift.designationNumber}}"
           role="alert"
           ng-if="!$ctrl.gift.paymentMethod"
         >
