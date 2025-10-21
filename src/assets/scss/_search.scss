@@ -323,6 +323,23 @@
     margin-bottom: 0;
   }
 
+  .is-row-link {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    column-gap: $gutter * 0.5;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+
+      .is-row-title {
+        text-decoration: underline;
+      }
+    }
+  }
+
   .is-row-thumb {
     min-width: 90px;
 
