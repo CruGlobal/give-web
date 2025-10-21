@@ -19,7 +19,7 @@
         <div class="col-sm-3 text-right payment-details-link">
           <button
             class="btn trigger"
-            aria-controls="payment-method-details-{{$ctrl.model.self.uri.split('/').pop()}}"
+            aria-controls="payment-method-details-{{$ctrl.paymentMethodId}}"
             aria-expanded="{{!$ctrl.isCollapsed}}"
           >
             Details
@@ -33,7 +33,7 @@
     uib-collapse="$ctrl.isCollapsed"
     role="tabpanel"
     class="panel-collapse"
-    id="payment-method-details-{{$ctrl.model.self.uri.split('/').pop()}}"
+    id="payment-method-details-{{$ctrl.paymentMethodId}}"
   >
     <div class="panel-body">
       <div class="container-fluid">
@@ -76,7 +76,7 @@
                 type="button"
                 class="btn btn-default btn-block"
                 ng-click="$ctrl.editPaymentMethod()"
-                aria-describedby="payment-method-{{$ctrl.model.self.uri.split('/').pop()}}"
+                aria-describedby="payment-method-{{$ctrl.paymentMethodId}}"
               >
                 Edit Payment Method
               </button>
@@ -86,7 +86,7 @@
                 type="button"
                 class="btn btn-default btn-block"
                 ng-click="$ctrl.deletePaymentMethod()"
-                aria-describedby="payment-method-{{$ctrl.model.self.uri.split('/').pop()}}"
+                aria-describedby="payment-method-{{$ctrl.paymentMethodId}}"
               >
                 Delete Payment Method
               </button>

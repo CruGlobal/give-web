@@ -38,6 +38,12 @@ class PaymentMethodController {
     this.validPaymentMethod = validPaymentMethod;
   }
 
+  $onInit() {
+    if (this.paymentMethod?.self?.uri) {
+      this.paymentMethodId = this.model.self.uri.split('/').pop();
+    }
+  }
+
   getExpiration() {
     return `${this.model['expiry-month']}/${this.model['expiry-year']}`;
   }
