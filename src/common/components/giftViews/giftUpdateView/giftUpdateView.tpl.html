@@ -17,11 +17,11 @@
             ng-min="1"
             ng-max="10000000"
             ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/"
-            aria-describedby="recipient-name-{{$ctrl.gift.designationNumber}} amount-errors-{{$ctrl.gift.designationNumber}"
+            aria-describedby="recipient-name-{{$ctrl.gift.designationNumber}} amountErrors-{{$ctrl.gift.designationNumber}}"
           />
         </label>
         <div
-          id="amountErrors"
+          id="amountErrors-{{$ctrl.gift.designationNumber}}"
           role="alert"
           ng-messages="$ctrl.giftForm.amount.$error"
           ng-if="($ctrl.giftForm.amount | showErrors)"
