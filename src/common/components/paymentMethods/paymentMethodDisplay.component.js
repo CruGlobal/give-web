@@ -10,6 +10,10 @@ class PaymentMethodDisplayController {
   constructor(envService) {
     this.imgDomain = envService.read('imgDomain');
   }
+
+  $onInit() {
+    this.paymentMethodId = this.paymentMethod.self.uri.split('/').pop();
+  }
 }
 
 export default angular

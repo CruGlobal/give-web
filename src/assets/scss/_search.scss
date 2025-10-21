@@ -20,12 +20,6 @@
     text-decoration: underline;
   }
 
-  h2 {
-    background: $colorCru-gold;
-    font-size: 20px;
-    font-weight: 600;
-  }
-
   .search-term {
     display: inline-block;
     font-weight: 600;
@@ -118,10 +112,6 @@
       transition: 0.25s all;
     }
   }
-}
-
-.search-results-header {
-  text-decoration: underline;
 }
 
 .search-section-head {
@@ -251,10 +241,11 @@
     padding-right: 20px;
   }
 
-  h4 {
+  h2 {
     padding-bottom: $gutter * 0.5;
     border-bottom: 2px solid $colorGrayscale-rock;
     margin-bottom: $gutter * 0.5;
+    text-decoration: underline;
   }
 }
 
