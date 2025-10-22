@@ -58,7 +58,6 @@ describe('product config form component', function () {
     expect($ctrl.$log).toBeDefined();
     expect($ctrl.designationsService).toBeDefined();
     expect($ctrl.cartService).toBeDefined();
-    expect($ctrl.possibleTransactionDays).toBeDefined();
     expect($ctrl.startDate).toBeDefined();
   });
 
@@ -437,29 +436,6 @@ describe('product config form component', function () {
       expect($ctrl.itemConfigForm.amount.$validators.pattern('1.214')).toBe(
         true,
       );
-    });
-  });
-
-  describe('frequencyOrder()', () => {
-    it('orders frequency by name', () => {
-      expect($ctrl.frequencyOrder({ name: 'NA' })).toEqual(0);
-      expect($ctrl.frequencyOrder({ name: 'MON' })).toEqual(1);
-    });
-
-    it('changes frequency order when quarterly is shown', () => {
-      $ctrl.hideQuarterly = false;
-      expect($ctrl.frequencyOrder({ name: 'QUARTERLY' })).toEqual(2);
-    });
-
-    it('changes frequency order when quarterly is hidden', () => {
-      $ctrl.hideQuarterly = true;
-      expect($ctrl.frequencyOrder({ name: 'NA' })).toEqual(0);
-    });
-
-    it('should change frequency order when annual is shown and quarterly is hidden', () => {
-      $ctrl.hideAnnual = true;
-      $ctrl.hideQuarterly = false;
-      expect($ctrl.frequencyOrder({ name: 'ANNUAL' })).toEqual(3);
     });
   });
 
@@ -1011,16 +987,6 @@ describe('product config form component', function () {
       };
 
       expect($ctrl.displayId()).toEqual('#0123456 - Title');
-    });
-  });
-
-  describe('suggestedAmount( amount )', () => {
-    it('should format suggestedAmounts correctly.', () => {
-      expect($ctrl.suggestedAmount(123.45)).toEqual('$123.45');
-      expect($ctrl.suggestedAmount(12345.67)).toEqual('$12,345.67');
-      expect($ctrl.suggestedAmount(123.4)).toEqual('$123.40');
-      expect($ctrl.suggestedAmount(123)).toEqual('$123');
-      expect($ctrl.suggestedAmount(1234)).toEqual('$1,234');
     });
   });
 
