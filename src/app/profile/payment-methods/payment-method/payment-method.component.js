@@ -39,7 +39,9 @@ class PaymentMethodController {
   }
 
   $onInit() {
-    this.paymentMethodId = this.model.self.uri.split('/').pop();
+    if (this.paymentMethod?.self?.uri) {
+      this.paymentMethodId = this.model.self.uri.split('/').pop();
+    }
   }
 
   getExpiration() {
