@@ -74,7 +74,6 @@ class ProductConfigFormController {
     this.changeAmount = this.changeAmount.bind(this);
     this.changeCustomAmount = this.changeCustomAmount.bind(this);
     this.changeStartDay = this.changeStartDay.bind(this);
-    this.suggestedAmount = this.suggestedAmount.bind(this);
   }
 
   $onInit() {
@@ -484,14 +483,6 @@ class ProductConfigFormController {
       value += ` - ${this.productData.displayName}`;
     }
     return value;
-  }
-
-  suggestedAmount(amount) {
-    return this.$filter('currency')(
-      amount,
-      '$',
-      `${amount}`.indexOf('.') > -1 ? 2 : 0,
-    );
   }
 
   giveLink(url) {
