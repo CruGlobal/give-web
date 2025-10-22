@@ -1,10 +1,16 @@
 import angular from 'angular';
+import indexOf from 'lodash/indexOf';
 import loading from 'common/components/loading/loading.component';
 import template from './giftFrequency.tpl.html';
 
 const componentName = 'giftFrequency';
 
-class GiftFrequencyController {}
+class GiftFrequencyController {
+  frequencyOrder(f) {
+    const order = ['NA', 'MON', 'QUARTERLY', 'ANNUAL'];
+    return indexOf(order, f.name);
+  }
+}
 
 export default angular
   .module(componentName, [loading.name])
@@ -13,7 +19,6 @@ export default angular
     templateUrl: template,
     bindings: {
       productData: '<',
-      frequencyOrder: '<',
       changeFrequency: '<',
       changingFrequency: '<',
     },

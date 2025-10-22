@@ -1,10 +1,21 @@
 import angular from 'angular';
 import 'angular-ordinal';
+import {
+  possibleTransactionDays,
+  possibleTransactionMonths,
+  startMonth,
+} from 'common/services/giftHelpers/giftDates.service';
 import template from './giftDates.tpl.html';
 
 const componentName = 'giftDates';
 
-class GiftDatesController {}
+class GiftDatesController {
+  constructor() {
+    this.possibleTransactionDays = possibleTransactionDays;
+    this.possibleTransactionMonths = possibleTransactionMonths;
+    this.startMonth = startMonth;
+  }
+}
 
 export default angular
   .module(componentName, ['ordinal'])
@@ -14,10 +25,7 @@ export default angular
     bindings: {
       productData: '<',
       itemConfig: '=',
-      possibleTransactionMonths: '<',
       nextDrawDate: '<',
       changeStartDay: '<',
-      possibleTransactionDays: '<',
-      startMonth: '<',
     },
   });

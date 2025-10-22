@@ -1,7 +1,6 @@
 import angular from 'angular';
 import 'angular-ordinal';
 import 'angular-sanitize';
-import indexOf from 'lodash/indexOf';
 import find from 'lodash/find';
 import omit from 'lodash/omit';
 import omitBy from 'lodash/omitBy';
@@ -17,12 +16,7 @@ import designationsService from 'common/services/api/designations.service';
 import cartService from 'common/services/api/cart.service';
 import orderService from 'common/services/api/order.service';
 import { forcedUserToLogout } from '../../../common/services/session/session.service';
-import {
-  possibleTransactionDays,
-  possibleTransactionMonths,
-  startDate,
-  startMonth,
-} from 'common/services/giftHelpers/giftDates.service';
+import { startDate } from 'common/services/giftHelpers/giftDates.service';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
 import showErrors from 'common/filters/showErrors.filter';
 import { giftAddedEvent, cartUpdatedEvent } from 'common/lib/cartEvents';
@@ -67,10 +61,7 @@ class ProductConfigFormController {
     this.cartService = cartService;
     this.orderService = orderService;
     this.commonService = commonService;
-    this.possibleTransactionDays = possibleTransactionDays;
-    this.possibleTransactionMonths = possibleTransactionMonths;
     this.startDate = startDate;
-    this.startMonth = startMonth;
     this.analyticsFactory = analyticsFactory;
     this.brandedAnalyticsFactory = brandedAnalyticsFactory;
     this.envService = envService;
@@ -83,7 +74,6 @@ class ProductConfigFormController {
     this.changeAmount = this.changeAmount.bind(this);
     this.changeCustomAmount = this.changeCustomAmount.bind(this);
     this.changeStartDay = this.changeStartDay.bind(this);
-    this.suggestedAmount = this.suggestedAmount.bind(this);
   }
 
   $onInit() {
@@ -272,11 +262,6 @@ class ProductConfigFormController {
       const regex = /^([0-9]*)(\.[0-9]{1,2})?$/;
       return !this.customInputActive || regex.test(value);
     };
-  }
-
-  frequencyOrder(f) {
-    const order = ['NA', 'MON', 'QUARTERLY', 'ANNUAL'];
-    return indexOf(order, f.name);
   }
 
   changeFrequency(product) {
@@ -498,14 +483,6 @@ class ProductConfigFormController {
       value += ` - ${this.productData.displayName}`;
     }
     return value;
-  }
-
-  suggestedAmount(amount) {
-    return this.$filter('currency')(
-      amount,
-      '$',
-      `${amount}`.indexOf('.') > -1 ? 2 : 0,
-    );
   }
 
   giveLink(url) {
