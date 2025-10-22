@@ -5,20 +5,7 @@ import template from './suggestedGiftAmounts.tpl.html';
 
 const componentName = 'suggestedGiftAmounts';
 
-class SuggestedGiftAmountsController {
-  /* @ngInject */
-  constructor($filter) {
-    this.$filter = $filter;
-  }
-
-  suggestedAmount(amount) {
-    return this.$filter('currency')(
-      amount,
-      '$',
-      `${amount}`.indexOf('.') > -1 ? 2 : 0,
-    );
-  }
-}
+class SuggestedGiftAmountsController {}
 
 export default angular
   .module(componentName, ['ngMessages', showErrors.name])
@@ -37,6 +24,7 @@ export default angular
       changeAmount: '<',
       customInputActive: '=',
       itemConfig: '=',
+      suggestedAmount: '<',
       itemConfigForm: '<',
       customAmount: '=',
       changeCustomAmount: '<',
