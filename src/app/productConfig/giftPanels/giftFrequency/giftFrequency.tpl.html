@@ -1,0 +1,40 @@
+<div class="panel panel-default give-modal-panel gift-frequency">
+  <h4 class="panel-title border-bottom-small mt" translate>
+    {{'GIFT_FREQUENCY'}}
+  </h4>
+  <div class="panel-body">
+    <div data-toggle="buttons">
+      <div
+        ng-repeat-start="f in $ctrl.productData.frequencies | orderBy: $ctrl.frequencyOrder track by $index"
+        ng-if="f.name !== 'SEMIANNUAL'"
+        style="display: inline"
+      >
+        <input
+          type="radio"
+          name="giftFrequency"
+          id="freq-{{$index}}"
+          ng-click="$ctrl.changeFrequency(f)"
+          ng-checked="f.name === $ctrl.productData.frequency"
+        />
+        <label
+          class="btn btn-radio btn-wide"
+          for="freq-{{$index}}"
+          ng-class="{'active': f.name === $ctrl.productData.frequency}"
+        >
+          <span class="giftsum-about giftsum-title" ng-switch="f.name">
+            <span ng-switch-when="NA" translate>{{'SINGLE_GIFT'}}</span>
+            <span ng-switch-default>{{f.display}}</span>
+          </span>
+        </label>
+      </div>
+      <span ng-repeat-end></span>
+    </div>
+    <loading
+      inline="true"
+      ng-if="$ctrl.changingFrequency"
+      class="mt-- text-center"
+    >
+      <translate>{{'CHANGING_FREQUENCY'}}</translate>
+    </loading>
+  </div>
+</div>

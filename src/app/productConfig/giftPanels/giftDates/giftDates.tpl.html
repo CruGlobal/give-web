@@ -1,0 +1,48 @@
+<div
+  class="panel panel-default give-modal-panel gift-dates"
+  ng-if="$ctrl.productData.frequency !== 'NA'"
+>
+  <h4 class="panel-title border-bottom-small mt0 pt-" translate>
+    {{'RECURRING_START'}}
+  </h4>
+  <div class="panel-body pt0">
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="form-group">
+          <label>
+            <span translate>{{'MONTH'}}</span>
+            <select
+              class="form-control form-control-subtle"
+              ng-model="$ctrl.itemConfig['RECURRING_START_MONTH']"
+              ng-options="(m | date:'MM') as (m | date:'MMMM, yyyy') for m in $ctrl.possibleTransactionMonths($ctrl.nextDrawDate)"
+              ng-change="$ctrl.changeStartDay($ctrl.itemConfig['RECURRING_DAY_OF_MONTH'], $ctrl.itemConfig['RECURRING_START_MONTH'])"
+            ></select>
+          </label>
+        </div>
+      </div>
+      <div class="col-sm-2">
+        <div class="form-group">
+          <label>
+            <span translate>{{'DAY'}}</span>
+            <select
+              class="form-control form-control-subtle"
+              ng-model="$ctrl.itemConfig['RECURRING_DAY_OF_MONTH']"
+              ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays($ctrl.itemConfig['RECURRING_START_MONTH'], $ctrl.nextDrawDate)"
+              ng-change="$ctrl.changeStartDay($ctrl.itemConfig['RECURRING_DAY_OF_MONTH'], $ctrl.itemConfig['RECURRING_START_MONTH'])"
+            ></select>
+          </label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label translate>{{'GIFT_START_DATE'}}</label>
+          <div class="form-group">
+            {{$ctrl.startMonth( $ctrl.itemConfig['RECURRING_DAY_OF_MONTH'],
+            $ctrl.itemConfig['RECURRING_START_MONTH'], $ctrl.nextDrawDate
+            ).format('ll')}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
