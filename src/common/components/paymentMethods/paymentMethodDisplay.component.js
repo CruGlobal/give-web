@@ -12,7 +12,9 @@ class PaymentMethodDisplayController {
   }
 
   $onInit() {
-    this.paymentMethodId = this.paymentMethod.self.uri.split('/').pop();
+    if (this.paymentMethod?.self?.uri) {
+      this.paymentMethodId = this.paymentMethod.self.uri.split('/').pop();
+    }
   }
 }
 
