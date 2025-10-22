@@ -278,27 +278,6 @@ label.btn.btn-default-form.active {
   }
 }
 
-.give-selection-reverse-order {
-  display: flex;
-  flex-direction: column;
-
-  & > .suggested-gift-amounts {
-    order: 4;
-  }
-
-  & > .gift-frequency {
-    order: 1;
-  }
-
-  & > .gift-dates {
-    order: 2;
-  }
-
-  & > .special-instructions {
-    order: 3;
-  }
-}
-
 @media (max-width: 549px) {
   .give-modal-recipient {
     margin-top: 5px;
