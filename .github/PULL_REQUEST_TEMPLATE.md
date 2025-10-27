@@ -20,7 +20,7 @@ Example:
 
 ## Checklist:
 
-- [ ] I have given my PR a title with the format "MPDX-(JIRA#) (summary sentence max 80 chars)"
+- [ ] I have given my PR a title with the format "EP-(JIRA#) (summary sentence max 80 chars)"
 - [ ] I have applied the appropriate labels (_Add the label "On Staging" to get the branch automatically merged into staging_)
 - [ ] I have requested a review from another person on the project
 - [ ] I have checked that `stage-branch-merger` successfully merged my branch to staging or manually merged it myself
