@@ -92,11 +92,6 @@
         change-start-day="$ctrl.changeStartDay"
       ></gift-dates>
 
-      <special-instructions
-        product-data="$ctrl.productData"
-        item-config="$ctrl.itemConfig"
-      ></special-instructions>
-
       <suggested-gift-amounts
         use-v3="$ctrl.useV3"
         error-changing-frequency="$ctrl.errorChangingFrequency"
@@ -114,6 +109,11 @@
         change-custom-amount="$ctrl.changeCustomAmount"
         selectable-amounts="$ctrl.selectableAmounts"
       ></suggested-gift-amounts>
+
+      <special-instructions
+        product-data="$ctrl.productData"
+        item-config="$ctrl.itemConfig"
+      ></special-instructions>
     </div>
 
     <!-- Non-V3 order: amounts → frequency → dates -->
