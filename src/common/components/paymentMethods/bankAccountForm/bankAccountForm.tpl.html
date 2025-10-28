@@ -233,12 +233,6 @@
     </h4>
     <div class="row">
       <div class="col-sm-12">
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <p translate>{{'BANK_AGREEMENT_MESSAGE'}}</p>
-          </div>
-        </div>
-
         <div
           class="form-group is-required mb0"
           ng-class="{'has-error': ($ctrl.bankPaymentForm.acceptedAgreement | showErrors)}"
@@ -251,7 +245,7 @@
               required
               value="true"
             />
-            <translate>{{'I_AGREE'}}</translate>
+            <translate translate-compile>{{'I_AGREE'}}</translate>
           </label>
           <div
             role="alert"
@@ -260,6 +254,14 @@
           >
             <div class="help-block" ng-message="required" translate>
               {{'MUST_AGREE_BANK_ACCT'}}
+            </div>
+          </div>
+        </div>
+
+        <div class="bank-agreement" ng-class="{'on': !$ctrl.hideAgreement}">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <p translate>{{'BANK_AGREEMENT_MESSAGE'}}</p>
             </div>
           </div>
         </div>
