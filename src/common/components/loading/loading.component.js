@@ -1,10 +1,10 @@
-import angular from 'angular'
+import angular from 'angular';
 
-import './loading.scss'
+import './loading.scss';
 
-import template from './loading.tpl.html'
+import template from './loading.tpl.html';
 
-const componentName = 'loading'
+const componentName = 'loading';
 
 /**
  * --- Usage ---
@@ -33,20 +33,20 @@ const componentName = 'loading'
 
 class LoadingController {
   /* @ngInject */
-  constructor () {
-    this.type = 'block'
-    this.inline = false
+  constructor() {
+    this.type = 'block';
+    this.inline = false;
+    this.iconFirst = false;
   }
 }
 
-export default angular
-  .module(componentName, [])
-  .component(componentName, {
-    controller: LoadingController,
-    templateUrl: template,
-    bindings: {
-      type: '@',
-      inline: '@'
-    },
-    transclude: true
-  })
+export default angular.module(componentName, []).component(componentName, {
+  controller: LoadingController,
+  templateUrl: template,
+  bindings: {
+    type: '@',
+    inline: '<',
+    iconFirst: '<',
+  },
+  transclude: true,
+});

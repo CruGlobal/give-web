@@ -1,6 +1,13 @@
-<loading type="overlay" ng-if="$ctrl.paymentFormState === 'loading' || $ctrl.paymentFormState === 'encrypting' || $ctrl.paymentFormState === 'success'"></loading>
+<loading
+  type="overlay"
+  ng-if="$ctrl.paymentFormState === 'loading' || $ctrl.paymentFormState === 'encrypting'"
+></loading>
 
-<div class="alert alert-danger" role="alert" ng-if="$ctrl.paymentFormState === 'error'">
+<div
+  class="alert alert-danger"
+  role="alert"
+  ng-if="$ctrl.paymentFormState === 'error'"
+>
   <p ng-switch="$ctrl.paymentFormError">
     <span ng-switch-when="Invalid routing number" translate>
       {{'ROUTING_NUM_INVALID'}}
@@ -14,49 +21,76 @@
     <span ng-switch-when="This bank account already exists." translate>
       {{'ALREADY_ADDED_BANK'}}
     </span>
-    <span ng-switch-default translate>
-      {{'ERROR_SAVING_PAYMENT'}}
-    </span>
+    <span ng-switch-default translate> {{'ERROR_SAVING_PAYMENT'}} </span>
   </p>
 </div>
 
-<div class="panel panel-default panel-with-gray-background" ng-if="$ctrl.paymentMethod">
+<div
+  class="panel panel-default panel-with-gray-background"
+  ng-if="$ctrl.paymentMethod"
+>
   <div class="panel-body">
-    <payment-method-display payment-method="$ctrl.paymentMethod"></payment-method-display>
+    <payment-method-display
+      payment-method="$ctrl.paymentMethod"
+    ></payment-method-display>
   </div>
 </div>
 
-<div class="mb_x" ng-if="!$ctrl.paymentMethod && $ctrl.hidePaymentTypeOptions !== 'true'">
+<div
+  class="mb_x"
+  ng-if="!$ctrl.paymentMethod && $ctrl.hidePaymentTypeOptions !== 'true'"
+>
   <div class="row">
     <div class="col-md-6">
-      <button id="addBankAccountButton" class="tab-btn btn btn-lg btn-default btn-block" ng-click="$ctrl.changePaymentType('bankAccount')" ng-class="{'on': $ctrl.paymentType === 'bankAccount'}">
+      <button
+        id="addBankAccountButton"
+        class="tab-btn btn btn-lg btn-default btn-block"
+        ng-click="$ctrl.changePaymentType('bankAccount')"
+        ng-class="{'on': $ctrl.paymentType === 'bankAccount'}"
+      >
         <translate>{{'BANK_ACCOUNT'}}</translate>
-        <img ng-src="{{$ctrl.imgDomain}}/assets/img/icon-bank.png" alt="Bank Account Icon"/>
+        <img
+          ng-src="{{$ctrl.imgDomain}}/assets/img/icon-bank.png"
+          aria-hidden="true"
+        />
       </button>
     </div>
     <div class="col-md-6">
-      <button id="addCreditCardButton" class="tab-btn btn btn-lg btn-default btn-block" ng-click="$ctrl.changePaymentType('creditCard')" ng-class="{'on': $ctrl.paymentType === 'creditCard'}">
+      <button
+        id="addCreditCardButton"
+        class="tab-btn btn btn-lg btn-default btn-block"
+        ng-click="$ctrl.changePaymentType('creditCard')"
+        ng-class="{'on': $ctrl.paymentType === 'creditCard'}"
+      >
         <translate>{{'CREDIT_CARD'}}</translate>
-        <img ng-src="{{$ctrl.imgDomain}}/assets/img/icon-cc.png" alt="Credit Card Icon"/>
+        <img
+          ng-src="{{$ctrl.imgDomain}}/assets/img/icon-cc.png"
+          aria-hidden="true"
+        />
       </button>
     </div>
   </div>
 </div>
 
-<div class="tab-indiv cart-tab show" ng-if="$ctrl.paymentType === 'bankAccount'">
-
-  <bank-account-form payment-form-state="$ctrl.paymentFormState" on-payment-form-state-change="$ctrl.onPaymentFormStateChange({ $event: $event })" payment-method="$ctrl.paymentMethod"></bank-account-form>
-
+<div
+  class="tab-indiv cart-tab show"
+  ng-if="$ctrl.paymentType === 'bankAccount'"
+>
+  <bank-account-form
+    payment-form-state="$ctrl.paymentFormState"
+    on-payment-form-state-change="$ctrl.onPaymentFormStateChange({ $event: $event })"
+    payment-method="$ctrl.paymentMethod"
+  ></bank-account-form>
 </div>
 <div class="tab-org cart-tab show" ng-if="$ctrl.paymentType === 'creditCard'">
-
-  <credit-card-form payment-form-state="$ctrl.paymentFormState"
-                    on-payment-form-state-change="$ctrl.onPaymentFormStateChange({ $event: $event })"
-                    payment-method="$ctrl.paymentMethod"
-                    disable-card-number="$ctrl.disableCardNumber"
-                    hide-cvv="$ctrl.hideCvv"
-                    mailing-address="$ctrl.mailingAddress"
-                    cart-data="$ctrl.cartData"
-                    branded-checkout-item="$ctrl.brandedCheckoutItem"></credit-card-form>
-
+  <credit-card-form
+    payment-form-state="$ctrl.paymentFormState"
+    on-payment-form-state-change="$ctrl.onPaymentFormStateChange({ $event: $event })"
+    payment-method="$ctrl.paymentMethod"
+    disable-card-number="$ctrl.disableCardNumber"
+    hide-cvv="$ctrl.hideCvv"
+    mailing-address="$ctrl.mailingAddress"
+    cart-data="$ctrl.cartData"
+    branded-checkout-item="$ctrl.brandedCheckoutItem"
+  ></credit-card-form>
 </div>

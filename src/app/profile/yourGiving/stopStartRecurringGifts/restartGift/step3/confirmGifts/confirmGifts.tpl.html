@@ -1,5 +1,10 @@
 <div class="modal-header">
-  <button type="button" class="close" aria-label="{{'Close' | translate}}" ng-click="$ctrl.cancel()">
+  <button
+    type="button"
+    class="close"
+    aria-label="{{'Close' | translate}}"
+    ng-click="$ctrl.cancel()"
+  >
     <span aria-hidden="true">x</span>
   </button>
   <div class="container-fluid">
@@ -14,13 +19,29 @@
 </div>
 
 <div class="modal-body">
-  <div class="alert alert-danger" role="alert" ng-if="$ctrl.error" ng-switch="$ctrl.error">
-    <p ng-switch-when="You already have a recurring donation to this recipient." translate>You already have a recurring gift to one of these recipients. Check to make sure you haven't added a recipient multiple times.</p>
-    <p ng-switch-default translate>There was an error processing your restarts. Please try again, or contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
+  <div
+    class="alert alert-danger"
+    role="alert"
+    ng-if="$ctrl.error"
+    ng-switch="$ctrl.error"
+  >
+    <p
+      ng-switch-when="You already have a recurring donation to this recipient."
+      translate
+    >
+      You already have a recurring gift to one of these recipients. Check to
+      make sure you haven't added a recipient multiple times.
+    </p>
+    <p ng-switch-default translate>
+      There was an error processing your restarts. Please try again, or contact
+      <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
+    </p>
   </div>
   <div ng-repeat="gift in $ctrl.saved" class="repeating-row">
     <div class="col-xs-12">
-      <p class="text-success" translate>This gift has been successfully restarted:</p>
+      <p class="text-success" translate>
+        This gift has been successfully restarted:
+      </p>
     </div>
     <gift-list-item gift="gift">
       <gift-details-view gift="gift" />
@@ -46,20 +67,30 @@
 
 <div class="modal-footer" ng-if="!$ctrl.loading">
   <div class="col-xs-6">
-    <a class="btn btn-default"
-       ng-if="$ctrl.error"
-       ng-click="$ctrl.cancel()"
-       translate>
+    <a
+      class="btn btn-default"
+      ng-if="$ctrl.error"
+      ng-click="$ctrl.cancel()"
+      translate
+    >
       Cancel
     </a>
-    <a class="btn btn-default"
-       ng-if="!$ctrl.error"
-       ng-click="$ctrl.previous()"
-       translate>
+    <a
+      class="btn btn-default"
+      ng-if="!$ctrl.error"
+      ng-click="$ctrl.previous()"
+      translate
+    >
       Back
     </a>
   </div>
   <div class="col-xs-6 text-right">
-    <button class="btn btn-primary" ng-click="$ctrl.processRestarts()" translate>Process Restarts</button>
+    <button
+      class="btn btn-primary"
+      ng-click="$ctrl.processRestarts()"
+      translate
+    >
+      Process Restarts
+    </button>
   </div>
 </div>

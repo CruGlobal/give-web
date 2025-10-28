@@ -1,0 +1,11 @@
+sign-out {
+  .panel {
+    padding-top: 30px;
+    padding-bottom: 30px;
+  
+    @include respond-to(supertiny) {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  }
+}

@@ -1,79 +1,64 @@
-<div class="alert alert-danger" role="alert" ng-if="$ctrl.errorMessage" ng-switch="$ctrl.errorMessage">
+<div
+  class="alert alert-danger"
+  role="alert"
+  ng-if="$ctrl.errorMessage"
+  ng-switch="$ctrl.errorMessage"
+>
   <span ng-switch-when="generic" translate>
-    An error has occurred. Please try again or contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
+    An error has occurred. Please try again or contact
+    <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
   </span>
-  <span ng-switch-when="mfa" translate>
-    Invalid Verification Code. Please try again.
-  </span>
-  <span ng-switch-default>
-    {{$ctrl.errorMessage | translate}}
-  </span>
+  <span ng-switch-default> {{$ctrl.errorMessage | translate}} </span>
 </div>
-<form class="sign-in-form loading-overlay-parent" name="$ctrl.signInForm" ng-switch="$ctrl.signInState">
-  <div ng-switch-when="identity">
-    <div class="form-group">
-      <label for="username" translate>Email</label>
-      <input id="username"
-             name="username"
-             type="email"
-             class="form-control form-control-subtle"
-             placeholder="{{'Email'|translate}}"
-             autocomplete="off"
-             required
-             ng-disabled="$ctrl.isSigningIn"
-             ng-model="$ctrl.username">
-    </div>
-    <div class="form-group">
-      <label for="password" translate>Password</label>
-      <input id="password"
-             name="password"
-             type="password"
-             class="form-control form-control-subtle"
-             placeholder="{{'Password'|translate}}"
-             autocomplete="off"
-             required
-             ng-disabled="$ctrl.isSigningIn"
-             ng-model="$ctrl.password">
-    </div>
-  </div>
-  <div ng-switch-when="mfa">
-    <p translate>Enter a verification code from your Authenticator app to continue.</p>
-    <div class="form-group">
-      <label for="mfa_token" translate>Verification Code</label>
-      <input id="mfa_token"
-             name="mfa_token"
-             type="text"
-             minlength="6"
-             maxlength="8"
-             class="form-control form-control-subtle"
-             placeholder="{{'Code'|translate}}"
-             autocomplete="off"
-             autofocus
-             required
-             ng-disabled="$ctrl.isSigningIn"
-             ng-model="$ctrl.mfa_token">
-    </div>
-    <div class="form-group">
-      <label class="checkbox-inline">
-        <input id="trust_device"
-               name="trust_device"
-               type="checkbox"
-               ng-model="$ctrl.trust_device"
-               ng-disabled="$ctrl.isSigningIn"
-               translate> Don't ask for codes again on this device.
-      </label>
-    </div>
+<sign-in-button
+  on-success="$ctrl.onSuccess()"
+  on-failure="$ctrl.onFailure()"
+  last-purchase-id="$ctrl.lastPurchaseId"
+  error-message="$ctrl.errorMessage"
+></sign-in-button>
 
-  </div>
-  <button
-    type="submit"
-    id="signInButton"
-    class="btn btn-block btn-primary"
-    ng-click="$ctrl.signIn()"
-    ng-disabled="!$ctrl.signInForm.$valid || $ctrl.isSigningIn"
-    translate>Sign In
-  </button>
-  <loading type="overlay" ng-if="$ctrl.isSigningIn">
-    <translate>Signing you in...</translate>
-  </loading>
-</form>
+<p ng-if="!$ctrl.onSignInPage">
+  <span translate>You will be taken to Okta,</span><br /><span translate
+    >then back to this site.</span
+  >
+</p>
+<p ng-if="$ctrl.onSignInPage" translate>
+  You will briefly be taken away from this site to login, then brought back
+  right where you left off.
+</p>
+<hr />
+<p class="no-account" ng-if="!$ctrl.onSignInPage" translate>
+  Don&rsquo;t have an account?
+</p>
+<button
+  class="okta-signup-button"
+  ng-if="!$ctrl.onSignInPage"
+  ng-click="$ctrl.onSignUpWithOkta()"
+>
+  <span translate>Create an Account</span>
+</button>
+<div class="details-wrapper">
+  <details name="okta-help">
+    <summary translate>Need help?</summary>
+    <p>
+      <a ng-click="$ctrl.onResetPassword()" href="javascript:void(0)" translate
+        >Forgot your password?</a
+      >
+    </p>
+    <p>
+      <span translate>Call</span> <a href="tel:+18882787233">(888) 278-7233</a>
+      <span translate>opt. 1, then 1.</span><br />
+      <span translate>9:00 a.m. to 5:00 p.m. ET, Monday-Friday,</span><br />
+      <span translate>or email us at</span>
+      <a href="mailto:eGift@cru.org">eGift@cru.org</a>.
+    </p>
+  </details>
+  <details name="okta-help">
+    <summary translate>What is Okta?</summary>
+    <p translate>
+      Okta is our preferred partner for protecting your personal information and
+      keeping your access to Cru&rsquo;s websites secure. You will be redirected
+      to Okta each time you log in.
+    </p>
+  </details>
+</div>

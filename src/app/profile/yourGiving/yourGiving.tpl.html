@@ -2,39 +2,81 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-
-        <div class="alert alert-danger" role="alert" ng-if="$ctrl.profileLoadingError">
-          <p translate>There was an error loading your profile. You can use the retry button to try loading them again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
-          <p><button type="button" class="btn btn-primary" ng-click="$ctrl.loadProfile()" translate>Retry</button></p>
+        <div
+          class="alert alert-danger"
+          role="alert"
+          ng-if="$ctrl.profileLoadingError"
+        >
+          <p translate>
+            There was an error loading your profile. You can use the retry
+            button to try loading them again. If you continue to see this
+            message, contact
+            <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
+          </p>
+          <p>
+            <button
+              type="button"
+              class="btn btn-primary"
+              ng-click="$ctrl.loadProfile()"
+              translate
+            >
+              Retry
+            </button>
+          </p>
         </div>
-        <div class="alert alert-success" role="alert" ng-if="$ctrl.recurringGiftsUpdateSuccess" translate>Your recurring gifts were updated successfully.</div>
-        <div class="alert alert-success" role="alert" ng-if="$ctrl.stopStartGiftsSuccess" translate>Your changes were successful.</div>
+        <div
+          class="alert alert-success"
+          role="alert"
+          ng-if="$ctrl.recurringGiftsUpdateSuccess"
+          translate
+        >
+          Your recurring gifts were updated successfully.
+        </div>
+        <div
+          class="alert alert-success"
+          role="alert"
+          ng-if="$ctrl.stopStartGiftsSuccess"
+          translate
+        >
+          Your changes were successful.
+        </div>
 
         <div class="row row-eq-height break-flex-at-549 mb">
-          <div class="col-md-8  col-sm-6 col-xs-12">
+          <div class="col-md-8 col-sm-6 col-xs-12">
             <div class="panel panel-full-height">
-              <div class="panel-body" style="min-height: 5em;">
-                <loading type="centered" inline="true" ng-if="$ctrl.profileLoading">
+              <div class="panel-body" style="min-height: 5em">
+                <loading
+                  type="centered"
+                  inline="true"
+                  ng-if="$ctrl.profileLoading"
+                >
                   <translate>Loading your giving profile...</translate>
                 </loading>
                 <div class="row" ng-if="!$ctrl.profileLoading">
                   <div class="col-md-6">
                     <h3 class="mb0 font-weight-mild">{{$ctrl.profile.name}}</h3>
-                    <p>Account #{{$ctrl.profile.donorNumber}}</a>
-                    </p>
+                    <p>Account #{{$ctrl.profile.donorNumber}}</p>
                     <div class="">
                       <p class="mb0" translate>Year-to-Date Giving</p>
-                      <h3 class="m0 font-weight-mild">{{$ctrl.profile.yearToDate | currency:'$'}}</h3>
+                      <h3 class="m0 font-weight-mild">
+                        {{$ctrl.profile.yearToDate | currency:'$'}}
+                      </h3>
                       <p>As of {{$ctrl.currentDate | date:'shortDate'}}</p>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label ng-if="$ctrl.profile.address" translate>Mailing Address:</label>
-                      <display-address address="$ctrl.profile.address"></display-address>
+                      <label ng-if="$ctrl.profile.address" translate
+                        >Mailing Address:</label
+                      >
+                      <display-address
+                        address="$ctrl.profile.address"
+                      ></display-address>
                     </div>
                     <div class="form-group mb0">
-                      <label ng-if="$ctrl.profile.phone" translate>Contact Phone:</label>
+                      <label ng-if="$ctrl.profile.phone" translate
+                        >Contact Phone:</label
+                      >
                       <p class="mb0">{{$ctrl.profile.phone}}</p>
                     </div>
                   </div>
@@ -43,17 +85,34 @@
             </div>
           </div>
 
-          <div class="col-md-4  col-sm-6 col-xs-12">
+          <div class="col-md-4 col-sm-6 col-xs-12">
             <div class="panel panel-full-height">
               <div class="panel-body">
                 <!-- Giving Control -->
-                <button class="btn btn-block btn-primary" ng-click="$ctrl.openEditRecurringGiftsModal()" translate>Edit Your Recurring Gifts</button>
-                <button class="btn btn-block btn-primary mb- mt-" ng-click="$ctrl.openGiveOneTimeGiftModal()" translate>Give a 1-Time Gift</button>
-                <button class="btn btn-block btn-primary" ng-click="$ctrl.openStopStartRecurringGiftsModal()" translate>Stop or Restart a Gift</button>
+                <button
+                  class="btn btn-block btn-primary"
+                  ng-click="$ctrl.openEditRecurringGiftsModal()"
+                  translate
+                >
+                  Edit Your Recurring Gifts
+                </button>
+                <button
+                  class="btn btn-block btn-primary mb- mt-"
+                  ng-click="$ctrl.openGiveOneTimeGiftModal()"
+                  translate
+                >
+                  Give a 1-Time Gift
+                </button>
+                <button
+                  class="btn btn-block btn-primary"
+                  ng-click="$ctrl.openStopStartRecurringGiftsModal()"
+                  translate
+                >
+                  Stop or Restart a Gift
+                </button>
               </div>
             </div>
           </div>
-
         </div>
 
         <div class="panel panel-margin-bottom" ng-if="!$ctrl.profileLoading">
@@ -63,74 +122,137 @@
                 <h3 translate>Your Giving</h3>
               </div>
               <div class="col-sm-7 mb--">
-                <loading inline="true" class="text-right" ng-if="$ctrl.viewLoading">
-                  <translate>Loading <span class="hidden-xs">your giving history</span>...</translate>
+                <loading
+                  inline="true"
+                  class="text-right"
+                  ng-if="$ctrl.viewLoading"
+                >
+                  <translate
+                    >Loading
+                    <span class="hidden-xs">your giving history</span
+                    >...</translate
+                  >
                 </loading>
               </div>
 
               <div class="col-xs-12 col-sm-12">
                 <div class="btn-toolbar">
                   <div class="btn-group" role="group" aria-label="...">
-                    <button type="button"
-                            class="btn btn-default"
-                            ng-class="{active: $ctrl.view == 'recipient'}"
-                            ng-click="$ctrl.setGivingView('recipient')">
+                    <button
+                      type="button"
+                      class="btn btn-default"
+                      ng-class="{active: $ctrl.view == 'recipient'}"
+                      ng-click="$ctrl.setGivingView('recipient')"
+                    >
                       <span class="visible-xs" translate>By Recipient</span>
                       <span class="hidden-xs" translate>Recipient View</span>
                     </button>
-                    <button type="button"
-                            class="btn btn-default"
-                            ng-class="{active: $ctrl.view == 'historical'}"
-                            ng-click="$ctrl.setGivingView('historical')">
+                    <button
+                      type="button"
+                      class="btn btn-default"
+                      ng-class="{active: $ctrl.view == 'historical'}"
+                      ng-click="$ctrl.setGivingView('historical')"
+                    >
                       <span class="visible-xs" translate>By Month</span>
                       <span class="hidden-xs" translate>Monthly View</span>
                     </button>
                   </div>
 
-                  <div class="btn-group" uib-dropdown role="group" ng-if="$ctrl.view == 'recipient'">
-                    <button class="btn btn-default dropdown-toggle" uib-dropdown-toggle>
-                      {{$ctrl.recipientFilter == 'recent' ? 'Your Recent Gifts' : $ctrl.recipientFilter | translate}}
+                  <div
+                    class="btn-group"
+                    uib-dropdown
+                    role="group"
+                    ng-if="$ctrl.view == 'recipient'"
+                  >
+                    <button
+                      class="btn btn-default dropdown-toggle"
+                      uib-dropdown-toggle
+                    >
+                      {{$ctrl.recipientFilter == 'recent' ? 'Your Recent Gifts'
+                      : $ctrl.recipientFilter | translate}}
                       <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" uib-dropdown-menu role="menu">
-                      <li ng-class="{active: $ctrl.recipientFilter == 'recent'}">
-                        <a ng-click="$ctrl.recipientFilter = 'recent'" translate>Your Recent Gifts</a>
+                      <li
+                        ng-class="{active: $ctrl.recipientFilter == 'recent'}"
+                        role="none"
+                      >
+                        <a
+                          role="menuitem"
+                          tabindex="0"
+                          href=""
+                          ng-click="$ctrl.recipientFilter = 'recent'"
+                          translate
+                          >Your Recent Gifts</a
+                        >
                       </li>
-                      <li ng-repeat="year in $ctrl.years"
-                          ng-class="{active: $ctrl.recipientFilter == year}">
-                        <a ng-click="$ctrl.recipientFilter = year">{{year}}</a>
+                      <li
+                        ng-repeat="year in $ctrl.years"
+                        ng-class="{active: $ctrl.recipientFilter == year}"
+                        role="none"
+                      >
+                        <a
+                          role="menuitem"
+                          tabindex="0"
+                          href=""
+                          ng-click="$ctrl.recipientFilter = year"
+                          >{{year}}</a
+                        >
                       </li>
                     </ul>
                   </div>
 
                   <div class="btn-group">
-                    <div class="btn-group" uib-dropdown role="group" ng-if="$ctrl.view == 'historical'">
-                      <button class="btn btn-default dropdown-toggle" uib-dropdown-toggle>
+                    <div
+                      class="btn-group"
+                      uib-dropdown
+                      role="group"
+                      ng-if="$ctrl.view == 'historical'"
+                    >
+                      <button
+                        class="btn btn-default dropdown-toggle"
+                        uib-dropdown-toggle
+                      >
                         {{$ctrl.historicalFilter.year}}
                         <span class="caret"></span>
                       </button>
                       <ul class="dropdown-menu" uib-dropdown-menu role="menu">
-                        <li ng-repeat="year in $ctrl.years"
-                            ng-class="{active: $ctrl.historicalFilter.year == year}">
-                          <a ng-click="$ctrl.historicalFilter.year = year">{{year}}</a>
+                        <li
+                          ng-repeat="year in $ctrl.years"
+                          ng-class="{active: $ctrl.historicalFilter.year == year}"
+                        >
+                          <a ng-click="$ctrl.historicalFilter.year = year"
+                            >{{year}}</a
+                          >
                         </li>
                       </ul>
                     </div>
 
-                    <div class="btn-group" uib-dropdown role="group" ng-if="$ctrl.view == 'historical'">
-                      <button class="btn btn-default dropdown-toggle" uib-dropdown-toggle>
+                    <div
+                      class="btn-group"
+                      uib-dropdown
+                      role="group"
+                      ng-if="$ctrl.view == 'historical'"
+                    >
+                      <button
+                        class="btn btn-default dropdown-toggle"
+                        uib-dropdown-toggle
+                      >
                         {{$ctrl.historicalFilter.month.label}}
                         <span class="caret"></span>
                       </button>
                       <ul class="dropdown-menu" uib-dropdown-menu role="menu">
-                        <li ng-repeat="month in $ctrl.months"
-                            ng-class="{active: $ctrl.historicalFilter.month == month}">
-                          <a ng-click="$ctrl.historicalFilter.month = month">{{month.label}}</a>
+                        <li
+                          ng-repeat="month in $ctrl.months"
+                          ng-class="{active: $ctrl.historicalFilter.month == month}"
+                        >
+                          <a ng-click="$ctrl.historicalFilter.month = month"
+                            >{{month.label}}</a
+                          >
                         </li>
                       </ul>
                     </div>
                   </div>
-
                 </div>
               </div>
             </div>
@@ -138,20 +260,23 @@
         </div>
 
         <div ng-switch="$ctrl.view">
-          <recipient-view ng-switch-when="recipient"
-                          reload="$ctrl.reload"
-                          set-loading="$ctrl.setViewLoading(loading)"
-                          filter="$ctrl.recipientFilter">
+          <recipient-view
+            ng-switch-when="recipient"
+            reload="$ctrl.reload"
+            set-loading="$ctrl.setViewLoading(loading)"
+            filter="$ctrl.recipientFilter"
+          >
           </recipient-view>
-          <historical-view ng-switch-when="historical"
-                           reload="$ctrl.reload"
-                           set-loading="$ctrl.setViewLoading(loading)"
-                           on-manage-gift="$ctrl.openEditRecurringGiftsModal()"
-                           year="$ctrl.historicalFilter.year"
-                           month="$ctrl.historicalFilter.month">
+          <historical-view
+            ng-switch-when="historical"
+            reload="$ctrl.reload"
+            set-loading="$ctrl.setViewLoading(loading)"
+            on-manage-gift="$ctrl.openEditRecurringGiftsModal()"
+            year="$ctrl.historicalFilter.year"
+            month="$ctrl.historicalFilter.month"
+          >
           </historical-view>
         </div>
-
       </div>
     </div>
   </div>

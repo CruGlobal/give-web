@@ -1,43 +1,41 @@
-import angular from 'angular'
-import 'angular-gettext'
-import sessionService, { Roles } from 'common/services/session/session.service'
-import template from './accountBenefitsModal.tpl.html'
+import angular from 'angular';
+import 'angular-gettext';
+import sessionService, { Roles } from 'common/services/session/session.service';
+import template from './accountBenefitsModal.tpl.html';
+import signInButton from '../../../common/components/signInForm/signInButton/signInButton.component';
 
-const componentName = 'accountBenefitsModal'
+const componentName = 'accountBenefitsModal';
 
 class AccountBenefitsModalController {
   /* @ngInject */
-  constructor (gettext, sessionService) {
-    this.gettext = gettext
-    this.sessionService = sessionService
+  constructor(gettext, sessionService) {
+    this.gettext = gettext;
+    this.sessionService = sessionService;
   }
 
-  $onInit () {
-    this.modalTitle = this.gettext('Register Your Account for Online Access')
+  $onInit() {
+    this.modalTitle = this.gettext('Register Your Account for Online Access');
   }
 
-  registerAccount () {
+  registerAccount() {
     if (this.sessionService.getRole() === Roles.registered) {
       // No need to sign in if we already are
-      this.onSuccess()
+      this.onSuccess();
     } else {
-      this.onStateChange({ state: 'sign-in' })
+      this.onRegister();
     }
   }
 }
 
 export default angular
-  .module(componentName, [
-    'gettext',
-    sessionService.name
-  ])
+  .module(componentName, ['gettext', sessionService.name, signInButton.name])
   .component(componentName, {
     controller: AccountBenefitsModalController,
     templateUrl: template,
     bindings: {
       modalTitle: '=',
-      onStateChange: '&',
+      onRegister: '&',
       onSuccess: '&',
-      onCancel: '&'
-    }
-  })
+      onCancel: '&',
+    },
+  });

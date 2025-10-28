@@ -1,24 +1,24 @@
-import angular from 'angular'
+import angular from 'angular';
 
-const serviceName = 'checkoutService'
+const serviceName = 'checkoutService';
 
 class CheckoutService {
   /* @ngInject */
-  constructor ($window, envService) {
-    this.$window = $window
-    this.envService = envService
+  constructor($window, envService) {
+    this.$window = $window;
+    this.envService = envService;
   }
 
-  initializeRecaptcha () {
-    const script = this.$window.document.createElement('script')
-    script.src = `https://www.google.com/recaptcha/enterprise.js?render=${this.envService.read('recaptchaKey')}`
-    script.id = 'give-checkout-recaptcha'
+  initializeRecaptcha() {
+    const script = this.$window.document.createElement('script');
+    script.src = `https://www.google.com/recaptcha/enterprise.js?render=${this.envService.read('recaptchaKey')}`;
+    script.id = 'give-checkout-recaptcha';
     if (!this.$window.document.getElementById(script.id)) {
-      this.$window.document.head.appendChild(script)
+      this.$window.document.head.appendChild(script);
     }
   }
 }
 
 export default angular
   .module(serviceName, [])
-  .service(serviceName, CheckoutService)
+  .service(serviceName, CheckoutService);

@@ -1,47 +1,45 @@
-import angular from 'angular'
+import angular from 'angular';
 
-import navCart, { giftAddedEvent, cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
-import uibDropdown from 'angular-ui-bootstrap/src/dropdown'
-import analyticsFactory from 'app/analytics/analytics.factory'
+import navCart from 'common/components/nav/navCart/navCart.component';
+import { giftAddedEvent, cartUpdatedEvent } from 'common/lib/cartEvents';
+import uibDropdown from 'angular-ui-bootstrap/src/dropdown';
+import analyticsFactory from 'app/analytics/analytics.factory';
 
-import template from './navCartIcon.tpl.html'
+import template from './navCartIcon.tpl.html';
 
-const componentName = 'navCartIcon'
+const componentName = 'navCartIcon';
 
 class NavCartIconController {
   /* @ngInject */
-  constructor ($rootScope, analyticsFactory) {
-    this.$rootScope = $rootScope
-    this.analyticsFactory = analyticsFactory
+  constructor($rootScope, analyticsFactory) {
+    this.$rootScope = $rootScope;
+    this.analyticsFactory = analyticsFactory;
   }
 
-  $onInit () {
-    this.$rootScope.$on(giftAddedEvent, () => this.giftAddedToCart())
+  $onInit() {
+    this.$rootScope.$on(giftAddedEvent, () => this.giftAddedToCart());
   }
 
-  giftAddedToCart () {
-    this.cartOpen = true
+  giftAddedToCart() {
+    this.cartOpen = true;
   }
 
-  cartOpened () {
-    if (!this.cartOpenedPreviously) { // Load cart on initial open only. Events will take care of other reloads
-      this.cartOpenedPreviously = true
-      this.$rootScope.$emit(cartUpdatedEvent)
+  cartOpened() {
+    if (!this.cartOpenedPreviously) {
+      // Load cart on initial open only. Events will take care of other reloads
+      this.cartOpenedPreviously = true;
+      this.$rootScope.$emit(cartUpdatedEvent);
     }
   }
 
-  miniCartViewAnalyticsEvent () {
-    this.analyticsFactory.cartView(true)
+  miniCartViewAnalyticsEvent() {
+    this.analyticsFactory.cartView(true);
   }
 }
 
 export default angular
-  .module(componentName, [
-    navCart.name,
-    analyticsFactory.name,
-    uibDropdown
-  ])
+  .module(componentName, [navCart.name, analyticsFactory.name, uibDropdown])
   .component(componentName, {
     controller: NavCartIconController,
-    templateUrl: template
-  })
+    templateUrl: template,
+  });

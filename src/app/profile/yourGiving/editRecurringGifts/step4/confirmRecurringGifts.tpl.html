@@ -1,5 +1,10 @@
 <div class="modal-header">
-  <button type="button" class="close" aria-label="Close" ng-click="$ctrl.dismiss()">
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    ng-click="$ctrl.dismiss()"
+  >
     <span aria-hidden="true">x</span>
   </button>
   <div class="container-fluid">
@@ -17,27 +22,66 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12 col-xs-12">
-        <div class="alert alert-danger" role="alert" ng-if="$ctrl.savingError" ng-switch="$ctrl.savingError">
-          <p ng-switch-when="Only Active recurring donations can be modified." translate>One of the gifts you are modifying is no longer an active gift. We may have accidentally shown you an inactive gift in a previous step. You may try only editing one gift at a time to determine which gift cannot be changed. If you continue to experience problems, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
-          <p ng-switch-when="You already have a recurring donation to this recipient." translate>You already have a recurring gift to one of these recipients. Check to make sure you haven't added a recipient multiple times.</p>
-          <p ng-switch-default translate>There was an error saving your gifts. Please check that all the entered information is valid and that you have a good internet connection. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
+        <div
+          class="alert alert-danger"
+          role="alert"
+          ng-if="$ctrl.savingError"
+          ng-switch="$ctrl.savingError"
+        >
+          <p
+            ng-switch-when="Only Active recurring donations can be modified."
+            translate
+          >
+            One of the gifts you are modifying is no longer an active gift. We
+            may have accidentally shown you an inactive gift in a previous step.
+            You may try only editing one gift at a time to determine which gift
+            cannot be changed. If you continue to experience problems, contact
+            <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
+          </p>
+          <p
+            ng-switch-when="You already have a recurring donation to this recipient."
+            translate
+          >
+            You already have a recurring gift to one of these recipients. Check
+            to make sure you haven't added a recipient multiple times.
+          </p>
+          <p ng-switch-default translate>
+            There was an error saving your gifts. Please check that all the
+            entered information is valid and that you have a good internet
+            connection. If you continue to see this message, contact
+            <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
+          </p>
         </div>
         <div class="alert alert-warning" role="alert" ng-if="!$ctrl.hasChanges">
-          <p translate>You haven't made any changes to your recurring gifts. Feel free to go back and make some changes.</p>
+          <p translate>
+            You haven't made any changes to your recurring gifts. Feel free to
+            go back and make some changes.
+          </p>
         </div>
-        <div ng-repeat="gift in $ctrl.recurringGiftChanges" class="row repeating-row user-profile">
+        <div
+          ng-repeat="gift in $ctrl.recurringGiftChanges"
+          class="row repeating-row user-profile"
+        >
           <gift-list-item gift="gift">
             <gift-details-view gift="gift"></gift-details-view>
           </gift-list-item>
         </div>
-        <div ng-repeat="gift in $ctrl.additions" class="row repeating-row user-profile">
+        <div
+          ng-repeat="gift in $ctrl.additions"
+          class="row repeating-row user-profile"
+        >
           <gift-list-item gift="gift">
             <gift-details-view gift="gift"></gift-details-view>
           </gift-list-item>
         </div>
-        <div ng-repeat="gift in $ctrl.savedGifts" class="row repeating-row user-profile">
+        <div
+          ng-repeat="gift in $ctrl.savedGifts"
+          class="row repeating-row user-profile"
+        >
           <div class="col-xs-12">
-            <p class="text-success" translate>This gift has been successfully saved:</p>
+            <p class="text-success" translate>
+              This gift has been successfully saved:
+            </p>
           </div>
           <gift-list-item gift="gift">
             <gift-details-view gift="gift"></gift-details-view>
@@ -50,16 +94,31 @@
 
 <div class="modal-footer" ng-if="!$ctrl.loading">
   <div class="col-xs-6">
-    <a class="btn btn-default"
-       ng-click="$ctrl.previous()"
-       translate>
+    <button
+      class="btn btn-default"
+      type="button"
+      ng-click="$ctrl.previous()"
+      translate
+    >
       Back
-    </a>
+    </button>
   </div>
   <div class="col-xs-6 text-right">
-    <button class="btn btn-primary" ng-click="$ctrl.saveChanges()" ng-disabled="$ctrl.saving || !$ctrl.hasChanges">
+    <button
+      class="btn btn-primary"
+      type="button"
+      ng-click="$ctrl.saveChanges()"
+      ng-disabled="$ctrl.saving || !$ctrl.hasChanges"
+    >
       <span ng-if="!$ctrl.saving" translate>Confirm Changes</span>
       <span ng-if="$ctrl.saving" translate>Saving...</span>
+      <span
+        class="sr-only"
+        aria-live="polite"
+        aria-atomic="true"
+        ng-bind="$ctrl.saving ? ('Saving...' | translate) : ''"
+      >
+      </span>
     </button>
   </div>
 </div>

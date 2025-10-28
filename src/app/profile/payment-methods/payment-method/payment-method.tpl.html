@@ -1,66 +1,104 @@
-  <div class="panel panel-default panel-with-gray-background">
-    <div ng-click="$ctrl.isCollapsed = !$ctrl.isCollapsed" class="panel-heading" role="tab">
-      <div ng-class="{'collapsed': $ctrl.isCollapsed}" class="payment-summary-link p- collapse-indicator-row" role="button">
-        <div class="row">
-          <div class="col-sm-9">
-            <payment-method-display payment-method="$ctrl.model" expired="!$ctrl.validPaymentMethod($ctrl.model)"></payment-method-display>
-          </div>
-          <div class="col-sm-3 text-right payment-details-link">
-            <button class="btn trigger">Details</button>
-          </div>
+<div class="panel panel-default panel-with-gray-background">
+  <div
+    ng-click="$ctrl.isCollapsed = !$ctrl.isCollapsed"
+    class="panel-heading"
+    role="tab"
+  >
+    <div
+      ng-class="{'collapsed': $ctrl.isCollapsed}"
+      class="payment-summary-link p- collapse-indicator-row"
+      role="button"
+    >
+      <div class="row">
+        <div class="col-sm-9">
+          <payment-method-display
+            payment-method="$ctrl.model"
+            expired="!$ctrl.validPaymentMethod($ctrl.model)"
+          ></payment-method-display>
+        </div>
+        <div class="col-sm-3 text-right payment-details-link">
+          <button
+            class="btn trigger"
+            aria-controls="payment-method-details-{{$ctrl.paymentMethodId}}"
+            aria-expanded="{{!$ctrl.isCollapsed}}"
+          >
+            Details
+          </button>
         </div>
       </div>
-    </div>
-
-    <div uib-collapse="$ctrl.isCollapsed" role="tabpanel" class="panel-collapse">
-      <div class="panel-body">
-        <div class="container-fluid">
-          <div class="row panel--payment-info">
-
-            <div ng-if="$ctrl.isCard()" class="col-sm-6 col-md-4">
-              <p class="section-title mb0">Name on card</p>
-              <p>{{$ctrl.model['cardholder-name']}}</p>
-            </div>
-            <div ng-if="$ctrl.isCard()" class="col-sm-6 col-md-4">
-              <div ng-if="$ctrl.model.address">
-                <p class="section-title mb0">Billing address</p>
-                <display-address address="$ctrl.model.address"></display-address>
-              </div>
-            </div>
-
-            <div ng-if="!$ctrl.isCard()" class="col-sm-12 col-md-8">
-              <div class="row panel--payment-info">
-                <div class="col-sm-6">
-                  <p class="section-title mb0">Bank Name</p>
-                  <p>{{$ctrl.model['bank-name']}}</p>
-                </div>
-                <div class="col-sm-6">
-                  <p class="section-title mb0">Account Type</p>
-                  <p>{{$ctrl.model['account-type']}}</p>
-                </div>
-                <div class="col-sm-6">
-                  <p class="section-title mb0">Account Number</p>
-                  <p>***********{{$ctrl.model['display-account-number']}}</p>
-                </div>
-                <div class="col-sm-6">
-                  <p class="section-title mb0">Routing Number</p>
-                  <p>{{$ctrl.model['routing-number']}}</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-sm-12 col-md-4 panel--buttons-column text-right">
-              <p>
-                <a class="btn btn-default btn-block" ng-click="$ctrl.editPaymentMethod()">Edit Payment Method</a>
-              </p>
-              <p>
-                <a class="btn btn-default btn-block" ng-click="$ctrl.deletePaymentMethod()">Delete Payment Method</a>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <recurring-gifts ng-if="$ctrl.model.recurringGifts.length" gifts="$ctrl.model.recurringGifts"></recurring-gifts>
     </div>
   </div>
+
+  <div
+    uib-collapse="$ctrl.isCollapsed"
+    role="tabpanel"
+    class="panel-collapse"
+    id="payment-method-details-{{$ctrl.paymentMethodId}}"
+  >
+    <div class="panel-body">
+      <div class="container-fluid">
+        <div class="row panel--payment-info">
+          <div ng-if="$ctrl.isCard()" class="col-sm-6 col-md-4">
+            <p class="section-title mb0">Name on card</p>
+            <p>{{$ctrl.model['cardholder-name']}}</p>
+          </div>
+          <div ng-if="$ctrl.isCard()" class="col-sm-6 col-md-4">
+            <div ng-if="$ctrl.model.address">
+              <p class="section-title mb0">Billing address</p>
+              <display-address address="$ctrl.model.address"></display-address>
+            </div>
+          </div>
+
+          <div ng-if="!$ctrl.isCard()" class="col-sm-12 col-md-8">
+            <div class="row panel--payment-info">
+              <div class="col-sm-6">
+                <p class="section-title mb0">Bank Name</p>
+                <p>{{$ctrl.model['bank-name']}}</p>
+              </div>
+              <div class="col-sm-6">
+                <p class="section-title mb0">Account Type</p>
+                <p>{{$ctrl.model['account-type']}}</p>
+              </div>
+              <div class="col-sm-6">
+                <p class="section-title mb0">Account Number</p>
+                <p>***********{{$ctrl.model['display-account-number']}}</p>
+              </div>
+              <div class="col-sm-6">
+                <p class="section-title mb0">Routing Number</p>
+                <p>{{$ctrl.model['routing-number']}}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-12 col-md-4 panel--buttons-column text-right">
+            <p>
+              <button
+                type="button"
+                class="btn btn-default btn-block"
+                ng-click="$ctrl.editPaymentMethod()"
+                aria-describedby="payment-method-{{$ctrl.paymentMethodId}}"
+              >
+                Edit Payment Method
+              </button>
+            </p>
+            <p>
+              <button
+                type="button"
+                class="btn btn-default btn-block"
+                ng-click="$ctrl.deletePaymentMethod()"
+                aria-describedby="payment-method-{{$ctrl.paymentMethodId}}"
+              >
+                Delete Payment Method
+              </button>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <recurring-gifts
+      ng-if="$ctrl.model.recurringGifts.length"
+      gifts="$ctrl.model.recurringGifts"
+    ></recurring-gifts>
+  </div>
+</div>

@@ -1,28 +1,29 @@
-import angular from 'angular'
-import { react2angular } from 'react2angular'
-import React from 'react'
-import { ButtonType, Recaptcha } from './Recaptcha'
+import angular from 'angular';
+import { react2angular } from 'react2angular';
+import React from 'react';
+import { ButtonType, Recaptcha } from './Recaptcha';
 
-const componentName = 'recaptchaWrapper'
+const componentName = 'recaptchaWrapper';
 
 declare global {
   interface Window {
-      grecaptcha: any
+    grecaptcha: any;
   }
 }
 
 interface RecaptchaWrapperProps {
-  action: string
-  onSuccess: (componentInstance: any) => void
-  componentInstance: any
-  buttonId: string
-  buttonType?: ButtonType
-  buttonClasses: string
-  buttonDisabled: boolean
-  buttonLabel: string
-  envService: any
-  $translate: any
-  $log: any
+  action: string;
+  onSuccess: () => void;
+  componentInstance: any;
+  buttonId: string;
+  buttonType?: ButtonType;
+  buttonClasses: string;
+  buttonDisabled: boolean;
+  buttonLabel: string;
+  envService: any;
+  $translate: any;
+  $log: any;
+  $rootScope: any;
 }
 
 export const RecaptchaWrapper = ({
@@ -36,24 +37,35 @@ export const RecaptchaWrapper = ({
   buttonLabel,
   envService,
   $translate,
-  $log
+  $log,
+  $rootScope,
 }: RecaptchaWrapperProps): JSX.Element => {
-  const recaptchaKey = envService.read('recaptchaKey')
+  const recaptchaKey = envService.read('recaptchaKey');
+
+  // Because the onSuccess callback is called by a React component, AngularJS doesn't know that an
+  // event happened and doesn't know it needs to rerender. We have to use $apply to ensure that
+  // AngularJS rerenders after the event handlers return.
+  const onSuccessWrapped = () => {
+    $rootScope.$apply(() => {
+      onSuccess.call(componentInstance);
+    });
+  };
 
   return (
-      <Recaptcha action={action}
-                 onSuccess={onSuccess}
-                 componentInstance={componentInstance}
-                 buttonId={buttonId}
-                 buttonType={buttonType}
-                 buttonClasses={buttonClasses}
-                 buttonDisabled={buttonDisabled}
-                 buttonLabel={buttonLabel}
-                 $translate={$translate}
-                 $log={$log}
-                 recaptchaKey={recaptchaKey}></Recaptcha>
-  )
-}
+    <Recaptcha
+      action={action}
+      onSuccess={onSuccessWrapped}
+      buttonId={buttonId}
+      buttonType={buttonType}
+      buttonClasses={buttonClasses}
+      buttonDisabled={buttonDisabled}
+      buttonLabel={buttonLabel}
+      $translate={$translate}
+      $log={$log}
+      recaptchaKey={recaptchaKey}
+    ></Recaptcha>
+  );
+};
 
 export default angular
   .module(componentName, [])
@@ -69,6 +81,8 @@ export default angular
         'buttonType',
         'buttonClasses',
         'buttonDisabled',
-        'buttonLabel'
+        'buttonLabel',
       ],
-      ['envService', '$translate', '$log']))
+      ['envService', '$translate', '$log', '$rootScope'],
+    ),
+  );

@@ -1,6 +1,8 @@
 <div class="panel" ng-if="$ctrl.isVisible">
   <div class="panel-body">
-    <h3 class="panel-name" translate>Register Your Account for Online Access</h3>
+    <h3 class="panel-name" translate>
+      Register Your Account for Online Access
+    </h3>
     <p translate>Benefits of registering for an account include:</p>
     <ul>
       <li translate>Save time during checkout</li>
@@ -9,6 +11,13 @@
       <li translate>Manage your recurring gifts</li>
       <li translate>Change your bank account or credit card information</li>
     </ul>
-    <button id="registerYourAccountButton" class="btn btn-primary btn-block" ng-click="$ctrl.doUserMatch()" translate>Register Your Account</button>
+    <button
+      id="registerYourAccountButton"
+      class="btn btn-primary btn-block"
+      ng-click="$ctrl.openModal()"
+      translate
+    >
+      Register Your Account
+    </button>
   </div>
 </div>

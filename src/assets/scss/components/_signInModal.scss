@@ -1,0 +1,32 @@
+sign-in-modal {
+  display: block;
+
+  .modal-body {
+    padding: 20px;
+  }
+
+  h4 {
+    font-size: 1.3em;
+    line-height: 1.5em;
+  }
+
+  sign-in-form {
+    margin-top: 0;
+
+    @media (min-width: 768px) {
+      hr {
+        width: 100%;
+      }
+    }
+  }
+
+  sign-in-button .btn-primary {
+    @include button-variant(black, $btn-primary-bg, $btn-primary-border);
+    
+    font-size: $btn-font-size + 2px;
+  }
+
+  .okta-button {
+    padding-block: 1.25em;
+  }
+}

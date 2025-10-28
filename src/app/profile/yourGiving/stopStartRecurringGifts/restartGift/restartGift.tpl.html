@@ -1,63 +1,82 @@
 <div ng-switch="$ctrl.step">
-  <div style="height: 100px;" ng-switch-default></div>
+  <div style="height: 100px" ng-switch-default></div>
 
   <!-- Step 0 -->
-  <step-0-payment-method-list ng-switch-when="select-payment-method"
-                              payment-methods="$ctrl.paymentMethods"
-                              dismiss="$ctrl.cancel()"
-                              next="$ctrl.next(null, null, paymentMethod)">
+  <step-0-payment-method-list
+    ng-switch-when="select-payment-method"
+    payment-methods="$ctrl.paymentMethods"
+    dismiss="$ctrl.cancel()"
+    next="$ctrl.next(null, null, paymentMethod)"
+  >
   </step-0-payment-method-list>
-  <step-0-add-update-payment-method ng-switch-when="add-update-payment-method"
-                                    previous="$ctrl.previous()"
-                                    next="$ctrl.next(selected)"
-                                    dismiss="$ctrl.cancel()"
-                                    can-go-back="true"
-                                    payment-method="$ctrl.paymentMethod"
-                                    set-loading="$ctrl.setLoading({loading: loading})">
+  <step-0-add-update-payment-method
+    ng-switch-when="add-update-payment-method"
+    previous="$ctrl.previous()"
+    next="$ctrl.next(selected)"
+    dismiss="$ctrl.cancel()"
+    can-go-back="true"
+    payment-method="$ctrl.paymentMethod"
+    set-loading="$ctrl.setLoading({loading: loading})"
+  >
   </step-0-add-update-payment-method>
 
   <!-- Step 1 -->
-  <suspended-gifts ng-switch-when="suspended"
-                   gifts="$ctrl.suspendedGifts"
-                   cancel="$ctrl.cancel()"
-                   previous="$ctrl.previous()"
-                   next="$ctrl.next(selected)">
+  <suspended-gifts
+    ng-switch-when="suspended"
+    gifts="$ctrl.suspendedGifts"
+    cancel="$ctrl.cancel()"
+    previous="$ctrl.previous()"
+    next="$ctrl.next(selected)"
+  >
   </suspended-gifts>
 
-  <suggested-recipients ng-switch-when="suggested"
-                        gifts="$ctrl.suggestedRecipients"
-                        cancel="$ctrl.cancel()"
-                        previous="$ctrl.previous()"
-                        next="$ctrl.next(selected)">
+  <suggested-recipients
+    ng-switch-when="suggested"
+    gifts="$ctrl.suggestedRecipients"
+    cancel="$ctrl.cancel()"
+    previous="$ctrl.previous()"
+    next="$ctrl.next(selected)"
+  >
   </suggested-recipients>
 
-  <redirect-gift-step-2 ng-switch-when="search"
-                        on-select-result="$ctrl.next(selected)"
-                        cancel="$ctrl.cancel()"
-                        previous="$ctrl.previous()">
+  <redirect-gift-step-2
+    ng-switch-when="search"
+    on-select-result="$ctrl.next(selected)"
+    cancel="$ctrl.cancel()"
+    previous="$ctrl.previous()"
+  >
   </redirect-gift-step-2>
 
   <!-- Step 2 -->
-  <configure-gifts ng-switch-when="configure"
-                   gifts="$ctrl.gifts"
-                   cancel="$ctrl.cancel()"
-                   previous="$ctrl.previous()"
-                   next="$ctrl.next(null, configured)">
+  <configure-gifts
+    ng-switch-when="configure"
+    gifts="$ctrl.gifts"
+    cancel="$ctrl.cancel()"
+    previous="$ctrl.previous()"
+    next="$ctrl.next(null, configured)"
+  >
   </configure-gifts>
 
   <!-- Step 3 -->
-  <confirm-gifts ng-switch-when="confirm"
-                 gifts="$ctrl.gifts"
-                 cancel="$ctrl.cancel()"
-                 previous="$ctrl.previous()"
-                 next="$ctrl.next()"
-                 set-loading="$ctrl.setLoading({loading: loading})">
+  <confirm-gifts
+    ng-switch-when="confirm"
+    gifts="$ctrl.gifts"
+    cancel="$ctrl.cancel()"
+    previous="$ctrl.previous()"
+    next="$ctrl.next()"
+    set-loading="$ctrl.setLoading({loading: loading})"
+  >
   </confirm-gifts>
 
   <!-- Loading -->
   <div ng-switch-when="loading">
     <div class="modal-header">
-      <button type="button" class="close" aria-label="{{'Close' | translate}}" ng-click="$ctrl.cancel()">
+      <button
+        type="button"
+        class="close"
+        aria-label="{{'Close' | translate}}"
+        ng-click="$ctrl.cancel()"
+      >
         <span aria-hidden="true">x</span>
       </button>
       <div class="container-fluid">
@@ -74,7 +93,11 @@
 
     <div class="modal-body">
       <div class="alert alert-danger" role="alert" ng-if="$ctrl.error">
-        <p translate>There was an error loading gift information. Please try again, or contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
+        <p translate>
+          There was an error loading gift information. Please try again, or
+          contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for
+          assistance.
+        </p>
       </div>
     </div>
 

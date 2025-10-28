@@ -1,35 +1,77 @@
-<form novalidate name="$ctrl.giftForm">
+<form novalidate name="$ctrl.giftForm" aria-label="Update gift details form">
   <div class="row mt-">
     <div class="col-sm-6">
-      <div class="form-group" ng-class="{'has-error': ($ctrl.giftForm.amount | showErrors)}">
-        <label translate>Amount</label>
-        <input type="number"
-               name="amount"
-               class="form-control form-control-subtle"
-               ng-model="$ctrl.gift.amount"
-               required
-               ng-min="1"
-               ng-max="10000000"
-               ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
-        <div role="alert" ng-messages="$ctrl.giftForm.amount.$error" ng-if="($ctrl.giftForm.amount | showErrors)">
-          <div class="help-block" ng-message="required" translate>You must enter an amount</div>
-          <div class="help-block" ng-message="min" translate>Amount must be at least $1</div>
-          <div class="help-block" ng-message="max" translate>Amount cannot be more than $10,000,000</div>
-          <div class="help-block" ng-message="number" translate>Please enter a valid number</div>
-          <div class="help-block" ng-message="pattern" translate>Please enter a valid number</div>
+      <div
+        class="form-group"
+        ng-class="{'has-error': ($ctrl.giftForm.amount | showErrors)}"
+      >
+        <label>
+          <span translate>Amount</span>
+          <input
+            type="number"
+            name="amount"
+            class="form-control form-control-subtle"
+            ng-model="$ctrl.gift.amount"
+            required
+            aria-invalid="{{ $ctrl.giftForm.amount | showErrors }}"
+            ng-min="1"
+            ng-max="10000000"
+            ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/"
+            aria-describedby="recipient-name-{{$ctrl.gift.designationNumber}} amountErrors-{{$ctrl.gift.designationNumber}}"
+          />
+        </label>
+        <div
+          id="amountErrors-{{$ctrl.gift.designationNumber}}"
+          role="alert"
+          ng-messages="$ctrl.giftForm.amount.$error"
+          ng-if="($ctrl.giftForm.amount | showErrors)"
+        >
+          <div class="help-block" ng-message="required" translate>
+            You must enter an amount
+          </div>
+          <div class="help-block" ng-message="min" translate>
+            Amount must be at least $1
+          </div>
+          <div class="help-block" ng-message="max" translate>
+            Amount cannot be more than $10,000,000
+          </div>
+          <div class="help-block" ng-message="number" translate>
+            Please enter a valid number
+          </div>
+          <div class="help-block" ng-message="pattern" translate>
+            Please enter a valid number
+          </div>
         </div>
       </div>
     </div>
     <div class="col-sm-6" ng-switch="$ctrl.singleGift">
       <p class="mt hidden-xs" ng-switch-when="true" translate>One-Time Gift</p>
-      <div class="form-group" ng-switch-default ng-class="{'has-error': !$ctrl.gift.paymentMethod}">
-        <label translate>Payment Method</label>
-        <select class="form-control  form-control-subtle"
-                ng-model="$ctrl.gift.paymentMethodId"
-                ng-options="paymentMethod.self.uri.split('/').pop() as ((paymentMethod['bank-name'] || paymentMethod['card-type']) + ' ****' + (paymentMethod['display-account-number'] || paymentMethod['last-four-digits'])) for paymentMethod in $ctrl.gift.paymentMethods" >
-        </select>
-        <div role="alert" ng-if="!$ctrl.gift.paymentMethod">
-          <div class="help-block" translate>You must choose a valid payment method</div>
+      <div
+        class="form-group"
+        ng-switch-default
+        ng-class="{'has-error': !$ctrl.gift.paymentMethod}"
+      >
+        <label>
+          <span translate>Payment Method</span>
+          <select
+            name="paymentMethod"
+            class="form-control form-control-subtle"
+            ng-model="$ctrl.gift.paymentMethodId"
+            ng-options="paymentMethod.self.uri.split('/').pop() as ((paymentMethod['bank-name'] || paymentMethod['card-type']) + ' ****' + (paymentMethod['display-account-number'] || paymentMethod['last-four-digits'])) for paymentMethod in $ctrl.gift.paymentMethods"
+            required
+            aria-required="true"
+            aria-invalid="{{!$ctrl.gift.paymentMethod ? 'true' : 'false'}}"
+            aria-describedby="recipient-name-{{$ctrl.gift.designationNumber}} paymentMethodError-{{$ctrl.gift.designationNumber}}"
+          ></select>
+        </label>
+        <div
+          id="paymentMethodError-{{$ctrl.gift.designationNumber}}"
+          role="alert"
+          ng-if="!$ctrl.gift.paymentMethod"
+        >
+          <div class="help-block" translate>
+            You must choose a valid payment method
+          </div>
         </div>
       </div>
     </div>
@@ -38,68 +80,123 @@
     <div class="row">
       <div class="col-sm-6">
         <div class="form-group">
-          <label translate>Frequency</label>
-          <select class="form-control  form-control-subtle"
-                  ng-model="$ctrl.gift.frequency">
-            <option value="Monthly" translate>Monthly</option>
-            <option value="Quarterly" translate>Quarterly</option>
-            <option value="Annual" translate>Annually</option>
-            <option value="Semi-Annual"
-                    ng-if="$ctrl.gift.parentDonation['rate']['recurrence']['interval'] === 'Semi-Annual'" translate>
-              Semi-Annually
-            </option>
-          </select>
+          <label>
+            <span translate>Frequency</span>
+            <select
+              name="frequency"
+              class="form-control form-control-subtle"
+              ng-model="$ctrl.gift.frequency"
+              aria-describedby="recipient-name-{{$ctrl.gift.designationNumber}}"
+            >
+              <option value="Monthly" translate>Monthly</option>
+              <option value="Quarterly" translate>Quarterly</option>
+              <option value="Annual" translate>Annually</option>
+              <option
+                value="Semi-Annual"
+                ng-if="$ctrl.gift.parentDonation['rate']['recurrence']['interval'] === 'Semi-Annual'"
+                translate
+              >
+                Semi-Annually
+              </option>
+            </select>
+          </label>
         </div>
       </div>
       <div class="col-sm-6">
         <div class="form-group">
-          <label translate>Transaction Day</label>
-          <select class="form-control form-control-subtle"
-                  ng-model="$ctrl.gift.transactionDay"
-                  ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays()">
-          </select>
+          <label>
+            <span translate>Transaction Day</span>
+            <select
+              name="transactionDay"
+              class="form-control form-control-subtle"
+              ng-model="$ctrl.gift.transactionDay"
+              ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays()"
+              aria-describedby="recipient-name-{{$ctrl.gift.designationNumber}}"
+            ></select>
+          </label>
         </div>
       </div>
     </div>
 
     <div ng-if="$ctrl.gift.frequency === 'Quarterly'">
-      <p>You have selected <strong>quarterly</strong> as a frequency.
-        Please tell us in which months you would like your quarterly gifts to be made
+      <p id="quarterlyInstructions-{{$ctrl.gift.designationNumber}}">
+        <span translate>You have selected </span>
+        <strong translate>quarterly </strong>
+        <span translate
+          >as a frequency. Please tell us in which months you would like your
+          quarterly gifts to be made</span
+        >
       </p>
 
-      <div class="form-group">
+      <fieldset
+        class="form-group"
+        aria-describedby="quarterlyInstructions-{{$ctrl.gift.designationNumber}}"
+      >
+        <legend class="sr-only">Quarterly gift months</legend>
         <label class="radio">
-          <input type="radio" ng-model="$ctrl.gift.startMonth" ng-value="$ctrl.startDate($ctrl.gift.transactionDay, $ctrl.gift.nextDrawDate).format('M')">
-          {{ $ctrl.quarterlyMonths($ctrl.gift.transactionDay, $ctrl.gift.nextDrawDate) }}
+          <input
+            type="radio"
+            name="quarterlyStartMonth"
+            ng-model="$ctrl.gift.startMonth"
+            ng-value="$ctrl.startDate($ctrl.gift.transactionDay, $ctrl.gift.nextDrawDate).format('M')"
+            aria-describedby="recipient-name-{{$ctrl.gift.designationNumber}} quarterlyInstructions-{{$ctrl.gift.designationNumber}}"
+          />
+          {{ $ctrl.quarterlyMonths($ctrl.gift.transactionDay,
+          $ctrl.gift.nextDrawDate) }}
         </label>
         <label class="radio">
-          <input type="radio" ng-model="$ctrl.gift.startMonth" ng-value="$ctrl.startDate($ctrl.gift.transactionDay, $ctrl.gift.nextDrawDate, 1).format('M')">
-          {{ $ctrl.quarterlyMonths($ctrl.gift.transactionDay, $ctrl.gift.nextDrawDate, 1) }}
+          <input
+            type="radio"
+            name="quarterlyStartMonth"
+            ng-model="$ctrl.gift.startMonth"
+            ng-value="$ctrl.startDate($ctrl.gift.transactionDay, $ctrl.gift.nextDrawDate, 1).format('M')"
+            aria-describedby="recipient-name-{{$ctrl.gift.designationNumber}} quarterlyInstructions-{{$ctrl.gift.designationNumber}}"
+          />
+          {{ $ctrl.quarterlyMonths($ctrl.gift.transactionDay,
+          $ctrl.gift.nextDrawDate, 1) }}
         </label>
         <label class="radio">
-          <input type="radio" ng-model="$ctrl.gift.startMonth" ng-value="$ctrl.startDate($ctrl.gift.transactionDay, $ctrl.gift.nextDrawDate, 2).format('M')">
-          {{ $ctrl.quarterlyMonths($ctrl.gift.transactionDay, $ctrl.gift.nextDrawDate, 2) }}
+          <input
+            type="radio"
+            name="quarterlyStartMonth"
+            ng-model="$ctrl.gift.startMonth"
+            ng-value="$ctrl.startDate($ctrl.gift.transactionDay, $ctrl.gift.nextDrawDate, 2).format('M')"
+            aria-describedby="recipient-name-{{$ctrl.gift.designationNumber}} quarterlyInstructions-{{$ctrl.gift.designationNumber}}"
+          />
+          {{ $ctrl.quarterlyMonths($ctrl.gift.transactionDay,
+          $ctrl.gift.nextDrawDate, 2) }}
         </label>
-      </div>
+      </fieldset>
     </div>
 
     <div ng-if="$ctrl.gift.frequency === 'Annual'">
-      <p>You have selected <strong>annually</strong> as a frequency.
-        Please tell us in which months you would like your annual gifts to be made
+      <p id="annualInstructions-{{$ctrl.gift.designationNumber}}">
+        <span translate>You have selected </span>
+        <strong translate>annually </strong>
+        <span translate
+          >as a frequency. Please tell us in which months you would like your
+          annual gifts to be made.</span
+        >
       </p>
 
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <select class="form-control  form-control-subtle"
-                    ng-model="$ctrl.gift.startMonth"
-                    ng-options="(idx*1+1).toString() as month for (idx, month) in $ctrl.possibleMonths">
-            </select>
+            <label class="sr-only">
+              <span translate>Annual gift month</span>
+              <select
+                name="annualStartMonth"
+                class="form-control form-control-subtle"
+                ng-model="$ctrl.gift.startMonth"
+                ng-options="(idx*1+1).toString() as month for (idx, month) in $ctrl.possibleMonths"
+                aria-describedby="annualInstructions-{{$ctrl.gift.designationNumber}}"
+              ></select>
+            </label>
           </div>
         </div>
       </div>
     </div>
-    <p class="mb0">
+    <p class="mb0" role="status" aria-live="polite" aria-atomic="true">
       <span translate>Next gift will be on</span>
       <strong>{{$ctrl.gift.nextGiftDate.format('ll')}}</strong>
     </p>

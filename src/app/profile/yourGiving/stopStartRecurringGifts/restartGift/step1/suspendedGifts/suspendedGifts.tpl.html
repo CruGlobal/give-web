@@ -1,5 +1,10 @@
 <div class="modal-header">
-  <button type="button" class="close" ng-click="$ctrl.cancel()" aria-label="{{'Close' | translate}}">
+  <button
+    type="button"
+    class="close"
+    ng-click="$ctrl.cancel()"
+    aria-label="{{'Close' | translate}}"
+  >
     <span aria-hidden="true">×</span>
   </button>
   <div class="container-fluid">
@@ -16,14 +21,18 @@
 
 <div class="modal-body">
   <form name="$ctrl.restartForm">
-    <div class="repeating-row select-recipient-row" ng-repeat="gift in $ctrl.gifts">
-      <gift-list-item gift="gift"
-                      selectable="checkbox">
-        <label>{{'Restart' | translate}}
-          <input type="checkbox" disabled>
+    <div
+      class="repeating-row select-recipient-row"
+      ng-repeat="gift in $ctrl.gifts"
+    >
+      <gift-list-item gift="gift" selectable="checkbox">
+        <label
+          >{{'Restart' | translate}}
+          <input type="checkbox" disabled />
         </label>
-        <p translate>This gift cannot be changed online. For assistance,
-          please call us at (888) 278-7233 from 9am to 5pm ET, Monday - Friday, or email us at
+        <p translate>
+          This gift cannot be changed online. For assistance, please call us at
+          (888) 278-7233 from 9am to 5pm ET, Monday - Friday, or email us at
           <a href="mailto:eGift@cru.org">eGift@cru.org</a>.
         </p>
       </gift-list-item>
@@ -33,17 +42,23 @@
 
 <div class="modal-footer">
   <div class="col-xs-6">
-    <button type="button"
-            class="btn btn-default"
-            ng-click="$ctrl.previous()"
-            translate>Back
+    <button
+      type="button"
+      class="btn btn-default"
+      ng-click="$ctrl.previous()"
+      translate
+    >
+      Back
     </button>
   </div>
   <div class="col-xs-6 text-right">
-    <button type="button"
-            class="btn btn-primary"
-            ng-click="$ctrl.next({selected})"
-            translate>Continue
+    <button
+      type="button"
+      class="btn btn-primary"
+      ng-click="$ctrl.next({selected})"
+      translate
+    >
+      Continue
     </button>
   </div>
 </div>

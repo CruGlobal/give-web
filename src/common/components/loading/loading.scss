@@ -72,6 +72,13 @@ loading {
     background-color: rgb(255 255 255 / 70%);
   }
 
+  .loading-fixed:first-child {
+    position: fixed;
+    z-index: 2;
+    top: 50%; 
+    left: 50%;
+  }
+
   /* stylelint-disable-next-line selector-class-pattern */
   .loadingWrap{
     display: inline-block
@@ -80,4 +87,13 @@ loading {
 
 .loading-overlay-parent{
   position: relative;
+}
+
+.icon-first > div {
+  display: flex;
+  width: 100%;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: start;
+  gap: 20px;
 }

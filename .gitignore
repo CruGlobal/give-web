@@ -10,5 +10,6 @@ coverage
 .sass-cache
 stats.json
 
-# asdf
-.tool-versions
+# Okta sign in  assets
+src/assets/okta-sign-in/font
+src/assets/okta-sign-in/labels

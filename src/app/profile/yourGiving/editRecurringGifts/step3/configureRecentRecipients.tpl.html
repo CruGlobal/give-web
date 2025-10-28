@@ -1,5 +1,10 @@
 <div class="modal-header">
-  <button type="button" class="close" aria-label="Close" ng-click="$ctrl.dismiss()">
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    ng-click="$ctrl.dismiss()"
+  >
     <span aria-hidden="true">x</span>
   </button>
   <div class="container-fluid">
@@ -18,7 +23,10 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12 col-xs-12">
-        <div ng-repeat="gift in $ctrl.additions" class="row repeating-row user-profile">
+        <div
+          ng-repeat="gift in $ctrl.additions"
+          class="row repeating-row user-profile"
+        >
           <gift-list-item gift="gift">
             <gift-update-view gift="gift"></gift-update-view>
           </gift-list-item>
@@ -30,13 +38,23 @@
 
 <div class="modal-footer">
   <div class="col-xs-6">
-    <a class="btn btn-default"
-       ng-click="$ctrl.previous()"
-       translate>
+    <button
+      class="btn btn-default"
+      type="button"
+      ng-click="$ctrl.previous()"
+      translate
+    >
       Back
-    </a>
+    </button>
   </div>
   <div class="col-xs-6 text-right">
-    <button class="btn btn-primary" ng-click="$ctrl.next({ additions: $ctrl.additions })" translate>Continue</button>
+    <button
+      class="btn btn-primary"
+      type="button"
+      ng-click="$ctrl.next({ additions: $ctrl.additions })"
+      translate
+    >
+      Continue
+    </button>
   </div>
 </div>

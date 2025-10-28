@@ -1,0 +1,11 @@
+<button
+  class="okta-button btn btn-primary"
+  ng-click="$ctrl.signInWithOkta()"
+  ng-disabled="$ctrl.isSigningIn"
+>
+  <strong translate>Log in</strong>
+  <i class="fa fa-external-link"></i>
+</button>
+<loading type="overlay" ng-if="$ctrl.isSigningIn">
+  <translate translate>Logging you in...</translate>
+</loading>

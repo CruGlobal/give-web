@@ -6,7 +6,11 @@
         <a href="" ng-click="$ctrl.tab = 'newsletter'">
           MPDX Newsletter <span class="xs-hide">Form</span>
         </a>
-        <a href="" ng-click="$ctrl.tab = 'givingLinks'" ng-if="$ctrl.givingLinksAvailable">
+        <a
+          href=""
+          ng-click="$ctrl.tab = 'givingLinks'"
+          ng-if="$ctrl.givingLinksAvailable"
+        >
           Giving Links
         </a>
       </li>
@@ -14,89 +18,156 @@
 
     <!-- Tab panes -->
     <div class="tab-content">
-      <div class="tab-pane"
-           ng-class="{active: $ctrl.tab === 'givingLinks'}"
-           ng-if="$ctrl.tab === 'givingLinks'">
+      <div
+        class="tab-pane"
+        ng-class="{active: $ctrl.tab === 'givingLinks'}"
+        ng-if="$ctrl.tab === 'givingLinks'"
+      >
         <div class="form-group">
           <span class="help-block">Setup additional country giving links.</span>
         </div>
         <table class="table table-hover table-condensed">
           <thead>
-          <tr>
-            <th>Country Name</th>
-            <th>Give Site URL</th>
-            <th></th>
-          </tr>
+            <tr>
+              <th>Country Name</th>
+              <th>Give Site URL</th>
+              <th></th>
+            </tr>
           </thead>
           <tbody>
-          <tr>
-            <td><input type="text" class="form-control" style="border: 0; box-shadow: none;" name="name"
-                       value="US" readonly="readonly"/></td>
-            <td><input type="url" class="form-control" style="border: 0; box-shadow: none;" name="url"
-                       value="{{$ctrl.giveDomain}}/{{$ctrl.designationNumber}}" readonly="readonly"/></td>
-            <td></td>
-          </tr>
-          <tr ng-repeat="a in $ctrl.givingLinks track by $index" ng-form="givingLinkForm">
-            <td class="form-group" ng-class="{'has-error': !givingLinkForm.name.$valid}">
-              <input name="name"
-                     type="text"
-                     class="form-control"
-                     ng-model="a.name"
-                     placeholder="Country Name"
-                     required ng-change="console.log(givingLinkForm)">
-              <span class="help-block" ng-hide="givingLinkForm.name.$valid">Name is required.</span>
-            </td>
-            <td class="form-group" ng-class="{'has-error': !givingLinkForm.url.$valid}">
-              <input name="url"
-                     type="url"
-                     class="form-control"
-                     placeholder="https://give.country.co/name"
-                     ng-model="a.url"
-                     required>
-              <span class="help-block" ng-hide="givingLinkForm.url.$valid">Url is required.</span>
-            </td>
-            <td><a href="" class="btn-link btn" ng-click="$ctrl.givingLinks.splice($index, 1)">
-              <i class="fa fa-minus-circle"></i>
-            </a></td>
-          </tr>
+            <tr>
+              <td>
+                <input
+                  type="text"
+                  class="form-control"
+                  style="border: 0; box-shadow: none"
+                  name="name"
+                  value="US"
+                  readonly="readonly"
+                />
+              </td>
+              <td>
+                <input
+                  type="url"
+                  class="form-control"
+                  style="border: 0; box-shadow: none"
+                  name="url"
+                  value="{{$ctrl.giveDomain}}/{{$ctrl.designationNumber}}"
+                  readonly="readonly"
+                />
+              </td>
+              <td></td>
+            </tr>
+            <tr
+              ng-repeat="a in $ctrl.givingLinks track by $index"
+              ng-form="givingLinkForm"
+            >
+              <td
+                class="form-group"
+                ng-class="{'has-error': !givingLinkForm.name.$valid}"
+              >
+                <input
+                  name="name"
+                  type="text"
+                  class="form-control"
+                  ng-model="a.name"
+                  placeholder="Country Name"
+                  required
+                  ng-change="console.log(givingLinkForm)"
+                />
+                <span class="help-block" ng-hide="givingLinkForm.name.$valid"
+                  >Name is required.</span
+                >
+              </td>
+              <td
+                class="form-group"
+                ng-class="{'has-error': !givingLinkForm.url.$valid}"
+              >
+                <input
+                  name="url"
+                  type="url"
+                  class="form-control"
+                  placeholder="https://give.country.co/name"
+                  ng-model="a.url"
+                  required
+                />
+                <span class="help-block" ng-hide="givingLinkForm.url.$valid"
+                  >Url is required.</span
+                >
+              </td>
+              <td>
+                <a
+                  href=""
+                  class="btn-link btn"
+                  ng-click="$ctrl.givingLinks.splice($index, 1)"
+                >
+                  <i class="fa fa-minus-circle"></i>
+                </a>
+              </td>
+            </tr>
           </tbody>
           <tfoot>
-          <tr>
-            <td colspan="3">
-              <a id="addGivingLinksButton" href="" ng-click="$ctrl.givingLinks.push({})">
-                <i class="fa fa-plus-circle"></i> Add another Giving Link</a>
-            </td>
-          </tr>
+            <tr>
+              <td colspan="3">
+                <a
+                  id="addGivingLinksButton"
+                  href=""
+                  ng-click="$ctrl.givingLinks.push({})"
+                >
+                  <i class="fa fa-plus-circle"></i> Add another Giving Link</a
+                >
+              </td>
+            </tr>
           </tfoot>
         </table>
       </div>
-      <div class="tab-pane"
-           ng-class="{active: $ctrl.tab === 'newsletter'}"
-           ng-if="$ctrl.tab === 'newsletter'">
+      <div
+        class="tab-pane"
+        ng-class="{active: $ctrl.tab === 'newsletter'}"
+        ng-if="$ctrl.tab === 'newsletter'"
+      >
         <div class="form-group">
           <label>
-            <input type="checkbox"
-                   aria-describedby="newsletter-help"
-                   ng-disabled="!$ctrl.hasNewsletter"
-                   ng-checked="$ctrl.showNewsletterForm"
-                   ng-model="$ctrl.showNewsletterForm"/> Display Newsletter Form?
+            <input
+              type="checkbox"
+              aria-describedby="newsletter-help"
+              ng-disabled="!$ctrl.hasNewsletter"
+              ng-checked="$ctrl.showNewsletterForm"
+              ng-model="$ctrl.showNewsletterForm"
+            />
+            Display Newsletter Form?
           </label>
         </div>
         <div id="newsletter-help" class="form-group">
-          <h6 ng-if="$ctrl.hasNewsletter">This form will allow donors to subscribe to your MPDX newsletter.</h6>
-          <h6 ng-if="!$ctrl.hasNewsletter">This option is disabled because you do not have an MPDX account. To sign up for one, visit <a href="https://mpdx.org" target="_blank">mpdx.org</a>.</h6>
+          <h6 ng-if="$ctrl.hasNewsletter">
+            This form will allow donors to subscribe to your MPDX newsletter.
+          </h6>
+          <h6 ng-if="!$ctrl.hasNewsletter">
+            This option is disabled because you do not have an MPDX account. To
+            sign up for one, visit
+            <a href="https://mpdx.org" target="_blank">mpdx.org</a>.
+          </h6>
         </div>
       </div>
     </div>
   </form>
 </div>
 <div class="modal-footer">
-  <button id="saveChangesButton"
-          type="button"
-          class="btn btn-primary pull-right"
-          ng-click="$ctrl.saveChanges()"
-          ng-disabled="!personalForm.$valid">
+  <button
+    id="saveChangesButton"
+    type="button"
+    class="btn btn-primary pull-right"
+    ng-click="$ctrl.saveChanges()"
+    ng-disabled="!personalForm.$valid"
+  >
     Save &amp; Close
   </button>
-  <button id="cancelChangesButton" type="button" class="btn btn-default" ng-click="$dismiss()">Cancel</button>
+  <button
+    id="cancelChangesButton"
+    type="button"
+    class="btn btn-default"
+    ng-click="$dismiss()"
+  >
+    Cancel
+  </button>
 </div>

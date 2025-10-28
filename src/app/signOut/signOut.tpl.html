@@ -1,0 +1,28 @@
+<div class="screenContent">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-xs-12">
+        <div class="panel">
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-xs-12">
+                <h3 class="text-center">
+                  <p translate>Successfully signed out.</p>
+                </h3>
+                <br />
+                <loading inline="true" class="center">
+                  <span translate ng-if="!$ctrl.redirectToPreviousLocation"
+                    >Redirecting to the homepage...</span
+                  >
+                  <span translate ng-if="$ctrl.redirectToPreviousLocation"
+                    >Redirecting to your previous page...</span
+                  >
+                </loading>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

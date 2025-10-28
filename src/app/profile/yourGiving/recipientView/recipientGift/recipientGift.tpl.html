@@ -1,13 +1,20 @@
 <div class="panel panel-margin-bottom recent-recipient-row">
   <div class="panel-body">
-
     <!-- Recipient Row -->
     <div class="row">
       <div class="col-md-2 col-full-height col-sm-12 col-xs-12 mb">
-        <img class="full-width" desig-src="{{$ctrl.recipient['designation-number']}}">
+        <img
+          class="full-width"
+          desig-src="{{$ctrl.recipient['designation-number']}}"
+        />
       </div>
       <div class="col-sm-12 col-md-7 col-full-height">
-        <h4 class="mb0">{{$ctrl.recipient['designation-name']}}</h4>
+        <h4
+          class="mb0"
+          ng-attr-id="{{ 'recipientName-' + $ctrl.recipient['designation-number']}}"
+        >
+          {{$ctrl.recipient['designation-name']}}
+        </h4>
         <small>#{{$ctrl.recipient['designation-number']}}</small>
 
         <div class="row">
@@ -16,29 +23,48 @@
               <label translate>Year-to-date:</label>
               <ul class="list-unstyled list-recurring">
                 <li>
-                  <h4>{{$ctrl.recipient['year-to-date-amount'] | currency:'$'}}</h4>
+                  <h4>
+                    {{$ctrl.recipient['year-to-date-amount'] | currency:'$'}}
+                  </h4>
                 </li>
               </ul>
             </div>
           </div>
           <div class="col-sm-3 col-md-3">
-            <div class="form-group mb0" ng-if="$ctrl.recipient['most-recent-donation']">
+            <div
+              class="form-group mb0"
+              ng-if="$ctrl.recipient['most-recent-donation']"
+            >
               <label translate>Most Recent:</label>
               <ul class="list-unstyled list-recurring">
                 <li>
-                  <h4>{{$ctrl.recipient['most-recent-donation']['historical-donation-line']['amount'] | currency:'$'}}</h4>
-                  <span class="meta">{{$ctrl.recipient['most-recent-donation']['historical-donation-line']['transaction-date']['display-value'] | date:'mediumDate'}}</span>
+                  <h4>
+                    {{$ctrl.recipient['most-recent-donation']['historical-donation-line']['amount']
+                    | currency:'$'}}
+                  </h4>
+                  <span class="meta"
+                    >{{$ctrl.recipient['most-recent-donation']['historical-donation-line']['transaction-date']['display-value']
+                    | date:'mediumDate'}}</span
+                  >
                 </li>
               </ul>
             </div>
           </div>
           <div class="col-sm-4 col-md-4">
-            <div class="form-group mb0" ng-if="$ctrl.recipient['recurring-donations']['donations'].length">
+            <div
+              class="form-group mb0"
+              ng-if="$ctrl.recipient['recurring-donations']['donations'].length"
+            >
               <label translate>Recurring Gifts:</label>
               <ul class="list-unstyled list-recurring">
-                <li ng-repeat="recurring in $ctrl.recipient['recurring-donations']['donations']" ng-init="gift = $ctrl.recurringGift(recurring)">
+                <li
+                  ng-repeat="recurring in $ctrl.recipient['recurring-donations']['donations']"
+                  ng-init="gift = $ctrl.recurringGift(recurring)"
+                >
                   <h4>{{gift.amount | currency:'$'}} {{gift.frequency}}</h4>
-                  <span class="meta">Next Gift: {{gift.nextGiftDate.format('ll')}}</span>
+                  <span class="meta"
+                    >Next Gift: {{gift.nextGiftDate.format('ll')}}</span
+                  >
                 </li>
               </ul>
             </div>
@@ -47,25 +73,43 @@
       </div>
 
       <div class="col-sm-4 col-md-3 col-full-height split-row">
-        <button type="button"
-                class="btn btn-primary btn-block split-col-left"
-                ng-click="$ctrl.giveNewGift()"
-                ng-if="$ctrl.recipient['designation-active']"
-                translate>Give a New Gift
+        <button
+          type="button"
+          class="btn btn-primary btn-block split-col-left"
+          ng-click="$ctrl.giveNewGift()"
+          ng-if="$ctrl.recipient['designation-active']"
+          ng-attr-aria-describedby="{{
+            'recipientName-' +$ctrl.recipient['designation-number']
+          }}"
+          translate
+        >
+          Give a New Gift
         </button>
-        <button type="button"
-                class="btn btn-subtle btn-block mt- collapse-indicator split-col-right"
-                ng-class="{collapsed: !$ctrl.showDetails}"
-                ng-click="$ctrl.toggleDetails()"
-                translate>
-          <i class="fa fa-exclamation-triangle text-danger"
-             ng-if="$ctrl.loadingDetailsError"
-             uib-tooltip="{{'Error loading detailed giving.' | translate}}">
+        <button
+          type="button"
+          class="btn btn-subtle btn-block mt- collapse-indicator split-col-right"
+          ng-class="{collapsed: !$ctrl.showDetails}"
+          ng-click="$ctrl.toggleDetails()"
+          translate
+        >
+          <i
+            class="fa fa-exclamation-triangle text-danger"
+            ng-if="$ctrl.loadingDetailsError"
+            uib-tooltip="{{'Error loading detailed giving.' | translate}}"
+          >
           </i>
           Details&nbsp;
         </button>
-        <div class="alert alert-danger text-sm-center" role="alert" ng-if="$ctrl.loadingDetailsError">
-          <p translate>Error loading detailed giving. You can try again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
+        <div
+          class="alert alert-danger text-sm-center"
+          role="alert"
+          ng-if="$ctrl.loadingDetailsError"
+        >
+          <p translate>
+            Error loading detailed giving. You can try again. If you continue to
+            see this message, contact
+            <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
+          </p>
         </div>
       </div>
     </div>
@@ -76,18 +120,26 @@
         <translate>Loading gift history...</translate>
       </loading>
       <div class="table-responsive" ng-if="!$ctrl.isLoading">
-        <div ng-if="!$ctrl.recipient['donations'].length > 0" translate>No Gift History</div>
-        <table class="table table-striped table-payment-history" ng-if="$ctrl.recipient['donations'].length > 0">
+        <div ng-if="!$ctrl.recipient['donations'].length > 0" translate>
+          No Gift History
+        </div>
+        <table
+          class="table table-striped table-payment-history"
+          ng-if="$ctrl.recipient['donations'].length > 0"
+        >
           <thead>
-          <tr>
-            <th class="date" translate>Date</th>
-            <th class="amount" translate>Amount</th>
-            <th class="method" translate>Payment Method</th>
-            <th class="status" translate>Status</th>
-          </tr>
+            <tr>
+              <th class="date" translate>Date</th>
+              <th class="amount" translate>Amount</th>
+              <th class="method" translate>Payment Method</th>
+              <th class="status" translate>Status</th>
+            </tr>
           </thead>
           <tbody>
-          <tr ng-repeat="gift in $ctrl.recipient['donations']" recipient-detail="gift"></tr>
+            <tr
+              ng-repeat="gift in $ctrl.recipient['donations']"
+              recipient-detail="gift"
+            ></tr>
           </tbody>
         </table>
       </div>

@@ -1,5 +1,10 @@
 <div class="modal-header">
-  <button type="button" class="close" aria-label="Close" ng-click="$ctrl.dismiss()">
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    ng-click="$ctrl.dismiss()"
+  >
     <span aria-hidden="true">x</span>
   </button>
   <div class="container-fluid">
@@ -21,15 +26,27 @@
           <translate>Loading recurring gifts...</translate>
         </loading>
         <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingError">
-          <p translate>There was an error loading your recurring gifts. You can use the retry button to try loading them again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
-        </div>
-        <div class="alert alert-warning" role="alert" ng-if="!$ctrl.loading && !$ctrl.loadingError && (!$ctrl.recurringGifts || $ctrl.recurringGifts.length === 0)">
           <p translate>
-            You don't seem to have any recurring gifts to edit.
-            You may click continue to set up a new recurring gift.
+            There was an error loading your recurring gifts. You can use the
+            retry button to try loading them again. If you continue to see this
+            message, contact
+            <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
           </p>
         </div>
-        <div ng-repeat="gift in $ctrl.recurringGifts" class="row repeating-row user-profile">
+        <div
+          class="alert alert-warning"
+          role="alert"
+          ng-if="!$ctrl.loading && !$ctrl.loadingError && (!$ctrl.recurringGifts || $ctrl.recurringGifts.length === 0)"
+        >
+          <p translate>
+            You don't seem to have any recurring gifts to edit. You may click
+            continue to set up a new recurring gift.
+          </p>
+        </div>
+        <div
+          ng-repeat="gift in $ctrl.recurringGifts"
+          class="row repeating-row user-profile"
+        >
           <gift-list-item gift="gift">
             <gift-update-view gift="gift"></gift-update-view>
           </gift-list-item>
@@ -41,19 +58,32 @@
 
 <div class="modal-footer" ng-if="!$ctrl.loading">
   <div class="col-xs-6">
-    <a class="btn btn-default"
-       ng-click="$ctrl.dismiss()"
-       translate>
+    <button
+      class="btn btn-default"
+      type="button"
+      ng-click="$ctrl.dismiss()"
+      translate
+    >
       Cancel
-    </a>
+    </button>
   </div>
   <div class="col-xs-6 text-right">
-    <a class="btn btn-primary" ng-if="$ctrl.loadingError" ng-click="$ctrl.loadGifts()" translate>Retry</a>
-    <a class="btn btn-primary" ng-if="!$ctrl.loadingError"
-       ng-click="$ctrl.next({ recurringGifts: $ctrl.recurringGifts })"
-       ng-disabled="!$ctrl.allPaymentMethodsValid()"
-       translate>
+    <a
+      class="btn btn-primary"
+      ng-if="$ctrl.loadingError"
+      ng-click="$ctrl.loadGifts()"
+      translate
+      >Retry</a
+    >
+    <button
+      class="btn btn-primary"
+      type="button"
+      ng-if="!$ctrl.loadingError"
+      ng-click="$ctrl.next({ recurringGifts: $ctrl.recurringGifts })"
+      ng-disabled="!$ctrl.allPaymentMethodsValid()"
+      translate
+    >
       Continue
-    </a>
+    </button>
   </div>
 </div>

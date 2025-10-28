@@ -1,19 +1,37 @@
 <div class="screenContent account-management">
   <div class="container container-edge-small container-edge-extrasmall">
-    <div ng-switch="$ctrl.successMessage.type" ng-class="{fade: !$ctrl.successMessage.show}" class="alert alert-success" role="alert">
-      <span ng-switch-when="paymentMethodAdded" translate>Payment method has been successfully added.</span>
-      <span ng-switch-when="paymentMethodDeleted" translate>Payment method has been successfully deleted.</span>
-      <span ng-switch-when="paymentMethodUpdated" translate>Payment method has been successfully updated.</span>
+    <div
+      ng-switch="$ctrl.successMessage.type"
+      ng-class="{fade: !$ctrl.successMessage.show}"
+      class="alert alert-success"
+      role="alert"
+    >
+      <span ng-switch-when="paymentMethodAdded" translate
+        >Payment method has been successfully added.</span
+      >
+      <span ng-switch-when="paymentMethodDeleted" translate
+        >Payment method has been successfully deleted.</span
+      >
+      <span ng-switch-when="paymentMethodUpdated" translate
+        >Payment method has been successfully updated.</span
+      >
     </div>
     <div class="panel pane-margin-bottom">
       <div class="panel-body">
-
         <div class="row pb">
           <div class="col-md-6">
             <h3 translate>Your Payment Methods</h3>
           </div>
           <div class="col-md-6 text-right">
-            <a id="addNewPaymentMethodLink" class="btn btn-primary" ng-click="$ctrl.addPaymentMethod()" translate>Add New Payment Method</a>
+            <button
+              type="button"
+              id="addNewPaymentMethodLink"
+              class="btn btn-primary"
+              ng-click="$ctrl.addPaymentMethod()"
+              translate
+            >
+              Add New Payment Method
+            </button>
           </div>
         </div>
         <div class="row panel panel-default">
@@ -22,22 +40,51 @@
             <loading ng-if="$ctrl.loading" class="mb">
               <translate>Loading payment methods...</translate>
             </loading>
-            <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingError === true">
-              <span translate>There was an error loading your payment methods. You may</span> <a href="" ng-click="$ctrl.loadPaymentMethods()" translate>try again</a>.
+            <div
+              class="alert alert-danger"
+              role="alert"
+              ng-if="$ctrl.loadingError === true"
+            >
+              <span translate
+                >There was an error loading your payment methods. You may</span
+              >
+              <a href="" ng-click="$ctrl.loadPaymentMethods()" translate
+                >try again</a
+              >.
             </div>
-            <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingError === 'authentication'" translate>
-              There was an error loading your payment methods. Please log out and log in again.
+            <div
+              class="alert alert-danger"
+              role="alert"
+              ng-if="$ctrl.loadingError === 'authentication'"
+              translate
+            >
+              There was an error loading your payment methods. Please log out
+              and log in again.
             </div>
-            <div class="alert alert-warning" role="alert" ng-if="!$ctrl.loading && !$ctrl.loadingError && $ctrl.paymentMethods.length === 0" translate>
+            <div
+              class="alert alert-warning"
+              role="alert"
+              ng-if="!$ctrl.loading && !$ctrl.loadingError && $ctrl.paymentMethods.length === 0"
+              translate
+            >
               You haven't added any payment methods. Feel free to add one.
             </div>
-            <div ng-if="$ctrl.paymentMethods" ng-repeat="paymentMethod in $ctrl.paymentMethods" class="panel-group panel-collapse">
-              <payment-method success-message="$ctrl.successMessage" model="paymentMethod" payment-methods-list="$ctrl.paymentMethods" mailing-address="$ctrl.mailingAddress" on-delete="$ctrl.onDelete()"></payment-method>
+            <div
+              ng-if="$ctrl.paymentMethods"
+              ng-repeat="paymentMethod in $ctrl.paymentMethods"
+              class="panel-group panel-collapse"
+            >
+              <payment-method
+                success-message="$ctrl.successMessage"
+                model="paymentMethod"
+                payment-methods-list="$ctrl.paymentMethods"
+                mailing-address="$ctrl.mailingAddress"
+                on-delete="$ctrl.onDelete()"
+              ></payment-method>
             </div>
           </div>
         </div>
       </div>
     </div>
-
   </div>
 </div>

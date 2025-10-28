@@ -12,61 +12,93 @@
 export default {
   extends: [
     'stylelint-config-standard-scss',
-    'stylelint-config-idiomatic-order'
+    'stylelint-config-idiomatic-order',
   ],
   ignoreFiles: [
     'src/assets/crubrand/**',
-    'src/assets/cru-scss/**'
+    'src/assets/cru-scss/**',
+    '**/okta-sign-in.min.css',
   ],
   plugins: [
     'stylelint-declaration-strict-value',
-    '@stylistic/stylelint-plugin'
+    '@stylistic/stylelint-plugin',
   ],
   overrides: [
     {
-      files: ['src/assets/scss/*.{css,scss}'],
+      files: ['src/assets/scss/**/*.{css,scss}'],
       customSyntax: 'postcss-scss',
       rules: {
         'media-feature-range-notation': 'prefix', // Enforces range notation in media queries to use `min-` instead of  `>=` .
-        'color-function-notation': 'legacy', // Uses legacy `rgb(r, g, b)` format instead of `rgb(r g b / a)`.
-        'declaration-block-no-redundant-longhand-properties': [true, {
-          /**
-           * Ignore specific shorthand properties that are not widely supported in all major browsers.
-           * This helps avoid compatibility issues.
-          */
-          ignoreShorthands: [
-            'inset', 'inset-block', 'inset-inline', 'mask', 'overscroll-behavior',
-            'padding-block', 'padding-inline', 'place-content', 'place-items', 'place-self',
-            'scroll-margin', 'border-block', 'border-block-end', 'border-block-start',
-            'border-inline', 'border-inline-end', 'border-inline-start'
-          ]
-        }],
-        'property-no-vendor-prefix': [true, {
-          /**
-           * Allows vendor prefixes for specific properties that are not fully supported across browsers.
-           * Reference: https://fullystacked.net/prefix/
-           */
-          ignoreProperties: [
-            'backdrop-filter', 'user-select', 'initial-letter', 'text-decoration',
-            'text-stroke', 'text-fill-color', 'line-clamp', 'box-decoration-break', 'stretch'
-          ]
-        }],
+        'color-function-notation': null, // Disables the color function notation rule to allow both `rgb()` and `rgba()` functions.
+        'declaration-block-no-redundant-longhand-properties': [
+          true,
+          {
+            /**
+             * Ignore specific shorthand properties that are not widely supported in all major browsers.
+             * This helps avoid compatibility issues.
+             */
+            ignoreShorthands: [
+              'inset',
+              'inset-block',
+              'inset-inline',
+              'mask',
+              'overscroll-behavior',
+              'padding-block',
+              'padding-inline',
+              'place-content',
+              'place-items',
+              'place-self',
+              'scroll-margin',
+              'border-block',
+              'border-block-end',
+              'border-block-start',
+              'border-inline',
+              'border-inline-end',
+              'border-inline-start',
+            ],
+          },
+        ],
+        'property-no-vendor-prefix': [
+          true,
+          {
+            /**
+             * Allows vendor prefixes for specific properties that are not fully supported across browsers.
+             * Reference: https://fullystacked.net/prefix/
+             */
+            ignoreProperties: [
+              'backdrop-filter',
+              'user-select',
+              'initial-letter',
+              'text-decoration',
+              'text-stroke',
+              'text-fill-color',
+              'line-clamp',
+              'box-decoration-break',
+              'stretch',
+            ],
+          },
+        ],
         'alpha-value-notation': 'number', // Forces numeric alpha values instead of percentage-based values.
         'scale-unlimited/declaration-strict-value': [
-          [
-            '/color$/', 'background', 'fill', 'stroke'
-          ],
+          ['/color$/', 'background', 'fill', 'stroke'],
           {
             /**
              * These values are considered acceptable for properties requiring variables.
              * The rule prevents the use of arbitrary values.
              */
             ignoreValues: [
-              'inherit', 'transparent', 'initial', 'unset', 'none',
-              'no-repeat', 'repeat', 'center', 'scroll'
+              'inherit',
+              'transparent',
+              'initial',
+              'unset',
+              'none',
+              'no-repeat',
+              'repeat',
+              'center',
+              'scroll',
             ],
-            disableFix: true
-          }
+            disableFix: true,
+          },
         ],
         // Stylistic rules enforced by @stylistic/stylelint-plugin.
         '@stylistic/number-leading-zero': 'always', // Ensures a leading zero for decimal values (e.g., `0.5` instead of `.5`).
@@ -83,8 +115,8 @@ export default {
         'selector-id-pattern': null,
         'scss/no-global-function-names': null,
         'selector-type-no-unknown': null,
-        'shorthand-property-no-redundant-values': null
-      }
-    }
-  ]
-}
+        'shorthand-property-no-redundant-values': null,
+      },
+    },
+  ],
+};

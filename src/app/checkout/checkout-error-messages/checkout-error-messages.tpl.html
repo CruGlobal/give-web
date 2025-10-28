@@ -1,0 +1,50 @@
+<div
+  class="alert alert-danger"
+  role="alert"
+  ng-if="$ctrl.needinfoErrors || $ctrl.submissionError"
+>
+  <p ng-repeat="error in $ctrl.needinfoErrors" ng-switch="error">
+    <span ng-switch-when="need.email" translate>{{'REVIEW_EMAIL_ERROR'}}</span>
+    <span ng-switch-when="need.payment.method" translate
+      >{{'REVIEW_PAYMENT_ERROR'}}</span
+    >
+    <span ng-switch-when="need.billing.address" translate
+      >{{'REVIEW_BILLING_ADDRESS_ERROR'}}</span
+    >
+    <span ng-switch-default translate>
+      <span ng-if="$ctrl.submissionErrorStatus > -1" translate>
+        {{'REVIEW_MISSING_DATA_ERROR'}}
+      </span>
+      <span ng-if="$ctrl.submissionErrorStatus === -1" translate>
+        {{'REVIEW_TIME_OUT_ERROR'}}
+      </span>
+    </span>
+  </p>
+  <p ng-if="$ctrl.submissionError" ng-switch="$ctrl.submissionError">
+    <span ng-switch-when="Current payment type is unknown" translate>
+      {{'REVIEW_SUBMITTING_PAYMENT_ERROR'}}
+    </span>
+    <span ng-switch-when="CardExpiredException" translate>
+      {{'REVIEW_CARD_EXPIRED_ERROR'}}
+    </span>
+    <span ng-switch-when="CardErrorException" translate>
+      {{'REVIEW_INVALID_CARD_ERROR'}}
+    </span>
+    <span ng-switch-when="CardDeclinedException" translate>
+      {{'REVIEW_CARD_DECLINED_ERROR'}}
+    </span>
+    <span ng-switch-when="InsufficientFundException" translate>
+      {{'REVIEW_INSUFFICIENT_FUNDS_ERROR'}}
+    </span>
+    <span ng-switch-when="AuthorizedAmountExceededException" translate>
+      {{'REVIEW_EXCEEDS_BALANCE_ERROR'}}
+    </span>
+    <span ng-switch-when="InvalidCVV2Exception" translate>
+      {{'REVIEW_INVALID_SEC_CODE_ERROR'}}
+    </span>
+    <span ng-switch-when="InvalidAddressException" translate>
+      {{'REVIEW_ADDRESS_MISMATCH_ERROR'}}
+    </span>
+    <span ng-switch-default translate> {{'REVIEW_DEFAULT_ERROR'}} </span>
+  </p>
+</div>
