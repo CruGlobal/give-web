@@ -87,7 +87,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: ${{ (github.ref == 'refs/heads/master' && 'production') || 'staging' }}
-    needs: [lint, test]
+    needs: [lint, test, build]
     if: (github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/staging')) || (github.event_name == 'workflow_dispatch' && github.event.inputs.auto-deploy == 'true')
     steps:
       - uses: actions/checkout@v2
