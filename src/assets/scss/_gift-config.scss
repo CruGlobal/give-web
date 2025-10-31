@@ -147,11 +147,15 @@ div[data-toggle="buttons"] label:hover {
 
 div[data-toggle="buttons"] label:active,
 div[data-toggle="buttons"] label.active {
-  border-color: $colorGrayscale-text;
-  background-color: $colorGrayscale-text;
+  border: 2px solid $colorCru-gold;
+  background-color: $colorCru-white;
   box-shadow: none;
-  color: $colorCru-white;
+  color: $colorGrayscale-black;
   font-weight: 600;
+
+  &:hover {
+    background-color: $colorCru-gold;
+  }
 }
 
 label.btn.btn-default-form.custom-amount.mr.u-textLeft {
