@@ -217,7 +217,7 @@ $slider-break-min: 1000px;
     }
 }
 
-.slider {
+.slider:not(.list) {
     position: relative;
     max-width: 1200px;
 

@@ -39,6 +39,10 @@ label:not(:has(input[type="checkbox"])) {
     display: block;
     margin-bottom: 4px;
   }
+
+  &.btn-radio > span {
+    margin-bottom: 0;
+  }
 }
 
 .is-required {
@@ -55,7 +59,7 @@ label:not(:has(input[type="checkbox"])) {
 .form-group {
   label:not(.error) {
     margin-bottom: 4px;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 500;
   }
 }
