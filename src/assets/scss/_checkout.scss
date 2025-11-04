@@ -116,7 +116,7 @@
   img {
     display: inline-block;
     max-height: 50px;
-    margin-left: 20px;
+    margin-left: 10px;
   }
 
   @include respond-to(extrasmall) {
@@ -257,4 +257,12 @@
 .premium-thumbnail {
   width: 200px;
   max-height: 500px;
+}
+
+.existing-payment-method payment-method-display {
+  font-size: 14px;
+}
+
+.form-group .number {
+  font-feature-settings: "calt" 0;
 }

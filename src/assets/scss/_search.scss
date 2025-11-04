@@ -351,12 +351,23 @@
   .is-row-meta {
     flex: 1;
 
+    a {
+      text-decoration: none;
+
+      &:hover {
+        .is-row-title,
+        .is-row-num {
+          color: $link-hover-color;
+        }
+      }
+    }
+
     span {
       display: block;
     }
 
     .is-row-title {
-      color: $colorCru-gray;
+      color: $colorGrayscale-black;
       font-size: 115%;
       font-weight: 500;
       line-height: 120%;
