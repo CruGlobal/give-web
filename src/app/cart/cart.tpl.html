@@ -9,7 +9,7 @@
               <div class="row">
                 <div class="col-sm-6">
                   <h3 id="cart-header" class="panel-name" translate>
-                    Your Gift Cart
+                    Selected Gifts
                   </h3>
                 </div>
                 <div class="col-sm-6 text-right">
@@ -18,19 +18,19 @@
                     class="text-right"
                     ng-if="$ctrl.updating"
                   >
-                    <translate>Updating cart...</translate>
+                    <translate>Updating gifts...</translate>
                   </loading>
                 </div>
               </div>
               <div class="alert alert-danger" role="alert" ng-if="$ctrl.error">
                 <p ng-if="$ctrl.error.loading" translate>
-                  Error loading your cart.
+                  Error loading your gifts.
                   <a id="retryLoadButton" href="" ng-click="$ctrl.loadCart()"
                     >Retry</a
                   >
                 </p>
                 <p ng-if="$ctrl.error.updating" translate>
-                  Error loading your updated cart.
+                  Error loading your updated gifts.
                   <a
                     id="retryUpdateButton"
                     href=""
@@ -46,7 +46,7 @@
                 ng-if="$ctrl.cartData && !$ctrl.cartData.items.length"
                 translate
               >
-                Your cart is empty
+                You have no gifts selected
               </p>
               <form ng-if="$ctrl.cartData.items.length">
                 <table
@@ -167,7 +167,7 @@
                           class="mb-- text-right"
                           ng-if="$ctrl.updating"
                         >
-                          <translate>Updating cart...</translate>
+                          <translate>Updating gifts...</translate>
                         </loading>
                         <div class="checkout-cart-summary pull-left">
                           <display-rate-totals

@@ -12,14 +12,14 @@
     ng-if="!$ctrl.hasItems && !$ctrl.loading && !$ctrl.error"
   >
     <div class="col-xs-12">
-      <p class="text-center mt-" translate>Your cart is empty</p>
+      <p class="text-center mt-" translate>You have no gifts selected</p>
     </div>
   </div>
 
   <div class="row repeating-row" ng-if="$ctrl.error">
     <div class="col-xs-12 text-center mt- text-warning">
       <p translate>
-        There was an error loading your cart.
+        There was an error loading your selected gifts.
         <br />
         You can <a href="" ng-click="$ctrl.loadCart()">try again</a>.
       </p>

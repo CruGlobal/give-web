@@ -29,8 +29,8 @@
           ng-if="$ctrl.errors.addToCart"
         >
           <p translate>
-            There was an error adding some of your gifts to cart. The ones below
-            were unable to be added to cart.
+            There was an error adding some of your gifts. The ones below were
+            unable to be added.
           </p>
         </div>
         <div
@@ -68,13 +68,13 @@
       ng-click="$ctrl.addToCart()"
       ng-disabled="!$ctrl.hasSelectedRecipients || $ctrl.addingToCart"
     >
-      <span ng-if="$ctrl.addingToCart" translate>Adding to Cart...</span>
-      <span ng-if="!$ctrl.addingToCart" translate>Add to Cart</span>
+      <span ng-if="$ctrl.addingToCart" translate>Adding to Gifts...</span>
+      <span ng-if="!$ctrl.addingToCart" translate>Add to Gifts</span>
       <span
         class="sr-only"
         aria-live="polite"
         aria-atomic="true"
-        ng-bind="$ctrl.addingToCart ? ('Adding to Cart...' | translate) : ''"
+        ng-bind="$ctrl.addingToCart ? ('Adding to Gifts...' | translate) : ''"
       >
       </span>
     </button>
