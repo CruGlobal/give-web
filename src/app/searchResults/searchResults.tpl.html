@@ -31,7 +31,7 @@
                 class="form-control"
                 placeholder="Search for..."
                 name="q"
-                value="{{$ctrl.searchParams.keyword}}"
+                ng-model="$ctrl.searchParams.keyword"
               />
               <span class="input-group-btn">
                 <button
