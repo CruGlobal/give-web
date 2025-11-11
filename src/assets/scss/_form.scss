@@ -61,6 +61,10 @@ label:not(:has(input[type="checkbox"])) {
     margin-bottom: 4px;
     font-size: 12px;
     font-weight: 500;
+
+    @media (min-width: 550px) and (max-width: 992px) {
+      font-size: 11px;
+    }
   }
 }
 
