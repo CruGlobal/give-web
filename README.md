@@ -230,7 +230,7 @@ Use the `cortexApiService` which provides convenience methods for sending reques
 
 ### Staging Environment
 
-Replace `https://give-static.cru.org` with `https://give-stage-static.cru.org` to use the staging environment.
+Go to `https://give-stage2.cru.org` to access the staging environment.
 
 ### Deployments
 
