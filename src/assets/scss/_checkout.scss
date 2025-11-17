@@ -184,6 +184,17 @@
   }
 }
 
+.credit-card-number-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  img {
+    max-width: unset;
+    height: 20px;
+  }
+}
+
 .billing-address-wrap  {
   display: none;
   margin-top: 20px;
