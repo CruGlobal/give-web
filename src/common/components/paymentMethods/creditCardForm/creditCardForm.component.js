@@ -162,9 +162,7 @@ class CreditCardController {
   }
 
   getCardType() {
-    return cruPayments.creditCard.card.info.type(
-      this.creditCardPayment.cardNumber,
-    );
+    return this.cardInfo.type(this.creditCardPayment.cardNumber);
   }
 
   savePayment() {
