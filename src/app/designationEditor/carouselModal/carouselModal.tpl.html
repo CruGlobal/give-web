@@ -107,16 +107,20 @@
     <div class="form-group text-center">
       <div ng-if="!$ctrl.uploading">
         <div><label translate>Select a Photo to Upload</label></div>
-        <div>
+        <div class="text-danger">
           <label ng-if="$ctrl.invalidFileType" translate
             >Uploaded image must be a JPEG or a PNG file</label
+          >
+          <label ng-if="$ctrl.fileTooLarge" translate
+            >Uploaded image must be less than 15MB</label
           >
         </div>
         <image-upload
           class="form-control"
           url="/bin/crugive/image.html?designationNumber={{$ctrl.designationNumber}}"
           on-invalid-file-type="$ctrl.invalidFileType = true"
-          on-complete="$ctrl.invalidFileType = false"
+          on-file-too-large="$ctrl.fileTooLarge = true"
+          on-complete="$ctrl.onComplete()"
           on-upload="$ctrl.uploadStart(file)"
           on-success="$ctrl.uploadComplete(response, file)"
           on-error="$ctrl.uploadError(file)"
