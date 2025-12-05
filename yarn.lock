@@ -2580,9 +2580,9 @@ angular-cookies@^1.8.2:
   resolved "https://registry.yarnpkg.com/angular-cookies/-/angular-cookies-1.8.2.tgz#0791c37c395d9fba8144781f3b2ed135ca7c5925"
   integrity sha512-M6fCnsnw1pj1+nXuO28ilJ+h6pFCIXQKSEgy9/PIoN0sZr5FqsE9BK18PdBQa8dif+fnHCAYpPU8MgDzT/sZSg==
 
-"angular-environment@https://github.com/jonshaffer/angular-environment.git#d3082c06fb16804d324faac9b7e753fd64a44e5d":
+"angular-environment@https://github.com/CruGlobal/angular-environment.git#1bf73ebce0d88244bf34d8853710c19c9c2988fe":
   version "1.0.8"
-  resolved "https://github.com/jonshaffer/angular-environment.git#d3082c06fb16804d324faac9b7e753fd64a44e5d"
+  resolved "https://github.com/CruGlobal/angular-environment.git#1bf73ebce0d88244bf34d8853710c19c9c2988fe"
 
 angular-filter@^0.5.17:
   version "0.5.17"
