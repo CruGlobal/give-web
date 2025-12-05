@@ -33,6 +33,7 @@ class CreditCardController {
     this.analyticsFactory = analyticsFactory;
     this.envService = envService;
     this.tsysService = tsysService;
+    this.imgDomain = envService.read('imgDomain');
 
     this.useMailingAddress = true;
     this.creditCardPayment = {
@@ -158,6 +159,10 @@ class CreditCardController {
   initializeExpirationDateOptions() {
     const currentYear = new Date().getFullYear();
     this.expirationDateYears = range(currentYear, currentYear + 20);
+  }
+
+  getCardType() {
+    return this.cardInfo.type(this.creditCardPayment.cardNumber);
   }
 
   savePayment() {

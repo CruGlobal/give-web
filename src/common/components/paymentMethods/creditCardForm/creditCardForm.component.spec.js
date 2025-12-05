@@ -451,6 +451,44 @@ describe('credit card form', () => {
     });
   });
 
+  describe('getCardType', () => {
+    it('should recognize Visa', () => {
+      self.controller.creditCardPayment.cardNumber = '4111111111111111';
+
+      expect(self.controller.getCardType()).toBe('Visa');
+    });
+
+    it('should recognize MasterCard', () => {
+      self.controller.creditCardPayment.cardNumber = '5555555555554444';
+
+      expect(self.controller.getCardType()).toBe('MasterCard');
+    });
+
+    it('should recognize American Express', () => {
+      self.controller.creditCardPayment.cardNumber = '378282246310005';
+
+      expect(self.controller.getCardType()).toBe('American Express');
+    });
+
+    it('should recognize Discover', () => {
+      self.controller.creditCardPayment.cardNumber = '6011111111111117';
+
+      expect(self.controller.getCardType()).toBe('Discover');
+    });
+
+    it('should recognize Diners Club', () => {
+      self.controller.creditCardPayment.cardNumber = '3056930009020004';
+
+      expect(self.controller.getCardType()).toBe('Diners Club');
+    });
+
+    it('should handle invalid card number', () => {
+      self.controller.creditCardPayment.cardNumber = '1111111111111111';
+
+      expect(self.controller.getCardType()).toBe('');
+    });
+  });
+
   describe('form controller', () => {
     it('should be invalid if any of the inputs are invalid', () => {
       self.formController.cardNumber.$setViewValue('');
