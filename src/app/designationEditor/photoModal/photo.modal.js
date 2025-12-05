@@ -149,6 +149,11 @@ class ModalInstanceCtrl {
     this.selectedPhoto.splice(newIndex, 0, ...item);
     this.maxCarouselError = false;
   }
+
+  onComplete() {
+    this.invalidFileType = false;
+    this.fileTooLarge = false;
+  }
 }
 
 export default angular

@@ -9,6 +9,7 @@ const imageUpload = /* @ngInject */ ($http) => ({
   scope: {
     url: '@',
     onInvalidFileType: '&',
+    onFileTooLarge: '&',
     onUpload: '&',
     onSuccess: '&',
     onError: '&',
@@ -16,6 +17,7 @@ const imageUpload = /* @ngInject */ ($http) => ({
   },
   link: (scope, element) => {
     const validMimeTypes = ['image/jpeg', 'image/png'];
+    const MAX_SIZE = 15 * 1024 * 1024;
 
     const el = angular.element(element);
     const fileInput = angular.element(
@@ -35,6 +37,15 @@ const imageUpload = /* @ngInject */ ($http) => ({
         event.target.value = null;
         scope.$apply(() => {
           scope.onInvalidFileType();
+        });
+        return;
+      }
+
+      if (file.size > MAX_SIZE) {
+        // Clear the selected file because it's not a valid image
+        event.target.value = null;
+        scope.$apply(() => {
+          scope.onFileTooLarge();
         });
         return;
       }
