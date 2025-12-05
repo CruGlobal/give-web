@@ -26,13 +26,14 @@ describe('imageUpload', () => {
 
       $scope = $rootScope.$new();
       $scope.onInvalidFileType = jest.fn();
+      $scope.onFileTooLarge = jest.fn();
       $scope.onUpload = jest.fn();
       $scope.onSuccess = jest.fn();
       $scope.onError = jest.fn();
       $scope.onComplete = jest.fn();
 
       element = $compile(
-        '<div class="btn btn-primary btn-upload" image-upload url="/upload" on-invalid-file-type="onInvalidFileType()" on-upload="onUpload()" on-success="onSuccess()" on-error="onError()" on-complete="onComplete()"><button>Upload</button></div>',
+        '<div class="btn btn-primary btn-upload" image-upload url="/upload" on-invalid-file-type="onInvalidFileType()" on-file-too-large="onFileTooLarge()" on-upload="onUpload()" on-success="onSuccess()" on-error="onError()" on-complete="onComplete()"><button>Upload</button></div>',
       )($scope);
     });
   });
@@ -112,5 +113,18 @@ describe('imageUpload', () => {
     expect($scope.onSuccess).not.toHaveBeenCalled();
     expect($scope.onError).toHaveBeenCalled();
     expect($scope.onComplete).toHaveBeenCalled();
+  });
+
+  it('should reject files larger than max size', () => {
+    const largeFile = new File(
+      [new ArrayBuffer(16 * 1024 * 1024)],
+      'large.jpg',
+      { type: 'image/jpeg' },
+    );
+    uploadFile(element.find('input')[0], largeFile);
+    $scope.$digest();
+
+    expect($scope.onFileTooLarge).toHaveBeenCalled();
+    expect($scope.onUpload).not.toHaveBeenCalled();
   });
 });
