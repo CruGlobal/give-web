@@ -5,9 +5,9 @@ const directiveName = 'creditCardCvv';
 const template = `<div class="credit-card-cvv-container form-group" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.securityCode | showErrors), 'is-required': !$ctrl.paymentMethod}">
   <label>
     <span class="credit-card-cvv-label" translate>{{'SEC_CODE'}}</span>
-    <input type="text" 
+    <input type="text"
       name="securityCode"
-      autocomplete="cc-csc"
+      autocomplete="off"
       class="form-control form-control-subtle"
       ng-model="$ctrl.creditCardPayment.securityCode"
       ng-required="!$ctrl.paymentMethod || $ctrl.creditCardPayment.cardNumber"
