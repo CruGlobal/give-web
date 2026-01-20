@@ -32,29 +32,24 @@
                 ng-disabled="$ctrl.disableCardNumber"
                 credit-card-number
               />
-              <div ng-switch="$ctrl.getCardType()">
+              <div ng-switch="$ctrl.getCardType()" class="credit-card-icons">
                 <img
-                  class="hidden-xs"
                   ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/american-express-curved-128px.png"
                   ng-switch-when="American Express"
                 />
                 <img
-                  class="hidden-xs"
                   ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/discover-curved-128px.png"
                   ng-switch-when="Discover"
                 />
                 <img
-                  class="hidden-xs"
                   ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/mastercard-curved-128px.png"
                   ng-switch-when="MasterCard"
                 />
                 <img
-                  class="hidden-xs"
                   ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/visa-curved-128px.png"
                   ng-switch-when="Visa"
                 />
                 <img
-                  class="hidden-xs"
                   ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/diners-curved-128px.png"
                   ng-switch-when="Diners Club"
                 />
