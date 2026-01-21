@@ -513,14 +513,14 @@ describe('checkout', () => {
           ).toHaveBeenCalled();
         });
 
-        it('should add securityCode viewValue from sessionStorage', () => {
+        it('should not add securityCode viewValue from sessionStorage', () => {
           self.$window.sessionStorage.setItem('cvv', '456');
           self.controller.shouldRecoverCvv = true;
           self.controller.switchPayment();
 
           expect(
             self.controller.creditCardPaymentForm.securityCode.$setViewValue,
-          ).toHaveBeenCalledWith(456);
+          ).toHaveBeenCalledWith('');
           expect(
             self.controller.creditCardPaymentForm.securityCode.$render,
           ).toHaveBeenCalled();
