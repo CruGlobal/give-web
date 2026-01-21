@@ -116,7 +116,7 @@
   img {
     display: inline-block;
     max-height: 50px;
-    margin-left: 20px;
+    margin-left: 10px;
   }
 
   @include respond-to(extrasmall) {
@@ -148,7 +148,7 @@
 
   label.radio-inline {
     margin-top: 10px;
-    font-size: initial;
+    font-size: 12px;
     font-weight: normal;
     text-transform: none;
   }
@@ -181,6 +181,31 @@
 
   .fa {
     vertical-align: middle;
+  }
+}
+
+.credit-card-number-wrapper {
+  position:relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .credit-card-icons {
+    position: absolute;
+    right: 5px;
+  }
+
+  img {
+    max-width: unset;
+    height: 20px;
+
+    @media (max-width: 549px) {
+      height: 17px;
+    }
+  }
+
+  input {
+    padding-right: 35px;
   }
 }
 

@@ -44,28 +44,28 @@
     <div class="col-md-6">
       <button
         id="addBankAccountButton"
-        class="tab-btn btn btn-lg btn-default btn-block"
+        class="tab-btn btn btn-default btn-block"
         ng-click="$ctrl.changePaymentType('bankAccount')"
         ng-class="{'on': $ctrl.paymentType === 'bankAccount'}"
       >
         <translate>{{'BANK_ACCOUNT'}}</translate>
         <img
           ng-src="{{$ctrl.imgDomain}}/assets/img/icon-bank.png"
-          alt="Bank Account Icon"
+          aria-hidden="true"
         />
       </button>
     </div>
     <div class="col-md-6">
       <button
         id="addCreditCardButton"
-        class="tab-btn btn btn-lg btn-default btn-block"
+        class="tab-btn btn btn-default btn-block"
         ng-click="$ctrl.changePaymentType('creditCard')"
         ng-class="{'on': $ctrl.paymentType === 'creditCard'}"
       >
         <translate>{{'CREDIT_CARD'}}</translate>
         <img
           ng-src="{{$ctrl.imgDomain}}/assets/img/icon-cc.png"
-          alt="Credit Card Icon"
+          aria-hidden="true"
         />
       </button>
     </div>

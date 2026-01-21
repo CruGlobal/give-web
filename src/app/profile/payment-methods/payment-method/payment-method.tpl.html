@@ -17,13 +17,24 @@
           ></payment-method-display>
         </div>
         <div class="col-sm-3 text-right payment-details-link">
-          <button class="btn trigger">Details</button>
+          <button
+            class="btn trigger"
+            aria-controls="payment-method-details-{{$ctrl.paymentMethodId}}"
+            aria-expanded="{{!$ctrl.isCollapsed}}"
+          >
+            Details
+          </button>
         </div>
       </div>
     </div>
   </div>
 
-  <div uib-collapse="$ctrl.isCollapsed" role="tabpanel" class="panel-collapse">
+  <div
+    uib-collapse="$ctrl.isCollapsed"
+    role="tabpanel"
+    class="panel-collapse"
+    id="payment-method-details-{{$ctrl.paymentMethodId}}"
+  >
     <div class="panel-body">
       <div class="container-fluid">
         <div class="row panel--payment-info">
@@ -61,18 +72,24 @@
 
           <div class="col-sm-12 col-md-4 panel--buttons-column text-right">
             <p>
-              <a
+              <button
+                type="button"
                 class="btn btn-default btn-block"
                 ng-click="$ctrl.editPaymentMethod()"
-                >Edit Payment Method</a
+                aria-describedby="payment-method-{{$ctrl.paymentMethodId}}"
               >
+                Edit Payment Method
+              </button>
             </p>
             <p>
-              <a
+              <button
+                type="button"
                 class="btn btn-default btn-block"
                 ng-click="$ctrl.deletePaymentMethod()"
-                >Delete Payment Method</a
+                aria-describedby="payment-method-{{$ctrl.paymentMethodId}}"
               >
+                Delete Payment Method
+              </button>
             </p>
           </div>
         </div>

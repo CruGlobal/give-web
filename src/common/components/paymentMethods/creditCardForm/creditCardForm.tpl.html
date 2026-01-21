@@ -8,7 +8,7 @@
       <h4 class="panel-title visible" translate>{{'CREDIT_CARD_PAYMENT'}}</h4>
       <span class="u-floatRight" style="margin-top: -16px">
         Secure
-        <i class="fas fa-lock ml--"></i>
+        <i class="fas fa-lock ml--" aria-hidden="true"></i>
       </span>
     </div>
 
@@ -20,17 +20,41 @@
         >
           <label>
             <span translate>{{'CARD_NUM_FULL'}}</span>
-            <input
-              type="text"
-              name="cardNumber"
-              autocomplete="cc-number"
-              class="form-control form-control-subtle"
-              ng-model="$ctrl.creditCardPayment.cardNumber"
-              ng-attr-placeholder="************{{$ctrl.creditCardPayment.cardNumberPlaceholder}}"
-              ng-required="!$ctrl.paymentMethod || $ctrl.creditCardPayment.cardNumber"
-              ng-disabled="$ctrl.disableCardNumber"
-              credit-card-number
-            />
+            <div class="credit-card-number-wrapper">
+              <input
+                type="text"
+                name="cardNumber"
+                autocomplete="cc-number"
+                class="form-control form-control-subtle"
+                ng-model="$ctrl.creditCardPayment.cardNumber"
+                ng-attr-placeholder="************{{$ctrl.creditCardPayment.cardNumberPlaceholder}}"
+                ng-required="!$ctrl.paymentMethod || $ctrl.creditCardPayment.cardNumber"
+                ng-disabled="$ctrl.disableCardNumber"
+                credit-card-number
+              />
+              <div ng-switch="$ctrl.getCardType()" class="credit-card-icons">
+                <img
+                  ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/american-express-curved-128px.png"
+                  ng-switch-when="American Express"
+                />
+                <img
+                  ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/discover-curved-128px.png"
+                  ng-switch-when="Discover"
+                />
+                <img
+                  ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/mastercard-curved-128px.png"
+                  ng-switch-when="MasterCard"
+                />
+                <img
+                  ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/visa-curved-128px.png"
+                  ng-switch-when="Visa"
+                />
+                <img
+                  ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/diners-curved-128px.png"
+                  ng-switch-when="Diners Club"
+                />
+              </div>
+            </div>
           </label>
           <div
             ng-messages="$ctrl.creditCardPaymentForm.cardNumber.$error"

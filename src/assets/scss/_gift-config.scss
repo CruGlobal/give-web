@@ -1,3 +1,12 @@
+product-config-form {
+  .btn:focus, 
+  .btn:active:focus, 
+  input[type="radio"]:focus + .btn-radio.active {
+    border-color: $colorCru-gold;
+    outline: 0;
+  }
+}
+
 .btn-radio, .custom-amount{
   min-width: 85px;
   padding: 1% 15px 1% 15px;
@@ -18,6 +27,16 @@
   }
 
 }
+
+// Hide radio buttons visually but keep them keyboard accessible
+div[data-toggle="buttons"] input[type="radio"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
 
 label.custom-amount {
   width: auto;
@@ -93,54 +112,12 @@ label.btn-radio {
   }
 }
 
-fieldset.amount-radios,
-fieldset.gift-frequency-radios {
-  display: flex;
-  flex-flow: row wrap;
-
-  @include mq(768, max) {
-    flex-flow:column;
-  }
-
-  label.btn-radio {
-    display: inline-block;
-    padding-top: 10px;
-    padding-bottom: 9px;
-    margin: 0;
-
-    @include mq(768, max) {
-      display: block;
-    }
-
-    span {
-      margin: 0;
-    }
-  }
-}
-
-
-fieldset.amount-radios {
-  gap: 5px;
-
-  label.btn-radio {
-    min-width: 80px;
-  }
-
-  div[role="alert"], .help-block {
-    width: 100%;
-  }
-}
-
-fieldset.gift-frequency-radios {
-  gap: 10px;
-}
-
-fieldset.button-group label.active{
+div[data-toggle="buttons"] label.active{
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
   color: #7aa3cc;
 }
 
-fieldset.button-group label {
+div[data-toggle="buttons"] label {
   margin-bottom: 10px;
   font-weight: 600;
   transition-delay: 100ms;
@@ -155,23 +132,30 @@ fieldset.button-group label {
 
 
 @include mq(768, max) {
+  div[data-toggle="buttons"] label {
+    display: block;
+  }
   .give-modal-panel .custom-amount {width: 100% !important;}
   .number {text-align: center;}
 }
 
-fieldset.button-group label:hover {
+div[data-toggle="buttons"] label:hover {
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
   background: #f9f9f9;
   color: $colorText;
 }
 
-fieldset.button-group label:active,
-fieldset.button-group label.active {
-  border-color: $colorGrayscale-text;
-  background-color: $colorGrayscale-text;
+div[data-toggle="buttons"] label:active,
+div[data-toggle="buttons"] label.active {
+  border: 2px solid $colorCru-gold;
+  background-color: $colorCru-white;
   box-shadow: none;
-  color: $colorCru-white;
+  color: $colorGrayscale-black;
   font-weight: 600;
+
+  &:hover {
+    background-color: $colorCru-gold;
+  }
 }
 
 label.btn.btn-default-form.custom-amount.mr.u-textLeft {
@@ -256,27 +240,6 @@ label.btn.btn-default-form.active {
 
   .recipient-id {
     display: block;
-  }
-}
-
-.give-selection-reverse-order {
-  display: flex;
-  flex-direction: column;
-
-  & > .suggested-gift-amounts {
-    order: 4;
-  }
-
-  & > .gift-frequency {
-    order: 1;
-  }
-
-  & > .gift-dates {
-    order: 2;
-  }
-
-  & > .special-instructions {
-    order: 3;
   }
 }
 

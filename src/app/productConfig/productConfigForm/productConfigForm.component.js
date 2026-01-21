@@ -1,7 +1,6 @@
 import angular from 'angular';
 import 'angular-ordinal';
 import 'angular-sanitize';
-import indexOf from 'lodash/indexOf';
 import find from 'lodash/find';
 import omit from 'lodash/omit';
 import omitBy from 'lodash/omitBy';
@@ -17,12 +16,7 @@ import designationsService from 'common/services/api/designations.service';
 import cartService from 'common/services/api/cart.service';
 import orderService from 'common/services/api/order.service';
 import { forcedUserToLogout } from '../../../common/services/session/session.service';
-import {
-  possibleTransactionDays,
-  possibleTransactionMonths,
-  startDate,
-  startMonth,
-} from 'common/services/giftHelpers/giftDates.service';
+import { startDate } from 'common/services/giftHelpers/giftDates.service';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
 import showErrors from 'common/filters/showErrors.filter';
 import { giftAddedEvent, cartUpdatedEvent } from 'common/lib/cartEvents';
@@ -30,6 +24,10 @@ import { giveGiftParams } from '../giveGiftParams';
 import loading from 'common/components/loading/loading.component';
 import analyticsFactory from 'app/analytics/analytics.factory';
 import brandedAnalyticsFactory from 'app/branded/analytics/branded-analytics.factory';
+import suggestedGiftAmounts from '../giftPanels/suggestedGiftAmounts/suggestedGiftAmounts.component';
+import giftFrequency from '../giftPanels/giftFrequency/giftFrequency.component';
+import giftDates from '../giftPanels/giftDates/giftDates.component';
+import specialInstructions from '../giftPanels/specialInstructions/specialInstructions.component';
 import template from './productConfigForm.tpl.html';
 
 export const brandedCoverFeeCheckedEvent = 'brandedCoverFeeCheckedEvent';
@@ -63,16 +61,19 @@ class ProductConfigFormController {
     this.cartService = cartService;
     this.orderService = orderService;
     this.commonService = commonService;
-    this.possibleTransactionDays = possibleTransactionDays;
-    this.possibleTransactionMonths = possibleTransactionMonths;
     this.startDate = startDate;
-    this.startMonth = startMonth;
     this.analyticsFactory = analyticsFactory;
     this.brandedAnalyticsFactory = brandedAnalyticsFactory;
     this.envService = envService;
     this.amountChanged = false;
 
     this.selectableAmounts = [50, 100, 250, 500, 1000, 5000];
+
+    // Bind methods to maintain 'this' context when called from child components
+    this.changeFrequency = this.changeFrequency.bind(this);
+    this.changeAmount = this.changeAmount.bind(this);
+    this.changeCustomAmount = this.changeCustomAmount.bind(this);
+    this.changeStartDay = this.changeStartDay.bind(this);
   }
 
   $onInit() {
@@ -261,11 +262,6 @@ class ProductConfigFormController {
       const regex = /^([0-9]*)(\.[0-9]{1,2})?$/;
       return !this.customInputActive || regex.test(value);
     };
-  }
-
-  frequencyOrder(f) {
-    const order = ['NA', 'MON', 'QUARTERLY', 'ANNUAL'];
-    return indexOf(order, f.name);
   }
 
   changeFrequency(product) {
@@ -489,14 +485,6 @@ class ProductConfigFormController {
     return value;
   }
 
-  suggestedAmount(amount) {
-    return this.$filter('currency')(
-      amount,
-      '$',
-      `${amount}`.indexOf('.') > -1 ? 2 : 0,
-    );
-  }
-
   giveLink(url) {
     if (typeof url === 'undefined') {
       this.showGivingLinks = false;
@@ -524,6 +512,10 @@ export default angular
     loading.name,
     analyticsFactory.name,
     brandedAnalyticsFactory.name,
+    suggestedGiftAmounts.name,
+    giftFrequency.name,
+    giftDates.name,
+    specialInstructions.name,
   ])
   .component(componentName, {
     controller: ProductConfigFormController,

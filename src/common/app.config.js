@@ -252,8 +252,10 @@ export const appConfig = /* @ngInject */ function (
     ACCOUNT_TYPE: 'Account Type',
     ACCOUNT_NUM: 'Account #',
     RETYPE_ACCOUNT_NUM: 'Retype Account #',
-    CHECKING: 'Checking <span class="hidden-md hide-modal">Account</span>',
-    SAVINGS: 'Savings <span class="hidden-md hide-modal">Account</span>',
+    CHECKING:
+      'Checking <span class="hidden-md hidden-sm hide-modal">Account</span>',
+    SAVINGS:
+      'Savings <span class="hidden-md hidden-sm hide-modal">Account</span>',
     LOCATE_ROUTING_ACCT: 'Locate your Routing and Account Numbers',
     BANK_AGREEMENT: 'Bank Account Agreement',
     BANK_AGREEMENT_MESSAGE:
