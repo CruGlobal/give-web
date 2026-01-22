@@ -131,7 +131,6 @@ class ExistingPaymentMethodsController {
       // Select the first payment method
       this.selectedPaymentMethod = paymentMethods[0];
     }
-    this.shouldRecoverCvv = true;
     this.switchPayment();
   }
 
@@ -206,13 +205,9 @@ class ExistingPaymentMethodsController {
       this.selectedPaymentMethod?.['card-type'] &&
       this.creditCardPaymentForm?.securityCode
     ) {
-      // Set cvv from session storage
-      const storage = this.shouldRecoverCvv
-        ? JSON.parse(this.sessionStorage.getItem('cvv'))
-        : '';
-      this.creditCardPaymentForm.securityCode.$setViewValue(storage);
+      // Always clear the CVV field for security - user must re-enter
+      this.creditCardPaymentForm.securityCode.$setViewValue('');
       this.creditCardPaymentForm.securityCode.$render();
-      this.shouldRecoverCvv = false;
     }
     if (this.selectedPaymentMethod?.['bank-name']) {
       // This is an EFT payment method so we need to remove any fee coverage
