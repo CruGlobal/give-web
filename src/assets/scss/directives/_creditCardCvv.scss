@@ -43,14 +43,14 @@
   .credit-card-cvv-label:not(.existing-payment-method .credit-card-cvv-label) {
     display: block;
     margin-bottom: 4px;
-    font-size: 14px;
+    font-size: 12px;
     letter-spacing: 1px;
     text-transform: uppercase;
 
     &::after {
       display: inline-block;
       margin-left: 6px;
-      content: '*';
+      content: '*' / '';
       font-family: fontawesome, "Font Awesome 5 Pro", sans-serif;
       font-size: 115%;
       line-height: 0;

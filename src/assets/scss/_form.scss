@@ -39,13 +39,17 @@ label:not(:has(input[type="checkbox"])) {
     display: block;
     margin-bottom: 4px;
   }
+
+  &.btn-radio > span {
+    margin-bottom: 0;
+  }
 }
 
 .is-required {
   label > span::after, label > translate::after {
     display: inline-block;
     margin-left: 6px;
-    content: "*";
+    content: "*" / "";
     font-family: fontawesome, "Font Awesome 5 Pro", sans-serif;
     font-size: 115%;
     line-height: 0;
@@ -55,8 +59,12 @@ label:not(:has(input[type="checkbox"])) {
 .form-group {
   label:not(.error) {
     margin-bottom: 4px;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 500;
+
+    @media (min-width: 550px) and (max-width: 992px) {
+      font-size: 11px;
+    }
   }
 }
 

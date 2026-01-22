@@ -1,8 +1,8 @@
-$colorCru-gold: #f9b625;
-$colorCru-gray: #666062;
+$colorCru-gold: #ffd000;
+$colorCru-gray: #565652;
 $colorCru-mid-gray: #444244;
 $colorCru-white: #fff;
-$colorCru-blueBright: #3eb1c8;
+$colorCru-blueBright: #00c0d8;
 $colorGrayscale-background: #f7f7f7;
 $colorGrayscale-sand: #f4f4f4;
 $colorGrayscale-pebble: #f0f0f0;
@@ -10,14 +10,14 @@ $colorGrayscale-stone: #e7e7e7;
 $colorGrayscale-rock: #b9b9b9;
 $colorGrayscale-slate: #909b9c;
 $colorGrayscale-black: #000;
-$colorText: #3a3a3a;
+$colorText: #000;
 $sm: 992px;
 $header-height: 84px;
 $gutter: 30px;
 $query-unit: 16px;
 $nav-break-min: 400px;
 $fontWeight5: 500;
-$data-font: "Helvetica Neue", helvetica, sans-serif;
+$data-font: "Inter", sans-serif;
 $border-radius: 4px;
 
 
@@ -44,23 +44,64 @@ $cru-tango-alt: #f5a055;
 $cru-tango-dark: #d77328;
 $color-white: #fff;
 
+@media (min-width: 1200px) {
+  nav-cart-icon .dropdown.open {
+    &::before {
+      position: absolute;
+      top: 62px;
+      left: 12%;
+      width: 20px;
+      height: 20px;
+      box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.25);
+      content: "";
+      transform: rotate(45deg);
+    }
 
-
+    &::after {
+      position: absolute;
+      z-index: 101;
+      top: 48px;
+      left: 12%;
+      border-width: 10px;
+      border-style: solid;
+      border-color: transparent transparent $colorCru-white transparent;
+      content: "";
+    }
+  }
+}
 
 #nav-cart-dropdown {
-  top: 0;
-  right: 0;
+  top: 64px;
+  right: -8px;
   left: auto;
-  width: 360px;
-  padding: 0;
+  width: 330px;
+  padding: 20px 10px;
   border: none;
+  border-radius: 5px;
   margin: 0;
-  background-color: $cru-scorpion-light;
-  color: $cru-scorpion;
+  background-color: $colorCru-white;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  color: $colorGrayscale-black;
+  cursor: auto;
+
+  p {
+    font-weight: 600;
+    text-transform: none;
+  }
+
+  .heading,
+  .title {
+    font-family: Sora, sans-serif;
+  }
+
+  .row {
+    margin-right: 0;
+    margin-left: 0;
+  }
 
   .repeating-row {
-    padding: 28px 0;
     border-top: 1px solid $colorCru-white;
+    margin-bottom: 20px;
 
     &:first-child {
       border-top: 0;
@@ -75,14 +116,31 @@ $color-white: #fff;
     }
 
     &.sub-total {
+      padding-top: 20px;
+      border-top: 1px solid $colorGrayscale-black;
       font-weight: 600;
       text-transform: uppercase;
+
+      ng-pluralize {
+        font-weight: 400;
+      }
+    }
+  }
+
+  .actions {
+    .col-xs-6:first-child {
+      padding-right: 5px;
+    }
+
+    .col-xs-6:last-child {
+      padding-left: 5px;
     }
   }
 
   .top-row {
     padding: 12px 0;
     border-bottom: 1px solid $colorCru-white;
+    margin-bottom: 0;
 
     .col-xs-6 {
       padding-right: 18px;
@@ -104,34 +162,48 @@ $color-white: #fff;
     font-size: 150%;
   }
 
+  .col-xs-3,
+  .col-xs-6,
+  .col-xs-9,
+  .col-xs-12 {
+    padding-right: 0;
+    padding-left: 0;
+  }
+
   .desktop-cart-list {
     max-height: 240px;
     overflow-y: auto;
   }
 
-  .title, .price {
-    font-weight: 600;
+  .giftsum-profile {
+    width: 55px;
+    height: 55px;
+    object-fit: cover;
   }
 
-  .designation-number, .frequency {
-    font-weight: 400 !important;
+  .giving-display-name {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+  }
+
+  .designation-number.price {
+    letter-spacing: 0.72px;
   }
 
   .btn-cart {
-    width: 100%;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    font-weight: 500;
-    letter-spacing: 1px;
+    color: $colorGrayscale-black;
+    letter-spacing: 0.65px;
     text-transform: uppercase;
 
     &.btn-default {
-      border-color: $cru-scorpion;
+      border-color: $colorCru-gold;
       background-color: transparent;
+      color: $colorGrayscale-black;
 
       &:hover {
-        background-color: $cru-scorpion;
-        color: $colorCru-white;
+        background-color: $colorCru-gold;
       }
     }
 
@@ -144,24 +216,21 @@ $color-white: #fff;
       border-radius: 0;
     }
   }
+}
 
-  .col-xs-9 {
-    padding-right: 14px;
-    padding-left: 28px;
-  }
+#cru-header #nav-cart-dropdown .btn-cart {
+  padding-right: 24px;
+  padding-left: 24px;
+  line-height: 20px;
+}
 
-  .col-xs-3 {
-    padding-right: 28px;
-    padding-left: 14px;
-  }
+.nav-cart-icon.dropdown-toggle {
+  cursor: pointer;
+  text-decoration: none;
 
-  .btn-primary {
-    border-color: transparent;
-    background-color: $cru-buttercup;
-    color: $colorCru-white;
-
-    &:hover {
-      background-color: $cru-buttercup-dark;
+  &:hover {
+    .material-icons-outlined {
+      color: $colorCru-gold;
     }
   }
 }

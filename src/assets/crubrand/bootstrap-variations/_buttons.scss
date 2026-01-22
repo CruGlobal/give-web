@@ -17,8 +17,11 @@
     background-image: none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
     border: $btn-border-size solid transparent;
     white-space: nowrap;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 
-    @include button-size($padding-base-vertical, $padding-base-horizontal, $btn-font-size, $line-height-base, $border-radius-base);
+    @include button-size(8px, $padding-large-horizontal, $btn-font-size, $line-height-base, $border-radius-buttons);
     @include user-select(none);
     @include transition(all 0.2s ease);
 
@@ -56,6 +59,11 @@
     }
 }
 
+a.cmp-button:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
 
 // Alternate buttons
 // --------------------------------------------------
@@ -66,6 +74,10 @@
 
 .btn-primary {
     @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border);
+    &:hover {
+        background-color: transparent;
+        border-color: $btn-primary-border;
+    }
 }
 
 // Success appears as green
@@ -134,12 +146,12 @@
 
 .btn-lg {
     // line-height: ensure even-numbered height of button next to large input
-    @include button-size($padding-large-vertical, $padding-large-horizontal, $font-size-base, $line-height-large, $border-radius-large);
+    @include button-size($padding-large-vertical, $padding-large-horizontal, $font-size-base, $line-height-large, $border-radius-buttons);
 }
 .btn-sm,
 .btn-xs {
     // line-height: ensure proper height of button next to small input
-    @include button-size($padding-small-vertical, $padding-small-horizontal, $font-size-base, $line-height-small, $border-radius-small);
+    @include button-size($padding-small-vertical, $padding-small-horizontal, $font-size-base, $line-height-small, $border-radius-buttons);
 }
 
 

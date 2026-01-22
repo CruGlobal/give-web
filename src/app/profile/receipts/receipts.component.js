@@ -90,10 +90,9 @@ class ReceiptsController {
     );
   }
 
-  setYear(year) {
+  onYearChange() {
     this.maxShow = this.step;
-    this.currentYear = year;
-    this.getReceipts(year);
+    this.getReceipts(this.currentYear);
   }
 
   getListYears() {

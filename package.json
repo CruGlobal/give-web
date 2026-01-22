@@ -9,7 +9,7 @@
     "@okta/okta-signin-widget": "^7.30.1",
     "angular": "^1.8.3",
     "angular-cookies": "^1.8.2",
-    "angular-environment": "https://github.com/jonshaffer/angular-environment.git#d3082c06fb16804d324faac9b7e753fd64a44e5d",
+    "angular-environment": "https://github.com/CruGlobal/angular-environment.git#1bf73ebce0d88244bf34d8853710c19c9c2988fe",
     "angular-filter": "^0.5.17",
     "angular-gettext": "^2.4.2",
     "angular-messages": "^1.8.2",

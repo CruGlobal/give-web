@@ -250,13 +250,16 @@ export const appConfig = /* @ngInject */ function (
     ACCOUNT_TYPE: 'Account Type',
     ACCOUNT_NUM: 'Account #',
     RETYPE_ACCOUNT_NUM: 'Retype Account #',
-    CHECKING: 'Checking <span class="hidden-md hide-modal">Account</span>',
-    SAVINGS: 'Savings <span class="hidden-md hide-modal">Account</span>',
+    CHECKING:
+      'Checking <span class="hidden-md hidden-sm hide-modal">Account</span>',
+    SAVINGS:
+      'Savings <span class="hidden-md hidden-sm hide-modal">Account</span>',
     LOCATE_ROUTING_ACCT: 'Locate your Routing and Account Numbers',
     BANK_AGREEMENT: 'Bank Account Agreement',
     BANK_AGREEMENT_MESSAGE:
-      'By selecting the "I Agree" checkbox below, I acknowledge that I have read, understand and agree to these Terms and Conditions, and that this agreement constitutes a "writing signed by me" under any applicable law or regulation. I authorize Cru to initiate electronic funds transfers (debits) from my account at the financial institution listed above, and to initiate deposits (credits) if necessary for any withdrawals made in error. This authority is to remain in full force and effect until Cru has received notification from me of its termination in such time as to afford Cru reasonable opportunity to act on it. All contributions to Cru are income tax-deductible and are made with the understanding that Cru has complete discretion and control over the use of all donated funds.',
-    I_AGREE: 'I agree',
+      'By selecting the "I Agree" checkbox above, I acknowledge that I have read, understand and agree to these Terms and Conditions, and that this agreement constitutes a "writing signed by me" under any applicable law or regulation. I authorize Cru to initiate electronic funds transfers (debits) from my account at the financial institution listed above, and to initiate deposits (credits) if necessary for any withdrawals made in error. This authority is to remain in full force and effect until Cru has received notification from me of its termination in such time as to afford Cru reasonable opportunity to act on it. All contributions to Cru are income tax-deductible and are made with the understanding that Cru has complete discretion and control over the use of all donated funds.',
+    I_AGREE:
+      'I acknowledge that I have read, understand, and agree to the <a ng-click="$ctrl.toggleAgreement($event)">terms and conditions</a> regarding electronic fund transfer.',
     CREDIT_CARD_PAYMENT: 'Credit / Debit Card Payment',
     CARD_NUM: 'Card #',
     CARD_NAME: 'Name on Card',
@@ -549,8 +552,9 @@ export const appConfig = /* @ngInject */ function (
     LOCATE_ROUTING_ACCT: 'Encuentra tu ruta y números de cuenta',
     BANK_AGREEMENT: 'Acuerdo de cuenta bancaria',
     BANK_AGREEMENT_MESSAGE:
-      'By selecting the "I Agree" checkbox below, I acknowledge that I have read, understand and agree to these Terms and Conditions, and that this agreement constitutes a "writing signed by me" under any applicable law or regulation. I authorize Cru to initiate electronic funds transfers (debits) from my account at the financial institution listed above, and to initiate deposits (credits) if necessary for any withdrawals made in error. This authority is to remain in full force and effect until Cru has received notification from me of its termination in such time as to afford Cru reasonable opportunity to act on it. All contributions to Cru are income tax-deductible and are made with the understanding that Cru has complete discretion and control over the use of all donated funds.',
-    I_AGREE: 'Estoy de acuerdo',
+      'By selecting the "I Agree" checkbox above, I acknowledge that I have read, understand and agree to these Terms and Conditions, and that this agreement constitutes a "writing signed by me" under any applicable law or regulation. I authorize Cru to initiate electronic funds transfers (debits) from my account at the financial institution listed above, and to initiate deposits (credits) if necessary for any withdrawals made in error. This authority is to remain in full force and effect until Cru has received notification from me of its termination in such time as to afford Cru reasonable opportunity to act on it. All contributions to Cru are income tax-deductible and are made with the understanding that Cru has complete discretion and control over the use of all donated funds.',
+    I_AGREE:
+      'Reconozco que he leído, comprendido y acepto los <a ng-click="$ctrl.toggleAgreement($event)">términos y condiciones</a> relacionados con la transferencia electrónica de fondos.',
     CREDIT_CARD_PAYMENT: 'Pago con tarjeta de crédito',
     CARD_NUM: 'Número de tarjeta',
     CARD_NAME: 'Nombre en la tarjeta',

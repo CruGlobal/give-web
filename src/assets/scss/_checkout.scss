@@ -62,7 +62,7 @@
         &::after {
           background: $colorCru-gold;
           color: $colorCru-white;
-        }        
+        }
       }
 
       .step-digit {
@@ -116,7 +116,7 @@
   img {
     display: inline-block;
     max-height: 50px;
-    margin-left: 20px;
+    margin-left: 10px;
   }
 
   @include respond-to(extrasmall) {
@@ -148,12 +148,12 @@
 
   label.radio-inline {
     margin-top: 10px;
-    font-size: initial;
+    font-size: 12px;
     font-weight: normal;
     text-transform: none;
   }
 
-  .radio-inline + .radio-inline, 
+  .radio-inline + .radio-inline,
   .checkbox-inline + .checkbox-inline {
     @include respond-to(medium) {
       // margin-left: 0;
@@ -233,6 +233,17 @@
   }
 }
 
+.bank-agreement {
+  overflow: hidden;
+  height: 100%;
+  max-height: 0;
+  transition: 0.5s all;
+
+  &.on {
+    max-height: 600px;
+  }
+}
+
 .form-group.has-error.no-wrap{
   label{
     white-space: nowrap;
@@ -246,4 +257,12 @@
 .premium-thumbnail {
   width: 200px;
   max-height: 500px;
+}
+
+.existing-payment-method payment-method-display {
+  font-size: 14px;
+}
+
+.form-group .number {
+  font-feature-settings: "calt" 0;
 }

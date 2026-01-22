@@ -4,8 +4,8 @@
   text-align: left;
 
   .btn-giftsum-action {
-    padding-top: 0;
-    padding-bottom: 0;
+    padding: 0 14px;
+    border: none;
     color: inherit;
 
     @include respond-to(extrasmall) {
@@ -97,6 +97,12 @@
       @include respond-to(extrasmall) {
         text-align: left;
 
+        .sep {
+          display: none;
+        }
+      }
+
+      @include respond-to(small) {
         .sep {
           display: none;
         }
