@@ -851,6 +851,17 @@ img.full-width {
   &:focus {
     outline: none;
   }
+}
+
+.screenContent-alt {
+  background: $colorCru-white;
+}
+
+.panel,
+.panel-body {
+  p, ul {
+    font-size: 100%;
+  }
 
   a {
     &::after {
@@ -872,17 +883,6 @@ img.full-width {
       white-space: nowrap;
       word-wrap: normal;
     }
-  }
-}
-
-.screenContent-alt {
-  background: $colorCru-white;
-}
-
-.panel,
-.panel-body {
-  p, ul {
-    font-size: 100%;
   }
 }
 
