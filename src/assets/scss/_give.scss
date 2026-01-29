@@ -851,6 +851,28 @@ img.full-width {
   &:focus {
     outline: none;
   }
+
+  a {
+    &::after {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      content: "arrow_outward";
+      direction: ltr;
+      font-family: 'Material Icons', sans-serif;
+      font-feature-settings: 'liga';
+      font-size: 1.2em;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      letter-spacing: normal;
+      line-height: 1;
+      text-rendering: optimizelegibility;
+      text-transform: none;
+      vertical-align: middle;
+      white-space: nowrap;
+      word-wrap: normal;
+    }
+  }
 }
 
 .screenContent-alt {
