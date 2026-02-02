@@ -57,6 +57,10 @@
         @include opacity(.65);
         @include box-shadow(none);
     }
+
+    &::after {
+        content: none !important;
+    }
 }
 
 a.cmp-button:hover {

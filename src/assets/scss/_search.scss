@@ -199,6 +199,10 @@
 
     a {
       display: block;
+
+      &::after {
+        content: none;
+      }
     }
 
     &.active {
