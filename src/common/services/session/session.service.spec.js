@@ -1,5 +1,6 @@
 import angular from 'angular';
 import 'angular-mocks';
+import { datadogRum } from '@datadog/browser-rum';
 import module, {
   Roles,
   Sessions,
@@ -14,6 +15,7 @@ import module, {
 import { cortexRole } from 'common/services/session/fixtures/cortex-role';
 import { giveSession } from 'common/services/session/fixtures/give-session';
 import { cruProfile } from 'common/services/session/fixtures/cru-profile';
+import * as rollbarConfig from 'common/rollbar.config.js';
 import { advanceBy, advanceTo, clear } from 'jest-date-mock';
 import 'rxjs/add/observable/of';
 
@@ -875,6 +877,127 @@ describe('session service', function () {
         sessionService.clearCheckoutSavedData(true);
         const dataAfterClear = $cookies.get(checkoutSavedDataCookieName);
         expect(dataAfterClear).toEqual(undefined);
+      });
+    });
+  });
+
+  describe('updateCurrentSession user tracking', () => {
+    let rollbarSpy, datadogSetUserSpy, datadogClearUserSpy;
+
+    beforeEach(() => {
+      rollbarSpy = jest.spyOn(rollbarConfig, 'updateRollbarPerson');
+      datadogSetUserSpy = jest
+        .spyOn(datadogRum, 'setUser')
+        .mockImplementation(() => {});
+      datadogClearUserSpy = jest
+        .spyOn(datadogRum, 'clearUser')
+        .mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      rollbarSpy.mockRestore();
+      datadogSetUserSpy.mockRestore();
+      datadogClearUserSpy.mockRestore();
+    });
+
+    describe('with a logged-in user', () => {
+      beforeEach(() => {
+        $cookies.put(Sessions.role, cortexRole.registered);
+        $cookies.put(Sessions.profile, cruProfile);
+        $cookies.put(Sessions.give, giveSession);
+        $rootScope.$digest();
+      });
+
+      it('should pass person object to updateRollbarPerson', () => {
+        expect(rollbarSpy).toHaveBeenCalledWith({
+          id: 'cas|873f88fa-327b-b95d-7d7a-7add211a9b64',
+          username: 'Charles Xavier',
+          email: 'professorx@xavier.edu',
+          giveId: 'cas|873f88fa-327b-b95d-7d7a-7add211a9b64',
+        });
+      });
+
+      it('should call datadogRum.setUser with person object', () => {
+        expect(datadogSetUserSpy).toHaveBeenCalledWith({
+          id: 'cas|873f88fa-327b-b95d-7d7a-7add211a9b64',
+          username: 'Charles Xavier',
+          email: 'professorx@xavier.edu',
+          giveId: 'cas|873f88fa-327b-b95d-7d7a-7add211a9b64',
+        });
+      });
+
+      it('should not call datadogRum.clearUser when logged in', () => {
+        expect(datadogClearUserSpy).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('with no user session', () => {
+      beforeEach(() => {
+        // Remove all session cookies to simulate logged-out state
+        $cookies.remove(Sessions.role);
+        $cookies.remove(Sessions.profile);
+        $cookies.remove(Sessions.give);
+        $rootScope.$digest();
+      });
+
+      it('should pass null to updateRollbarPerson', () => {
+        expect(rollbarSpy).toHaveBeenCalledWith(null);
+      });
+
+      it('should call datadogRum.clearUser when no session exists', () => {
+        expect(datadogClearUserSpy).toHaveBeenCalled();
+      });
+
+      it('should not call datadogRum.setUser when no session exists', () => {
+        expect(datadogSetUserSpy).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('when session changes from logged-in to logged-out', () => {
+      beforeEach(() => {
+        $cookies.put(Sessions.role, cortexRole.registered);
+        $cookies.put(Sessions.profile, cruProfile);
+        $cookies.put(Sessions.give, giveSession);
+        $rootScope.$digest();
+
+        // Clear spies to track only the logout transition
+        rollbarSpy.mockClear();
+        datadogSetUserSpy.mockClear();
+        datadogClearUserSpy.mockClear();
+
+        // Simulate logout
+        $cookies.remove(Sessions.role);
+        $cookies.remove(Sessions.profile);
+        $cookies.remove(Sessions.give);
+        $rootScope.$digest();
+      });
+
+      it('should pass null to updateRollbarPerson after logout', () => {
+        expect(rollbarSpy).toHaveBeenCalledWith(null);
+      });
+
+      it('should call datadogRum.clearUser after logout', () => {
+        expect(datadogClearUserSpy).toHaveBeenCalled();
+      });
+    });
+
+    describe('with a public session', () => {
+      beforeEach(() => {
+        $cookies.put(Sessions.role, cortexRole.public);
+        $rootScope.$digest();
+      });
+
+      it('should still set person with partial sub for public session', () => {
+        // Public cortex role has sub: "cas|" which is truthy
+        expect(rollbarSpy).toHaveBeenCalledWith(
+          expect.objectContaining({ id: 'cas|' }),
+        );
+      });
+
+      it('should call datadogRum.setUser for public session with partial sub', () => {
+        expect(datadogSetUserSpy).toHaveBeenCalledWith(
+          expect.objectContaining({ id: 'cas|' }),
+        );
       });
     });
   });
