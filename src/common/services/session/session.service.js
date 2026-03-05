@@ -13,6 +13,7 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/finally';
 
 import { updateRollbarPerson } from 'common/rollbar.config.js';
+import { updateDatadogUser } from 'common/datadog.config.js';
 
 import appConfig from 'common/app.config';
 /* eslint-disable camelcase */
@@ -366,7 +367,16 @@ const session = /* @ngInject */ function (
     // Update sessionSubject with new value
     sessionSubject.next(session);
 
-    updateRollbarPerson(session, giveSession);
+    const person = session.sub
+      ? {
+          id: session.sub,
+          username: session.first_name + ' ' + session.last_name,
+          email: session.email,
+          giveId: giveSession.sub,
+        }
+      : null;
+    updateRollbarPerson(person);
+    updateDatadogUser(person);
     updateCheckoutSavedData();
   }
 
