@@ -269,6 +269,9 @@ module.exports = (env = {}) => [
         publicPath: (process.env.S3_GIVE_DOMAIN || '') + '/',
         seed: {
           'fontawesome.css': '//give.cru.org/css/fontawesome.css',
+          'material.css': '//fonts.googleapis.com/icon?family=Material+Icons',
+          'material-outlined.css':
+            '//fonts.googleapis.com/icon?family=Material+Icons+Outlined',
         },
       }),
     ],

@@ -1,5 +1,10 @@
 /* global XMLHttpRequest */
-const defaultChunks = ['angular.js', 'fontawesome.css'];
+const defaultChunks = [
+  'angular.js',
+  'fontawesome.css',
+  'material.css',
+  'material-outlined.css',
+];
 
 const SCRIPT = /.*\.js$/;
 const STYLE = /.*\.css$/;
