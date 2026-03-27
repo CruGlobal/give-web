@@ -272,6 +272,10 @@ module.exports = (env = {}) => [
           'material.css': '//fonts.googleapis.com/icon?family=Material+Icons',
           'material-outlined.css':
             '//fonts.googleapis.com/icon?family=Material+Icons+Outlined',
+          'material-icons.woff2':
+            '//fonts.gstatic.com/s/materialicons/v145/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2',
+          'material-icons-outlined.woff2':
+            '//fonts.gstatic.com/s/materialiconsoutlined/v110/gok-H7zzDkdnRel8-DQ6KAXJ69wP1tGnf4ZGhUcel5euIg.woff2',
         },
       }),
     ],
