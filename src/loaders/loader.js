@@ -4,10 +4,13 @@ const defaultChunks = [
   'fontawesome.css',
   'material.css',
   'material-outlined.css',
+  'material-icons.woff2',
+  'material-icons-outlined.woff2',
 ];
 
 const SCRIPT = /.*\.js$/;
 const STYLE = /.*\.css$/;
+const FONT = /.*\.woff2$/;
 
 const loadManifest = () => {
   return new Promise((resolve, reject) => {
@@ -40,6 +43,18 @@ const addStyleTag = (filename) => {
   });
 };
 
+const addFontLink = (filename) => {
+  return new Promise((resolve, reject) => {
+    const link = document.createElement('link');
+    link.addEventListener('load', resolve);
+    link.href = filename;
+    link.rel = 'preload';
+    link.as = 'font';
+    link.type = 'font/woff2';
+    document.head.appendChild(link);
+  });
+};
+
 const Loader = {
   start: async (chunks = []) => {
     const manifest = await loadManifest();
@@ -49,6 +64,8 @@ const Loader = {
           return addScriptTag(manifest[name]);
         } else if (STYLE.test(name)) {
           return addStyleTag(manifest[name]);
+        } else if (FONT.test(name)) {
+          return addFontLink(manifest[name]);
         }
         return Promise.resolve();
       }),
