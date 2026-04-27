@@ -153,26 +153,28 @@ describe('rollbarConfig', () => {
 
     describe('updateRollbarPerson', () => {
       it('should add person info to the rollbar configuration', () => {
-        module.updateRollbarPerson(
-          {
-            sub: 'cas|12345',
-            first_name: 'Fname',
-            last_name: 'Lname',
-            email: 'someone@email.com',
-          },
-          {
-            sub: 'cas|12345',
-          },
-        );
+        const person = {
+          id: 'cas|12345',
+          username: 'Fname Lname',
+          email: 'someone@email.com',
+          giveId: 'cas|12345',
+        };
+
+        module.updateRollbarPerson(person);
 
         expect(self.rollbarSpies.configure).toHaveBeenCalledWith({
           payload: {
-            person: {
-              id: 'cas|12345',
-              username: 'Fname Lname',
-              email: 'someone@email.com',
-              giveId: 'cas|12345',
-            },
+            person,
+          },
+        });
+      });
+
+      it('should clear person info when called with null', () => {
+        module.updateRollbarPerson(null);
+
+        expect(self.rollbarSpies.configure).toHaveBeenCalledWith({
+          payload: {
+            person: {},
           },
         });
       });
