@@ -24,4 +24,13 @@ const dataDogConfig = /* @ngInject */ function (envServiceProvider) {
     window.datadogRum && window.datadogRum.init(config);
   }
 };
-export { dataDogConfig as default };
+
+function updateDatadogUser(person) {
+  if (person) {
+    datadogRum.setUser(person);
+  } else {
+    datadogRum.clearUser();
+  }
+}
+
+export { dataDogConfig as default, updateDatadogUser };
