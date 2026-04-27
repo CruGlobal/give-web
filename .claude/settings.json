@@ -1,0 +1,15 @@
+{
+  "enabledPlugins": {
+    "rebase-branch@cru-plugins": true,
+    "pr-review@cru-plugins": true,
+    "test-writer@cru-plugins": true,
+    "gc@cru-plugins": true,
+    "gca@cru-plugins": true,
+    "dl@cru-plugins": true,
+    "pr@cru-plugins": true,
+    "send@cru-plugins": true,
+    "code-review@cru-plugins": true,
+    "lint-before-push@cru-plugins": true,
+    "figma@cru-plugins": true
+  }
+}
