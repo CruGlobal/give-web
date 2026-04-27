@@ -55,7 +55,11 @@ class CreditCardController {
     if (get(changes, 'paymentFormState.currentValue') === 'submitted') {
       this.savePayment();
     }
-    if (get(changes, 'mailingAddress.currentValue') && !this.paymentMethod) {
+    if (
+      get(changes, 'mailingAddress.currentValue') &&
+      !this.paymentMethod &&
+      this.useMailingAddress
+    ) {
       assign(this.creditCardPayment.address, this.mailingAddress);
     }
   }
