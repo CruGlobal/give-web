@@ -175,25 +175,33 @@ class BrandedCheckoutController {
   }
 
   onThankYouPurchaseLoaded(purchase) {
-    this.onOrderCompleted({
-      $event: {
-        $window: this.$window,
-        purchase: changeCaseObject.camelCase(
-          pick(purchase, ['donorDetails', 'lineItems']),
-        ),
-      },
-    });
+    try {
+      this.onOrderCompleted({
+        $event: {
+          $window: this.$window,
+          purchase: changeCaseObject.camelCase(
+            pick(purchase, ['donorDetails', 'lineItems']),
+          ),
+        },
+      });
+    } catch (error) {
+      console.error('onOrderCompleted callback threw:', error);
+    }
     this.brandedAnalyticsFactory.savePurchase(purchase);
     this.brandedAnalyticsFactory.purchase();
   }
 
   onPaymentFailed(donorDetails) {
-    this.onOrderFailed({
-      $event: {
-        $window: this.$window,
-        donorDetails: changeCaseObject.camelCase(donorDetails),
-      },
-    });
+    try {
+      this.onOrderFailed({
+        $event: {
+          $window: this.$window,
+          donorDetails: changeCaseObject.camelCase(donorDetails),
+        },
+      });
+    } catch (error) {
+      console.error('onOrderFailed callback threw:', error);
+    }
   }
 
   fireAnalyticsEvents(...checkoutSteps) {
