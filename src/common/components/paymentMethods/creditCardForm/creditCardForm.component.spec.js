@@ -119,6 +119,20 @@ describe('credit card form', () => {
         'CO',
       );
     });
+
+    it('should not update creditCardPayment address when useMailingAddress is false', () => {
+      self.controller.useMailingAddress = false;
+      self.controller.mailingAddress = { region: 'CO' };
+      self.controller.$onChanges({
+        mailingAddress: {
+          currentValue: { region: 'CO' },
+        },
+      });
+
+      expect(self.controller.creditCardPayment.address.region).not.toEqual(
+        'CO',
+      );
+    });
   });
 
   describe('waitForFormInitialization', () => {
