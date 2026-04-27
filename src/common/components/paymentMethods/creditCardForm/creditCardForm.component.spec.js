@@ -84,6 +84,55 @@ describe('credit card form', () => {
 
       expect(self.controller.savePayment).toHaveBeenCalled();
     });
+
+    it('should update creditCardPayment address when mailingAddress changes', () => {
+      const mailingAddress = {
+        country: 'US',
+        streetAddress: '123 Main St',
+        locality: 'Denver',
+        region: 'CO',
+        postalCode: '80202',
+      };
+      self.controller.mailingAddress = mailingAddress;
+      self.controller.$onChanges({
+        mailingAddress: {
+          currentValue: mailingAddress,
+        },
+      });
+
+      expect(self.controller.creditCardPayment.address.region).toEqual('CO');
+      expect(self.controller.creditCardPayment.address.locality).toEqual(
+        'Denver',
+      );
+    });
+
+    it('should not update creditCardPayment address when mailingAddress changes if paymentMethod exists', () => {
+      self.controller.paymentMethod = { address: { region: 'CA' } };
+      self.controller.mailingAddress = { region: 'CO' };
+      self.controller.$onChanges({
+        mailingAddress: {
+          currentValue: { region: 'CO' },
+        },
+      });
+
+      expect(self.controller.creditCardPayment.address.region).not.toEqual(
+        'CO',
+      );
+    });
+
+    it('should not update creditCardPayment address when useMailingAddress is false', () => {
+      self.controller.useMailingAddress = false;
+      self.controller.mailingAddress = { region: 'CO' };
+      self.controller.$onChanges({
+        mailingAddress: {
+          currentValue: { region: 'CO' },
+        },
+      });
+
+      expect(self.controller.creditCardPayment.address.region).not.toEqual(
+        'CO',
+      );
+    });
   });
 
   describe('waitForFormInitialization', () => {
