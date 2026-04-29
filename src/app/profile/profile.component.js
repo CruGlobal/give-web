@@ -33,7 +33,6 @@ class ProfileController {
     $log,
     $scope,
     sessionEnforcerService,
-    envService,
     profileService,
     analyticsFactory,
   ) {
@@ -50,7 +49,6 @@ class ProfileController {
     this.emailLoading = true;
     this.phonesLoading = true;
     this.mailingAddressLoading = true;
-    this.acsUrl = envService.read('acsUrl');
   }
 
   $onInit() {
@@ -99,7 +97,7 @@ class ProfileController {
         this.donorDetails = donorDetails;
         this.hasSpouse = !!this.donorDetails['spouse-name']['family-name'];
         this.initTitles();
-        this.setPKeys();
+        this.setSubscriberIds();
         this.donorDetailsLoading = false;
       },
       (error) => {
@@ -192,14 +190,16 @@ class ProfileController {
     );
   }
 
-  setPKeys() {
-    this.profilePKey = this.donorDetails['acs-profile-pkey'];
-    this.spousePKey = this.donorDetails['acs-spouse-profile-pkey'];
+  setSubscriberIds() {
+    this.sfmcSubscriberId = this.donorDetails.sfmcSubscriberId;
+    this.sfmcSpouseSubscriberId = this.donorDetails.sfmcSpouseSubscriberId;
   }
 
-  linkToAdobeCampaign(pKey) {
-    if (pKey) {
-      window.open(`${this.acsUrl}${pKey}`);
+  linkToSfmc(subscriberId) {
+    if (subscriberId) {
+      window.open(
+        `https://cloud.connect.cru.org/preferences?SubscriberId=${subscriberId}`,
+      );
     }
   }
 

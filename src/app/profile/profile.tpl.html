@@ -379,8 +379,8 @@
                           <a
                             id="donorEmailPreferences"
                             href=""
-                            ng-if="$ctrl.profilePKey"
-                            ng-click="$ctrl.linkToAdobeCampaign($ctrl.profilePKey)"
+                            ng-if="$ctrl.sfmcSubscriberId"
+                            ng-click="$ctrl.linkToSfmc($ctrl.sfmcSubscriberId)"
                             translate
                             >Edit Email Preferences</a
                           >
@@ -436,8 +436,8 @@
                           <a
                             id="spouseEmailPreferences"
                             href=""
-                            ng-if="$ctrl.spousePKey"
-                            ng-click="$ctrl.linkToAdobeCampaign($ctrl.spousePKey)"
+                            ng-if="$ctrl.sfmcSpouseSubscriberId"
+                            ng-click="$ctrl.linkToSfmc($ctrl.sfmcSpouseSubscriberId)"
                             translate
                             >Edit Email Preferences</a
                           >
