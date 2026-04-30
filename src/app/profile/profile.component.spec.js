@@ -17,6 +17,11 @@ describe('ProfileComponent', function () {
       module.name,
       {
         $window: { location: '/profile.html' },
+        envService: {
+          read: jest
+            .fn()
+            .mockReturnValue('https://cloud.connect.cru.org/preferences'),
+        },
       },
       {
         donorEmailForm: {
@@ -484,26 +489,6 @@ describe('ProfileComponent', function () {
 
       expect($ctrl.sfmcSubscriberId).toEqual(undefined);
       expect($ctrl.sfmcSpouseSubscriberId).toEqual(undefined);
-    });
-  });
-
-  describe('linkToSfmc()', () => {
-    beforeEach(() => {
-      jest.spyOn(window, 'open').mockImplementation(() => {});
-    });
-
-    it('should open tab if subscriberId is present', () => {
-      $ctrl.linkToSfmc('123456');
-
-      expect(window.open).toHaveBeenCalledWith(
-        'https://cloud.connect.cru.org/preferences?SubscriberId=123456',
-      );
-    });
-
-    it('should not open tab if subscriberId is undefined', () => {
-      $ctrl.linkToSfmc(undefined);
-
-      expect(window.open).not.toHaveBeenCalled();
     });
   });
 

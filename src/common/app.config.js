@@ -60,6 +60,7 @@ export const appConfig = /* @ngInject */ function (
         oktaClientId: '0oa26fp9l9iFxuKJf0h8',
         oktaReferrer: 'https://localhost.cru.org:9000',
         recaptchaKey: '6LcCMoYqAAAAABMoyLs5CyKWwE8qn_YslEaiRPRD',
+        sfmcUrl: 'https://cloud.connect.cru.org/preferences',
       },
       devcloud: {
         apiUrl: 'https://give-stage2.cru.org',
@@ -71,6 +72,7 @@ export const appConfig = /* @ngInject */ function (
         oktaClientId: '0oa26fp9l9iFxuKJf0h8',
         oktaReferrer: 'https://give-dev-cloud.cru.org',
         recaptchaKey: '6LcCMoYqAAAAABMoyLs5CyKWwE8qn_YslEaiRPRD',
+        sfmcUrl: 'https://cloud.connect.cru.org/preferences',
       },
       stagecloud: {
         apiUrl: 'https://give-stage-cloud.cru.org',
@@ -82,6 +84,7 @@ export const appConfig = /* @ngInject */ function (
         oktaClientId: '0oa26fp9l9iFxuKJf0h8',
         oktaReferrer: 'https://give-stage-cloud.cru.org',
         recaptchaKey: '6LcCMoYqAAAAABMoyLs5CyKWwE8qn_YslEaiRPRD',
+        sfmcUrl: 'https://cloud.connect.cru.org/preferences',
       },
       prodcloud: {
         apiUrl: 'https://give-prod-cloud.cru.org',
@@ -93,6 +96,7 @@ export const appConfig = /* @ngInject */ function (
         oktaClientId: '0oa22s4b0hbsS58xv0h8',
         oktaReferrer: 'https://give-prod-cloud.cru.org',
         recaptchaKey: '6LduSiQqAAAAAOLA7NEU8-3-mdCmBKEUCwaFQuJF',
+        sfmcUrl: 'https://cloud.connect.cru.org/preferences',
       },
       staging: {
         apiUrl: 'https://give-stage2.cru.org',
@@ -104,6 +108,7 @@ export const appConfig = /* @ngInject */ function (
         oktaClientId: '0oa26fp9l9iFxuKJf0h8',
         oktaReferrer: 'https://give-stage2.cru.org',
         recaptchaKey: '6LcCMoYqAAAAABMoyLs5CyKWwE8qn_YslEaiRPRD',
+        sfmcUrl: 'https://cloud.connect.cru.org/preferences',
       },
       nonprod: {
         apiUrl: 'https://give-stage2-next.cru.org',
@@ -114,6 +119,7 @@ export const appConfig = /* @ngInject */ function (
         oktaUrl: 'https://cru.oktapreview.com',
         oktaClientId: '0oa26fp9l9iFxuKJf0h8',
         oktaReferrer: 'https://give-stage2-next.cru.org',
+        sfmcUrl: 'https://cloud.connect.cru.org/preferences',
       },
       preprod: {
         apiUrl: 'https://give-preprod.cru.org',
@@ -124,6 +130,7 @@ export const appConfig = /* @ngInject */ function (
         oktaUrl: 'https://signon.okta.com',
         oktaClientId: '0oa22s4b0hbsS58xv0h8',
         oktaReferrer: 'https://give-preprod.cru.org',
+        sfmcUrl: 'https://cloud.connect.cru.org/preferences',
       },
       production: {
         apiUrl: 'https://give.cru.org',
@@ -135,6 +142,7 @@ export const appConfig = /* @ngInject */ function (
         oktaClientId: '0oa22s4b0hbsS58xv0h8',
         oktaReferrer: 'https://give.cru.org',
         recaptchaKey: '6LduSiQqAAAAAOLA7NEU8-3-mdCmBKEUCwaFQuJF',
+        sfmcUrl: 'https://cloud.connect.cru.org/preferences',
       },
       defaults: {
         isCheckout: false,

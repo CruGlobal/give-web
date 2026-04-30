@@ -378,9 +378,10 @@
                           </div>
                           <a
                             id="donorEmailPreferences"
-                            href=""
                             ng-if="$ctrl.sfmcSubscriberId"
-                            ng-click="$ctrl.linkToSfmc($ctrl.sfmcSubscriberId)"
+                            ng-href="{{$ctrl.sfmcUrl}}?SubscriberId={{$ctrl.sfmcSubscriberId}}"
+                            target="_blank"
+                            rel="noopener noreferrer"
                             translate
                             >Edit Email Preferences</a
                           >
@@ -435,9 +436,10 @@
                           </div>
                           <a
                             id="spouseEmailPreferences"
-                            href=""
                             ng-if="$ctrl.sfmcSpouseSubscriberId"
-                            ng-click="$ctrl.linkToSfmc($ctrl.sfmcSpouseSubscriberId)"
+                            ng-href="{{$ctrl.sfmcUrl}}?SubscriberId={{$ctrl.sfmcSpouseSubscriberId}}"
+                            target="_blank"
+                            rel="noopener noreferrer"
                             translate
                             >Edit Email Preferences</a
                           >

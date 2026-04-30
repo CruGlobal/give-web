@@ -32,6 +32,7 @@ class ProfileController {
     $location,
     $log,
     $scope,
+    envService,
     sessionEnforcerService,
     profileService,
     analyticsFactory,
@@ -44,6 +45,7 @@ class ProfileController {
     this.sessionEnforcerService = sessionEnforcerService;
     this.profileService = profileService;
     this.analyticsFactory = analyticsFactory;
+    this.sfmcUrl = envService.read('sfmcUrl');
     this.phoneNumbers = [];
     this.donorDetailsLoading = true;
     this.emailLoading = true;
@@ -193,14 +195,6 @@ class ProfileController {
   setSubscriberIds() {
     this.sfmcSubscriberId = this.donorDetails.sfmcSubscriberId;
     this.sfmcSpouseSubscriberId = this.donorDetails.sfmcSpouseSubscriberId;
-  }
-
-  linkToSfmc(subscriberId) {
-    if (subscriberId) {
-      window.open(
-        `https://cloud.connect.cru.org/preferences?SubscriberId=${encodeURIComponent(subscriberId)}`,
-      );
-    }
   }
 
   syncPhoneValidators() {
