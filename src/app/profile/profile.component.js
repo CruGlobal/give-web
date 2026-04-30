@@ -198,7 +198,7 @@ class ProfileController {
   linkToSfmc(subscriberId) {
     if (subscriberId) {
       window.open(
-        `https://cloud.connect.cru.org/preferences?SubscriberId=${subscriberId}`,
+        `https://cloud.connect.cru.org/preferences?SubscriberId=${encodeURIComponent(subscriberId)}`,
       );
     }
   }
@@ -508,7 +508,6 @@ class ProfileController {
 
 export default angular
   .module(componentName, [
-    'environment',
     profileService.name,
     'ngMessages',
     sessionEnforcerService.name,
