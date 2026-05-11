@@ -61,6 +61,7 @@ export const appConfig = /* @ngInject */ function (
         oktaReferrer: 'https://localhost.cru.org:9000',
         recaptchaKey: '6LcCMoYqAAAAABMoyLs5CyKWwE8qn_YslEaiRPRD',
         sfmcUrl: 'https://cloud.connect.cru.org/preferences',
+        sfmcClientId: '534014548',
       },
       devcloud: {
         apiUrl: 'https://give-stage2.cru.org',
@@ -73,6 +74,7 @@ export const appConfig = /* @ngInject */ function (
         oktaReferrer: 'https://give-dev-cloud.cru.org',
         recaptchaKey: '6LcCMoYqAAAAABMoyLs5CyKWwE8qn_YslEaiRPRD',
         sfmcUrl: 'https://cloud.connect.cru.org/preferences',
+        sfmcClientId: '534014548',
       },
       stagecloud: {
         apiUrl: 'https://give-stage-cloud.cru.org',
@@ -85,6 +87,7 @@ export const appConfig = /* @ngInject */ function (
         oktaReferrer: 'https://give-stage-cloud.cru.org',
         recaptchaKey: '6LcCMoYqAAAAABMoyLs5CyKWwE8qn_YslEaiRPRD',
         sfmcUrl: 'https://cloud.connect.cru.org/preferences',
+        sfmcClientId: '534014548',
       },
       prodcloud: {
         apiUrl: 'https://give-prod-cloud.cru.org',
@@ -97,6 +100,7 @@ export const appConfig = /* @ngInject */ function (
         oktaReferrer: 'https://give-prod-cloud.cru.org',
         recaptchaKey: '6LduSiQqAAAAAOLA7NEU8-3-mdCmBKEUCwaFQuJF',
         sfmcUrl: 'https://cloud.connect.cru.org/preferences',
+        sfmcClientId: '534014548',
       },
       staging: {
         apiUrl: 'https://give-stage2.cru.org',
@@ -109,6 +113,7 @@ export const appConfig = /* @ngInject */ function (
         oktaReferrer: 'https://give-stage2.cru.org',
         recaptchaKey: '6LcCMoYqAAAAABMoyLs5CyKWwE8qn_YslEaiRPRD',
         sfmcUrl: 'https://cloud.connect.cru.org/preferences',
+        sfmcClientId: '534014548',
       },
       nonprod: {
         apiUrl: 'https://give-stage2-next.cru.org',
@@ -120,6 +125,7 @@ export const appConfig = /* @ngInject */ function (
         oktaClientId: '0oa26fp9l9iFxuKJf0h8',
         oktaReferrer: 'https://give-stage2-next.cru.org',
         sfmcUrl: 'https://cloud.connect.cru.org/preferences',
+        sfmcClientId: '534014548',
       },
       preprod: {
         apiUrl: 'https://give-preprod.cru.org',
@@ -131,6 +137,7 @@ export const appConfig = /* @ngInject */ function (
         oktaClientId: '0oa22s4b0hbsS58xv0h8',
         oktaReferrer: 'https://give-preprod.cru.org',
         sfmcUrl: 'https://cloud.connect.cru.org/preferences',
+        sfmcClientId: '534014548',
       },
       production: {
         apiUrl: 'https://give.cru.org',
@@ -143,6 +150,7 @@ export const appConfig = /* @ngInject */ function (
         oktaReferrer: 'https://give.cru.org',
         recaptchaKey: '6LduSiQqAAAAAOLA7NEU8-3-mdCmBKEUCwaFQuJF',
         sfmcUrl: 'https://cloud.connect.cru.org/preferences',
+        sfmcClientId: '534014548',
       },
       defaults: {
         isCheckout: false,

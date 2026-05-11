@@ -18,9 +18,13 @@ describe('ProfileComponent', function () {
       {
         $window: { location: '/profile.html' },
         envService: {
-          read: jest
-            .fn()
-            .mockReturnValue('https://cloud.connect.cru.org/preferences'),
+          read: jest.fn().mockImplementation((key) => {
+            const values = {
+              sfmcUrl: 'https://cloud.connect.cru.org/preferences',
+              sfmcClientId: '534014548',
+            };
+            return values[key];
+          }),
         },
       },
       {
