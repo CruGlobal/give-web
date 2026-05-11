@@ -449,8 +449,8 @@ describe('ProfileComponent', function () {
 
     it('should set subscriberId for primary email', () => {
       $ctrl.donorDetails = {
-        sfmcSubscriberId: primarySubscriberId,
-        sfmcSpouseSubscriberId: undefined,
+        'sfmc-subscriber-id': primarySubscriberId,
+        'sfmc-spouse-subscriber-id': undefined,
       };
 
       $ctrl.setSubscriberIds();
@@ -461,8 +461,8 @@ describe('ProfileComponent', function () {
 
     it('should set subscriberId for spouse email', () => {
       $ctrl.donorDetails = {
-        sfmcSubscriberId: undefined,
-        sfmcSpouseSubscriberId: spouseSubscriberId,
+        'sfmc-subscriber-id': undefined,
+        'sfmc-spouse-subscriber-id': spouseSubscriberId,
       };
 
       $ctrl.setSubscriberIds();
@@ -473,8 +473,8 @@ describe('ProfileComponent', function () {
 
     it('should set subscriberId for both primary and spouse emails', () => {
       $ctrl.donorDetails = {
-        sfmcSubscriberId: primarySubscriberId,
-        sfmcSpouseSubscriberId: spouseSubscriberId,
+        'sfmc-subscriber-id': primarySubscriberId,
+        'sfmc-spouse-subscriber-id': spouseSubscriberId,
       };
 
       $ctrl.setSubscriberIds();
@@ -485,8 +485,8 @@ describe('ProfileComponent', function () {
 
     it('should set subscriberId to undefined for both primary and spouse emails', () => {
       $ctrl.donorDetails = {
-        sfmcSubscriberId: undefined,
-        sfmcSpouseSubscriberId: undefined,
+        'sfmc-subscriber-id': undefined,
+        'sfmc-spouse-subscriber-id': undefined,
       };
 
       $ctrl.setSubscriberIds();
