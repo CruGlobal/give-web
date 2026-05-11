@@ -194,8 +194,9 @@ class ProfileController {
   }
 
   setSubscriberIds() {
-    this.sfmcSubscriberId = this.donorDetails.sfmcSubscriberId;
-    this.sfmcSpouseSubscriberId = this.donorDetails.sfmcSpouseSubscriberId;
+    this.sfmcSubscriberId = this.donorDetails['sfmc-subscriber-id'];
+    this.sfmcSpouseSubscriberId =
+      this.donorDetails['sfmc-spouse-subscriber-id'];
   }
 
   syncPhoneValidators() {
