@@ -46,6 +46,7 @@ class ProfileController {
     this.profileService = profileService;
     this.analyticsFactory = analyticsFactory;
     this.sfmcUrl = envService.read('sfmcUrl');
+    this.sfmcClientId = envService.read('sfmcClientId');
     this.phoneNumbers = [];
     this.donorDetailsLoading = true;
     this.emailLoading = true;
