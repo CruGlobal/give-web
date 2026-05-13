@@ -209,12 +209,22 @@ class SignUpModalController {
     const passwordInput = schema.find(
       (field) => field.name === 'credentials.passcode',
     );
-    // When Okta has CAPTCHA enabled for sign-up, the schema includes a field
-    // with `type: 'captcha'`. The widget's CaptchaView renders it and supplies
-    // the `captchaVerify` token on submit. It must be present in the step that
-    // actually submits to Okta (step 3) — otherwise the IDX call fails with
-    // "captchaVerify is null".
-    const captchaInput = schema.find((field) => field.type === 'captcha');
+    // When Okta has CAPTCHA enabled, the schema includes two flattened
+    // captchaVerify.* fields:
+    //   - captchaVerify.captchaId   — a hidden field whose value is the
+    //     Okta-side captcha config id (we need to send this back)
+    //   - captchaVerify.captchaToken — a type:'captcha' field that the
+    //     widget uses to render and resolve the reCAPTCHA challenge
+    // We capture the captchaId here so submitFinalData can attach it to
+    // the IDX payload; the widget's v2 view-builder only writes the token.
+    const captchaIdField = schema.find(
+      (field) => field.name === 'captchaVerify.captchaId',
+    );
+    this.captchaId = captchaIdField?.value || null;
+    const captchaTokenInput = schema.find(
+      (field) => field.name === 'captchaVerify.captchaToken',
+    );
+
     return {
       // Step 1: Name, email, account type and organization name (if applicable)
       1: this.getStep1Fields(schema),
@@ -222,7 +232,7 @@ class SignUpModalController {
       2: this.getStep2Fields(schema),
       // Step 3: Password (We don't save the password for security reasons.
       // Which is why it's the last step)
-      3: [passwordInput, ...(captchaInput ? [captchaInput] : [])],
+      3: [passwordInput, ...(captchaTokenInput ? [captchaTokenInput] : [])],
     };
   }
 
@@ -511,6 +521,12 @@ class SignUpModalController {
       lastName: this.$scope.lastName,
       email: this.$scope.email,
     };
+    // Okta requires captchaVerify to contain BOTH captchaId and
+    // captchaToken. The widget's v2 view-builder only writes the token,
+    // so we attach the captchaId we captured from the schema in getSteps.
+    if (postData.captchaVerify && this.captchaId) {
+      postData.captchaVerify.captchaId = this.captchaId;
+    }
     onSuccess(postData);
   }
 
