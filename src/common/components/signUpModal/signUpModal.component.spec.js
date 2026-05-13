@@ -446,6 +446,46 @@ describe('signUpForm', function () {
         ]);
       });
     });
+
+    describe('getStep3Fields() (captcha passthrough)', () => {
+      const onSuccess = jest.fn();
+      beforeEach(() => {
+        $ctrl.currentStep = 3;
+        $ctrl.captchaId = null;
+        onSuccess.mockClear();
+      });
+
+      it('returns just the password field when no captcha fields are in the schema', () => {
+        $ctrl.parseSchema(schema, onSuccess);
+        expect(onSuccess).toHaveBeenCalledWith([schema[3]]);
+        expect($ctrl.captchaId).toBeNull();
+      });
+
+      it('captures captchaId and includes the captchaToken field when Okta has CAPTCHA enabled', () => {
+        const captchaIdField = {
+          name: 'captchaVerify.captchaId',
+          type: 'string',
+          value: 'abc123captchaConfigId',
+          visible: false,
+        };
+        const captchaTokenField = {
+          name: 'captchaVerify.captchaToken',
+          type: 'captcha',
+          required: true,
+          visible: false,
+        };
+        const schemaWithCaptcha = [
+          ...schema,
+          captchaIdField,
+          captchaTokenField,
+        ];
+
+        $ctrl.parseSchema(schemaWithCaptcha, onSuccess);
+
+        expect(onSuccess).toHaveBeenCalledWith([schema[3], captchaTokenField]);
+        expect($ctrl.captchaId).toBe('abc123captchaConfigId');
+      });
+    });
   });
 
   describe('loadCountries()', () => {
@@ -892,6 +932,45 @@ describe('signUpForm', function () {
           email: user.email,
         },
       });
+    });
+
+    it('wraps captchaVerify with the captured captchaId before submission', () => {
+      $ctrl.captchaId = 'abc123captchaConfigId';
+      $ctrl.$scope.firstName = 'Daniel';
+      $ctrl.$scope.lastName = 'Bisgrove';
+      $ctrl.$scope.email = 'd@example.com';
+
+      const postData = {
+        captchaVerify: { captchaToken: 'real-grecaptcha-token-from-google' },
+      };
+      const onSuccess = jest.fn();
+
+      $ctrl.submitFinalData(postData, onSuccess);
+
+      expect(onSuccess).toHaveBeenCalledWith(
+        expect.objectContaining({
+          captchaVerify: {
+            captchaId: 'abc123captchaConfigId',
+            captchaToken: 'real-grecaptcha-token-from-google',
+          },
+        }),
+      );
+    });
+
+    it('leaves postData unchanged when no captchaVerify is present', () => {
+      $ctrl.captchaId = 'abc123captchaConfigId';
+      $ctrl.$scope.firstName = 'Daniel';
+      $ctrl.$scope.lastName = 'Bisgrove';
+      $ctrl.$scope.email = 'd@example.com';
+
+      const postData = {};
+      const onSuccess = jest.fn();
+
+      $ctrl.submitFinalData(postData, onSuccess);
+
+      expect(onSuccess).toHaveBeenCalledWith(
+        expect.not.objectContaining({ captchaVerify: expect.anything() }),
+      );
     });
   });
 
