@@ -220,7 +220,7 @@ class SignUpModalController {
     const captchaIdField = schema.find(
       (field) => field.name === 'captchaVerify.captchaId',
     );
-    this.captchaId = captchaIdField?.value || null;
+    this.$scope.captchaId = captchaIdField?.value || null;
     const captchaTokenInput = schema.find(
       (field) => field.name === 'captchaVerify.captchaToken',
     );
@@ -524,8 +524,8 @@ class SignUpModalController {
     // Okta requires captchaVerify to contain BOTH captchaId and
     // captchaToken. The widget's v2 view-builder only writes the token,
     // so we attach the captchaId we captured from the schema in getSteps.
-    if (postData.captchaVerify && this.captchaId) {
-      postData.captchaVerify.captchaId = this.captchaId;
+    if (postData.captchaVerify && this.$scope.captchaId) {
+      postData.captchaVerify.captchaId = this.$scope.captchaId;
     }
     onSuccess(postData);
   }
