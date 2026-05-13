@@ -17,6 +17,15 @@ describe('ProfileComponent', function () {
       module.name,
       {
         $window: { location: '/profile.html' },
+        envService: {
+          read: jest.fn().mockImplementation((key) => {
+            const values = {
+              sfmcUrl: 'https://cloud.connect.cru.org/preferences',
+              sfmcClientId: '534014548',
+            };
+            return values[key];
+          }),
+        },
       },
       {
         donorEmailForm: {
@@ -171,7 +180,7 @@ describe('ProfileComponent', function () {
   describe('loadDonorDetails()', () => {
     beforeEach(() => {
       jest.spyOn($ctrl, 'initTitles').mockImplementation(() => {});
-      jest.spyOn($ctrl, 'setPKeys').mockImplementation(() => {});
+      jest.spyOn($ctrl, 'setSubscriberIds').mockImplementation(() => {});
     });
 
     it('should load donor details on $onInit() and have a spouse info', () => {
@@ -189,7 +198,7 @@ describe('ProfileComponent', function () {
       expect($ctrl.hasSpouse).toBe(true);
       expect($ctrl.profileService.getProfileDonorDetails).toHaveBeenCalled();
       expect($ctrl.initTitles).toHaveBeenCalled();
-      expect($ctrl.setPKeys).toHaveBeenCalled();
+      expect($ctrl.setSubscriberIds).toHaveBeenCalled();
     });
 
     it('should load donor details on $onInit() without spouse info', () => {
@@ -205,7 +214,7 @@ describe('ProfileComponent', function () {
 
       expect($ctrl.hasSpouse).toBe(false);
       expect($ctrl.initTitles).toHaveBeenCalled();
-      expect($ctrl.setPKeys).toHaveBeenCalled();
+      expect($ctrl.setSubscriberIds).toHaveBeenCalled();
     });
 
     it('should handle and error of loading donor details on $onInit()', () => {
@@ -221,7 +230,7 @@ describe('ProfileComponent', function () {
       expect($ctrl.donorDetailsError).toBe('loading');
       expect($ctrl.profileService.getProfileDonorDetails).toHaveBeenCalled();
       expect($ctrl.initTitles).not.toHaveBeenCalled();
-      expect($ctrl.setPKeys).not.toHaveBeenCalled();
+      expect($ctrl.setSubscriberIds).not.toHaveBeenCalled();
     });
   });
 
@@ -434,76 +443,56 @@ describe('ProfileComponent', function () {
     });
   });
 
-  describe('setPKeys()', () => {
-    const primaryPKey = '123456';
-    const spousePKey = '654321';
+  describe('setSubscriberIds()', () => {
+    const primarySubscriberId = '123456';
+    const spouseSubscriberId = '654321';
 
-    it('should set PKey for primary email', () => {
+    it('should set subscriberId for primary email', () => {
       $ctrl.donorDetails = {
-        'acs-profile-pkey': primaryPKey,
-        'acs-spouse-profile-pkey': undefined,
+        'sfmc-subscriber-id': primarySubscriberId,
+        'sfmc-spouse-subscriber-id': undefined,
       };
 
-      $ctrl.setPKeys();
+      $ctrl.setSubscriberIds();
 
-      expect($ctrl.profilePKey).toEqual(primaryPKey);
-      expect($ctrl.spousePKey).toEqual(undefined);
+      expect($ctrl.sfmcSubscriberId).toEqual(primarySubscriberId);
+      expect($ctrl.sfmcSpouseSubscriberId).toEqual(undefined);
     });
 
-    it('should set PKey for spouse email', () => {
+    it('should set subscriberId for spouse email', () => {
       $ctrl.donorDetails = {
-        'acs-profile-pkey': undefined,
-        'acs-spouse-profile-pkey': spousePKey,
+        'sfmc-subscriber-id': undefined,
+        'sfmc-spouse-subscriber-id': spouseSubscriberId,
       };
 
-      $ctrl.setPKeys();
+      $ctrl.setSubscriberIds();
 
-      expect($ctrl.profilePKey).toEqual(undefined);
-      expect($ctrl.spousePKey).toEqual(spousePKey);
+      expect($ctrl.sfmcSubscriberId).toEqual(undefined);
+      expect($ctrl.sfmcSpouseSubscriberId).toEqual(spouseSubscriberId);
     });
 
-    it('should set PKey for both primary and spouse emails', () => {
+    it('should set subscriberId for both primary and spouse emails', () => {
       $ctrl.donorDetails = {
-        'acs-profile-pkey': primaryPKey,
-        'acs-spouse-profile-pkey': spousePKey,
+        'sfmc-subscriber-id': primarySubscriberId,
+        'sfmc-spouse-subscriber-id': spouseSubscriberId,
       };
 
-      $ctrl.setPKeys();
+      $ctrl.setSubscriberIds();
 
-      expect($ctrl.profilePKey).toEqual(primaryPKey);
-      expect($ctrl.spousePKey).toEqual(spousePKey);
+      expect($ctrl.sfmcSubscriberId).toEqual(primarySubscriberId);
+      expect($ctrl.sfmcSpouseSubscriberId).toEqual(spouseSubscriberId);
     });
 
-    it('should set PKey to undefined for both primary and spouse emails', () => {
+    it('should set subscriberId to undefined for both primary and spouse emails', () => {
       $ctrl.donorDetails = {
-        'acs-profile-pkey': undefined,
-        'acs-spouse-profile-pkey': undefined,
+        'sfmc-subscriber-id': undefined,
+        'sfmc-spouse-subscriber-id': undefined,
       };
 
-      $ctrl.setPKeys();
+      $ctrl.setSubscriberIds();
 
-      expect($ctrl.profilePKey).toEqual(undefined);
-      expect($ctrl.spousePKey).toEqual(undefined);
-    });
-  });
-
-  describe('linkToAdobeCampaign()', () => {
-    beforeEach(() => {
-      jest.spyOn(window, 'open').mockImplementation(() => {});
-    });
-
-    it('should open tab if pKey is present', () => {
-      $ctrl.linkToAdobeCampaign('123456');
-
-      expect(window.open).toHaveBeenCalledWith(
-        'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=123456',
-      );
-    });
-
-    it('should not open tab if pKey is undefined', () => {
-      $ctrl.linkToAdobeCampaign(undefined);
-
-      expect(window.open).not.toHaveBeenCalled();
+      expect($ctrl.sfmcSubscriberId).toEqual(undefined);
+      expect($ctrl.sfmcSpouseSubscriberId).toEqual(undefined);
     });
   });
 

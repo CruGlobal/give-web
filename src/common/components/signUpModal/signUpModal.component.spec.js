@@ -446,6 +446,32 @@ describe('signUpForm', function () {
         ]);
       });
     });
+
+    describe('getStep3Fields() (captcha passthrough)', () => {
+      const onSuccess = jest.fn();
+      beforeEach(() => {
+        $ctrl.currentStep = 3;
+        onSuccess.mockClear();
+      });
+
+      it('returns just the password field when no captcha is in the schema', () => {
+        $ctrl.parseSchema(schema, onSuccess);
+        expect(onSuccess).toHaveBeenCalledWith([schema[3]]);
+      });
+
+      it('includes the captcha field on step 3 when Okta has CAPTCHA enabled', () => {
+        const captchaField = {
+          name: 'captchaVerify',
+          type: 'captcha',
+          required: true,
+        };
+        const schemaWithCaptcha = [...schema, captchaField];
+
+        $ctrl.parseSchema(schemaWithCaptcha, onSuccess);
+
+        expect(onSuccess).toHaveBeenCalledWith([schema[3], captchaField]);
+      });
+    });
   });
 
   describe('loadCountries()', () => {

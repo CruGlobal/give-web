@@ -209,6 +209,12 @@ class SignUpModalController {
     const passwordInput = schema.find(
       (field) => field.name === 'credentials.passcode',
     );
+    // When Okta has CAPTCHA enabled for sign-up, the schema includes a field
+    // with `type: 'captcha'`. The widget's CaptchaView renders it and supplies
+    // the `captchaVerify` token on submit. It must be present in the step that
+    // actually submits to Okta (step 3) — otherwise the IDX call fails with
+    // "captchaVerify is null".
+    const captchaInput = schema.find((field) => field.type === 'captcha');
     return {
       // Step 1: Name, email, account type and organization name (if applicable)
       1: this.getStep1Fields(schema),
@@ -216,7 +222,7 @@ class SignUpModalController {
       2: this.getStep2Fields(schema),
       // Step 3: Password (We don't save the password for security reasons.
       // Which is why it's the last step)
-      3: [passwordInput],
+      3: [passwordInput, ...(captchaInput ? [captchaInput] : [])],
     };
   }
 

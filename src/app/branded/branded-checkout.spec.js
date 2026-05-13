@@ -315,6 +315,19 @@ describe('branded checkout', () => {
       );
       expect($ctrl.brandedAnalyticsFactory.purchase).toHaveBeenCalled();
     });
+
+    it('should swallow errors thrown by onOrderCompleted', () => {
+      $ctrl.onOrderCompleted = jest.fn(() => {
+        throw new Error('Callback failed');
+      });
+
+      $ctrl.onThankYouPurchaseLoaded(purchaseData);
+
+      expect($ctrl.brandedAnalyticsFactory.savePurchase).toHaveBeenCalledWith(
+        purchaseData,
+      );
+      expect($ctrl.brandedAnalyticsFactory.purchase).toHaveBeenCalled();
+    });
   });
 
   describe('onPaymentFailed', () => {
@@ -331,6 +344,16 @@ describe('branded checkout', () => {
           },
         },
       });
+    });
+
+    it('should swallow errors thrown by onOrderFailed', () => {
+      $ctrl.onOrderFailed = jest.fn(() => {
+        throw new Error('Callback failed');
+      });
+
+      expect(() =>
+        $ctrl.onPaymentFailed({ 'donor-type': 'Household' }),
+      ).not.toThrow();
     });
   });
 });
