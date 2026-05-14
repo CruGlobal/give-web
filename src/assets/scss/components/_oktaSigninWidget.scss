@@ -125,6 +125,10 @@ sign-up-modal {
         border: 1px solid transparent;
         border-radius: 0;
 
+        &::after {
+          display: none;
+        }
+
         span {
           // Make the selected item color match the color of text inputs
           color: $okta-text-color;
