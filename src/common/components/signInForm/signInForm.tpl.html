@@ -1,4 +1,32 @@
 <div
+  class="alert alert-warning"
+  role="alert"
+  ng-if="$ctrl.showSessionMismatchMessage"
+>
+  <p translate>
+    It appears that you logged in, but the system got a bit confused due to
+    previous cookies. Currently you are only partially logged in.
+  </p>
+  <p translate>To fix this in Chrome, please go to:</p>
+  <ol>
+    <li translate>Chrome Settings</li>
+    <li translate>Privacy and Security</li>
+    <li translate>Third Party Cookies</li>
+    <li translate>See all site data and permissions</li>
+    <li translate>
+      Find <strong>cru.org</strong> and click the trash can icon (&ldquo;Delete
+      site data and permissions for cru.org&rdquo;). Some of the stale cookies
+      are on the parent <em>cru.org</em> domain, not just <em>give.cru.org</em>,
+      so this is the level that needs to be cleared.
+    </li>
+  </ol>
+  <p translate>
+    After doing this, reload this page and log in again. If you continue to have
+    trouble, contact
+    <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
+  </p>
+</div>
+<div
   class="alert alert-danger"
   role="alert"
   ng-if="$ctrl.errorMessage"

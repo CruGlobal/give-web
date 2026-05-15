@@ -210,6 +210,27 @@ const session = /* @ngInject */ function (
           });
         })
         .then((response) => {
+          // /okta/login sets a give.cru.org-scoped cortex-role cookie with
+          // role=REGISTERED. If $cookies.get() still returns a non-REGISTERED
+          // value after that, a stale parent-domain (.cru.org) cookie from a
+          // prior session on another Cru property is shadowing the new one.
+          // Remove the parent-domain copy so the give.cru.org one wins on
+          // future reads. Legitimate REGISTERED cookies on .cru.org (e.g.
+          // cross-property SSO) are left alone.
+          const cookieJwt = $cookies.get(Sessions.role);
+          if (cookieJwt) {
+            try {
+              const decoded = jwtDecode(cookieJwt);
+              if (decoded.role !== Roles.registered) {
+                $cookies.remove(Sessions.role, {
+                  path: '/',
+                  domain: cookieDomain,
+                });
+              }
+            } catch (e) {
+              // Malformed cookie — ignore.
+            }
+          }
           observer.next(response);
           observer.complete();
         })
