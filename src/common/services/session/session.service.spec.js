@@ -8,6 +8,7 @@ import module, {
   SignInEvent,
   BodySignInEvent,
   checkoutSavedDataCookieName,
+  cookieDomain,
   redirectLocation,
   locationSearchOnLogin,
   forcedUserToLogout,
@@ -496,6 +497,66 @@ describe('session service', function () {
         setTimeout(() => {
           $httpBackend.flush();
           done();
+        });
+      });
+
+      it('should remove a shadowing .cru.org cortex-role cookie after a successful login', (done) => {
+        // Simulate the bug: a stale IDENTIFIED cortex-role cookie remains
+        // visible to $cookies.get() even after /okta/login set a fresh
+        // REGISTERED one on the give.cru.org domain.
+        $cookies.put(Sessions.role, cortexRole.identified);
+        jest.spyOn($cookies, 'remove');
+
+        $httpBackend
+          .expectPOST('https://give-stage2.cru.org/okta/login', {
+            access_token: accessToken,
+          })
+          .respond(200, 'success');
+
+        sessionService.handleOktaRedirect().subscribe(() => {
+          try {
+            expect($cookies.remove).toHaveBeenCalledWith(Sessions.role, {
+              path: '/',
+              domain: cookieDomain,
+            });
+            done();
+          } catch (e) {
+            done(e);
+          }
+        }, done);
+
+        setTimeout(() => {
+          $httpBackend.flush();
+        });
+      });
+
+      it('should leave a REGISTERED cortex-role cookie alone after a successful login', (done) => {
+        // Legitimate cross-property case: a .cru.org cortex-role with role
+        // REGISTERED is not a shadow — leave it alone so other Cru
+        // properties keep their SSO session.
+        $cookies.put(Sessions.role, cortexRole.registered);
+        jest.spyOn($cookies, 'remove');
+
+        $httpBackend
+          .expectPOST('https://give-stage2.cru.org/okta/login', {
+            access_token: accessToken,
+          })
+          .respond(200, 'success');
+
+        sessionService.handleOktaRedirect().subscribe(() => {
+          try {
+            expect($cookies.remove).not.toHaveBeenCalledWith(
+              Sessions.role,
+              expect.objectContaining({ domain: cookieDomain }),
+            );
+            done();
+          } catch (e) {
+            done(e);
+          }
+        }, done);
+
+        setTimeout(() => {
+          $httpBackend.flush();
         });
       });
 
