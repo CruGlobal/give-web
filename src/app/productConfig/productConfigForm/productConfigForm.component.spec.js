@@ -370,6 +370,24 @@ describe('product config form component', function () {
     });
   });
 
+  describe('omitIrrelevantData', () => {
+    it('should not throw when productData is undefined', () => {
+      delete $ctrl.productData;
+      const itemConfig = { AMOUNT: '50', 'jcr-title': 't', empty: '' };
+      expect($ctrl.omitIrrelevantData(itemConfig)).toEqual({ AMOUNT: '50' });
+    });
+
+    it('should omit recurring fields when frequency is NA', () => {
+      $ctrl.productData = { frequency: 'NA' };
+      const itemConfig = {
+        AMOUNT: '50',
+        RECURRING_START_MONTH: '01',
+        RECURRING_DAY_OF_MONTH: '15',
+      };
+      expect($ctrl.omitIrrelevantData(itemConfig)).toEqual({ AMOUNT: '50' });
+    });
+  });
+
   describe('waitForFormInitialization()', () => {
     it('should wait for the form to become available and then call addCustomValidators()', (done) => {
       jest.spyOn($ctrl, 'addCustomValidators').mockImplementation(() => {});
