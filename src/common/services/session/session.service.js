@@ -36,6 +36,24 @@ export const checkoutSavedDataCookieName = 'checkoutSavedData';
 export const forcedUserToLogout = 'forcedUserToLogout';
 export const cookieDomain = '.cru.org';
 
+// Returns true if the given cookie header string contains more than one
+// `cortex-role=…` entry. The browser exposes duplicate cookies on different
+// domains as separate entries in document.cookie, which is the one place
+// JS can directly observe parent-domain shadowing.
+export function hasDuplicateCortexRole(cookieHeader) {
+  if (!cookieHeader) {
+    return false;
+  }
+  const prefix = Sessions.role + '=';
+  let count = 0;
+  for (const entry of cookieHeader.split(/;\s*/)) {
+    if (entry.startsWith(prefix) && ++count > 1) {
+      return true;
+    }
+  }
+  return false;
+}
+
 // AngularJS event broadcasted when the user signs in
 export const SignInEvent = 'SessionSignedIn';
 // AngularJS event broadcasted when the user signs in
@@ -373,6 +391,15 @@ const session = /* @ngInject */ function (
 
   /* Private Methods */
   function updateCurrentSession() {
+    // Self-heal the parent-domain-cookie shadow on every session refresh, not
+    // just on a fresh /okta/login. This catches users who are already stuck
+    // when the code deploys: the duplicate cortex-role gets cleaned up on
+    // the next page load, and the watcher re-fires updateCurrentSession on
+    // the cleaner state.
+    const cookieHeader = $document[0] && $document[0].cookie;
+    if (hasDuplicateCortexRole(cookieHeader)) {
+      $cookies.remove(Sessions.role, { path: '/', domain: cookieDomain });
+    }
     const cortexRole = decodeCookie(Sessions.role);
     const cruProfile = updateCurrentProfile();
     const giveSession = decodeCookie(Sessions.give);

@@ -9,6 +9,7 @@ import module, {
   BodySignInEvent,
   checkoutSavedDataCookieName,
   cookieDomain,
+  hasDuplicateCortexRole,
   redirectLocation,
   locationSearchOnLogin,
   forcedUserToLogout,
@@ -139,6 +140,40 @@ describe('session service', function () {
   describe('sessionSubject', () => {
     it('to be defined', () => {
       expect(sessionService.sessionSubject).toBeDefined();
+    });
+  });
+
+  describe('hasDuplicateCortexRole helper', () => {
+    it('returns true when the cookie header has multiple cortex-role entries', () => {
+      expect(
+        hasDuplicateCortexRole(
+          'cortex-role=jwt-a; cortex-role=jwt-b; other=foo',
+        ),
+      ).toBe(true);
+    });
+
+    it('returns false when there is exactly one cortex-role entry', () => {
+      expect(hasDuplicateCortexRole('cortex-role=jwt-a; other=foo')).toBe(
+        false,
+      );
+    });
+
+    it('returns false when there are no cortex-role entries', () => {
+      expect(hasDuplicateCortexRole('other=foo; another=bar')).toBe(false);
+    });
+
+    it('returns false for an empty cookie header', () => {
+      expect(hasDuplicateCortexRole('')).toBe(false);
+    });
+
+    it('returns false for undefined input', () => {
+      expect(hasDuplicateCortexRole(undefined)).toBe(false);
+    });
+
+    it('is not fooled by cookie names that merely contain "cortex-role"', () => {
+      expect(
+        hasDuplicateCortexRole('not-cortex-role=a; my-cortex-role-extra=b'),
+      ).toBe(false);
     });
   });
 
