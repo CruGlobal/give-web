@@ -203,6 +203,12 @@ describe('giftDates service', () => {
       );
     });
 
+    it('should return the earliest valid date when transactionDay and month are undefined', () => {
+      expect(
+        giftDates.startMonth(undefined, undefined, '2017-01-02').toString(),
+      ).toEqual(moment('2017-01-02').toString());
+    });
+
     it('should support using the old startDate', () => {
       expect(
         giftDates.startMonth('3', 1, '2017-01-02', 0, '2017-01-03').toString(),
