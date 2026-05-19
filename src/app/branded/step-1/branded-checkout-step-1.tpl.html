@@ -106,6 +106,14 @@
   </div>
   <div class="panel">
     <div class="panel-body text-right">
+      <div
+        ng-if="$ctrl.submissionHasErrors"
+        class="alert alert-danger text-left"
+        role="alert"
+        translate
+      >
+        {{'SUBMIT_VALIDATION_ERROR'}}
+      </div>
       <div class="checkout-cta pull-right" ng-if="$ctrl.useV3">
         <recaptcha-wrapper
           action="'branded_checkout'"
