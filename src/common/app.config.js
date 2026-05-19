@@ -424,6 +424,8 @@ export const appConfig = /* @ngInject */ function (
     STARTING_DATE: 'Starts on: {{startdate}}',
     SUBMIT_GIFT: 'Submit Your Gift',
     SUBMITTING_GIFT: 'Submitting your gift...',
+    SUBMIT_VALIDATION_ERROR:
+      'Please correct the errors above before continuing.',
     RETRY_LOAD:
       'There was an error loading your gifts. You may <a id="retryLoadButton" href="" ng-click="{{retryLoadFunction}}">retry</a> loading them. If you continue to see this message, please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
     FINAL_THANK_YOU_HEADING: 'Thank you for Your Gift',
@@ -722,6 +724,8 @@ export const appConfig = /* @ngInject */ function (
     STARTING_DATE: 'Starts on: {{startdate}}',
     SUBMIT_GIFT: 'Submit Your Gift',
     SUBMITTING_GIFT: 'Submitting your gift...',
+    SUBMIT_VALIDATION_ERROR:
+      'Please correct the errors above before continuing.',
     RETRY_LOAD:
       'There was an error loading your gifts. You may <a id="retryLoadButton" href="" ng-click="{{retryLoadFunction}}">retry</a> loading them. If you continue to see this message, please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
     FINAL_THANK_YOU_HEADING: 'Thank you for Your Gift',
