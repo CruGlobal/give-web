@@ -45,7 +45,7 @@ class Geographies {
         cache: true,
       })
       .map((data) => {
-        const regions = data.regions;
+        const regions = data.regions || [];
 
         // Order regions in alphabetical order
         regions.sort((a, b) =>

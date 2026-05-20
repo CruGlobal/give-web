@@ -55,6 +55,13 @@ class CreditCardController {
     if (get(changes, 'paymentFormState.currentValue') === 'submitted') {
       this.savePayment();
     }
+    if (
+      get(changes, 'mailingAddress.currentValue') &&
+      !this.paymentMethod &&
+      this.useMailingAddress
+    ) {
+      assign(this.creditCardPayment.address, this.mailingAddress);
+    }
   }
 
   initExistingPaymentMethod() {
@@ -89,7 +96,7 @@ class CreditCardController {
         ) => {
           // If editing existing payment method, don't require a CVV
           return (
-            (!this.creditCardPaymentForm.securityCode.$viewValue &&
+            (!this.creditCardPaymentForm.securityCode?.$viewValue &&
               this.paymentMethod &&
               !this.creditCardPayment.cardNumber) ||
             cruPayments.creditCard.cvv.validate.minLength(number)

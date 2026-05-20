@@ -457,7 +457,7 @@ class ProductConfigFormController {
 
   omitIrrelevantData(itemConfig) {
     const data =
-      this.productData.frequency === 'NA'
+      this.productData?.frequency === 'NA'
         ? omit(itemConfig, [
             'RECURRING_START_MONTH',
             'RECURRING_DAY_OF_MONTH',

@@ -185,6 +185,20 @@ describe('geographies service', () => {
       self.$httpBackend.flush();
     });
 
+    it('should return an empty array when the country has no regions', (done) => {
+      self.$httpBackend
+        .expectGET(
+          'https://give-stage2.cru.org/cortex/geographies/crugive/countries/inaq=/regions?zoom=element',
+        )
+        .respond(200, {});
+      const ca = find(countriesResponse._element, { name: 'CA' });
+      self.geographiesService.getRegions(ca).subscribe((data) => {
+        expect(data).toEqual([]);
+        done();
+      }, done);
+      self.$httpBackend.flush();
+    });
+
     it('should not rename any non US regions', () => {
       self.$httpBackend
         .expectGET(
