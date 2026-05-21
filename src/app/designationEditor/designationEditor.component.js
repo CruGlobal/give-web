@@ -371,8 +371,9 @@ class DesignationEditorController {
               () => {
                 this.saveStatus = 'success';
                 this.loadingOverlay = false;
-                this.carouselImages =
-                  this.designationContent.secondaryPhotos || [];
+                this.carouselImages = uniq(
+                  this.designationContent.secondaryPhotos || [],
+                );
                 this.updateCarousel();
               },
               (error) => {
