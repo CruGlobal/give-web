@@ -32,8 +32,8 @@ class ProfileController {
     $location,
     $log,
     $scope,
-    sessionEnforcerService,
     envService,
+    sessionEnforcerService,
     profileService,
     analyticsFactory,
   ) {
@@ -45,12 +45,13 @@ class ProfileController {
     this.sessionEnforcerService = sessionEnforcerService;
     this.profileService = profileService;
     this.analyticsFactory = analyticsFactory;
+    this.sfmcUrl = envService.read('sfmcUrl');
+    this.sfmcClientId = envService.read('sfmcClientId');
     this.phoneNumbers = [];
     this.donorDetailsLoading = true;
     this.emailLoading = true;
     this.phonesLoading = true;
     this.mailingAddressLoading = true;
-    this.acsUrl = envService.read('acsUrl');
   }
 
   $onInit() {
@@ -99,7 +100,7 @@ class ProfileController {
         this.donorDetails = donorDetails;
         this.hasSpouse = !!this.donorDetails['spouse-name']['family-name'];
         this.initTitles();
-        this.setPKeys();
+        this.setSubscriberIds();
         this.donorDetailsLoading = false;
       },
       (error) => {
@@ -192,15 +193,10 @@ class ProfileController {
     );
   }
 
-  setPKeys() {
-    this.profilePKey = this.donorDetails['acs-profile-pkey'];
-    this.spousePKey = this.donorDetails['acs-spouse-profile-pkey'];
-  }
-
-  linkToAdobeCampaign(pKey) {
-    if (pKey) {
-      window.open(`${this.acsUrl}${pKey}`);
-    }
+  setSubscriberIds() {
+    this.sfmcSubscriberId = this.donorDetails['sfmc-subscriber-id'];
+    this.sfmcSpouseSubscriberId =
+      this.donorDetails['sfmc-spouse-subscriber-id'];
   }
 
   syncPhoneValidators() {
@@ -508,7 +504,6 @@ class ProfileController {
 
 export default angular
   .module(componentName, [
-    'environment',
     profileService.name,
     'ngMessages',
     sessionEnforcerService.name,
