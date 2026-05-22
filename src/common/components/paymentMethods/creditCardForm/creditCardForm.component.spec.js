@@ -706,6 +706,14 @@ describe('credit card form', () => {
         expect(self.formController.securityCode.$error.minLength).toEqual(true);
       });
 
+      it('should fall back to CVV length validation when securityCode control is gone', () => {
+        const minLength =
+          self.formController.securityCode.$validators.minLength;
+        delete self.controller.creditCardPaymentForm.securityCode;
+        expect(minLength('123')).toEqual(true);
+        expect(minLength('12')).toEqual(false);
+      });
+
       it('should not be valid if it is greater than 4 digits', () => {
         self.formController.securityCode.$setViewValue('12345');
 

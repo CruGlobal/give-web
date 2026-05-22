@@ -66,10 +66,13 @@ export function startMonth(
 ) {
   monthOffset = monthOffset || 0;
   const earliestValidDate = _earliestValidDate(nextDrawDate, startDate);
-  const transactionDate = earliestValidDate
-    .clone()
-    .month(parseInt(month) - 1)
-    .date(transactionDay);
+  const transactionDate = earliestValidDate.clone();
+  if (month) {
+    transactionDate.month(parseInt(month) - 1);
+  }
+  if (transactionDay) {
+    transactionDate.date(transactionDay);
+  }
   if (transactionDate.isBefore(earliestValidDate)) {
     transactionDate.add(1, 'years');
   }

@@ -96,7 +96,7 @@ class CreditCardController {
         ) => {
           // If editing existing payment method, don't require a CVV
           return (
-            (!this.creditCardPaymentForm.securityCode.$viewValue &&
+            (!this.creditCardPaymentForm.securityCode?.$viewValue &&
               this.paymentMethod &&
               !this.creditCardPayment.cardNumber) ||
             cruPayments.creditCard.cvv.validate.minLength(number)
