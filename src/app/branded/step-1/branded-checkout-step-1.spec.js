@@ -378,6 +378,7 @@ describe('branded checkout step 1', () => {
 
       expect($ctrl.next).toHaveBeenCalled();
       expect($ctrl.submitted).toEqual(true);
+      expect($ctrl.validationError).toBeFalsy();
     });
 
     it('should set submitted to false if submissions completed and errors', () => {
@@ -389,6 +390,7 @@ describe('branded checkout step 1', () => {
 
       expect($ctrl.next).not.toHaveBeenCalled();
       expect($ctrl.submitted).toEqual(false);
+      expect($ctrl.validationError).toEqual(true);
     });
   });
 });
