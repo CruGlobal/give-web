@@ -118,7 +118,7 @@ class BrandedCheckoutStep1Controller {
 
   submit() {
     this.resetSubmission();
-    this.submissionHasErrors = false;
+    this.validationError = false;
     this.submitted = true;
   }
 
@@ -200,7 +200,7 @@ class BrandedCheckoutStep1Controller {
         }
       } else {
         this.submitted = false;
-        this.submissionHasErrors = true;
+        this.validationError = true;
       }
     }
   }
