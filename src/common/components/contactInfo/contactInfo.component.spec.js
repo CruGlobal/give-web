@@ -699,9 +699,32 @@ describe('contactInfo', function () {
       expect(self.controller.onSubmit).toHaveBeenCalledWith({ success: false });
     });
 
+    it('should show an error if the donor details were never loaded', () => {
+      self.controller.detailsForm.$valid = true;
+      // donorDetails is still the placeholder from $onInit because getDonorDetails failed
+      self.controller.donorDetails = {
+        mailingAddress: {
+          country: 'US',
+        },
+      };
+      jest
+        .spyOn(self.controller.orderService, 'updateDonorDetails')
+        .mockImplementation(() => {});
+      self.controller.submitDetails();
+
+      expect(
+        self.controller.orderService.updateDonorDetails,
+      ).not.toHaveBeenCalled();
+      expect(self.controller.submissionError).toEqual(
+        'Donor details were not loaded',
+      );
+      expect(self.controller.onSubmit).toHaveBeenCalledWith({ success: false });
+    });
+
     it('should save donor details and email', () => {
       self.controller.detailsForm.$valid = true;
       self.controller.donorDetails = {
+        self: { uri: '/donordetails/crugive/abc' },
         'given-name': 'Fname',
         email: 'someone@asdf.com',
         emailFormUri: '/emails/crugive',
@@ -726,6 +749,7 @@ describe('contactInfo', function () {
       expect(
         self.controller.orderService.updateDonorDetails,
       ).toHaveBeenCalledWith({
+        self: { uri: '/donordetails/crugive/abc' },
         'given-name': 'Fname',
         email: 'someone@asdf.com',
         emailFormUri: '/emails/crugive',
@@ -747,6 +771,7 @@ describe('contactInfo', function () {
     it('should save radio station', () => {
       self.controller.detailsForm.$valid = true;
       self.controller.donorDetails = {
+        self: { uri: '/donordetails/crugive/abc' },
         'given-name': 'Fname',
         'donor-type': 'Staff',
       };
@@ -771,6 +796,7 @@ describe('contactInfo', function () {
     it('should handle an error saving donor details', () => {
       self.controller.detailsForm.$valid = true;
       self.controller.donorDetails = {
+        self: { uri: '/donordetails/crugive/abc' },
         'given-name': 'Fname',
       };
       jest
@@ -782,6 +808,7 @@ describe('contactInfo', function () {
       expect(
         self.controller.orderService.updateDonorDetails,
       ).toHaveBeenCalledWith({
+        self: { uri: '/donordetails/crugive/abc' },
         'given-name': 'Fname',
       });
 
@@ -796,6 +823,7 @@ describe('contactInfo', function () {
     it('should handle an error saving email', () => {
       self.controller.detailsForm.$valid = true;
       self.controller.donorDetails = {
+        self: { uri: '/donordetails/crugive/abc' },
         'given-name': 'Fname',
         email: 'a@a',
         emailFormUri: '/emails/crugive',
@@ -814,6 +842,7 @@ describe('contactInfo', function () {
       expect(
         self.controller.orderService.updateDonorDetails,
       ).toHaveBeenCalledWith({
+        self: { uri: '/donordetails/crugive/abc' },
         'given-name': 'Fname',
         email: 'a@a',
         emailFormUri: '/emails/crugive',
@@ -835,6 +864,7 @@ describe('contactInfo', function () {
       self.controller.detailsForm.$valid = true;
       self.controller.showSpouseDetails = true;
       self.controller.donorDetails = {
+        self: { uri: '/donordetails/crugive/abc' },
         'given-name': 'Fname',
         email: 'someone@asdf.com',
         emailFormUri: '/emails/crugive',
@@ -861,6 +891,7 @@ describe('contactInfo', function () {
       expect(
         self.controller.orderService.updateDonorDetails,
       ).toHaveBeenCalledWith({
+        self: { uri: '/donordetails/crugive/abc' },
         'given-name': 'Fname',
         email: 'someone@asdf.com',
         emailFormUri: '/emails/crugive',

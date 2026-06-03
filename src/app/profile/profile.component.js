@@ -364,7 +364,7 @@ class ProfileController {
       (error) => {
         this.mailingAddressLoading = false;
         this.mailingAddressError = 'updating';
-        this.$log.error('Failed loading mailing address', error);
+        this.$log.error('Failed updating mailing address', error);
       },
     );
   }
