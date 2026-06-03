@@ -745,6 +745,20 @@ describe('product config form component', function () {
       testSaving(false);
     });
 
+    describe('product data not loaded', () => {
+      it('should show an error if productData was never loaded', () => {
+        jest.spyOn($ctrl.cartService, 'addItem');
+        $ctrl.productData = undefined;
+        $ctrl.saveGiftToCart();
+
+        expect($ctrl.cartService.addItem).not.toHaveBeenCalled();
+        expect($ctrl.errorSavingGeneric).toEqual(true);
+        expect($ctrl.onStateChange).toHaveBeenCalledWith({
+          state: 'errorSubmitting',
+        });
+      });
+    });
+
     describe('testing transaction flag', () => {
       beforeEach(() => {
         $ctrl.productData = {};
