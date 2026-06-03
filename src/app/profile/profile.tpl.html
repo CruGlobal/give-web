@@ -300,7 +300,9 @@
                           >
                         </li>
 
-                        <li ng-if="!$ctrl.donorDetails.staff">
+                        <li
+                          ng-if="$ctrl.donorDetails && !$ctrl.donorDetails.staff"
+                        >
                           <strong translate
                             >To change your name, please email us at
                             <a
