@@ -228,6 +228,11 @@ class Step1Controller {
     this.detailsForm.$setSubmitted();
     if (this.detailsForm.$valid) {
       const details = this.donorDetails;
+      if (!details.self) {
+        this.submissionError = 'Donor details were not loaded';
+        this.onSubmit({ success: false });
+        return;
+      }
       this.submissionError = '';
 
       // Clear the saved checkout data
