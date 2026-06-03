@@ -5,6 +5,23 @@
 [![Build Status](https://github.com/CruGlobal/give-web/actions/workflows/build.yml/badge.svg)](https://github.com/CruGlobal/give-web/actions)
 [![codecov](https://codecov.io/gh/CruGlobal/give-web/branch/master/graph/badge.svg)](https://codecov.io/gh/CruGlobal/give-web)
 
+## Browser Support
+
+Browser and device usage based on GA4 28-day active users for give.cru.org (Apr 8 – May 5, 2026).
+
+**Targeted browsers** (Babel/browserslist `defaults` plus `ie >= 11`): the last 2 versions of Chrome, Edge, Firefox (and Firefox ESR), Safari (macOS & iOS), Opera, and Samsung Internet, plus any browser with over 0.5% global usage. Internet Explorer 11 is explicitly retained.
+
+| Browser          | Share |     | Device  | Share |
+| :--------------- | :---- | :-- | :------ | :---- |
+| Chrome           | 50.2% |     | Mobile  | 55.0% |
+| Safari           | 25.2% |     | Desktop | 43.4% |
+| Android Webview  | 15.2% |     | Tablet  | 1.0%  |
+| Edge             | 4.0%  |     |         |       |
+| Firefox          | 1.4%  |     |         |       |
+| Samsung Internet | 1.3%  |     |         |       |
+| Opera            | 0.9%  |     |         |       |
+| Other            | 1.8%  |     |         |       |
+
 ## Usage
 
 ### Importing JS and HTML templates
