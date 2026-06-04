@@ -302,7 +302,7 @@ class Profile {
         .do((data) => {
           this.paymentMethodForms = data;
 
-          angular.forEach(this.paymentMethodForms, (paymentMethodForm) => {
+          angular.forEach(data.paymentMethodForms, (paymentMethodForm) => {
             if (
               !this.hateoasHelperService.getLink(
                 paymentMethodForm.selfservicepaymentinstrumentform,
