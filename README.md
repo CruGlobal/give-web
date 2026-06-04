@@ -259,3 +259,32 @@ _I highly doubt you will need to move over more images. I didn't want to use web
 #### `node_modules/@okta/okta-signin-widget/dist/labels/`
 
 Webpack copies the labels from `@okta/okta-signin-widget` and stores them on our application, so do need to update these.
+
+## Browser Support
+
+Browser and device usage based on GA4 28-day active users for give.cru.org. _Last updated: 2026-05-05; review annually._
+
+**Targeted browsers** (Babel/browserslist `defaults` plus `ie >= 11`): the last 2 versions of Chrome, Edge, Firefox (and Firefox ESR), Safari (macOS & iOS), Opera, and Samsung Internet, plus any browser with over 0.5% global usage. Internet Explorer 11 is explicitly retained.
+
+**Usage snapshot — by browser**
+
+| Browser          | Share |
+| :--------------- | :---- |
+| Chrome           | 50.2% |
+| Safari           | 25.2% |
+| Android Webview  | 15.2% |
+| Edge             | 4.0%  |
+| Firefox          | 1.4%  |
+| Samsung Internet | 1.3%  |
+| Opera            | 0.9%  |
+| Other            | 1.8%  |
+
+**Usage snapshot — by device**
+
+| Device  | Share |
+| :------ | :---- |
+| Mobile  | 55.0% |
+| Desktop | 43.4% |
+| Tablet  | 1.0%  |
+
+_Device shares total 99.4%; remainder is unknown/unreported by GA4._
