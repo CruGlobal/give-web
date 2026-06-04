@@ -282,3 +282,5 @@ Browser and device usage based on GA4 28-day active users for give.cru.org. _Las
 | Mobile  | 55.0% |
 | Desktop | 43.4% |
 | Tablet  | 1.0%  |
+
+_Device shares total 99.4%; remainder is unknown/unreported by GA4._
