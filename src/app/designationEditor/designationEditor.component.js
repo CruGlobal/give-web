@@ -3,6 +3,7 @@ import 'angular-sanitize';
 import find from 'lodash/find';
 import includes from 'lodash/includes';
 import isArray from 'lodash/isArray';
+import uniq from 'lodash/uniq';
 import uibModal from 'angular-ui-bootstrap/src/modal';
 
 import commonModule from 'common/common.module';
@@ -304,7 +305,7 @@ class DesignationEditorController {
   extractCarouselUrls() {
     const designController = this.designationContent['design-controller'];
     if (designController && designController.carousel) {
-      return this.getImageUrls(designController.carousel);
+      return uniq(this.getImageUrls(designController.carousel));
     }
     return [];
   }
@@ -372,8 +373,9 @@ class DesignationEditorController {
               () => {
                 this.saveStatus = 'success';
                 this.loadingOverlay = false;
-                this.carouselImages =
-                  this.designationContent.secondaryPhotos || [];
+                this.carouselImages = uniq(
+                  this.designationContent.secondaryPhotos || [],
+                );
                 this.updateCarousel();
               },
               (error) => {

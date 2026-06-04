@@ -300,7 +300,9 @@
                           >
                         </li>
 
-                        <li>
+                        <li
+                          ng-if="$ctrl.donorDetails && !$ctrl.donorDetails.staff"
+                        >
                           <strong translate
                             >To change your name, please email us at
                             <a
@@ -378,9 +380,10 @@
                           </div>
                           <a
                             id="donorEmailPreferences"
-                            href=""
-                            ng-if="$ctrl.profilePKey"
-                            ng-click="$ctrl.linkToAdobeCampaign($ctrl.profilePKey)"
+                            ng-if="$ctrl.sfmcSubscriberId"
+                            ng-href="{{$ctrl.sfmcUrl}}?SubscriberId={{$ctrl.sfmcSubscriberId}}&ClientId={{$ctrl.sfmcClientId}}"
+                            target="_blank"
+                            rel="noopener noreferrer"
                             translate
                             >Edit Email Preferences</a
                           >
@@ -435,9 +438,10 @@
                           </div>
                           <a
                             id="spouseEmailPreferences"
-                            href=""
-                            ng-if="$ctrl.spousePKey"
-                            ng-click="$ctrl.linkToAdobeCampaign($ctrl.spousePKey)"
+                            ng-if="$ctrl.sfmcSpouseSubscriberId"
+                            ng-href="{{$ctrl.sfmcUrl}}?SubscriberId={{$ctrl.sfmcSpouseSubscriberId}}&ClientId={{$ctrl.sfmcClientId}}"
+                            target="_blank"
+                            rel="noopener noreferrer"
                             translate
                             >Edit Email Preferences</a
                           >
@@ -592,9 +596,23 @@
                         ng-if="$ctrl.mailingAddress"
                         address="$ctrl.mailingAddress.address"
                         parent-form="$ctrl.mailingAddressForm"
-                        disabled="$ctrl.donorDetails.staff"
+                        address-disabled="$ctrl.donorDetails.staff"
                       ></address-form>
                     </form>
+                  </div>
+                </div>
+
+                <div class="row" ng-if="$ctrl.donorDetails.staff">
+                  <div class="col-sm-12">
+                    <strong translate
+                      >As a staff member, your profile details are managed
+                      through PSHR. Contact
+                      <a
+                        href="mailto:personnel.records@cru.org?subject=Profile change request"
+                        >personnel.records@cru.org</a
+                      >
+                      to update them.</strong
+                    >
                   </div>
                 </div>
 

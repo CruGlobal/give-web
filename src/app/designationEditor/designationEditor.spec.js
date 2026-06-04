@@ -799,6 +799,23 @@ describe('Designation Editor', function () {
       };
       expect($ctrl.extractCarouselUrls()).toEqual([]);
     });
+
+    it('should deduplicate images', () => {
+      $ctrl.designationContent = {
+        'design-controller': {
+          carousel: {
+            image0: { fileReference: '/content/dam/a.jpg' },
+            image1: { fileReference: '/content/dam/a.jpg' },
+            image2: { fileReference: '/content/dam/b.jpg' },
+            'jcr:primaryType': 'nt:unstructured',
+          },
+        },
+      };
+      expect($ctrl.extractCarouselUrls()).toEqual([
+        '/content/dam/a.jpg',
+        '/content/dam/b.jpg',
+      ]);
+    });
   });
 
   describe('updateCarousel', () => {
