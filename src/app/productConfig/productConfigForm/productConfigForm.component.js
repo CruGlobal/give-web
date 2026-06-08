@@ -393,11 +393,6 @@ class ProductConfigFormController {
     if (!this.itemConfigForm.$valid) {
       return;
     }
-    if (!this.productData) {
-      this.errorSavingGeneric = true;
-      this.onStateChange({ state: 'errorSubmitting' });
-      return;
-    }
     this.submittingGift = true;
     this.onStateChange({ state: 'submitting' });
 
