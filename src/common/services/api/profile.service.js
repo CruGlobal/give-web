@@ -409,6 +409,17 @@ class Profile {
     });
   }
 
+  getLatestPurchase() {
+    return this.cortexApiService
+      .get({
+        path: ['profiles', this.cortexApiService.scope, 'default'],
+        zoom: {
+          purchases: 'purchases:element[]',
+        },
+      })
+      .map((data) => data.purchases?.[0]?.self.uri);
+  }
+
   getPurchase(uri) {
     return this.cortexApiService
       .get({

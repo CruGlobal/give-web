@@ -1,5 +1,9 @@
 import angular from 'angular';
 import map from 'lodash/map';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/mergeMap';
 
 import displayAddressComponent from 'common/components/display-address/display-address.component';
 import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component';
@@ -11,6 +15,7 @@ import orderService from 'common/services/api/order.service';
 import profileService from 'common/services/api/profile.service';
 import sessionService, {
   SignOutEvent,
+  Roles,
 } from 'common/services/session/session.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
 import designationsService from 'common/services/api/designations.service';
@@ -33,6 +38,7 @@ class ThankYouSummaryController {
     envService,
     orderService,
     profileService,
+    sessionService,
     sessionModalService,
     designationsService,
     thankYouService,
@@ -43,6 +49,7 @@ class ThankYouSummaryController {
     this.envService = envService;
     this.orderService = orderService;
     this.profileService = profileService;
+    this.sessionService = sessionService;
     this.sessionModalService = sessionModalService;
     this.designationsService = designationsService;
     this.thankYouService = thankYouService;
@@ -68,12 +75,43 @@ class ThankYouSummaryController {
   loadLastPurchase() {
     this.loading = true;
     const lastPurchaseLink = this.orderService.retrieveLastPurchaseLink();
-    if (!lastPurchaseLink) {
-      this.loadingError = 'lastPurchaseLink missing';
-      this.loading = false;
+    if (lastPurchaseLink) {
+      this.loadPurchaseByUri(lastPurchaseLink, true);
       return;
     }
-    this.profileService.getPurchase(lastPurchaseLink).subscribe(
+
+    // No lastPurchaseLink (e.g. new tab/device), but a signed in
+    // user can still load their most recent purchase
+    if (this.sessionService.getRole() === Roles.registered) {
+      this.profileService
+        .getLatestPurchase()
+        .mergeMap((uri) => {
+          if (!uri) {
+            return Observable.throw('No purchases found for registered user');
+          }
+          return Observable.of(uri);
+        })
+        .subscribe(
+          (uri) => {
+            this.loadPurchaseByUri(uri, false);
+          },
+          (error) => {
+            this.$log.error(
+              'Error loading latest purchase for thank you component',
+              error,
+            );
+            this.loadingError = 'lastPurchaseLink missing';
+            this.loading = false;
+          },
+        );
+      return;
+    }
+    this.loadingError = 'lastPurchaseLink missing';
+    this.loading = false;
+  }
+
+  loadPurchaseByUri(uri, isFreshPurchase) {
+    this.profileService.getPurchase(uri).subscribe(
       (data) => {
         this.purchase = data;
 
@@ -94,11 +132,14 @@ class ThankYouSummaryController {
         });
 
         this.analyticsFactory.pageLoaded();
-        this.analyticsFactory.setPurchaseNumber(
-          data.rawData['purchase-number'],
-        );
-        if (!this.envService.read('isBrandedCheckout')) {
-          this.analyticsFactory.transactionEvent(this.purchase);
+        // Don't fire purchase analytics if the user returns to the thank you page
+        if (isFreshPurchase) {
+          this.analyticsFactory.setPurchaseNumber(
+            data.rawData['purchase-number'],
+          );
+          if (!this.envService.read('isBrandedCheckout')) {
+            this.analyticsFactory.transactionEvent(this.purchase);
+          }
         }
       },
       (error) => {

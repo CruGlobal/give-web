@@ -7,7 +7,7 @@ import 'rxjs/add/observable/throw';
 
 import module from './thankYouSummary.component.js';
 
-import { SignOutEvent } from 'common/services/session/session.service';
+import { SignOutEvent, Roles } from 'common/services/session/session.service';
 
 describe('thank you summary', () => {
   beforeEach(angular.mock.module(module.name));
@@ -79,8 +79,12 @@ describe('thank you summary', () => {
         },
         profileService: {
           getPurchase: () => Observable.of(self.mockPurchase),
+          getLatestPurchase: () => Observable.of('/purchases/crugive/latest='),
           getEmails: () =>
             Observable.of([{ email: 'someperson@someaddress.com' }]),
+        },
+        sessionService: {
+          getRole: () => Roles.public,
         },
         $window: { location: '/thank-you.html' },
       },
@@ -188,19 +192,101 @@ describe('thank you summary', () => {
       ).not.toHaveBeenCalled();
     });
 
-    it('should not request purchase data if lastPurchaseLink is not defined', () => {
+    it('should not attempt a fallback if lastPurchaseLink is missing and user is not registered', () => {
       jest
         .spyOn(self.controller.orderService, 'retrieveLastPurchaseLink')
         .mockImplementation(() => undefined);
       jest
+        .spyOn(self.controller.sessionService, 'getRole')
+        .mockReturnValue(Roles.public);
+      jest
         .spyOn(self.controller.profileService, 'getPurchase')
         .mockImplementation(() => {});
+      jest.spyOn(self.controller.profileService, 'getLatestPurchase');
       self.controller.loadLastPurchase();
 
+      expect(
+        self.controller.profileService.getLatestPurchase,
+      ).not.toHaveBeenCalled();
       expect(self.controller.profileService.getPurchase).not.toHaveBeenCalled();
       expect(self.controller.purchase).not.toBeDefined();
       expect(self.controller.loading).toEqual(false);
       expect(self.controller.loadingError).toEqual('lastPurchaseLink missing');
+    });
+
+    describe('lastPurchaseLink missing and user is registered', () => {
+      beforeEach(() => {
+        jest
+          .spyOn(self.controller.orderService, 'retrieveLastPurchaseLink')
+          .mockImplementation(() => undefined);
+        jest
+          .spyOn(self.controller.sessionService, 'getRole')
+          .mockReturnValue(Roles.registered);
+      });
+
+      it('should load the latest purchase as a fallback without firing transaction analytics', () => {
+        jest.spyOn(self.controller.profileService, 'getPurchase');
+        jest.spyOn(self.controller.profileService, 'getLatestPurchase');
+        jest.spyOn(self.controller.analyticsFactory, 'transactionEvent');
+        jest.spyOn(self.controller.analyticsFactory, 'setPurchaseNumber');
+        jest.spyOn(self.controller.analyticsFactory, 'pageLoaded');
+        jest.spyOn(self.controller.envService, 'read').mockReturnValue(false);
+        self.controller.loadLastPurchase();
+
+        expect(
+          self.controller.profileService.getLatestPurchase,
+        ).toHaveBeenCalled();
+        expect(self.controller.profileService.getPurchase).toHaveBeenCalledWith(
+          '/purchases/crugive/latest=',
+        );
+        expect(self.controller.purchase).toEqual(self.mockPurchase);
+        expect(self.controller.rateTotals).toEqual([
+          { frequency: 'Single', total: '$50.00', amount: 50 },
+          { frequency: 'Monthly', total: '$20.00', amount: 20 },
+        ]);
+        expect(self.controller.loading).toEqual(false);
+        expect(self.controller.loadingError).toBeUndefined();
+        expect(self.controller.onPurchaseLoaded).toHaveBeenCalledWith({
+          $event: { purchase: self.mockPurchase },
+        });
+        expect(self.controller.analyticsFactory.pageLoaded).toHaveBeenCalled();
+        expect(
+          self.controller.analyticsFactory.transactionEvent,
+        ).not.toHaveBeenCalled();
+        expect(
+          self.controller.analyticsFactory.setPurchaseNumber,
+        ).not.toHaveBeenCalled();
+      });
+
+      it('should show the missing error when there are no purchases to fall back to', () => {
+        jest
+          .spyOn(self.controller.profileService, 'getLatestPurchase')
+          .mockReturnValue(Observable.of(undefined));
+        jest.spyOn(self.controller.profileService, 'getPurchase');
+        self.controller.loadLastPurchase();
+
+        expect(
+          self.controller.profileService.getPurchase,
+        ).not.toHaveBeenCalled();
+        expect(self.controller.purchase).not.toBeDefined();
+        expect(self.controller.loading).toEqual(false);
+        expect(self.controller.loadingError).toEqual(
+          'lastPurchaseLink missing',
+        );
+      });
+
+      it('should show the missing error when the fallback lookup fails', () => {
+        jest
+          .spyOn(self.controller.profileService, 'getLatestPurchase')
+          .mockReturnValue(Observable.throw('some error'));
+        self.controller.loadLastPurchase();
+
+        expect(self.controller.purchase).not.toBeDefined();
+        expect(self.controller.loading).toEqual(false);
+        expect(self.controller.loadingError).toEqual(
+          'lastPurchaseLink missing',
+        );
+      });
     });
 
     it('should handle an api error', () => {
