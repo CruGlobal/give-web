@@ -49,6 +49,14 @@ class OktaAuthCallbackController {
   }
 
   onSignInSuccess(data) {
+    // handleOktaRedirect emits `false` when the page loads without an Okta
+    // login redirect in the URL (direct navigation, refresh, bookmark, back
+    // button, etc). Redirect to the sign-in page instead of showing an error
+    // message.
+    if (data === false) {
+      this.redirectToSignInPage();
+      return;
+    }
     if (!data) {
       this.onSignInFailure(data);
       return;
