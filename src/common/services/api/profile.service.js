@@ -273,7 +273,7 @@ class Profile {
             );
           }
           paymentMethod.recurringGifts = flatMap(
-            paymentMethod.recurringgifts.donations,
+            paymentMethod.recurringgifts?.donations,
             (donation) => {
               return map(donation['donation-lines'], (donationLine) => {
                 return new RecurringGiftModel(donationLine, donation);
