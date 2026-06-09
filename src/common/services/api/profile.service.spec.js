@@ -688,6 +688,52 @@ describe('profile service', () => {
     });
   });
 
+  describe('getLatestPurchase', () => {
+    it('should return the URI of the newest purchase', () => {
+      self.$httpBackend
+        .expectGET(
+          'https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=purchases:element',
+        )
+        .respond(200, {
+          self: { uri: '/profiles/crugive/default' },
+          _purchases: [
+            {
+              _element: [
+                { self: { uri: '/purchases/crugive/newest=' } },
+                { self: { uri: '/purchases/crugive/older=' } },
+              ],
+            },
+          ],
+        });
+
+      let result;
+      self.profileService.getLatestPurchase().subscribe((uri) => {
+        result = uri;
+      });
+      self.$httpBackend.flush();
+
+      expect(result).toEqual('/purchases/crugive/newest=');
+    });
+
+    it('should return undefined when there are no purchases', () => {
+      self.$httpBackend
+        .expectGET(
+          'https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=purchases:element',
+        )
+        .respond(200, {
+          self: { uri: '/profiles/crugive/default' },
+        });
+
+      let result = 'unset';
+      self.profileService.getLatestPurchase().subscribe((uri) => {
+        result = uri;
+      });
+      self.$httpBackend.flush();
+
+      expect(result).toBeUndefined();
+    });
+  });
+
   describe('getDonorDetails', () => {
     it("should load the user's donorDetails", () => {
       self.$httpBackend
