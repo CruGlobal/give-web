@@ -22,8 +22,6 @@ import designationsService from 'common/services/api/designations.service';
 import thankYouService from '../../../common/services/api/thankYou.service';
 import analyticsFactory from 'app/analytics/analytics.factory';
 
-import { Observable } from 'rxjs/Observable';
-
 import template from './thankYouSummary.tpl.html';
 /* global Image */
 
