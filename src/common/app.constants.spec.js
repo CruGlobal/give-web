@@ -14,6 +14,9 @@ describe('app.constants', () => {
         ['1234567890'],
         ['(111) 111-111'],
         ['011 44 20 7946 0958'],
+        ['011 86 139 1234 5678'], // 13 digits after the 011 access prefix
+        ['011 49 30 12345678901'], // 15 digits after the prefix; 011 is excluded from the digit cap
+        ['0115551234'], // plain 10-digit number that happens to start with 011
         ['407.555.1234'],
       ])('should match %s', (number) => {
         expect(phoneNumberRegex.test(number)).toEqual(true);
@@ -45,6 +48,7 @@ describe('app.constants', () => {
         [''],
         ['123456'], // fewer than 7 digits
         ['1234567890123456'], // more than 15 digits
+        ['011 49 30 123456789012'], // 16 digits after the 011 prefix exceeds the E.164 max
         ['407-555-1234 ext.'], // extension marker without digits
       ])('should not match %s', (number) => {
         expect(phoneNumberRegex.test(number)).toEqual(false);
