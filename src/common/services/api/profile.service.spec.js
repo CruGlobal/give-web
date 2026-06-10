@@ -224,6 +224,35 @@ describe('profile service', () => {
       };
       testGetPaymentMethod(incomingPaymentMethodResponse);
     });
+
+    it('should still load the payment method when it is missing payment-instrument-identification-attributes', (done) => {
+      const incomingPaymentMethodResponse = angular.copy(paymentmethodResponse);
+      incomingPaymentMethodResponse.address = undefined;
+      delete incomingPaymentMethodResponse[
+        'payment-instrument-identification-attributes'
+      ];
+
+      self.$httpBackend
+        .expectGET(
+          'https://give-stage2.cru.org/cortex/selfservicepaymentinstruments/crugive/giydiojyg4=',
+        )
+        .respond(200, incomingPaymentMethodResponse);
+
+      self.profileService
+        .getPaymentMethod('/selfservicepaymentinstruments/crugive/giydiojyg4=')
+        .subscribe(
+          (data) => {
+            // The payment method missing identification attributes is still returned, just without an address
+            expect(data.id).toEqual('giydiojyg4=');
+            expect(data['card-number']).toEqual('1111');
+            expect(data.address).toBeUndefined();
+            expect(data.streetAddress).toBeUndefined();
+            done();
+          },
+          (error) => done(error),
+        );
+      self.$httpBackend.flush();
+    });
   });
 
   describe('getPaymentMethodsWithDonations', () => {
