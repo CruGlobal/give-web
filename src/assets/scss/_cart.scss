@@ -214,7 +214,7 @@ product-config-modal .modal-footer {
   .btn-block-xs {
     display: block;
     width: 100%;
-    &.pull-right {float: none !important;}
+    &.pull-right, &.pull-left {float: none !important;}
     + .btn-block-xs {margin-top: 10px;}
   }
 
