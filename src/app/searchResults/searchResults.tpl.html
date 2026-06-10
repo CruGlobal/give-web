@@ -24,7 +24,7 @@
 
       <div class="row">
         <div class="col-xs-12 col-sm-10 col-sm-offset-1">
-          <form method="get" action="">
+          <form ng-submit="$ctrl.submitKeywordSearch()">
             <div class="input-group is-search-main">
               <input
                 type="search"
@@ -58,7 +58,7 @@
             <div class="row">
               <div class="col-sm-12 col-md-3">
                 <div class="is-advanced">
-                  <form method="get" action="/search-results.html">
+                  <form ng-submit="$ctrl.submitNameSearch()">
                     <h2 class="h4 search-results-header" translate>
                       Search
                       <button
@@ -129,7 +129,7 @@
                             type="text"
                             class="form-control input-subtle"
                             name="fName"
-                            value="{{$ctrl.searchParams.first_name}}"
+                            ng-model="$ctrl.searchParams.first_name"
                           />
                         </div>
 
@@ -139,15 +139,10 @@
                             type="text"
                             class="form-control input-subtle"
                             name="lName"
-                            value="{{$ctrl.searchParams.last_name}}"
+                            ng-model="$ctrl.searchParams.last_name"
                           />
                         </div>
 
-                        <input
-                          type="hidden"
-                          name="type"
-                          value="{{$ctrl.searchParams.type}}"
-                        />
                         <button
                           id="bottomSearchButton"
                           class="btn btn-primary btn-block"
