@@ -120,6 +120,55 @@ describe('profile service', () => {
       };
       testGetPaymentMethods(incomingPaymentMethodsResponse);
     });
+
+    it('should still load all payment methods when one is missing payment-instrument-identification-attributes', (done) => {
+      const incomingPaymentMethodsResponse = angular.copy(
+        paymentmethodsResponse,
+      );
+      const incomingPaymentMethods =
+        incomingPaymentMethodsResponse._selfservicepaymentinstruments[0]
+          ._element;
+      incomingPaymentMethods[0][
+        'payment-instrument-identification-attributes'
+      ] = {
+        'country-name': 'US',
+        'street-address': '123 First St',
+        'extended-address': '',
+        locality: 'Sacramento',
+        'postal-code': '12345',
+        region: 'CA',
+      };
+      delete incomingPaymentMethods[1][
+        'payment-instrument-identification-attributes'
+      ];
+
+      self.$httpBackend
+        .expectGET(
+          'https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=selfservicepaymentinstruments:element',
+        )
+        .respond(200, incomingPaymentMethodsResponse);
+
+      self.profileService.getPaymentMethods().subscribe(
+        (data) => {
+          expect(data.length).toEqual(2);
+          // The bank account missing identification attributes is still returned, just without an address
+          expect(data[0]['account-type']).toEqual('Savings');
+          expect(data[0].address).toBeUndefined();
+          // The well-formed payment method is unaffected
+          expect(data[1].address).toEqual({
+            country: 'US',
+            streetAddress: '123 First St',
+            extendedAddress: '',
+            locality: 'Sacramento',
+            region: 'CA',
+            postalCode: '12345',
+          });
+          done();
+        },
+        (error) => done(error),
+      );
+      self.$httpBackend.flush();
+    });
   });
 
   describe('getPaymentMethod', () => {
@@ -200,6 +249,37 @@ describe('profile service', () => {
       self.profileService.getPaymentMethodsWithDonations().subscribe((data) => {
         expect(data).toEqual(expectedData);
       });
+      self.$httpBackend.flush();
+    });
+
+    it('should still load all payment methods when one is missing payment-instrument-identification-attributes', (done) => {
+      const incomingResponse = cloneDeep(paymentmethodsWithDonationsResponse);
+      const incomingPaymentMethods =
+        incomingResponse._selfservicepaymentinstruments[0]._element;
+      delete incomingPaymentMethods[0][
+        'payment-instrument-identification-attributes'
+      ];
+
+      self.$httpBackend
+        .expectGET(
+          'https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=selfservicepaymentinstruments:element,selfservicepaymentinstruments:element:recurringgifts',
+        )
+        .respond(200, incomingResponse);
+
+      self.profileService.getPaymentMethodsWithDonations().subscribe(
+        (data) => {
+          expect(data.length).toEqual(2);
+          // The payment method missing identification attributes is still returned, just without an address
+          expect(data[0].address).toBeUndefined();
+          // The other payment method is unaffected
+          expect(data[1].recurringGifts).toEqual([
+            expect.any(RecurringGiftModel),
+            expect.any(RecurringGiftModel),
+          ]);
+          done();
+        },
+        (error) => done(error),
+      );
       self.$httpBackend.flush();
     });
   });
