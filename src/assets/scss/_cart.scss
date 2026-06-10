@@ -223,3 +223,11 @@ product-config-modal .modal-footer {
   }
 }
 
+@media screen and (min-width: 550px) {
+  // Two adjacent right-floated footer buttons: the float places them
+  // flush against each other, so restore Bootstrap's 5px button gap.
+  .modal-footer .btn-block-xs.pull-right + .btn-block-xs.pull-right {
+    margin-right: 5px;
+  }
+}
+
