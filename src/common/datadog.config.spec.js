@@ -96,6 +96,9 @@ describe('dataDogConfig', () => {
       ).toEqual(true);
       expect(
         wouldTrace(entry, 'https://give-stage2.cru.org/cortex/carts/default'),
+      ).toEqual(true);
+      expect(
+        wouldTrace(entry, 'https://example.com/cortex/carts/default'),
       ).toEqual(false);
     });
 
@@ -114,7 +117,7 @@ describe('dataDogConfig', () => {
       ).toEqual(true);
       expect(
         wouldTrace(entry, 'https://give-stage2.cru.org/cortex/carts/default'),
-      ).toEqual(false);
+      ).toEqual(true);
     });
 
     it('should fall back to the environment apiUrl when the branded-checkout element has no api-url attribute', () => {

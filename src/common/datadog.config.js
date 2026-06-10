@@ -11,11 +11,15 @@ const dataDogConfig = /* @ngInject */ function (envServiceProvider) {
     const brandedCheckoutElement = document.querySelector('branded-checkout');
     const brandedCheckoutApiUrl =
       brandedCheckoutElement && brandedCheckoutElement.getAttribute('api-url');
-    const apiUrl = brandedCheckoutApiUrl
-      ? normalizeApiUrl(brandedCheckoutApiUrl)
-      : envServiceProvider.read('apiUrl');
+    // Always trace the env cortex URL; additionally trace the branded one when present
+    const apiUrls = [envServiceProvider.read('apiUrl')];
+    if (brandedCheckoutApiUrl) {
+      apiUrls.push(normalizeApiUrl(brandedCheckoutApiUrl));
+    }
     // The api-url attribute may omit the protocol, so match request urls protocol-relatively
-    const cortexUrl = apiUrl.replace(/^https?:/, '') + '/cortex';
+    const cortexUrls = apiUrls.map(
+      (apiUrl) => apiUrl.replace(/^https?:/, '') + '/cortex',
+    );
     const config = {
       applicationId: '3937053e-386b-4b5b-ab4a-c83217d2f953',
       clientToken,
@@ -23,7 +27,10 @@ const dataDogConfig = /* @ngInject */ function (envServiceProvider) {
       service: 'give-web',
       env: envServiceProvider.get(),
       allowedTracingUrls: [
-        (url) => url.replace(/^https?:/, '').startsWith(cortexUrl),
+        (url) =>
+          cortexUrls.some((cortexUrl) =>
+            url.replace(/^https?:/, '').startsWith(cortexUrl),
+          ),
       ],
       version: process.env.GITHUB_SHA,
       sessionSampleRate: envServiceProvider.is('staging') ? 100 : 50,
