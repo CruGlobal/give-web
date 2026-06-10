@@ -487,6 +487,22 @@ describe('checkout', () => {
           newStep: 'thankYou',
         });
       });
+
+      it('should not submit when the selected credit card has expired', () => {
+        advanceTo(new Date(2015, 0, 10));
+        jest.spyOn(self.controller.orderService, 'submitOrder');
+        self.controller.creditCardPaymentDetails = {
+          'card-type': 'Visa',
+          'expiry-month': '12',
+          'expiry-year': '2014',
+        };
+
+        self.controller.submitOrder();
+
+        expect(self.controller.orderService.submitOrder).not.toHaveBeenCalled();
+        expect(self.controller.changeStep).not.toHaveBeenCalled();
+        clear();
+      });
     });
 
     describe('logToDatadogRum', () => {

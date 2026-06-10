@@ -162,6 +162,11 @@ class Step3Controller {
   }
 
   submitOrder() {
+    // Guards direct callers (submitOrderEvent, branded submit binding) and
+    // cards that expire after the button state was last evaluated
+    if (this.isCardExpired()) {
+      return;
+    }
     this.orderService.submitOrder(this).subscribe(() => {
       if (!this.isBranded) {
         // Branded checkout submits its purchase analytics event on the thank you page
