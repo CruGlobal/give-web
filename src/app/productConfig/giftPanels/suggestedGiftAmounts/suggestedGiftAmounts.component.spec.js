@@ -35,8 +35,9 @@ describe('suggestedGiftAmounts', () => {
       $rootScope = _$rootScope_;
     }));
 
+    let scope;
     const compileComponent = (scopeValues) => {
-      const scope = $rootScope.$new();
+      scope = $rootScope.$new();
       Object.assign(
         scope,
         {
@@ -108,6 +109,22 @@ describe('suggestedGiftAmounts', () => {
         'customAmountLabelRadio',
       );
       expect(input.getAttribute('placeholder')).toBeNull();
+    });
+
+    it('activates the custom input when the radio-variant amount input gains focus', () => {
+      const element = compileComponent({
+        useSuggestedAmounts: true,
+        useV3: false,
+        suggestedAmounts: [{ amount: 50, label: 'Suggested', order: 1 }],
+      });
+      const input = element.querySelector('#customAmountInput');
+
+      expect(scope.customInputActive).toEqual(false);
+
+      angular.element(input).triggerHandler('focus');
+      $rootScope.$digest();
+
+      expect(scope.customInputActive).toEqual(true);
     });
   });
 });

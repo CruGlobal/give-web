@@ -172,6 +172,25 @@ label.btn.btn-default-form.active {
   background: none;
 }
 
+.suggested-gift-amounts .custom-amount {
+  min-width: 125px;
+
+  .custom-amount-label {
+    color: $colorGrayscale-text;
+  }
+
+  input.number {
+    width: 6em;
+    text-align: left;
+  }
+
+  // The live active state (gold border, light background from the rules
+  // above) keeps the input text dark, so the label goes dark to match.
+  &.active .custom-amount-label {
+    color: $colorGrayscale-black;
+  }
+}
+
 .modal {
   position: fixed;
   z-index: 1040;
@@ -307,38 +326,6 @@ label.btn.btn-default-form.active {
   &:last-child {
     padding-bottom: 0;
     margin-bottom: 0;
-  }
-
-  .custom-amount {
-    min-width: 125px;
-    &:hover, .number:hover {cursor: pointer;}
-
-    ::placeholder {
-      color: $colorGrayscale-text;
-      transition-delay: 100ms;
-      transition-duration: 100ms;
-    }
-
-    .custom-amount-label {
-      color: $colorGrayscale-text;
-    }
-
-    input.number {
-      width: 6em;
-      text-align: left;
-    }
-
-    &.active {
-      background-color: $colorGrayscale-text !important;
-
-      ::placeholder {
-        color: $colorCru-white;
-      }
-
-      .custom-amount-label {
-        color: $colorCru-white;
-      }
-    }
   }
 }
 

@@ -199,7 +199,6 @@ export const appConfig = /* @ngInject */ function (
     FORCED_USER_TO_LOGOUT:
       'There was an error adding this item to your account due to session data. Please re-add the item to your cart.',
     GIFT_AMOUNT: 'Gift Amount',
-    OTHER_PLACEHOLDER: 'Other',
     OTHER_AMOUNT: 'Other amount',
     GIFT_FREQUENCY: 'Gift Frequency',
     VALID_DOLLAR_AMOUNT_ERROR: 'Your gift must be a valid dollar amount',
@@ -476,7 +475,6 @@ export const appConfig = /* @ngInject */ function (
     ADD_SPOUSE: 'Add Spouse',
     REMOVE_SPOUSE: 'Remove',
     SUGGESTED_AMOUNT_HELP: 'Suggested Gift Amounts. Tab for Custom Amount',
-    CUSTOM_AMOUNT: 'Custom Amount',
   });
 
   $translateProvider.translations('es', {
@@ -496,7 +494,6 @@ export const appConfig = /* @ngInject */ function (
     FORCED_USER_TO_LOGOUT:
       'There was an error adding this item to your account due to session data. Please re-add the item to your cart.',
     GIFT_AMOUNT: 'Selecciona Una Cantidad',
-    OTHER_PLACEHOLDER: 'Otro regalo generoso',
     OTHER_AMOUNT: 'Otra cantidad',
     GIFT_FREQUENCY: 'Frecuencia de la donación',
     VALID_DOLLAR_AMOUNT_ERROR:
@@ -777,7 +774,6 @@ export const appConfig = /* @ngInject */ function (
     ADD_SPOUSE: 'Add Spouse',
     REMOVE_SPOUSE: 'Remove',
     SUGGESTED_AMOUNT_HELP: 'Suggested Gift Amounts. Tab for Custom Amount',
-    CUSTOM_AMOUNT: 'Custom Amount',
   });
   $translateProvider.preferredLanguage('en');
 };
