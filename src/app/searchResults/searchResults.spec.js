@@ -148,7 +148,6 @@ describe('searchResults', function () {
         type: 'featured',
       });
       expect($ctrl.requestGiveSearch).toHaveBeenCalledWith('featured');
-      expect($ctrl.$window.location.href).toEqual('/search-results.html');
     });
 
     it('clears the name params on a new keyword search', () => {
@@ -188,7 +187,6 @@ describe('searchResults', function () {
         type: 'people',
       });
       expect($ctrl.requestGiveSearch).toHaveBeenCalledWith('people');
-      expect($ctrl.$window.location.href).toEqual('/search-results.html');
     });
 
     it('clears the keyword param on a new name search', () => {
@@ -207,6 +205,7 @@ describe('searchResults', function () {
 
   describe('$locationChangeSuccess', () => {
     beforeEach(() => {
+      $location.path('/search-results.html');
       jest.spyOn($ctrl, 'requestGiveSearch').mockImplementation(() => {});
     });
 
@@ -229,6 +228,44 @@ describe('searchResults', function () {
       $rootScope.$broadcast('$locationChangeSuccess');
 
       expect($ctrl.requestGiveSearch).not.toHaveBeenCalled();
+    });
+
+    it('ignores location changes that navigate away from the search-results page', () => {
+      $location.search({ q: 'steve', type: 'featured' });
+      $ctrl.$onInit();
+      $ctrl.requestGiveSearch.mockClear();
+
+      // Navigating to another route fires $locationChangeSuccess before the
+      // search-results scope is destroyed by the route transition.
+      $location.path('/checkout.html');
+      $location.search({});
+      $rootScope.$broadcast('$locationChangeSuccess');
+
+      expect($ctrl.requestGiveSearch).not.toHaveBeenCalled();
+      expect($ctrl.searchParams.keyword).toEqual('steve');
+      expect($ctrl.searchParams.type).toEqual('featured');
+    });
+
+    it('runs exactly one search per in-place keyword search', () => {
+      $rootScope.$digest();
+      jest.spyOn($location, 'search');
+      $ctrl.$onInit();
+      $ctrl.requestGiveSearch.mockClear();
+
+      $ctrl.searchParams.keyword = 'steve';
+      $ctrl.searchParams.type = 'featured';
+      $ctrl.submitKeywordSearch();
+      // Let the genuine $locationChangeSuccess from the URL update fire
+      $rootScope.$digest();
+
+      expect($location.search).toHaveBeenCalledWith({
+        q: 'steve',
+        fName: null,
+        lName: null,
+        type: 'featured',
+      });
+      expect($ctrl.requestGiveSearch).toHaveBeenCalledTimes(1);
+      expect($ctrl.requestGiveSearch).toHaveBeenCalledWith('featured');
     });
   });
 

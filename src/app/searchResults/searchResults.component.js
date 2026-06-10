@@ -82,6 +82,12 @@ class SearchResultsController {
   // Re-read the URL params and re-run the search if they changed
   // (e.g. browser back/forward). No-op for our own URL updates.
   syncFromLocation() {
+    // When navigating away, $locationChangeSuccess fires before this scope is
+    // destroyed. Ignore location changes that leave the search-results page so
+    // we don't wipe the params and fire a stray search request.
+    if (!includes(this.$location.path(), 'search-results')) {
+      return;
+    }
     const params = this.$location.search();
     if (
       (params.q || undefined) === (this.searchParams.keyword || undefined) &&
