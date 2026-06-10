@@ -40,6 +40,11 @@ div[data-toggle="buttons"] input[type="radio"] {
 
 label.custom-amount {
   width: auto;
+
+  .custom-amount-label {
+    margin-right: 8px;
+    white-space: nowrap;
+  }
 }
 
 .radio,
@@ -305,7 +310,7 @@ label.btn.btn-default-form.active {
   }
 
   .custom-amount {
-    width: 125px;
+    min-width: 125px;
     &:hover, .number:hover {cursor: pointer;}
 
     ::placeholder {
@@ -314,10 +319,23 @@ label.btn.btn-default-form.active {
       transition-duration: 100ms;
     }
 
+    .custom-amount-label {
+      color: $colorGrayscale-text;
+    }
+
+    input.number {
+      width: 6em;
+      text-align: left;
+    }
+
     &.active {
       background-color: $colorGrayscale-text !important;
 
       ::placeholder {
+        color: $colorCru-white;
+      }
+
+      .custom-amount-label {
         color: $colorCru-white;
       }
     }

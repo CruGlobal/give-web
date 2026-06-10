@@ -200,6 +200,7 @@ export const appConfig = /* @ngInject */ function (
       'There was an error adding this item to your account due to session data. Please re-add the item to your cart.',
     GIFT_AMOUNT: 'Gift Amount',
     OTHER_PLACEHOLDER: 'Other',
+    OTHER_AMOUNT: 'Other amount',
     GIFT_FREQUENCY: 'Gift Frequency',
     VALID_DOLLAR_AMOUNT_ERROR: 'Your gift must be a valid dollar amount',
     AMOUNT_EMPTY_ERROR: 'Amount must be not empty',
@@ -496,6 +497,7 @@ export const appConfig = /* @ngInject */ function (
       'There was an error adding this item to your account due to session data. Please re-add the item to your cart.',
     GIFT_AMOUNT: 'Selecciona Una Cantidad',
     OTHER_PLACEHOLDER: 'Otro regalo generoso',
+    OTHER_AMOUNT: 'Otra cantidad',
     GIFT_FREQUENCY: 'Frecuencia de la donación',
     VALID_DOLLAR_AMOUNT_ERROR:
       'Su regalo debe ser una cantidad válida en dólares',

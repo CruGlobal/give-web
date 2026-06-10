@@ -531,6 +531,10 @@ hr.horizontal-divider {
     float: none;
     vertical-align: 0%;
   }
+
+  .custom-amount-label {
+    margin-right: $gutter * 0.5;
+  }
 }
 
 .btn-xs,
@@ -633,17 +637,27 @@ hr.horizontal-divider {
 
   label {
     all: unset;
+    display: flex;
     width: 100%;
     height: 100%;
+    align-items: center;
+    cursor: pointer;
 
     input[type="radio"] {
       position: absolute;
       opacity: 0;
     }
 
+    .custom-amount-label {
+      padding: 0 5px 0 10px;
+      font-weight: normal;
+      white-space: nowrap;
+    }
+
     input[type="text"] {
-      width: 100%;
+      min-width: 0;
       height: 100%;
+      flex: 1;
       padding: 0 7px;
       border: none;
       transition: all 0.3s ease;

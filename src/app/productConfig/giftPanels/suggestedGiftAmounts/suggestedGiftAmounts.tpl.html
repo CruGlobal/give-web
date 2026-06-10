@@ -68,17 +68,19 @@
               type="radio"
               ng-checked="$ctrl.customInputActive"
             />
+            <span id="customAmountLabelV3" class="custom-amount-label" translate
+              >{{'OTHER_AMOUNT'}}</span
+            >
             <input
               name="amount"
               type="text"
               id="customAmount"
               step="1"
-              aria-label="{{'CUSTOM_AMOUNT' | translate}}"
+              aria-labelledby="customAmountLabelV3"
               ng-model="$ctrl.customAmount"
               ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
               ng-focus="$ctrl.customInputActive = true;"
               ng-required="$ctrl.customInputActive"
-              placeholder="{{'OTHER_PLACEHOLDER' | translate}}"
             />
           </label>
         </div>
@@ -134,22 +136,29 @@
         ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}"
       >
         <div class="form-group">
-          <label>
+          <label for="customAmountInput">
             <input
               name="suggestedAmount"
               type="radio"
               ng-checked="$ctrl.customInputActive"
             />
+            <span
+              id="customAmountLabelRadio"
+              class="custom-amount-label"
+              translate
+              >{{'OTHER_AMOUNT'}}</span
+            >
             <input
               class="form-control form-control-subtle"
               name="amount"
               type="text"
+              id="customAmountInput"
               step="1"
+              aria-labelledby="customAmountLabelRadio"
               ng-model="$ctrl.customAmount"
               ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
               ng-focus="$ctrl.customInputActive = true"
               ng-required="$ctrl.customInputActive"
-              placeholder="{{'OTHER_PLACEHOLDER' | translate}}"
             />
           </label>
           <div
@@ -213,6 +222,9 @@
         ng-class="{active: $ctrl.customInputActive}"
         class="btn btn-default-form u-textLeft custom-amount"
       >
+        <span id="customAmountLabel" class="custom-amount-label" translate
+          >{{'OTHER_AMOUNT'}}</span
+        >
         <div class="form-group form-group-default u-inline">
           <input
             class="form-control form-control-subtle number"
@@ -221,10 +233,9 @@
             step="1"
             ng-required="$ctrl.customInputActive"
             ng-model="$ctrl.customAmount"
-            aria-label="{{'CUSTOM_AMOUNT' | translate}}"
+            aria-labelledby="customAmountLabel"
             ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
             ng-focus="$ctrl.customInputActive = true;"
-            placeholder="{{'Other' | translate}}"
             ng-attr-aria-invalid="{{$ctrl.itemConfigForm.amount | showErrors}}"
             ng-attr-aria-errormessage="{{ ($ctrl.itemConfigForm.amount | showErrors) ? 'amountErrors' : undefined }}"
             required
