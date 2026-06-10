@@ -26,6 +26,109 @@ describe('dataDogConfig', () => {
     });
   });
 
+  describe('allowedTracingUrls', () => {
+    let initSpy;
+
+    // Replicates how DataDog evaluates allowedTracingUrls entries
+    // (string prefix match, RegExp test, or predicate function)
+    const wouldTrace = (entry, url) => {
+      if (typeof entry === 'function') {
+        return entry(url);
+      }
+      if (entry instanceof RegExp) {
+        return entry.test(url);
+      }
+      return url.startsWith(entry);
+    };
+
+    const initializeDataDog = () => {
+      angular
+        .module('testDataDogTracingConfig', [
+          'environment',
+          'pascalprecht.translate',
+        ])
+        .config(appConfig)
+        .config(module.default);
+      angular.mock.module('testDataDogTracingConfig');
+      inject(() => {});
+
+      expect(initSpy).toHaveBeenCalled();
+      const allowedTracingUrls = initSpy.mock.calls[0][0].allowedTracingUrls;
+      expect(allowedTracingUrls.length).toEqual(1);
+      return allowedTracingUrls[0];
+    };
+
+    beforeEach(() => {
+      initSpy = jest.spyOn(datadogRum, 'init').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      initSpy.mockRestore();
+      document
+        .querySelectorAll('branded-checkout')
+        .forEach((element) => element.remove());
+    });
+
+    it('should trace the environment apiUrl cortex requests when no branded-checkout element exists', () => {
+      const entry = initializeDataDog();
+
+      // development environment apiUrl from app.config.js
+      expect(
+        wouldTrace(entry, 'https://give-stage2.cru.org/cortex/carts/default'),
+      ).toEqual(true);
+      expect(
+        wouldTrace(entry, 'https://example.com/cortex/carts/default'),
+      ).toEqual(false);
+    });
+
+    it('should trace the branded-checkout api-url cortex requests when the attribute includes a protocol', () => {
+      const element = document.createElement('branded-checkout');
+      element.setAttribute('api-url', 'https://brandedcheckout.jesusfilm.org');
+      document.body.appendChild(element);
+
+      const entry = initializeDataDog();
+
+      expect(
+        wouldTrace(
+          entry,
+          'https://brandedcheckout.jesusfilm.org/cortex/carts/default',
+        ),
+      ).toEqual(true);
+      expect(
+        wouldTrace(entry, 'https://give-stage2.cru.org/cortex/carts/default'),
+      ).toEqual(false);
+    });
+
+    it('should trace the branded-checkout api-url cortex requests when the attribute omits the protocol', () => {
+      const element = document.createElement('branded-checkout');
+      element.setAttribute('api-url', 'brandedcheckout.jesusfilm.org/');
+      document.body.appendChild(element);
+
+      const entry = initializeDataDog();
+
+      expect(
+        wouldTrace(
+          entry,
+          'https://brandedcheckout.jesusfilm.org/cortex/carts/default',
+        ),
+      ).toEqual(true);
+      expect(
+        wouldTrace(entry, 'https://give-stage2.cru.org/cortex/carts/default'),
+      ).toEqual(false);
+    });
+
+    it('should fall back to the environment apiUrl when the branded-checkout element has no api-url attribute', () => {
+      const element = document.createElement('branded-checkout');
+      document.body.appendChild(element);
+
+      const entry = initializeDataDog();
+
+      expect(
+        wouldTrace(entry, 'https://give-stage2.cru.org/cortex/carts/default'),
+      ).toEqual(true);
+    });
+  });
+
   describe('updateDatadogUser', () => {
     let setUserSpy, clearUserSpy;
 
