@@ -285,31 +285,33 @@ class DesignationsService {
     const path = this.generatePath(code, campaignPage);
     return Observable.from(
       this.$http.get(this.envService.read('publicGive') + path),
-    ).map((data) => {
-      const givingLinks = [];
-      if (data.data['jcr:content']) {
-        // Map giving links
-        if (data.data['jcr:content'].givingLinks) {
-          angular.forEach(data.data['jcr:content'].givingLinks, (v, k) => {
-            if (!v || !v.name || !v.url) {
-              // Some accounts contain multiple, empty giving links. Until we figure how how they
-              // are being created, we are ignoring them on the frontend.
-              // https://jira.cru.org/browse/EP-2554
-              return;
-            }
+    )
+      .map((data) => {
+        const givingLinks = [];
+        if (data.data['jcr:content']) {
+          // Map giving links
+          if (data.data['jcr:content'].givingLinks) {
+            angular.forEach(data.data['jcr:content'].givingLinks, (v, k) => {
+              if (!v || !v.name || !v.url) {
+                // Some accounts contain multiple, empty giving links. Until we figure how how they
+                // are being created, we are ignoring them on the frontend.
+                // https://jira.cru.org/browse/EP-2554
+                return;
+              }
 
-            if (toFinite(k) > 0 || startsWith(k, 'item')) {
-              givingLinks.push({
-                name: v.name,
-                url: v.url,
-                order: toFinite(k) > 0 ? toFinite(k) : Number(k.substring(4)),
-              });
-            }
-          });
+              if (toFinite(k) > 0 || startsWith(k, 'item')) {
+                givingLinks.push({
+                  name: v.name,
+                  url: v.url,
+                  order: toFinite(k) > 0 ? toFinite(k) : Number(k.substring(4)),
+                });
+              }
+            });
+          }
         }
-      }
-      return givingLinks;
-    });
+        return givingLinks;
+      })
+      .catch(() => Observable.of([]));
   }
 
   ministriesList(pagePath) {
