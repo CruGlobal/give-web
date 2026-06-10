@@ -8,6 +8,7 @@ import { SignInEvent } from 'common/services/session/session.service';
 import capitalizeFilter from 'common/filters/capitalize.filter';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
 import { startDate } from 'common/services/giftHelpers/giftDates.service';
+import { validPaymentMethod } from 'common/services/paymentHelpers/validPaymentMethods';
 import analyticsFactory from 'app/analytics/analytics.factory';
 import checkoutErrorMessages from 'app/checkout/checkout-error-messages/checkout-error-messages.component';
 import displayAddressComponent from 'common/components/display-address/display-address.component';
@@ -133,11 +134,19 @@ class Step3Controller {
       });
   }
 
+  isCardExpired() {
+    return (
+      !!this.creditCardPaymentDetails &&
+      !validPaymentMethod(this.creditCardPaymentDetails)
+    );
+  }
+
   canSubmitOrder() {
     let enableSubmitBtn = !!(
       this.cartData &&
       this.donorDetails &&
       (this.bankAccountPaymentDetails || this.creditCardPaymentDetails) &&
+      !this.isCardExpired() &&
       !this.needinfoErrors
     );
     enableSubmitBtn =
