@@ -487,7 +487,7 @@ export const appConfig = /* @ngInject */ function (
     SESSION_MISMATCH_STEP_4:
       'Find <strong>cru.org</strong> and click the <strong>trash can icon</strong> to delete it',
     SESSION_MISMATCH_CONTACT:
-      'Still stuck? Email <a href="mailto:eGift@cru.org">eGift@cru.org</a> - we\'re happy to help!',
+      'Still stuck? Email <a href="mailto:techhelp@cru.org">techhelp@cru.org</a> - we\'re happy to help!',
   });
 
   $translateProvider.translations('es', {
@@ -799,7 +799,7 @@ export const appConfig = /* @ngInject */ function (
     SESSION_MISMATCH_STEP_4:
       'Busque <strong>cru.org</strong> y haga clic en el <strong>ícono de papelera</strong> para eliminarlo',
     SESSION_MISMATCH_CONTACT:
-      '¿Aún tiene problemas? Escríbanos a <a href="mailto:eGift@cru.org">eGift@cru.org</a>; ¡con gusto le ayudaremos!',
+      '¿Aún tiene problemas? Escríbanos a <a href="mailto:techhelp@cru.org">techhelp@cru.org</a>; ¡con gusto le ayudaremos!',
   });
   $translateProvider.preferredLanguage('en');
 };
