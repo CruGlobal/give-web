@@ -403,6 +403,14 @@ describe('oktaAuthCallback', function () {
       expect($ctrl.redirectToLocationPriorToLogin).not.toHaveBeenCalled();
     });
 
+    it('should redirect to sign in when there is no Okta login redirect', () => {
+      jest.spyOn($ctrl, 'onSignInFailure');
+      jest.spyOn($ctrl, 'redirectToSignInPage').mockImplementation(() => {});
+      $ctrl.onSignInSuccess(false);
+      expect($ctrl.redirectToSignInPage).toHaveBeenCalled();
+      expect($ctrl.onSignInFailure).not.toHaveBeenCalled();
+    });
+
     it('should not fail if has data', () => {
       jest.spyOn($ctrl, 'onSignInFailure');
       jest

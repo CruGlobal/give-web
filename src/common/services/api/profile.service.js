@@ -273,7 +273,7 @@ class Profile {
             );
           }
           paymentMethod.recurringGifts = flatMap(
-            paymentMethod.recurringgifts.donations,
+            paymentMethod.recurringgifts?.donations,
             (donation) => {
               return map(donation['donation-lines'], (donationLine) => {
                 return new RecurringGiftModel(donationLine, donation);
@@ -302,7 +302,7 @@ class Profile {
         .do((data) => {
           this.paymentMethodForms = data;
 
-          angular.forEach(this.paymentMethodForms, (paymentMethodForm) => {
+          angular.forEach(data.paymentMethodForms, (paymentMethodForm) => {
             if (
               !this.hateoasHelperService.getLink(
                 paymentMethodForm.selfservicepaymentinstrumentform,
@@ -407,6 +407,17 @@ class Profile {
     return this.cortexApiService.delete({
       path: uri,
     });
+  }
+
+  getLatestPurchase() {
+    return this.cortexApiService
+      .get({
+        path: ['profiles', this.cortexApiService.scope, 'default'],
+        zoom: {
+          purchases: 'purchases:element[]',
+        },
+      })
+      .map((data) => data.purchases?.[0]?.self.uri);
   }
 
   getPurchase(uri) {

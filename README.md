@@ -152,41 +152,10 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
 - `hide-quarterly` - Hides the quarterly frequency option. If you don't want this feature, do not add this attribute at all. - _Optional_
 - `use-v3` - `true` if you want to enable version 3. Version 3 removes the review page from the checkout flow and makes UX improvements on the form. - _Optional_
 
-#### Server-side configuration for a new branded checkout domain
+#### Setup for a new branded checkout domain
 
-1. Figure out what domain you will be hosting the branded checkout form on. For example, `myministry.org`
-2. Make sure HTTPS is enabled on that domain
-3. You will need to setup a subdomain for the give.cru.org API. We've experienced cross-domain cookie issues trying to hit the give.cru.org API directly from a custom domain. Create a CNAME record for `brandedcheckout.myministry.org` (the subdomain could be different but using that suggested subdomain makes it consistent with other sites) and point it at `cortex-gateway-production-alb-425941461.us-east-1.elb.amazonaws.com`.
-4. In order to accept credit cards on your own domain, you will need a new TSYS device id (a numeric id around 14 digits) associated with one of our Merchant Accounts. Contact the Cru's Financial Services Group ([hazel.mcpherson@cru.org](mailto:hazel.mcpherson@cru.org)) and request one. You will use the device id to complete step 6.
-5. To prepare for the next step, think of a unique identifier like `"jesusfilm"` or `"aia"` that uniquely identifies your ministry and domain. We can create this for you but we need enough information about your ministry to do so.
-6. Once you have completed the steps above, contact Cru's Digital Products and Services (DPS) department ([help@cru.org](mailto:help@cru.org)). Below is an example email: (replace the `{{}}`s with the info for your site)
-
-   > I'm working on implementing branded checkout for {{my ministry}}. I would like to host the branded checkout form on {{myminsitry.org}}. HTTPS is setup on my domain and I have created a CNAME record for the subdomain {{brandedcheckout.myministry.org}} that points to cortex-gateway-production-alb-425941461.us-east-1.elb.amazonaws.com. (DPS may be able to help with the CNAME record configuration if the domain is hosted with us.)
-   >
-   > I need help configuring the give.cru.org API to work on my domain. Can you:
-   >
-   > - Add an SSL certificate to cruorg-alb for my subdomain {{brandedcheckout.myministry.org}}
-   > - Add that same subdomain to cortex_gateway's AUTH_PROXY_VALID_ORIGINS environment variable
-   > - Add the user facing domain to the maintenance app's cortex_gateway CORS Whitelist
-   >
-   > I also need help setting up a my TSYS merchant account with the give.cru.org API to be able to proccess credit cards on my site. Can you:
-   >
-   > - Add my TSYS device id to the give.cru.org API configuration. My device id is {{12345678901234}} and the url I would like to use for the branded checkout form is {{https://myministry.org}}. I would like to use a identifier of "{{myministry}}". (Or uniquely describe your ministry and domain if you want DPS to create the identifier. We can't have multiple sites that use the same identifier.)
-   > - Whitelist my site {{https://myministry.org}} with TSYS so their TSEP credit card tokenization services will work on my domain.
-   > - Whitelist my domain {{myminisry.org}} with Recaptcha.
-
-7. Test the subdomain configured to point to the give.cru.org API. https://brandedcheckout.myministry.org/cortex/nextdrawdate is a good test url. There should be no certificate errors and you should get a response that looks like this `{"next-draw-date":"2018-09-27"}`. If there are errors, please get in touch with ([help@cru.org](mailto:help@cru.org)) again and provide details as to what is happening.
-8. Add the `<branded-checkout>` tag to a page on the domain you've configured above. You can follow the documentation above for all the possible attributes and the required style and script tags. The email conversations above should have provided the values for the `api-url` (the subdomain that has a CNAME to cortex-gateway-production-alb-425941461.us-east-1.elb.amazonaws.com) and `tsys-device` (the unique string identifier created by you or by DPS) attributes. You can add them like this:
-   ```html
-   <branded-checkout
-     designation-number="0763355"
-     api-url="https://brandedcheckout.myministry.com"
-     tsys-device="myministry"
-   >
-   </branded-checkout>
-   <script src="https://give-static.cru.org/branded-checkout.v2.js"></script>
-   ```
-9. If you go to this page in a browser, you should see the `<branded-checkout>` tag fill with content. There should also be no errors in the browser's console. If you see errors that appear to be caused by branded checkout please contact us at [help@cru.org](mailto:help@cru.org).
+To set up a branded checkout for your ministry, there are a number of steps that must be completed. Please follow the instructions in this Google Doc:
+https://docs.google.com/document/d/1in5Nw2T2c0Umm-3npFhIydHml53lAG6Z_9wCF5k2_8M/edit.
 
 #### Updates
 
@@ -255,3 +224,32 @@ _I highly doubt you will need to move over more images. I didn't want to use web
 #### `node_modules/@okta/okta-signin-widget/dist/labels/`
 
 Webpack copies the labels from `@okta/okta-signin-widget` and stores them on our application, so do need to update these.
+
+## Browser Support
+
+Browser and device usage based on GA4 28-day active users for give.cru.org. _Last updated: 2026-05-05; review annually._
+
+**Targeted browsers** (Babel/browserslist `defaults` plus `ie >= 11`): the last 2 versions of Chrome, Edge, Firefox (and Firefox ESR), Safari (macOS & iOS), Opera, and Samsung Internet, plus any browser with over 0.5% global usage. Internet Explorer 11 is explicitly retained.
+
+**Usage snapshot — by browser**
+
+| Browser          | Share |
+| :--------------- | :---- |
+| Chrome           | 50.2% |
+| Safari           | 25.2% |
+| Android Webview  | 15.2% |
+| Edge             | 4.0%  |
+| Firefox          | 1.4%  |
+| Samsung Internet | 1.3%  |
+| Opera            | 0.9%  |
+| Other            | 1.8%  |
+
+**Usage snapshot — by device**
+
+| Device  | Share |
+| :------ | :---- |
+| Mobile  | 55.0% |
+| Desktop | 43.4% |
+| Tablet  | 1.0%  |
+
+_Device shares total 99.4%; remainder is unknown/unreported by GA4._
