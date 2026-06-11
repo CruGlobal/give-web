@@ -478,6 +478,20 @@ export const appConfig = /* @ngInject */ function (
     REMOVE_SPOUSE: 'Remove',
     SUGGESTED_AMOUNT_HELP: 'Suggested Gift Amounts. Tab for Custom Amount',
     CUSTOM_AMOUNT: 'Custom Amount',
+    SESSION_MISMATCH_RELOAD:
+      '<strong>Please reload this page and log in again.</strong>',
+    SESSION_MISMATCH_CLEAR_DATA:
+      "If it still doesn't work, you'll need to clear saved data for cru.org in Chrome:",
+    SESSION_MISMATCH_STEP_1:
+      'Click the <strong>three dots</strong> (top-right corner) &rarr; <strong>Settings</strong>',
+    SESSION_MISMATCH_STEP_2:
+      'Go to <strong>Privacy and Security</strong> &rarr; <strong>Site and Shields Settings</strong>',
+    SESSION_MISMATCH_STEP_3:
+      'Click <strong>View permissions and data stored across sites</strong>',
+    SESSION_MISMATCH_STEP_4:
+      'Find <strong>cru.org</strong> and click the <strong>trash can icon</strong> to delete it',
+    SESSION_MISMATCH_CONTACT:
+      'Still stuck? Email <a href="mailto:techhelp@cru.org">techhelp@cru.org</a> - we\'re happy to help!',
   });
 
   $translateProvider.translations('es', {
@@ -780,6 +794,20 @@ export const appConfig = /* @ngInject */ function (
     REMOVE_SPOUSE: 'Remove',
     SUGGESTED_AMOUNT_HELP: 'Suggested Gift Amounts. Tab for Custom Amount',
     CUSTOM_AMOUNT: 'Custom Amount',
+    SESSION_MISMATCH_RELOAD:
+      '<strong>Vuelva a cargar esta página e inicie sesión de nuevo.</strong>',
+    SESSION_MISMATCH_CLEAR_DATA:
+      'Si aún no funciona, deberá borrar los datos guardados de cru.org en Chrome:',
+    SESSION_MISMATCH_STEP_1:
+      'Haga clic en los <strong>tres puntos</strong> (esquina superior derecha) &rarr; <strong>Configuración</strong>',
+    SESSION_MISMATCH_STEP_2:
+      'Vaya a <strong>Privacidad y seguridad</strong> &rarr; <strong>Configuración de sitios</strong>',
+    SESSION_MISMATCH_STEP_3:
+      'Haga clic en <strong>Ver permisos y datos almacenados en los sitios</strong>',
+    SESSION_MISMATCH_STEP_4:
+      'Busque <strong>cru.org</strong> y haga clic en el <strong>ícono de papelera</strong> para eliminarlo',
+    SESSION_MISMATCH_CONTACT:
+      '¿Aún tiene problemas? Escríbanos a <a href="mailto:techhelp@cru.org">techhelp@cru.org</a>; ¡con gusto le ayudaremos!',
   });
   $translateProvider.preferredLanguage('en');
 };

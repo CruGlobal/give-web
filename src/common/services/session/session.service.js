@@ -41,13 +41,14 @@ export const cookieDomain = '.cru.org';
 // domains as separate entries in document.cookie, which is the one place
 // JS can directly observe parent-domain shadowing.
 export function hasDuplicateCortexRole(cookieHeader) {
-  if (!cookieHeader) return false;
-  const entries = cookieHeader.split(/;\s*/);
+  if (!cookieHeader) {
+    return false;
+  }
+  const prefix = Sessions.role + '=';
   let count = 0;
-  for (const entry of entries) {
-    if (entry.startsWith(Sessions.role + '=')) {
-      count += 1;
-      if (count > 1) return true;
+  for (const entry of cookieHeader.split(/;\s*/)) {
+    if (entry.startsWith(prefix) && ++count > 1) {
+      return true;
     }
   }
   return false;
