@@ -12,10 +12,11 @@ describe('designation service', () => {
   beforeEach(angular.mock.module(module.name));
   const self = {};
 
-  beforeEach(inject((designationsService, $httpBackend, $location) => {
+  beforeEach(inject((designationsService, $httpBackend, $location, $log) => {
     self.designationsService = designationsService;
     self.$httpBackend = $httpBackend;
     self.$location = $location;
+    self.$log = $log;
   }));
 
   afterEach(() => {
@@ -220,6 +221,10 @@ describe('designation service', () => {
           expect(suggestedAmounts).toEqual([]);
           expect(itemConfig['default-campaign-code']).toBeUndefined();
           expect(itemConfig['jcr-title']).toBeUndefined();
+          expect(self.$log.error.logs[0]).toEqual([
+            'Error loading suggested amounts for designation 0123456',
+            expect.objectContaining({ status: 400 }),
+          ]);
           done();
         }, done);
       self.$httpBackend.flush();
@@ -316,6 +321,10 @@ describe('designation service', () => {
         .givingLinks('0123456')
         .subscribe((givingLinks) => {
           expect(givingLinks).toEqual([]);
+          expect(self.$log.error.logs[0]).toEqual([
+            'Error loading giving links for designation 0123456',
+            expect.objectContaining({ status: 404 }),
+          ]);
           done();
         }, done);
       self.$httpBackend.flush();

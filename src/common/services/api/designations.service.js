@@ -19,12 +19,14 @@ class DesignationsService {
   constructor(
     $http,
     $location,
+    $log,
     envService,
     cortexApiService,
     hateoasHelperService,
   ) {
     this.$http = $http;
     this.$location = $location;
+    this.$log = $log;
     this.envService = envService;
     this.cortexApiService = cortexApiService;
     this.hateoasHelperService = hateoasHelperService;
@@ -269,7 +271,13 @@ class DesignationsService {
         }
         return suggestedAmounts;
       })
-      .catch(() => Observable.of([]));
+      .catch((error) => {
+        this.$log.error(
+          `Error loading suggested amounts for designation ${code}`,
+          error,
+        );
+        return Observable.of([]);
+      });
   }
 
   facebookPixel(code) {
@@ -311,7 +319,13 @@ class DesignationsService {
         }
         return givingLinks;
       })
-      .catch(() => Observable.of([]));
+      .catch((error) => {
+        this.$log.error(
+          `Error loading giving links for designation ${code}`,
+          error,
+        );
+        return Observable.of([]);
+      });
   }
 
   ministriesList(pagePath) {
