@@ -2,14 +2,14 @@
   {{$ctrl.gift.amount | currency}} {{$ctrl.gift.frequency}}
 </h5>
 <div ng-switch="$ctrl.gift.frequency">
-  <small ng-switch-when="Monthly" translate>
+  <small ng-switch-when="Monthly">
     On the {{$ctrl.gift.transactionDay | ordinal}} of each month
   </small>
-  <small ng-switch-when="Quarterly" translate>
+  <small ng-switch-when="Quarterly">
     On the {{$ctrl.gift.transactionDay | ordinal}} of
     {{$ctrl.quarterlyMonths(null, $ctrl.gift.nextGiftDate)}}
   </small>
-  <small ng-switch-when="Annually" translate>
+  <small ng-switch-when="Annual">
     On {{$ctrl.gift.nextGiftDate.format('MMMM')}} {{$ctrl.gift.transactionDay |
     ordinal}} of each year
   </small>
