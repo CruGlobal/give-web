@@ -15,6 +15,7 @@ const componentName = 'searchResults';
 class SearchResultsController {
   /* @ngInject */
   constructor(
+    $scope,
     $window,
     $location,
     $log,
@@ -23,6 +24,7 @@ class SearchResultsController {
     analyticsFactory,
     envService,
   ) {
+    this.$scope = $scope;
     this.$window = $window;
     this.$location = $location;
     this.$log = $log;
@@ -44,7 +46,63 @@ class SearchResultsController {
     this.featuredGroupBy = 'startMonth';
 
     this.requestGiveSearch(this.searchParams.type);
+    // Support back/forward navigation since in-place searches update the URL
+    // without reloading the page (so $onInit only runs once).
+    this.$scope.$on('$locationChangeSuccess', () => this.syncFromLocation());
     this.analyticsFactory.pageLoaded();
+  }
+
+  // Submit handler for the main keyword search box
+  submitKeywordSearch() {
+    this.searchParams.first_name = undefined;
+    this.searchParams.last_name = undefined;
+    this.updateLocationSearch();
+    this.requestGiveSearch(this.searchParams.type);
+  }
+
+  // Submit handler for the advanced people (first/last name) search
+  submitNameSearch() {
+    this.searchParams.keyword = undefined;
+    this.searchParams.type = 'people';
+    this.updateLocationSearch();
+    this.requestGiveSearch('people');
+  }
+
+  // Reflect the current search params in the URL so results stay
+  // shareable/bookmarkable without triggering a full page reload.
+  updateLocationSearch() {
+    this.$location.search({
+      q: this.searchParams.keyword || null,
+      fName: this.searchParams.first_name || null,
+      lName: this.searchParams.last_name || null,
+      type: this.searchParams.type || null,
+    });
+  }
+
+  // Re-read the URL params and re-run the search if they changed
+  // (e.g. browser back/forward). No-op for our own URL updates.
+  syncFromLocation() {
+    // When navigating away, $locationChangeSuccess fires before this scope is
+    // destroyed. Ignore location changes that leave the search-results page so
+    // we don't wipe the params and fire a stray search request.
+    if (!includes(this.$location.path(), 'search-results')) {
+      return;
+    }
+    const params = this.$location.search();
+    if (
+      (params.q || undefined) === (this.searchParams.keyword || undefined) &&
+      (params.fName || undefined) ===
+        (this.searchParams.first_name || undefined) &&
+      (params.lName || undefined) ===
+        (this.searchParams.last_name || undefined) &&
+      (params.type || undefined) === (this.searchParams.type || undefined)
+    ) {
+      return;
+    }
+    this.searchParams.keyword = params.q;
+    this.searchParams.first_name = params.fName;
+    this.searchParams.last_name = params.lName;
+    this.requestGiveSearch(params.type);
   }
 
   requestGiveSearch(type) {

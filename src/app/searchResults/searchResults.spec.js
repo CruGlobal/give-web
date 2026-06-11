@@ -7,10 +7,17 @@ import module from './searchResults.component';
 
 describe('searchResults', function () {
   beforeEach(angular.mock.module(module.name));
-  let $ctrl;
+  let $ctrl, $rootScope, $location;
 
-  beforeEach(inject(function (_$componentController_) {
+  beforeEach(inject(function (
+    _$componentController_,
+    _$rootScope_,
+    _$location_,
+  ) {
+    $rootScope = _$rootScope_;
+    $location = _$location_;
     $ctrl = _$componentController_(module.name, {
+      $scope: $rootScope.$new(),
       $window: {
         location: {
           href: '/search-results.html',
@@ -115,6 +122,150 @@ describe('searchResults', function () {
       expect(
         $ctrl.analyticsFactory.productViewDetailsEvent,
       ).toHaveBeenCalledWith('product');
+    });
+  });
+
+  describe('submitKeywordSearch', () => {
+    beforeEach(() => {
+      jest.spyOn($ctrl, 'requestGiveSearch').mockImplementation(() => {});
+      jest.spyOn($location, 'search');
+    });
+
+    it('updates the URL params and searches in place without reloading', () => {
+      $ctrl.searchParams = {
+        keyword: 'steve',
+        first_name: 'first',
+        last_name: 'last',
+        type: 'featured',
+      };
+
+      $ctrl.submitKeywordSearch();
+
+      expect($location.search).toHaveBeenCalledWith({
+        q: 'steve',
+        fName: null,
+        lName: null,
+        type: 'featured',
+      });
+      expect($ctrl.requestGiveSearch).toHaveBeenCalledWith('featured');
+    });
+
+    it('clears the name params on a new keyword search', () => {
+      $ctrl.searchParams = {
+        keyword: 'steve',
+        first_name: 'first',
+        last_name: 'last',
+      };
+
+      $ctrl.submitKeywordSearch();
+
+      expect($ctrl.searchParams.first_name).toBeUndefined();
+      expect($ctrl.searchParams.last_name).toBeUndefined();
+    });
+  });
+
+  describe('submitNameSearch', () => {
+    beforeEach(() => {
+      jest.spyOn($ctrl, 'requestGiveSearch').mockImplementation(() => {});
+      jest.spyOn($location, 'search');
+    });
+
+    it('updates the URL params and searches people in place without reloading', () => {
+      $ctrl.searchParams = {
+        keyword: 'steve',
+        first_name: 'first',
+        last_name: 'last',
+        type: 'people',
+      };
+
+      $ctrl.submitNameSearch();
+
+      expect($location.search).toHaveBeenCalledWith({
+        q: null,
+        fName: 'first',
+        lName: 'last',
+        type: 'people',
+      });
+      expect($ctrl.requestGiveSearch).toHaveBeenCalledWith('people');
+    });
+
+    it('clears the keyword param on a new name search', () => {
+      $ctrl.searchParams = {
+        keyword: 'steve',
+        first_name: 'first',
+        last_name: 'last',
+        type: 'people',
+      };
+
+      $ctrl.submitNameSearch();
+
+      expect($ctrl.searchParams.keyword).toBeUndefined();
+    });
+  });
+
+  describe('$locationChangeSuccess', () => {
+    beforeEach(() => {
+      $location.path('/search-results.html');
+      jest.spyOn($ctrl, 'requestGiveSearch').mockImplementation(() => {});
+    });
+
+    it('re-reads params and re-runs the search when the URL changes (back/forward)', () => {
+      $ctrl.$onInit();
+      $ctrl.requestGiveSearch.mockClear();
+
+      $location.search({ q: 'new keyword', type: 'featured' });
+      $rootScope.$broadcast('$locationChangeSuccess');
+
+      expect($ctrl.searchParams.keyword).toEqual('new keyword');
+      expect($ctrl.requestGiveSearch).toHaveBeenCalledWith('featured');
+    });
+
+    it('does not re-run the search when the params have not changed', () => {
+      $location.search({ q: 'steve' });
+      $ctrl.$onInit();
+      $ctrl.requestGiveSearch.mockClear();
+
+      $rootScope.$broadcast('$locationChangeSuccess');
+
+      expect($ctrl.requestGiveSearch).not.toHaveBeenCalled();
+    });
+
+    it('ignores location changes that navigate away from the search-results page', () => {
+      $location.search({ q: 'steve', type: 'featured' });
+      $ctrl.$onInit();
+      $ctrl.requestGiveSearch.mockClear();
+
+      // Navigating to another route fires $locationChangeSuccess before the
+      // search-results scope is destroyed by the route transition.
+      $location.path('/checkout.html');
+      $location.search({});
+      $rootScope.$broadcast('$locationChangeSuccess');
+
+      expect($ctrl.requestGiveSearch).not.toHaveBeenCalled();
+      expect($ctrl.searchParams.keyword).toEqual('steve');
+      expect($ctrl.searchParams.type).toEqual('featured');
+    });
+
+    it('runs exactly one search per in-place keyword search', () => {
+      $rootScope.$digest();
+      jest.spyOn($location, 'search');
+      $ctrl.$onInit();
+      $ctrl.requestGiveSearch.mockClear();
+
+      $ctrl.searchParams.keyword = 'steve';
+      $ctrl.searchParams.type = 'featured';
+      $ctrl.submitKeywordSearch();
+      // Let the genuine $locationChangeSuccess from the URL update fire
+      $rootScope.$digest();
+
+      expect($location.search).toHaveBeenCalledWith({
+        q: 'steve',
+        fName: null,
+        lName: null,
+        type: 'featured',
+      });
+      expect($ctrl.requestGiveSearch).toHaveBeenCalledTimes(1);
+      expect($ctrl.requestGiveSearch).toHaveBeenCalledWith('featured');
     });
   });
 
