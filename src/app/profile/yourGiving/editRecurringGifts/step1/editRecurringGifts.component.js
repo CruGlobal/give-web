@@ -42,6 +42,10 @@ class EditRecurringGiftsController {
   allPaymentMethodsValid() {
     return every(this.recurringGifts, (gift) => gift.paymentMethod);
   }
+
+  allAmountsValid() {
+    return every(this.recurringGifts, (gift) => gift.hasValidAmount());
+  }
 }
 
 export default angular
