@@ -229,25 +229,13 @@ const session = /* @ngInject */ function (
         })
         .then((response) => {
           // /okta/login sets a give.cru.org-scoped cortex-role cookie with
-          // role=REGISTERED. If $cookies.get() still returns a non-REGISTERED
-          // value after that, a stale parent-domain (.cru.org) cookie from a
-          // prior session on another Cru property is shadowing the new one.
-          // Remove the parent-domain copy so the give.cru.org one wins on
-          // future reads. Legitimate REGISTERED cookies on .cru.org (e.g.
-          // cross-property SSO) are left alone.
-          const cookieJwt = $cookies.get(Sessions.role);
-          if (cookieJwt) {
-            try {
-              const decoded = jwtDecode(cookieJwt);
-              if (decoded.role !== Roles.registered) {
-                $cookies.remove(Sessions.role, {
-                  path: '/',
-                  domain: cookieDomain,
-                });
-              }
-            } catch (e) {
-              // Malformed cookie — ignore.
-            }
+          // role=REGISTERED. If a stale parent-domain (.cru.org) copy is
+          // shadowing it, the cookie watcher won't fire (the visible value
+          // didn't change), so attempt the heal here. Skipped on the
+          // redirect-to-Okta branch, where no /okta/login call was made and
+          // response is undefined.
+          if (response) {
+            healCortexRoleShadow();
           }
           observer.next(response);
           observer.complete();
@@ -396,10 +384,7 @@ const session = /* @ngInject */ function (
     // when the code deploys: the duplicate cortex-role gets cleaned up on
     // the next page load, and the watcher re-fires updateCurrentSession on
     // the cleaner state.
-    const cookieHeader = $document[0] && $document[0].cookie;
-    if (hasDuplicateCortexRole(cookieHeader)) {
-      $cookies.remove(Sessions.role, { path: '/', domain: cookieDomain });
-    }
+    const cortexRoleShadowed = healCortexRoleShadow();
     const cortexRole = decodeCookie(Sessions.role);
     const cruProfile = updateCurrentProfile();
     const giveSession = decodeCookie(Sessions.give);
@@ -411,6 +396,11 @@ const session = /* @ngInject */ function (
     // Copy new session into current session object
     const newSession = angular.merge({}, cortexRole, cruProfile);
     angular.copy(newSession, session);
+    if (cortexRoleShadowed) {
+      // Surfaced so the sign-in form can tell the user to clear the cookie
+      // manually — only set when JS could not remove the shadowing copy.
+      session.cortexRoleShadowed = true;
+    }
 
     // Update sessionSubject with new value
     sessionSubject.next(session);
@@ -431,6 +421,39 @@ const session = /* @ngInject */ function (
   function decodeCookie(cookieName) {
     const jwt = $cookies.get(cookieName);
     return angular.isDefined(jwt) ? jwtDecode(jwt) : {};
+  }
+
+  // A duplicate cortex-role entry in document.cookie means a parent-domain
+  // (.cru.org) copy from another Cru property or environment is shadowing the
+  // give.cru.org cookie set by /okta/login. If the visible (winning) copy is
+  // not REGISTERED, remove the parent-domain copy so the fresh cookie wins on
+  // future reads; a REGISTERED parent copy may be legitimate cross-property
+  // SSO and is left alone. Returns true when a non-REGISTERED duplicate
+  // persists after the attempt — a shadow JS cannot remove (e.g. a host-only
+  // or path-scoped copy), meaning the user must clear cookies manually.
+  function healCortexRoleShadow() {
+    // $document[0] can be undefined in unit tests that mock $document.
+    const cookieHeader = () => $document[0] && $document[0].cookie;
+    if (!hasDuplicateCortexRole(cookieHeader())) {
+      return false;
+    }
+    if (visibleCortexRole() === Roles.registered) {
+      return false;
+    }
+    $cookies.remove(Sessions.role, { path: '/', domain: cookieDomain });
+    return (
+      hasDuplicateCortexRole(cookieHeader()) &&
+      visibleCortexRole() !== Roles.registered
+    );
+  }
+
+  function visibleCortexRole() {
+    try {
+      return decodeCookie(Sessions.role).role;
+    } catch {
+      // Malformed cookie — treat as non-REGISTERED so the shadow is removed.
+      return undefined;
+    }
   }
 
   function setSessionTimeout(timeout) {
@@ -465,7 +488,7 @@ const session = /* @ngInject */ function (
     const timeout = new Date(giveSession.exp * 1000) - Date.now();
     if (timeout <= 0) {
       // Give session still exists but has expired (some browsers may not delete expired cookies)
-      $cookies.remove(Sessions.give, { path: '/', domain: '.cru.org' });
+      $cookies.remove(Sessions.give, { path: '/', domain: cookieDomain });
       return undefined;
     }
     return timeout;

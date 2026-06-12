@@ -489,7 +489,7 @@ export const appConfig = /* @ngInject */ function (
     SESSION_MISMATCH_STEP_1:
       'Click the <strong>three dots</strong> (top-right corner) &rarr; <strong>Settings</strong>',
     SESSION_MISMATCH_STEP_2:
-      'Go to <strong>Privacy and Security</strong> &rarr; <strong>Site and Shields Settings</strong>',
+      'Go to <strong>Privacy and Security</strong> &rarr; <strong>Site Settings</strong>',
     SESSION_MISMATCH_STEP_3:
       'Click <strong>View permissions and data stored across sites</strong>',
     SESSION_MISMATCH_STEP_4:
