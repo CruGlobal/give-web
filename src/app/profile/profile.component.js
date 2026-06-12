@@ -284,6 +284,17 @@ class ProfileController {
               'Failed to create phone number because it already exists.'
           ) {
             this.phoneNumberError = 'duplicate';
+          } else if (
+            error &&
+            error.status >= 400 &&
+            error.status < 500 &&
+            angular.isString(error.data) &&
+            error.data
+          ) {
+            // Surface the descriptive message the server sends for 4xx errors
+            // (e.g. invalid or non-US phone number)
+            this.phoneNumberError = 'server';
+            this.phoneNumberErrorMessage = error.data;
           } else {
             this.phoneNumberError = 'updating';
           }
@@ -454,6 +465,7 @@ class ProfileController {
     this.donorDetailsError = '';
     this.emailAddressError = '';
     this.phoneNumberError = '';
+    this.phoneNumberErrorMessage = '';
     this.mailingAddressError = '';
     this.success = false;
     if (

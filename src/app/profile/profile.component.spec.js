@@ -727,6 +727,47 @@ describe('ProfileComponent', function () {
       expect($ctrl.profileService.addPhoneNumber).toHaveBeenCalled();
       expect($ctrl.phoneNumberError).toBe('duplicate');
     });
+
+    it('should display the server message on a 4xx error', () => {
+      $ctrl.phoneNumbers = [
+        {
+          self: false,
+          delete: false,
+        },
+      ];
+      jest.spyOn($ctrl.profileService, 'addPhoneNumber').mockReturnValue(
+        Observable.throw({
+          status: 400,
+          data: 'Unable to save the phone number. Please verify it is valid US phone number.',
+        }),
+      );
+      $ctrl.updatePhoneNumbers();
+
+      expect($ctrl.profileService.addPhoneNumber).toHaveBeenCalled();
+      expect($ctrl.phoneNumberError).toBe('server');
+      expect($ctrl.phoneNumberErrorMessage).toBe(
+        'Unable to save the phone number. Please verify it is valid US phone number.',
+      );
+    });
+
+    it('should keep the generic message on a 5xx error', () => {
+      $ctrl.phoneNumbers = [
+        {
+          self: false,
+          delete: false,
+        },
+      ];
+      jest.spyOn($ctrl.profileService, 'addPhoneNumber').mockReturnValue(
+        Observable.throw({
+          status: 500,
+          data: 'Internal server error details',
+        }),
+      );
+      $ctrl.updatePhoneNumbers();
+
+      expect($ctrl.profileService.addPhoneNumber).toHaveBeenCalled();
+      expect($ctrl.phoneNumberError).toBe('updating');
+    });
   });
 
   describe('deletePhoneNumber()', () => {
