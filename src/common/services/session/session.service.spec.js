@@ -90,6 +90,47 @@ describe('session service', function () {
     });
   });
 
+  // jsdom on localhost cannot hold two cookies with the same name (that takes
+  // a give.cru.org host cookie plus a .cru.org parent-domain copy), so the
+  // shadow-cookie tests fake the jar at the document level. `removableEntry`
+  // is the entry that a {path: '/', domain: '.cru.org'} removal deletes; pass
+  // null to simulate a copy JS cannot remove (e.g. a host-only duplicate).
+  // Replaced manually rather than with jest.spyOn because two spies on the
+  // same property's get and set don't restore cleanly.
+  let originalCookieDescriptor;
+  function fakeCookieJar(entries, removableEntry = null) {
+    const jar = { entries: entries.slice() };
+    originalCookieDescriptor = Object.getOwnPropertyDescriptor(
+      Document.prototype,
+      'cookie',
+    );
+    Object.defineProperty(Document.prototype, 'cookie', {
+      configurable: true,
+      get: () => jar.entries.join('; '),
+      set: (value) => {
+        const isRoleRemoval =
+          value.startsWith(`${Sessions.role}=`) &&
+          value.includes(`domain=${cookieDomain}`) &&
+          value.includes('1970');
+        if (isRoleRemoval && removableEntry) {
+          jar.entries = jar.entries.filter((entry) => entry !== removableEntry);
+        }
+      },
+    });
+    return jar;
+  }
+
+  afterEach(() => {
+    if (originalCookieDescriptor) {
+      Object.defineProperty(
+        Document.prototype,
+        'cookie',
+        originalCookieDescriptor,
+      );
+      originalCookieDescriptor = undefined;
+    }
+  });
+
   it('to be defined', () => {
     expect(sessionService).toBeDefined();
   });
@@ -174,6 +215,103 @@ describe('session service', function () {
       expect(
         hasDuplicateCortexRole('not-cortex-role=a; my-cortex-role-extra=b'),
       ).toBe(false);
+    });
+  });
+
+  describe('cortex-role shadow self-heal', () => {
+    const staleIdentified = `${Sessions.role}=${cortexRole.identified}`;
+    const stalePublic = `${Sessions.role}=${cortexRole.public}`;
+    const freshRegistered = `${Sessions.role}=${cortexRole.registered}`;
+
+    it('removes a shadowing parent-domain copy on session refresh and recovers the fresh role', () => {
+      const jar = fakeCookieJar(
+        [staleIdentified, freshRegistered],
+        staleIdentified,
+      );
+
+      $rootScope.$digest();
+
+      expect(jar.entries).toEqual([freshRegistered]);
+      expect(sessionService.session.role).toEqual(Roles.registered);
+      expect(sessionService.session.cortexRoleShadowed).toBeUndefined();
+    });
+
+    it('flags the session when the shadowing copy cannot be removed', () => {
+      fakeCookieJar([stalePublic, freshRegistered], null);
+
+      $rootScope.$digest();
+
+      expect(sessionService.session.cortexRoleShadowed).toBe(true);
+      expect(sessionService.session.role).toEqual(Roles.public);
+    });
+
+    it('leaves duplicates alone when the visible cookie is REGISTERED', () => {
+      jest.spyOn($cookies, 'remove');
+      const jar = fakeCookieJar(
+        [freshRegistered, staleIdentified],
+        staleIdentified,
+      );
+
+      $rootScope.$digest();
+
+      expect($cookies.remove).not.toHaveBeenCalledWith(
+        Sessions.role,
+        expect.objectContaining({ domain: cookieDomain }),
+      );
+      expect(jar.entries).toEqual([freshRegistered, staleIdentified]);
+      expect(sessionService.session.cortexRoleShadowed).toBeUndefined();
+    });
+
+    it('does not treat a single non-REGISTERED cookie as a shadow', () => {
+      // An Okta session without a Cortex login (e.g. no donor account yet,
+      // or a failed /okta/login) has no duplicate cookie and must not
+      // trigger the clear-your-cookies warning.
+      jest.spyOn($cookies, 'remove');
+      fakeCookieJar([staleIdentified]);
+
+      $rootScope.$digest();
+
+      expect($cookies.remove).not.toHaveBeenCalledWith(
+        Sessions.role,
+        expect.objectContaining({ domain: cookieDomain }),
+      );
+      expect(sessionService.session.cortexRoleShadowed).toBeUndefined();
+    });
+
+    it('clears the flag once a later refresh finds no duplicates', () => {
+      const jar = fakeCookieJar([stalePublic, freshRegistered], null);
+      $rootScope.$digest();
+      expect(sessionService.session.cortexRoleShadowed).toBe(true);
+
+      // The user clears the offending cookie manually.
+      jar.entries = [freshRegistered];
+      $rootScope.$digest();
+
+      expect(sessionService.session.cortexRoleShadowed).toBeUndefined();
+      expect(sessionService.session.role).toEqual(Roles.registered);
+    });
+
+    it('skips the heal when sign-in redirects to Okta without a login call', (done) => {
+      jest
+        .spyOn(sessionService.authClient, 'isAuthenticated')
+        .mockResolvedValue(false);
+      jest
+        .spyOn(sessionService.authClient.token, 'getWithRedirect')
+        .mockResolvedValue(undefined);
+      jest.spyOn($cookies, 'remove');
+      fakeCookieJar([staleIdentified, freshRegistered], staleIdentified);
+
+      sessionService.signIn().subscribe(() => {
+        try {
+          expect($cookies.remove).not.toHaveBeenCalledWith(
+            Sessions.role,
+            expect.objectContaining({ domain: cookieDomain }),
+          );
+          done();
+        } catch (e) {
+          done(e);
+        }
+      }, done);
     });
   });
 
@@ -536,10 +674,12 @@ describe('session service', function () {
       });
 
       it('should remove a shadowing .cru.org cortex-role cookie after a successful login', (done) => {
-        // Simulate the bug: a stale IDENTIFIED cortex-role cookie remains
-        // visible to $cookies.get() even after /okta/login set a fresh
-        // REGISTERED one on the give.cru.org domain.
-        $cookies.put(Sessions.role, cortexRole.identified);
+        // Simulate the bug: a stale IDENTIFIED cortex-role copy is still the
+        // winning entry in document.cookie even after /okta/login set a
+        // fresh REGISTERED one on the give.cru.org domain.
+        const staleEntry = `${Sessions.role}=${cortexRole.identified}`;
+        const freshEntry = `${Sessions.role}=${cortexRole.registered}`;
+        const jar = fakeCookieJar([staleEntry, freshEntry], staleEntry);
         jest.spyOn($cookies, 'remove');
 
         $httpBackend
@@ -554,6 +694,7 @@ describe('session service', function () {
               path: '/',
               domain: cookieDomain,
             });
+            expect(jar.entries).toEqual([freshEntry]);
             done();
           } catch (e) {
             done(e);
@@ -565,11 +706,13 @@ describe('session service', function () {
         });
       });
 
-      it('should leave a REGISTERED cortex-role cookie alone after a successful login', (done) => {
-        // Legitimate cross-property case: a .cru.org cortex-role with role
-        // REGISTERED is not a shadow — leave it alone so other Cru
-        // properties keep their SSO session.
-        $cookies.put(Sessions.role, cortexRole.registered);
+      it('should leave duplicates alone when the visible cortex-role is REGISTERED', (done) => {
+        // The winning cookie is healthy, so a second copy (e.g. legitimate
+        // cross-property SSO on .cru.org) is none of our business — leave it
+        // alone so other Cru properties keep their session.
+        const freshEntry = `${Sessions.role}=${cortexRole.registered}`;
+        const otherEntry = `${Sessions.role}=${cortexRole.identified}`;
+        const jar = fakeCookieJar([freshEntry, otherEntry], otherEntry);
         jest.spyOn($cookies, 'remove');
 
         $httpBackend
@@ -584,6 +727,7 @@ describe('session service', function () {
               Sessions.role,
               expect.objectContaining({ domain: cookieDomain }),
             );
+            expect(jar.entries).toEqual([freshEntry, otherEntry]);
             done();
           } catch (e) {
             done(e);
