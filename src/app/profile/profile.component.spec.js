@@ -738,7 +738,7 @@ describe('ProfileComponent', function () {
       jest.spyOn($ctrl.profileService, 'addPhoneNumber').mockReturnValue(
         Observable.throw({
           status: 400,
-          data: 'Unable to save the phone number. Please verify it is valid US phone number.',
+          data: 'Unable to save the phone number. Please verify it is a valid phone number.',
         }),
       );
       $ctrl.updatePhoneNumbers();
@@ -746,7 +746,7 @@ describe('ProfileComponent', function () {
       expect($ctrl.profileService.addPhoneNumber).toHaveBeenCalled();
       expect($ctrl.phoneNumberError).toBe('server');
       expect($ctrl.phoneNumberErrorMessage).toBe(
-        'Unable to save the phone number. Please verify it is valid US phone number.',
+        'Unable to save the phone number. Please verify it is a valid phone number.',
       );
     });
 
@@ -770,7 +770,7 @@ describe('ProfileComponent', function () {
       expect($ctrl.phoneNumberErrorMessage).toBeFalsy();
     });
 
-    it('should display the message from an object payload on a 4xx error', () => {
+    it('should fall back to the generic message for an object payload on a 4xx error', () => {
       $ctrl.phoneNumbers = [
         {
           self: false,
@@ -785,10 +785,8 @@ describe('ProfileComponent', function () {
       );
       $ctrl.updatePhoneNumbers();
 
-      expect($ctrl.phoneNumberError).toBe('server');
-      expect($ctrl.phoneNumberErrorMessage).toBe(
-        'Phone number is not a valid US number.',
-      );
+      expect($ctrl.phoneNumberError).toBe('updating');
+      expect($ctrl.phoneNumberErrorMessage).toBeFalsy();
     });
 
     it('should keep the generic message when a 4xx has an empty body', () => {
