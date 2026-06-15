@@ -8,6 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/do';
 import { phoneNumberRegex } from 'common/app.constants';
+import getClientErrorMessage from 'common/lib/getClientErrorMessage';
 
 import template from './profile.tpl.html';
 
@@ -242,7 +243,6 @@ class ProfileController {
     const requests = [];
     for (let i = 0; i < this.phoneNumbers.length; i++) {
       const item = this.phoneNumbers[i];
-      this.phonesLoading = true;
 
       if (this.phoneNumberForms[i] && !this.phoneNumberForms[i].$dirty)
         continue;
@@ -275,28 +275,43 @@ class ProfileController {
           }),
         );
       }
-      Observable.forkJoin(requests).subscribe(
-        null,
-        (error) => {
-          if (
-            error &&
-            error.data ===
-              'Failed to create phone number because it already exists.'
-          ) {
-            this.phoneNumberError = 'duplicate';
-          } else {
-            this.phoneNumberError = 'updating';
-          }
-          this.$log.error('Error updating phone numbers', error);
-          this.phonesLoading = false;
-        },
-        () => {
-          this.resetPhoneNumberForms();
-          this.success = true;
-          this.phonesLoading = false;
-        },
-      );
     }
+
+    if (!requests.length) {
+      return;
+    }
+
+    // Subscribe once to all collected requests rather than re-subscribing per
+    // phone number inside the loop (which duplicated requests and fired the
+    // success/error handlers multiple times).
+    this.phonesLoading = true;
+    Observable.forkJoin(requests).subscribe(
+      null,
+      (error) => {
+        const serverMessage = getClientErrorMessage(error);
+        if (
+          error &&
+          error.data ===
+            'Failed to create phone number because it already exists.'
+        ) {
+          this.phoneNumberError = 'duplicate';
+        } else if (serverMessage) {
+          // Surface the descriptive message the server sends for 4xx errors
+          // (e.g. invalid or non-US phone number)
+          this.phoneNumberError = 'server';
+          this.phoneNumberErrorMessage = serverMessage;
+        } else {
+          this.phoneNumberError = 'updating';
+        }
+        this.$log.error('Error updating phone numbers', error);
+        this.phonesLoading = false;
+      },
+      () => {
+        this.resetPhoneNumberForms();
+        this.success = true;
+        this.phonesLoading = false;
+      },
+    );
   }
 
   deletePhoneNumber(phone, index) {
@@ -454,6 +469,7 @@ class ProfileController {
     this.donorDetailsError = '';
     this.emailAddressError = '';
     this.phoneNumberError = '';
+    this.phoneNumberErrorMessage = '';
     this.mailingAddressError = '';
     this.success = false;
     if (
