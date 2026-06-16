@@ -61,7 +61,7 @@ describe('editRecurringGiftsModal', () => {
       });
     });
 
-    describe('allPaymentMethodsValid', () => {
+    describe('allGiftsValid', () => {
       beforeEach(() => {
         RecurringGiftModel.paymentMethods = [
           {
@@ -70,23 +70,33 @@ describe('editRecurringGiftsModal', () => {
         ];
       });
 
-      it('should return true if all payment methods are valid', () => {
+      it('should return true if all gifts have valid payment methods and amounts', () => {
         self.controller.recurringGifts = [
           new RecurringGiftModel({}).setDefaults(),
           new RecurringGiftModel({}).setDefaults(),
         ];
 
-        expect(self.controller.allPaymentMethodsValid()).toEqual(true);
+        expect(self.controller.allGiftsValid()).toEqual(true);
       });
 
-      it('should return false if any payment methods is invalid', () => {
+      it('should return false if any payment method is invalid', () => {
         self.controller.recurringGifts = [
           new RecurringGiftModel({}).setDefaults(),
           new RecurringGiftModel({}).setDefaults(),
         ];
         self.controller.recurringGifts[0].paymentMethodId = 'something invalid';
 
-        expect(self.controller.allPaymentMethodsValid()).toEqual(false);
+        expect(self.controller.allGiftsValid()).toEqual(false);
+      });
+
+      it('should return false if any amount is invalid', () => {
+        self.controller.recurringGifts = [
+          new RecurringGiftModel({}).setDefaults(),
+          new RecurringGiftModel({}).setDefaults(),
+        ];
+        self.controller.recurringGifts[0].amount = undefined;
+
+        expect(self.controller.allGiftsValid()).toEqual(false);
       });
     });
   });
