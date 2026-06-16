@@ -39,12 +39,15 @@ class EditRecurringGiftsController {
     }
   }
 
-  allPaymentMethodsValid() {
-    return every(this.recurringGifts, (gift) => gift.paymentMethod);
-  }
-
-  allAmountsValid() {
-    return every(this.recurringGifts, (gift) => gift.hasValidAmount());
+  allGiftsValid() {
+    const hasPaymentMethods = every(
+      this.recurringGifts,
+      (gift) => gift.paymentMethod,
+    );
+    const hasValidAmounts = every(this.recurringGifts, (gift) =>
+      gift.hasValidAmount(),
+    );
+    return hasPaymentMethods && hasValidAmounts;
   }
 }
 
