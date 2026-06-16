@@ -1032,7 +1032,7 @@ describe('order service', () => {
       self.$httpBackend.flush();
     });
 
-    it('should not fail when the current payment is missing payment-instrument-identification-attributes', (done) => {
+    it('should pass when the current payment is missing payment-instrument-identification-attributes', (done) => {
       const clonedResponse = angular.copy(paymentMethodCreditCardResponse);
       const description =
         clonedResponse._order[0]._paymentinstrumentselector[0]._chosen[0]
