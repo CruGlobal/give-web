@@ -266,11 +266,8 @@ export default class RecurringGiftModel {
   }
 
   hasChanges() {
-    // updated-amount is undefined when the amount input was cleared or invalid
-    // (ng-model sets the model to undefined), so it isn't a change to submit
     return (
-      (this.gift['updated-amount'] !== '' &&
-        this.gift['updated-amount'] !== undefined) ||
+      !!this.gift['updated-amount'] ||
       this.gift['updated-payment-instrument-id'] !== '' ||
       this.gift['updated-rate'].recurrence.interval !== '' ||
       this.gift['updated-recurring-day-of-month'] !== '' ||
