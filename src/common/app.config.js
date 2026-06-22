@@ -206,6 +206,9 @@ export const appConfig = /* @ngInject */ function (
     AMOUNT_MIN_ERROR: 'Amount must be at least {{currencyLimit}}',
     AMOUNT_MAX_ERROR: 'Amount must be less than {{currencyLimit}}',
     SINGLE_GIFT: 'Single Gift',
+    MONTHLY_GIFT: 'Monthly',
+    QUARTERLY_GIFT: 'Quarterly',
+    ANNUAL_GIFT: 'Annual',
     CHANGING_FREQUENCY: 'Changing frequency...',
     RECURRING_START: 'Transaction Start Date for Recurring Gifts',
     MONTH: 'Month',
@@ -440,6 +443,9 @@ export const appConfig = /* @ngInject */ function (
     RECEIPT_MAILING_ADDRESS: 'Receipt Mailing Address',
     GIFT_SUMMARY: 'Gift Summary',
     FIRST_GIFT: 'First Gift:',
+    SINGLE_GIFT_TOTAL: 'Single Gift Total:',
+    MONTHLY_GIFT_TOTAL: 'Monthly Gift Total:',
+    QUARTERLY_GIFT_TOTAL: 'Quarterly Gift Total:',
     ANNUAL_GIFT_TOTAL: 'Annual Gift Total:',
     FREQUENCY_GIFT_TOTAL: '{{frequency}} Gift Total:',
     CHOOSE_RESOURCE: 'Choose a Resource',
@@ -479,7 +485,7 @@ export const appConfig = /* @ngInject */ function (
   });
 
   $translateProvider.translations('es', {
-    GIVE_GIFT_HEADER: 'Dar regalo',
+    GIVE_GIFT_HEADER: 'Hacer un Regalo',
     LOADING_GIFT_DETAILS: 'Cargando detalles del regalo...',
     LOADING_ERROR:
       'There was an error loading the details needed to configure your gift. You may <a href ng-click="{{loadData}}">try again</a>. If you continue to experience issues, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
@@ -494,7 +500,7 @@ export const appConfig = /* @ngInject */ function (
     GIFT_IN_CART_ERROR: 'Ya tienes este regalo en tu carrito.',
     FORCED_USER_TO_LOGOUT:
       'There was an error adding this item to your account due to session data. Please re-add the item to your cart.',
-    GIFT_AMOUNT: 'Selecciona Una Cantidad',
+    GIFT_AMOUNT: 'Monto de la Donación',
     OTHER_PLACEHOLDER: 'Otro regalo generoso',
     GIFT_FREQUENCY: 'Frecuencia de la donación',
     VALID_DOLLAR_AMOUNT_ERROR:
@@ -502,10 +508,12 @@ export const appConfig = /* @ngInject */ function (
     AMOUNT_EMPTY_ERROR: 'El importe no debe estar vacío.',
     AMOUNT_MIN_ERROR: 'La cantidad debe ser al menos {{currencyLimit}}',
     AMOUNT_MAX_ERROR: 'El importe debe ser inferior a {{currencyLimit}}',
-    SINGLE_GIFT: 'Una sola',
+    SINGLE_GIFT: 'Donación Única',
+    MONTHLY_GIFT: 'Mensual',
+    QUARTERLY_GIFT: 'Trimestral',
+    ANNUAL_GIFT: 'Anual',
     CHANGING_FREQUENCY: 'Cambio de frecuencia...',
-    RECURRING_START:
-      'Fecha de inicio de la transacción para regalos recurrentes',
+    RECURRING_START: 'Fecha en que comienza la donación recurrente',
     MONTH: 'Mes',
     DAY: 'Dia',
     GIFT_START_DATE: 'Tu regalo comenzará el',
@@ -531,7 +539,7 @@ export const appConfig = /* @ngInject */ function (
     SPOUSE_FIRST_NAME: 'Nombre del cónyuge',
     SPOUSE_LAST_NAME: 'Apellido del cónyuge',
     ORGANIZATION_NAME: 'Nombre de la Organización',
-    MAILING_ADDRESS: 'Dirección de envio',
+    MAILING_ADDRESS: 'Dirección de envío',
     SUFFIX: 'Sufijo',
     COUNTRY: 'País',
     ADDRESS: 'Dirección',
@@ -557,14 +565,14 @@ export const appConfig = /* @ngInject */ function (
       'By selecting the "I Agree" checkbox above, I acknowledge that I have read, understand and agree to these Terms and Conditions, and that this agreement constitutes a "writing signed by me" under any applicable law or regulation. I authorize Cru to initiate electronic funds transfers (debits) from my account at the financial institution listed above, and to initiate deposits (credits) if necessary for any withdrawals made in error. This authority is to remain in full force and effect until Cru has received notification from me of its termination in such time as to afford Cru reasonable opportunity to act on it. All contributions to Cru are income tax-deductible and are made with the understanding that Cru has complete discretion and control over the use of all donated funds.',
     I_AGREE:
       'Reconozco que he leído, comprendido y acepto los <a ng-click="$ctrl.toggleAgreement($event)">términos y condiciones</a> relacionados con la transferencia electrónica de fondos.',
-    CREDIT_CARD_PAYMENT: 'Pago con tarjeta de crédito',
+    CREDIT_CARD_PAYMENT: 'Pago con tarjeta de crédito o débito',
     CARD_NUM: 'Número de tarjeta',
     CARD_NAME: 'Nombre en la tarjeta',
     EXP_MONTH: 'Mes de expiración',
-    EXP_YEAR: 'Año de caducidad',
+    EXP_YEAR: 'Año de expiración',
     SEC_CODE: 'Código de seguridad',
     SAME_ADDRESS: 'La misma que mi direccion de correo',
-    BILLING_ADDRESS: 'Dirección de Envio',
+    BILLING_ADDRESS: 'Dirección de Facturación',
     NEW_ADDRESS: 'Nueva',
     ERROR_SAVING_TITLE: 'Se produjo un error al guardar el título que eligió.',
     ERROR_SAVING_EMAIL:
@@ -681,7 +689,7 @@ export const appConfig = /* @ngInject */ function (
     REVIEW: 'Review',
     CONTACT_INFORMATION: 'Contact Information',
     CHANGE: 'Change',
-    PAYMENT_METHOD: 'Payment Method',
+    PAYMENT_METHOD: 'Forma de Pago',
     REVIEW_EMAIL_ERROR:
       'There was an issue with your email. Please verify that it is correct.',
     REVIEW_PAYMENT_ERROR:
@@ -710,8 +718,8 @@ export const appConfig = /* @ngInject */ function (
     ACCOUNT_NUM_FULL: 'Account Number',
     ROUTING_NUM_FULL: 'Routing Number',
     CARD_NUM_FULL: 'Número de tarjeta',
-    CARD_TYPE: 'Card Type',
-    EXPIRES: 'Expires',
+    CARD_TYPE: 'Tipo de Tarjeta',
+    EXPIRES: 'Vence',
     REVIEW_GIFTS: 'Review Gifts',
     GIFT: 'Gift',
     FREQUENCY: 'Frequency',
@@ -722,13 +730,13 @@ export const appConfig = /* @ngInject */ function (
     KEEP_DATE: 'Keep {{keepdate}}',
     CHANGE_TO_DATE: 'Change to {{changedate}}',
     STARTING_DATE: 'Starts on: {{startdate}}',
-    SUBMIT_GIFT: 'Submit Your Gift',
+    SUBMIT_GIFT: 'Enviar Tu Donación',
     SUBMITTING_GIFT: 'Submitting your gift...',
     SUBMIT_VALIDATION_ERROR:
       'Please correct the errors above before continuing.',
     RETRY_LOAD:
       'There was an error loading your gifts. You may <a id="retryLoadButton" href="" ng-click="{{retryLoadFunction}}">retry</a> loading them. If you continue to see this message, please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
-    FINAL_THANK_YOU_HEADING: 'Thank you for Your Gift',
+    FINAL_THANK_YOU_HEADING: 'Gracias por Tu Regalo',
     FINAL_GIFT_SUMMARY_EXPIRATION_ERROR: `Your gift was submitted but we cannot provide a detailed summary at this time as your session has expired.
         You will receive a confirmation email from us shortly, or you can review your donation now by looking at <a href="/your-giving.html">Your Giving</a>.`,
     FINAL_GIFT_NO_SUMMARY_ERROR: `Your gift was submitted but we cannot provide a detailed summary at this time.
@@ -737,14 +745,17 @@ export const appConfig = /* @ngInject */ function (
       <strong>{{useremail}}</strong> as well as a tax-deductible receipt by postal mail.`,
     FINAL_GIFT_THANK_YOU:
       "Thanks for making a difference in the lives of people both now and for eternity. May the Lord bless your investment in this work for Christ's kingdom. (Luke 6:38)",
-    RECEIPT_MAILING_ADDRESS: 'Receipt Mailing Address',
-    GIFT_SUMMARY: 'Gift Summary',
-    FIRST_GIFT: 'First Gift:',
-    ANNUAL_GIFT_TOTAL: 'Annual Gift Total:',
+    RECEIPT_MAILING_ADDRESS: 'Dirección de Envío del Recibo',
+    GIFT_SUMMARY: 'Resumen de la Donación',
+    FIRST_GIFT: 'Primer Regalo:',
+    SINGLE_GIFT_TOTAL: 'Total de la Donación Única:',
+    MONTHLY_GIFT_TOTAL: 'Total de la Donación Mensual:',
+    QUARTERLY_GIFT_TOTAL: 'Total de la Donación Trimestral:',
+    ANNUAL_GIFT_TOTAL: 'Total de la Donación Anual:',
     FREQUENCY_GIFT_TOTAL: '{{frequency}} Gift Total:',
     CHOOSE_RESOURCE: 'Choose a Resource',
     NO_THANK_YOU: 'Thank you, but please do not send me the resources.',
-    RADIO_STATION: 'Radio Station',
+    RADIO_STATION: 'Estación de Radio',
     RADIO_STATION_LIST_ERROR:
       'There was an error loading radio stations in your area.',
     RADIO_STATION_SELECT_ERROR: 'There was an error selecting a radio station.',
