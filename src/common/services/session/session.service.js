@@ -70,11 +70,16 @@ const session = /* @ngInject */ function (
   $timeout,
   $window,
   $location,
+  $log,
   envService,
 ) {
   const session = {};
   const sessionSubject = new BehaviorSubject(session);
   let sessionTimeout;
+  // Tracks whether we have already reported the current unhealable shadow to
+  // Rollbar, so the cookie watcher re-firing updateCurrentSession does not
+  // log a duplicate for the same stuck user. Reset once the shadow clears.
+  let cortexRoleShadowReported = false;
   const maximumTimeout = 30 * 1000;
 
   const oktaSignInWidgetDefaultOptions = {
@@ -400,6 +405,17 @@ const session = /* @ngInject */ function (
       // Surfaced so the sign-in form can tell the user to clear the cookie
       // manually — only set when JS could not remove the shadowing copy.
       session.cortexRoleShadowed = true;
+      // Report to Rollbar once per occurrence so we can measure how many users
+      // actually get stuck. The JWT is intentionally omitted; only the stuck
+      // (visible) role is included.
+      if (!cortexRoleShadowReported) {
+        cortexRoleShadowReported = true;
+        $log.error('Unhealable cortex-role shadow: user must clear cookies', {
+          visibleRole: session.role,
+        });
+      }
+    } else {
+      cortexRoleShadowReported = false;
     }
 
     // Update sessionSubject with new value
