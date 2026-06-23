@@ -494,8 +494,7 @@ export const appConfig = /* @ngInject */ function (
       'Click <strong>See all site data and permissions</strong>',
     SESSION_MISMATCH_STEP_4:
       'Find <strong>cru.org</strong> and click the <strong>trash can icon</strong> to delete it',
-    SESSION_MISMATCH_RELOAD_AGAIN:
-      'Then reload the page and log in again.',
+    SESSION_MISMATCH_RELOAD_AGAIN: 'Then reload the page and log in again.',
     SESSION_MISMATCH_CONTACT:
       'Still stuck? Email <a href="mailto:techhelp@cru.org">techhelp@cru.org</a> - we\'re happy to help!',
   });

@@ -58,6 +58,7 @@ describe('session service', function () {
     $window,
     $location,
     $injector,
+    $log,
     envService;
 
   beforeEach(inject(function (
@@ -70,6 +71,7 @@ describe('session service', function () {
     _$window_,
     _$location_,
     _$injector_,
+    _$log_,
     _envService_,
   ) {
     sessionService = _sessionService_;
@@ -81,6 +83,7 @@ describe('session service', function () {
     $window = _$window_;
     $location = _$location_;
     $injector = _$injector_;
+    $log = _$log_;
     envService = _envService_;
   }));
 
@@ -294,6 +297,55 @@ describe('session service', function () {
 
       expect(sessionService.session.cortexRoleShadowed).toBeUndefined();
       expect(sessionService.session.role).toEqual(Roles.registered);
+    });
+
+    it('reports an unhealable shadow to Rollbar once with the stuck role', () => {
+      jest.spyOn($log, 'error').mockImplementation(() => {});
+      // A re-fire of updateCurrentSession on a still-stuck session (the visible
+      // role changes, so the cookie watcher fires again) must not re-report.
+      const jar = fakeCookieJar([stalePublic, freshRegistered], null);
+      $rootScope.$digest();
+      jar.entries = [staleIdentified, freshRegistered];
+      $rootScope.$digest();
+
+      expect($log.error).toHaveBeenCalledTimes(1);
+      expect($log.error).toHaveBeenCalledWith(
+        expect.stringContaining('cortex-role shadow'),
+        { visibleRole: Roles.public },
+      );
+    });
+
+    it('does not report to Rollbar when the duplicate self-heals', () => {
+      jest.spyOn($log, 'error').mockImplementation(() => {});
+      fakeCookieJar([staleIdentified, freshRegistered], staleIdentified);
+
+      $rootScope.$digest();
+
+      expect($log.error).not.toHaveBeenCalled();
+    });
+
+    it('does not report to Rollbar for a single non-REGISTERED cookie', () => {
+      jest.spyOn($log, 'error').mockImplementation(() => {});
+      fakeCookieJar([staleIdentified]);
+
+      $rootScope.$digest();
+
+      expect($log.error).not.toHaveBeenCalled();
+    });
+
+    it('reports again after the shadow clears and recurs', () => {
+      jest.spyOn($log, 'error').mockImplementation(() => {});
+      const jar = fakeCookieJar([stalePublic, freshRegistered], null);
+      $rootScope.$digest();
+      expect($log.error).toHaveBeenCalledTimes(1);
+
+      // User clears the offending cookie, then a later refresh reintroduces it.
+      jar.entries = [freshRegistered];
+      $rootScope.$digest();
+      jar.entries = [stalePublic, freshRegistered];
+      $rootScope.$digest();
+
+      expect($log.error).toHaveBeenCalledTimes(2);
     });
 
     it('skips the heal when sign-in redirects to Okta without a login call', (done) => {
