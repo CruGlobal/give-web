@@ -489,11 +489,13 @@ export const appConfig = /* @ngInject */ function (
     SESSION_MISMATCH_STEP_1:
       'Click the <strong>three dots</strong> (top-right corner) &rarr; <strong>Settings</strong>',
     SESSION_MISMATCH_STEP_2:
-      'Go to <strong>Privacy and Security</strong> &rarr; <strong>Site Settings</strong>',
+      'Go to <strong>Privacy and Security</strong> &rarr; <strong>Third-Party Cookies</strong>',
     SESSION_MISMATCH_STEP_3:
-      'Click <strong>View permissions and data stored across sites</strong>',
+      'Click <strong>See all site data and permissions</strong>',
     SESSION_MISMATCH_STEP_4:
       'Find <strong>cru.org</strong> and click the <strong>trash can icon</strong> to delete it',
+    SESSION_MISMATCH_RELOAD_AGAIN:
+      'Then reload the page and log in again.',
     SESSION_MISMATCH_CONTACT:
       'Still stuck? Email <a href="mailto:techhelp@cru.org">techhelp@cru.org</a> - we\'re happy to help!',
   });
@@ -808,11 +810,13 @@ export const appConfig = /* @ngInject */ function (
     SESSION_MISMATCH_STEP_1:
       'Haga clic en los <strong>tres puntos</strong> (esquina superior derecha) &rarr; <strong>Configuración</strong>',
     SESSION_MISMATCH_STEP_2:
-      'Vaya a <strong>Privacidad y seguridad</strong> &rarr; <strong>Configuración de sitios</strong>',
+      'Vaya a <strong>Privacidad y seguridad</strong> &rarr; <strong>Cookies de terceros</strong>',
     SESSION_MISMATCH_STEP_3:
-      'Haga clic en <strong>Ver permisos y datos almacenados en los sitios</strong>',
+      'Haga clic en <strong>Ver todos los datos y permisos de los sitios</strong>',
     SESSION_MISMATCH_STEP_4:
       'Busque <strong>cru.org</strong> y haga clic en el <strong>ícono de papelera</strong> para eliminarlo',
+    SESSION_MISMATCH_RELOAD_AGAIN:
+      'Luego vuelva a cargar la página e inicie sesión de nuevo.',
     SESSION_MISMATCH_CONTACT:
       '¿Aún tiene problemas? Escríbanos a <a href="mailto:techhelp@cru.org">techhelp@cru.org</a>; ¡con gusto le ayudaremos!',
   });

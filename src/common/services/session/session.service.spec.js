@@ -246,6 +246,10 @@ describe('session service', function () {
     });
 
     it('leaves duplicates alone when the visible cookie is REGISTERED', () => {
+      // Order matters: $cookies.get returns the FIRST cortex-role entry in the
+      // header, so a REGISTERED cookie ahead of the stale one is the "visible"
+      // role and the heal short-circuits (contrast with the IDENTIFIED-first
+      // case in the test above, where the heal removes the parent-domain copy).
       jest.spyOn($cookies, 'remove');
       const jar = fakeCookieJar(
         [freshRegistered, staleIdentified],
@@ -263,9 +267,10 @@ describe('session service', function () {
     });
 
     it('does not treat a single non-REGISTERED cookie as a shadow', () => {
-      // An Okta session without a Cortex login (e.g. no donor account yet,
-      // or a failed /okta/login) has no duplicate cookie and must not
-      // trigger the clear-your-cookies warning.
+      // A single cortex-role cookie is not a shadow: hasDuplicateCortexRole is
+      // false, so nothing is removed and the session is not flagged. The
+      // clear-your-cookies warning is gated on an unhealable duplicate, not
+      // merely on a non-REGISTERED role.
       jest.spyOn($cookies, 'remove');
       fakeCookieJar([staleIdentified]);
 
