@@ -17,6 +17,7 @@ import checkoutService from 'common/services/checkoutHelpers/checkout.service';
 import brandedAnalyticsFactory from './analytics/branded-analytics.factory';
 
 import 'common/lib/fakeLocalStorage';
+import normalizeApiUrl from 'common/lib/normalizeApiUrl';
 
 import template from './branded-checkout.tpl.html';
 
@@ -80,20 +81,7 @@ class BrandedCheckoutController {
   }
 
   normalizeApiUrl(url) {
-    if (!url) {
-      return url;
-    }
-
-    // Remove trailing slashes
-    url = url.replace(/\/+$/, '');
-
-    // Remove protocol if present
-    url = url.replace(/^https?:/, '');
-
-    // Remove slash before query parameters if present
-    url = url.replace(/\/\?/, '?');
-
-    return url.startsWith('//') ? url : '//' + url;
+    return normalizeApiUrl(url);
   }
 
   formatDonorDetails() {
