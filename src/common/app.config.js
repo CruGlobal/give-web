@@ -398,6 +398,8 @@ export const appConfig = /* @ngInject */ function (
     REVIEW_SUBMITTING_PAYMENT_ERROR:
       'There was an error submitting your payment. Verify that your payment info is correct or try adding it again. If you are still seeing this message, please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
     REVIEW_CARD_EXPIRED_ERROR: 'Your card is expired.',
+    REVIEW_SELECTED_CARD_EXPIRED_ERROR:
+      'The credit card you selected has expired. Please choose or add another payment method.',
     REVIEW_INVALID_CARD_ERROR: 'The credit card number entered is invalid.',
     REVIEW_CARD_DECLINED_ERROR: 'Your credit card was declined.',
     REVIEW_INSUFFICIENT_FUNDS_ERROR:
@@ -718,6 +720,8 @@ export const appConfig = /* @ngInject */ function (
     REVIEW_SUBMITTING_PAYMENT_ERROR:
       'There was an error submitting your payment. Verify that your payment info is correct or try adding it again. If you are still seeing this message, please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
     REVIEW_CARD_EXPIRED_ERROR: 'Your card is expired.',
+    REVIEW_SELECTED_CARD_EXPIRED_ERROR:
+      'La tarjeta de crédito que seleccionó ha expirado. Por favor, elija o agregue otro método de pago.',
     REVIEW_INVALID_CARD_ERROR: 'The credit card number entered is invalid.',
     REVIEW_CARD_DECLINED_ERROR: 'Your credit card was declined.',
     REVIEW_INSUFFICIENT_FUNDS_ERROR:
