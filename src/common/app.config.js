@@ -756,10 +756,10 @@ export const appConfig = /* @ngInject */ function (
         You will receive a confirmation email from us shortly, or you can review your donation now by looking at <a href="/your-giving.html">Your Giving</a>.`,
     FINAL_GIFT_NO_SUMMARY_ERROR: `Your gift was submitted but we cannot provide a detailed summary at this time.
         You will receive a confirmation email from us shortly, or you can review your donation now by looking at <a href="/your-giving.html">Your Giving</a>.`,
-    FINAL_PROCESSING_GIFT: `We are processing your gift now. We'll send an email confirmation to
-      <strong>{{useremail}}</strong> as well as a tax-deductible receipt by postal mail.`,
+    FINAL_PROCESSING_GIFT: `Estamos procesando tu donación ahora. Te enviaremos un correo electrónico de confirmación a
+      <strong>{{useremail}}</strong>, así como un recibo deducible de impuestos por correo postal.`,
     FINAL_GIFT_THANK_YOU:
-      "Thanks for making a difference in the lives of people both now and for eternity. May the Lord bless your investment in this work for Christ's kingdom. (Luke 6:38)",
+      'Gracias por marcar una diferencia en la vida de las personas, tanto ahora como por la eternidad. Que el Señor bendiga tu inversión en esta obra para el Reino de Cristo (Lucas 6:38).',
     RECEIPT_MAILING_ADDRESS: 'Dirección de Envío del Recibo',
     GIFT_SUMMARY: 'Resumen de la Donación',
     FIRST_GIFT: 'Primer Regalo:',
