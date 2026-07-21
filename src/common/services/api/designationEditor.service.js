@@ -83,7 +83,7 @@ class designationEditorService {
         params: {
           designationNumber: designationNumber,
           campaign: campaignPage,
-          source: 'give-web',
+          source: 'give',
         },
       },
     );
