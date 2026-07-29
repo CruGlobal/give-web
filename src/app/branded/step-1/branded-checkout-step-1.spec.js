@@ -337,6 +337,17 @@ describe('branded checkout step 1', () => {
 
       expect($ctrl.checkSuccessfulSubmission).toHaveBeenCalled();
     });
+
+    it('should handle an invalid gift form', () => {
+      $ctrl.onGiftConfigStateChange('errorValidating');
+
+      expect($ctrl.submission.giftConfig).toEqual({
+        completed: true,
+        error: true,
+      });
+
+      expect($ctrl.checkSuccessfulSubmission).toHaveBeenCalled();
+    });
   });
 
   describe('onContactInfoSubmit', () => {

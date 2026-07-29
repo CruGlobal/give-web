@@ -813,6 +813,15 @@ describe('product config form component', function () {
         expect($ctrl.errorSavingGeneric).toEqual(false);
       });
 
+      it('should report an invalid form to the parent', () => {
+        $ctrl.itemConfigForm.$valid = false;
+        $ctrl.saveGiftToCart();
+
+        expect($ctrl.onStateChange).toHaveBeenCalledWith({
+          state: 'errorValidating',
+        });
+      });
+
       it('should still submit the gift if the form is not dirty', () => {
         $ctrl.saveGiftToCart();
 
