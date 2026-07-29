@@ -1,27 +1,15 @@
 import angular from 'angular';
 import 'angular-messages';
+import giftAmount from 'common/filters/giftAmount.filter';
 import showErrors from 'common/filters/showErrors.filter';
 import template from './suggestedGiftAmounts.tpl.html';
 
 const componentName = 'suggestedGiftAmounts';
 
-class SuggestedGiftAmountsController {
-  /* @ngInject */
-  constructor($filter) {
-    this.$filter = $filter;
-  }
-
-  suggestedAmount(amount) {
-    return this.$filter('currency')(
-      amount,
-      '$',
-      `${amount}`.indexOf('.') > -1 ? 2 : 0,
-    );
-  }
-}
+class SuggestedGiftAmountsController {}
 
 export default angular
-  .module(componentName, ['ngMessages', showErrors.name])
+  .module(componentName, ['ngMessages', giftAmount.name, showErrors.name])
   .component(componentName, {
     controller: SuggestedGiftAmountsController,
     templateUrl: template,
@@ -41,5 +29,7 @@ export default angular
       customAmount: '=',
       changeCustomAmount: '<',
       selectableAmounts: '<',
+      premiumMinimum: '<',
+      premiumName: '<',
     },
   });

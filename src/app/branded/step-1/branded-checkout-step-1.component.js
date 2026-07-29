@@ -8,6 +8,7 @@ import checkoutErrorMessages from 'app/checkout/checkout-error-messages/checkout
 
 import cartService from 'common/services/api/cart.service';
 import orderService from 'common/services/api/order.service';
+import giftAmount from 'common/filters/giftAmount.filter';
 import analyticsFactory from '../../analytics/analytics.factory';
 import brandedAnalyticsFactory from '../../branded/analytics/branded-analytics.factory';
 
@@ -23,7 +24,6 @@ class BrandedCheckoutStep1Controller {
   constructor(
     $scope,
     $log,
-    $filter,
     $window,
     analyticsFactory,
     brandedAnalyticsFactory,
@@ -32,7 +32,6 @@ class BrandedCheckoutStep1Controller {
   ) {
     this.$scope = $scope;
     this.$log = $log;
-    this.$filter = $filter;
     this.$window = $window;
     this.analyticsFactory = analyticsFactory;
     this.brandedAnalyticsFactory = brandedAnalyticsFactory;
@@ -310,6 +309,7 @@ export default angular
     checkoutErrorMessages.name,
     cartService.name,
     orderService.name,
+    giftAmount.name,
     analyticsFactory.name,
     brandedAnalyticsFactory.name,
   ])
