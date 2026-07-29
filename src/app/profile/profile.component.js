@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/do';
 import { phoneNumberRegex } from 'common/app.constants';
-import getClientErrorMessage from 'common/lib/getClientErrorMessage';
+import getServerErrorMessage from 'common/lib/getServerErrorMessage';
 
 import template from './profile.tpl.html';
 
@@ -288,7 +288,7 @@ class ProfileController {
     Observable.forkJoin(requests).subscribe(
       null,
       (error) => {
-        const serverMessage = getClientErrorMessage(error);
+        const serverMessage = getServerErrorMessage(error);
         if (
           error &&
           error.data ===

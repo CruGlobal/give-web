@@ -100,7 +100,7 @@ describe('donation editor service', () => {
 
   it('should call save endpoint', () => {
     $httpBackend
-      .expectPOST(designationConstants.designationEndpoint)
+      .expectPOST(designationConstants.designationEndpoint + '?source=give')
       .respond(200);
 
     designationEditorService.save({});

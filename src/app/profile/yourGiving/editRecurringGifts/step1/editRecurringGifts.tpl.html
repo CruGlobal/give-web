@@ -80,7 +80,7 @@
       type="button"
       ng-if="!$ctrl.loadingError"
       ng-click="$ctrl.next({ recurringGifts: $ctrl.recurringGifts })"
-      ng-disabled="!$ctrl.allPaymentMethodsValid()"
+      ng-disabled="!$ctrl.allGiftsValid()"
       translate
     >
       Continue

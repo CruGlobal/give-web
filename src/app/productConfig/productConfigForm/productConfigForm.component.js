@@ -533,5 +533,7 @@ export default angular
       useV3: '<',
       hideAnnual: '<',
       hideQuarterly: '<',
+      premiumMinimum: '<',
+      premiumName: '<',
     },
   });

@@ -103,6 +103,16 @@ export default class RecurringGiftModel {
     this.gift['updated-amount'] = value !== this.gift.amount ? value : '';
   }
 
+  // Mirrors the amount validation rules in giftUpdateView.tpl.html
+  hasValidAmount() {
+    const amount = this.amount;
+    return (
+      /^[0-9]+(\.[0-9]{1,2})?$/.test(amount) &&
+      amount >= 1 &&
+      amount <= 10000000
+    );
+  }
+
   get paymentMethodId() {
     let paymentMethodId =
       this.gift['updated-payment-instrument-id'] ||
@@ -257,7 +267,7 @@ export default class RecurringGiftModel {
 
   hasChanges() {
     return (
-      this.gift['updated-amount'] !== '' ||
+      !!this.gift['updated-amount'] ||
       this.gift['updated-payment-instrument-id'] !== '' ||
       this.gift['updated-rate'].recurrence.interval !== '' ||
       this.gift['updated-recurring-day-of-month'] !== '' ||

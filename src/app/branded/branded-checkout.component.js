@@ -59,6 +59,10 @@ class BrandedCheckoutController {
         this.normalizeApiUrl(this.apiUrl);
     }
     this.code = this.designationNumber;
+    // Invalid values or minimums without a premium code means no minimum applies.
+    const premiumMinimum = parseFloat(this.premiumMinimumAmount);
+    this.premiumMinimum =
+      this.premiumCode && premiumMinimum > 0 ? premiumMinimum : null;
     this.tsysService.setDevice(this.tsysDevice);
     this.analyticsFactory.pageLoaded(true);
     this.formatDonorDetails();
@@ -238,6 +242,8 @@ export default angular
       premiumCode: '@',
       premiumName: '@',
       premiumImageUrl: '@',
+      premiumMinimumAmount: '@',
+      radioStationApiUrl: '@',
       donorDetailsVariable: '@donorDetails',
       defaultPaymentType: '@',
       hidePaymentTypeOptions: '@',

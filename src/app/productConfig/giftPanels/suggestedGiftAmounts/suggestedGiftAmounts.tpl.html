@@ -49,9 +49,7 @@
             ng-checked="$ctrl.itemConfig.AMOUNT === suggested.amount"
           />
           <label for="sa-{{$index}}">
-            <span class="amount-box"
-              >{{$ctrl.suggestedAmount(suggested.amount)}}</span
-            >
+            <span class="amount-box">{{suggested.amount | giftAmount}}</span>
             <span class="amount-description">{{suggested.label}}</span>
           </label>
         </div>
@@ -126,7 +124,7 @@
             ng-click="$ctrl.changeAmount(suggested.amount)"
             ng-checked="!$ctrl.customInputActive && $ctrl.itemConfig.AMOUNT === suggested.amount"
           />
-          {{$ctrl.suggestedAmount(suggested.amount)}} {{suggested.label}}
+          {{suggested.amount | giftAmount}} {{suggested.label}}
         </label>
       </div>
       <div
@@ -258,5 +256,12 @@
       </div>
     </div>
     <!-- End of selectableAmounts container -->
+
+    <p
+      class="help-block"
+      ng-if="$ctrl.premiumMinimum"
+      translate="PREMIUM_MINIMUM_MESSAGE"
+      translate-values="{amount: ($ctrl.premiumMinimum | giftAmount), premiumName: $ctrl.premiumName}"
+    ></p>
   </div>
 </div>

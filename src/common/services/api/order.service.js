@@ -305,7 +305,7 @@ class Order {
           if (
             paymentMethod.description[
               'payment-instrument-identification-attributes'
-            ]['street-address']
+            ]?.['street-address']
           ) {
             paymentMethod.description.address = formatAddressForTemplate(
               paymentMethod.description[
@@ -340,7 +340,9 @@ class Order {
       .map((data) => {
         if (
           data &&
-          data['payment-instrument-identification-attributes']['street-address']
+          data['payment-instrument-identification-attributes']?.[
+            'street-address'
+          ]
         ) {
           data.address = formatAddressForTemplate(
             data['payment-instrument-identification-attributes'],

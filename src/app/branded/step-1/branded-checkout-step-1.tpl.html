@@ -22,6 +22,8 @@
       hide-quarterly="$ctrl.hideQuarterly"
       hide-annual="$ctrl.hideAnnual"
       use-v3="$ctrl.useV3"
+      premium-minimum="$ctrl.activePremiumMinimum()"
+      premium-name="$ctrl.premiumName"
     >
     </product-config-form>
     <div
@@ -72,7 +74,7 @@
     <div class="panel-body">
       <h3 class="panel-name" translate>{{'CHOOSE_RESOURCE'}}</h3>
       <div class="row text-left">
-        <div class="col-sm-3">
+        <div class="col-sm-6">
           <div class="row">
             <label class="radio-inline">
               <input
@@ -96,6 +98,15 @@
               />
               <translate>{{'NO_THANK_YOU'}}</translate>
             </label>
+          </div>
+          <div class="row has-error">
+            <div
+              class="help-block"
+              role="alert"
+              ng-if="$ctrl.premiumMinimumError"
+              translate="PREMIUM_MINIMUM_ERROR"
+              translate-values="{amount: ($ctrl.premiumMinimum | giftAmount), premiumName: $ctrl.premiumName}"
+            ></div>
           </div>
         </div>
         <div ng-if="$ctrl.premiumImageUrl" class="col-sm-4">
