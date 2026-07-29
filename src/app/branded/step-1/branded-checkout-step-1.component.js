@@ -117,8 +117,24 @@ class BrandedCheckoutStep1Controller {
 
   submit() {
     this.resetSubmission();
+    this.premiumMinimumError = !this.premiumMinimumMet();
     this.validationError = false;
     this.submitted = true;
+  }
+
+  /*
+   * Returns `false` when the donor opted to receive a premium but their gift is less than the
+   * configured minimum. An unparseable amount is left to the gift amount field's own validation.
+   */
+  premiumMinimumMet() {
+    const minimum = this.activePremiumMinimum();
+    const amount = parseFloat(this.itemConfig.AMOUNT);
+    return !minimum || isNaN(amount) || amount >= minimum;
+  }
+
+  // The minimum only applies while the donor opted to receive the premium.
+  activePremiumMinimum() {
+    return this.itemConfig.PREMIUM_CODE ? this.premiumMinimum : null;
   }
 
   resetSubmission() {
@@ -191,7 +207,10 @@ class BrandedCheckoutStep1Controller {
 
   checkSuccessfulSubmission() {
     if (every(this.submission, 'completed')) {
-      if (every(this.submission, { error: false })) {
+      if (
+        every(this.submission, { error: false }) &&
+        !this.premiumMinimumError
+      ) {
         if (this.useV3) {
           this.submitOrderInternal();
         } else {
@@ -333,6 +352,7 @@ export default angular
       premiumCode: '<',
       premiumName: '<',
       premiumImageUrl: '<',
+      premiumMinimum: '<',
       itemConfig: '=',
       onSubmittingOrder: '&',
       onSubmitted: '&',
