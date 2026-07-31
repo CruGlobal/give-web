@@ -391,6 +391,7 @@ class ProductConfigFormController {
     this.errorSavingGeneric = false;
     this.amountFormatError = '';
     if (!this.itemConfigForm.$valid) {
+      this.onStateChange({ state: 'errorValidating' });
       return;
     }
     this.submittingGift = true;
