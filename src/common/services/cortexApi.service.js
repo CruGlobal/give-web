@@ -6,6 +6,7 @@ import 'rxjs/add/observable/from';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/catch';
 
 import { cortexScope } from 'common/app.constants';
 import appConfig from 'common/app.config';
@@ -38,6 +39,27 @@ class CortexApi {
     if (config.followLocation) {
       config.params.FollowLocation = true;
     }
+
+    return this.sendWithRetry(config, true);
+  }
+
+  // Branded checkout signout on load expires every session cookie, so the
+  // requests that follow can each reach the gateway cookie-less and create
+  // their own session. When a second session wins the browser's cookie jar
+  // mid-request, cortex answers 403 for the resource the losing session
+  // resolved. Retrying picks up the surviving session.
+  sendWithRetry(config, retry) {
+    return this.send(config).catch((response) => {
+      // Only repeat reads: a 403 on a write may have already applied server side.
+      if (retry && config.method === 'GET' && response?.status === 403) {
+        return this.sendWithRetry(config, false);
+      }
+
+      return Observable.throw(response);
+    });
+  }
+
+  send(config) {
     if (!config.cache && this.envService.read('isBrandedCheckout')) {
       config.params.nocache = new Date().getTime();
     }
