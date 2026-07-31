@@ -103,7 +103,7 @@
             <div
               class="help-block"
               role="alert"
-              ng-if="$ctrl.premiumMinimumError"
+              ng-if="!$ctrl.premiumMinimumMet()"
               translate="PREMIUM_MINIMUM_ERROR"
               translate-values="{amount: ($ctrl.premiumMinimum | giftAmount), premiumName: $ctrl.premiumName}"
             ></div>
