@@ -167,12 +167,111 @@ describe('branded checkout step 1', () => {
   });
 
   describe('submit', () => {
+    beforeEach(() => {
+      // $onInit always initializes itemConfig before the submit button can be clicked
+      $ctrl.itemConfig = {};
+    });
+
     it('should reset and start submission', () => {
       jest.spyOn($ctrl, 'resetSubmission').mockImplementation(() => {});
       $ctrl.submit();
 
       expect($ctrl.resetSubmission).toHaveBeenCalled();
       expect($ctrl.submitted).toEqual(true);
+    });
+
+    it('should flag the premium minimum but still let the panels validate', () => {
+      jest.spyOn($ctrl, 'premiumMinimumMet').mockReturnValue(false);
+      $ctrl.submit();
+
+      expect($ctrl.premiumMinimumError).toEqual(true);
+      expect($ctrl.submitted).toEqual(true);
+    });
+
+    it('should clear a previous premium minimum error when it is resolved', () => {
+      jest.spyOn($ctrl, 'premiumMinimumMet').mockReturnValue(true);
+      $ctrl.premiumMinimumError = true;
+      $ctrl.submit();
+
+      expect($ctrl.premiumMinimumError).toEqual(false);
+      expect($ctrl.submitted).toEqual(true);
+    });
+
+    it('should clear a previous validation error', () => {
+      $ctrl.validationError = true;
+      $ctrl.submit();
+
+      expect($ctrl.validationError).toEqual(false);
+    });
+  });
+
+  describe('premiumMinimumMet', () => {
+    beforeEach(() => {
+      $ctrl.premiumMinimum = 50;
+      $ctrl.itemConfig = { AMOUNT: 25, PREMIUM_CODE: '112233' };
+    });
+
+    it('should not be met when the premium is selected and the gift is under the minimum', () => {
+      expect($ctrl.premiumMinimumMet()).toEqual(false);
+    });
+
+    it('should be met when the gift equals the minimum', () => {
+      $ctrl.itemConfig.AMOUNT = 50;
+
+      expect($ctrl.premiumMinimumMet()).toEqual(true);
+    });
+
+    it('should be met when the gift is over the minimum', () => {
+      $ctrl.itemConfig.AMOUNT = 75;
+
+      expect($ctrl.premiumMinimumMet()).toEqual(true);
+    });
+
+    it('should be met when the premium was declined', () => {
+      $ctrl.itemConfig.PREMIUM_CODE = undefined;
+
+      expect($ctrl.premiumMinimumMet()).toEqual(true);
+    });
+
+    it('should be met when no minimum applies', () => {
+      $ctrl.premiumMinimum = null;
+
+      expect($ctrl.premiumMinimumMet()).toEqual(true);
+    });
+
+    it('should be met when the gift amount is not a number, leaving that error to the amount field', () => {
+      $ctrl.itemConfig.AMOUNT = '';
+
+      expect($ctrl.premiumMinimumMet()).toEqual(true);
+    });
+
+    it('should handle a string gift amount', () => {
+      $ctrl.itemConfig.AMOUNT = '25';
+
+      expect($ctrl.premiumMinimumMet()).toEqual(false);
+    });
+  });
+
+  describe('activePremiumMinimum', () => {
+    beforeEach(() => {
+      $ctrl.premiumMinimum = 50;
+      $ctrl.itemConfig = { PREMIUM_CODE: '112233' };
+    });
+
+    it('should return the minimum while the premium is selected', () => {
+      expect($ctrl.activePremiumMinimum()).toEqual(50);
+    });
+
+    it('should return null once the premium is declined', () => {
+      $ctrl.itemConfig.PREMIUM_CODE = undefined;
+
+      expect($ctrl.activePremiumMinimum()).toBeNull();
+    });
+
+    it('should return null when no minimum is configured', () => {
+      $ctrl.premiumMinimum = null;
+
+      expect($ctrl.activePremiumMinimum()).toBeNull();
     });
   });
 
@@ -400,6 +499,32 @@ describe('branded checkout step 1', () => {
       $ctrl.checkSuccessfulSubmission();
 
       expect($ctrl.next).not.toHaveBeenCalled();
+      expect($ctrl.submitted).toEqual(false);
+      expect($ctrl.validationError).toEqual(true);
+    });
+
+    it('should not continue when the gift is under the premium minimum', () => {
+      $ctrl.submission.giftConfig.completed = true;
+      $ctrl.submission.contactInfo.completed = true;
+      $ctrl.submission.payment.completed = true;
+      $ctrl.premiumMinimumError = true;
+      $ctrl.checkSuccessfulSubmission();
+
+      expect($ctrl.next).not.toHaveBeenCalled();
+      expect($ctrl.submitted).toEqual(false);
+      expect($ctrl.validationError).toEqual(true);
+    });
+
+    it('should not submit the order when the gift is under the premium minimum', () => {
+      jest.spyOn($ctrl, 'submitOrderInternal').mockImplementation(() => {});
+      $ctrl.useV3 = true;
+      $ctrl.submission.giftConfig.completed = true;
+      $ctrl.submission.contactInfo.completed = true;
+      $ctrl.submission.payment.completed = true;
+      $ctrl.premiumMinimumError = true;
+      $ctrl.checkSuccessfulSubmission();
+
+      expect($ctrl.submitOrderInternal).not.toHaveBeenCalled();
       expect($ctrl.submitted).toEqual(false);
       expect($ctrl.validationError).toEqual(true);
     });

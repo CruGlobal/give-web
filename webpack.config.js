@@ -101,7 +101,7 @@ const sharedConfig = {
         to: 'img/[path][name].[ext]',
       },
       'unsupportedBrowser.html',
-      'branded-checkout-dev.html',
+      'branded-checkout.html',
     ]),
     new webpack.EnvironmentPlugin({
       GITHUB_SHA: 'development',
