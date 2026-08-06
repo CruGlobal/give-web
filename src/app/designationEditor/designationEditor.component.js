@@ -102,6 +102,7 @@ class DesignationEditorController {
       return;
     }
     this.loadingContentError = false;
+    this.permissionError = false;
     this.contentLoaded = false;
     this.loadingOverlay = true;
 
@@ -138,6 +139,16 @@ class DesignationEditorController {
 
           this.contentLoaded = false;
           this.loadingOverlay = false;
+
+          if (error.status === 403) {
+            this.permissionError = true;
+            this.$log.warn(
+              'User does not have permission to edit this designation.',
+              error,
+            );
+            return;
+          }
+
           this.loadingContentError = true;
           this.$log.error(
             'Error loading designation content or photos.',
