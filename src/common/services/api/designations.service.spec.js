@@ -230,6 +230,26 @@ describe('designation service', () => {
       self.$httpBackend.flush();
     });
 
+    it('should log missing AEM pages as info instead of error', (done) => {
+      const itemConfig = { amount: 50 };
+      self.$httpBackend
+        .expectGET(
+          'https://give-stage2.cru.org/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json',
+        )
+        .respond(404, {});
+      self.designationsService
+        .suggestedAmounts('0123456', itemConfig)
+        .subscribe((suggestedAmounts) => {
+          expect(suggestedAmounts).toEqual([]);
+          expect(self.$log.error.logs).toEqual([]);
+          expect(self.$log.info.logs[0]).toEqual([
+            'No AEM page for designation 0123456',
+          ]);
+          done();
+        }, done);
+      self.$httpBackend.flush();
+    });
+
     it('should handle no campaign page', (done) => {
       const itemConfig = { amount: 50 };
       self.$httpBackend
@@ -311,7 +331,7 @@ describe('designation service', () => {
       self.$httpBackend.flush();
     });
 
-    it('should handle a missing designation page', (done) => {
+    it('should handle a missing designation page, logging as info', (done) => {
       self.$httpBackend
         .expectGET(
           'https://give-stage2.cru.org/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json',
@@ -321,9 +341,28 @@ describe('designation service', () => {
         .givingLinks('0123456')
         .subscribe((givingLinks) => {
           expect(givingLinks).toEqual([]);
+          expect(self.$log.error.logs).toEqual([]);
+          expect(self.$log.info.logs[0]).toEqual([
+            'No AEM page for designation 0123456',
+          ]);
+          done();
+        }, done);
+      self.$httpBackend.flush();
+    });
+
+    it('should handle an AEM error, logging as error', (done) => {
+      self.$httpBackend
+        .expectGET(
+          'https://give-stage2.cru.org/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json',
+        )
+        .respond(500, {});
+      self.designationsService
+        .givingLinks('0123456')
+        .subscribe((givingLinks) => {
+          expect(givingLinks).toEqual([]);
           expect(self.$log.error.logs[0]).toEqual([
             'Error loading giving links for designation 0123456',
-            expect.objectContaining({ status: 404 }),
+            expect.objectContaining({ status: 500 }),
           ]);
           done();
         }, done);
