@@ -35,18 +35,18 @@
 </div>
 
 <div class="modal-footer">
-  <div class="col-xs-6">
-    <button class="btn btn-default" ng-click="$ctrl.previous()" translate>
-      Back
-    </button>
-  </div>
-  <div class="col-xs-6 text-right">
-    <button
-      class="btn btn-primary"
-      ng-click="$ctrl.gatherSelections()"
-      translate
-    >
-      Continue
-    </button>
-  </div>
+  <button
+    class="btn btn-primary btn-block-xs pull-right"
+    ng-click="$ctrl.gatherSelections()"
+    translate
+  >
+    Continue
+  </button>
+  <button
+    class="btn btn-default btn-block-xs pull-left"
+    ng-click="$ctrl.previous()"
+    translate
+  >
+    Back
+  </button>
 </div>

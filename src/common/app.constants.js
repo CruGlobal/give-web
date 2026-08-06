@@ -28,9 +28,11 @@ const cortexScope = 'crugive';
 const mobileBreakpoint = 575;
 
 // Generic phone number regex, matches + and 011 prefixes.
-// See https://stackoverflow.com/a/19592342/2860048
+// Anchored at both ends, allows digits/spaces/hyphens/parentheses/dots,
+// requires 7-15 digits (ITU E.164 max, excluding a leading 011 international
+// access prefix), and supports an optional extension.
 const phoneNumberRegex =
-  /([0-9\s-]{7,})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/;
+  /^((?:011[\s\-.]*)?\+?(?:[\s\-().]*\d){7,15})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/;
 
 // See envServiceProvider.config in common/app.config.js for url configurations
 
