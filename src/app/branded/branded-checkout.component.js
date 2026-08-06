@@ -55,8 +55,9 @@ class BrandedCheckoutController {
     this.envService.data.vars[this.envService.get()].isBrandedCheckout = true;
     if (this.apiUrl) {
       // set custom API url
-      this.envService.data.vars[this.envService.get()].apiUrl =
-        this.normalizeApiUrl(this.apiUrl);
+      this.envService.data.vars[this.envService.get()].apiUrl = normalizeApiUrl(
+        this.apiUrl,
+      );
     }
     this.code = this.designationNumber;
     this.tsysService.setDevice(this.tsysDevice);
@@ -78,10 +79,6 @@ class BrandedCheckoutController {
     );
     this.$translate.use(this.language || 'en');
     this.checkoutService.initializeRecaptcha();
-  }
-
-  normalizeApiUrl(url) {
-    return normalizeApiUrl(url);
   }
 
   formatDonorDetails() {
