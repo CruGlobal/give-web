@@ -1,5 +1,6 @@
 import angular from 'angular';
 import 'angular-mocks';
+import { advanceTo, clear } from 'jest-date-mock';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
@@ -262,7 +263,64 @@ describe('checkout', () => {
       });
     });
 
+    describe('isCardExpired', () => {
+      beforeEach(() => {
+        advanceTo(new Date(2015, 0, 10));
+      });
+
+      afterEach(clear);
+
+      it('should be false when no credit card payment is loaded', () => {
+        self.controller.creditCardPaymentDetails = undefined;
+
+        expect(self.controller.isCardExpired()).toEqual(false);
+      });
+
+      it('should be false for a bank account payment', () => {
+        self.controller.bankAccountPaymentDetails = {
+          'account-type': 'Checking',
+        };
+        self.controller.creditCardPaymentDetails = undefined;
+
+        expect(self.controller.isCardExpired()).toEqual(false);
+      });
+
+      it('should be false for an unexpired credit card', () => {
+        self.controller.creditCardPaymentDetails = {
+          'card-type': 'Visa',
+          'expiry-month': '01',
+          'expiry-year': '2015',
+        };
+
+        expect(self.controller.isCardExpired()).toEqual(false);
+      });
+
+      it('should be true for an expired credit card', () => {
+        self.controller.creditCardPaymentDetails = {
+          'card-type': 'Visa',
+          'expiry-month': '12',
+          'expiry-year': '2014',
+        };
+
+        expect(self.controller.isCardExpired()).toEqual(true);
+      });
+
+      it('should be true for a credit card missing expiry attributes', () => {
+        self.controller.creditCardPaymentDetails = {
+          'card-type': 'Visa',
+        };
+
+        expect(self.controller.isCardExpired()).toEqual(true);
+      });
+    });
+
     describe('canSubmitOrder', () => {
+      beforeEach(() => {
+        advanceTo(new Date(2015, 0, 10));
+      });
+
+      afterEach(clear);
+
       function runCanSubmitOrder(config) {
         self.controller.cartData = config.cartData;
         self.controller.donorDetails = config.donorDetails;
@@ -298,9 +356,29 @@ describe('checkout', () => {
           cartData: {},
           donorDetails: {},
           bankAccountPaymentDetails: undefined,
-          creditCardPaymentDetails: {},
+          creditCardPaymentDetails: {
+            'card-type': 'Visa',
+            'expiry-month': '01',
+            'expiry-year': '2015',
+          },
           needinfoErrors: undefined,
           outcome: true,
+          submittingOrder: false,
+        });
+      });
+
+      it('should not let you submit the order if the selected credit card has expired', () => {
+        runCanSubmitOrder({
+          cartData: {},
+          donorDetails: {},
+          bankAccountPaymentDetails: undefined,
+          creditCardPaymentDetails: {
+            'card-type': 'Visa',
+            'expiry-month': '12',
+            'expiry-year': '2014',
+          },
+          needinfoErrors: undefined,
+          outcome: false,
           submittingOrder: false,
         });
       });
@@ -408,6 +486,22 @@ describe('checkout', () => {
         expect(self.controller.changeStep).toHaveBeenCalledWith({
           newStep: 'thankYou',
         });
+      });
+
+      it('should not submit when the selected credit card has expired', () => {
+        advanceTo(new Date(2015, 0, 10));
+        jest.spyOn(self.controller.orderService, 'submitOrder');
+        self.controller.creditCardPaymentDetails = {
+          'card-type': 'Visa',
+          'expiry-month': '12',
+          'expiry-year': '2014',
+        };
+
+        self.controller.submitOrder();
+
+        expect(self.controller.orderService.submitOrder).not.toHaveBeenCalled();
+        expect(self.controller.changeStep).not.toHaveBeenCalled();
+        clear();
       });
     });
 
