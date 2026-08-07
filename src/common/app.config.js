@@ -482,6 +482,7 @@ export const appConfig = /* @ngInject */ function (
     REMOVE_SPOUSE: 'Remove',
     SUGGESTED_AMOUNT_HELP: 'Suggested Gift Amounts. Tab for Custom Amount',
     CUSTOM_AMOUNT: 'Custom Amount',
+    ALREADY_IN_RECURRING_GIFTS: 'Already in your recurring gifts',
     SESSION_MISMATCH_RELOAD:
       '<strong>Please reload this page and log in again.</strong>',
     SESSION_MISMATCH_CLEAR_DATA:
@@ -802,6 +803,7 @@ export const appConfig = /* @ngInject */ function (
     REMOVE_SPOUSE: 'Remove',
     SUGGESTED_AMOUNT_HELP: 'Suggested Gift Amounts. Tab for Custom Amount',
     CUSTOM_AMOUNT: 'Custom Amount',
+    ALREADY_IN_RECURRING_GIFTS: 'Ya está en sus donaciones recurrentes',
     SESSION_MISMATCH_RELOAD:
       '<strong>Vuelva a cargar esta página e inicie sesión de nuevo.</strong>',
     SESSION_MISMATCH_CLEAR_DATA:

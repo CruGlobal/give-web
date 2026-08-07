@@ -47,7 +47,13 @@
           ng-repeat="gift in $ctrl.recentRecipients"
           class="row repeating-row user-profile"
         >
-          <gift-list-item gift="gift" selectable="checkbox"></gift-list-item>
+          <gift-list-item gift="gift" selectable="checkbox">
+            <span
+              class="label label-warning"
+              ng-if="$ctrl.isExistingRecurringGift(gift)"
+              >{{'ALREADY_IN_RECURRING_GIFTS' | translate}}</span
+            >
+          </gift-list-item>
         </div>
       </div>
     </div>
