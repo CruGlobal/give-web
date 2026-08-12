@@ -3,10 +3,12 @@ import 'angular-messages';
 import assign from 'lodash/assign';
 import pick from 'lodash/pick';
 import includes from 'lodash/includes';
+import isString from 'lodash/isString';
 import startsWith from 'lodash/startsWith';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 import { phoneNumberRegex } from 'common/app.constants';
+import * as structuredErrorService from 'common/services/structuredError.service';
 
 import addressForm from 'common/components/addressForm/addressForm.component';
 import emailField from './emailField/emailField.component';
@@ -229,6 +231,7 @@ class Step1Controller {
     if (this.detailsForm.$valid) {
       const details = this.donorDetails;
       this.submissionError = '';
+      this.submissionErrorId = undefined;
 
       // Clear the saved checkout data
       this.sessionService.clearCheckoutSavedData();
@@ -253,7 +256,19 @@ class Step1Controller {
         },
         (error) => {
           this.$log.warn('Error saving donor contact info', error);
-          this.submissionError = error && error.data;
+          const data = error && error.data;
+          if (!data || isString(data)) {
+            // Plain-text body (pre-8.3 backend) or no body at all (e.g. timeout).
+            // A falsy value is kept falsy so the alert stays hidden.
+            this.submissionError = data;
+          } else {
+            // Cortex 8.3 returns structured JSON error bodies ({messages: [...]}) where
+            // older versions returned plain text; the debug-message carries the same text.
+            const firstError = structuredErrorService.getErrors(error)[0];
+            this.submissionError =
+              (firstError && firstError.message) || 'unknown error';
+            this.submissionErrorId = firstError && firstError.id;
+          }
           if (startsWith(this.submissionError, 'Invalid email address:')) {
             this.submissionError = 'Invalid email address';
           }
