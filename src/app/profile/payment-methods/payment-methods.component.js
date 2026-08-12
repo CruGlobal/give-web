@@ -100,7 +100,7 @@ class PaymentMethodsController {
       },
       (error) => {
         this.loading = false;
-        if (error.status === 500) {
+        if (error.status === 500 || error.status === 403) {
           this.loadingError = 'authentication';
         } else {
           this.loadingError = true;
