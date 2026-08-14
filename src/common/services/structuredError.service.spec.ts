@@ -121,4 +121,59 @@ describe('structuredErrorService', () => {
       expect(structuredErrorService.getErrors(null)).toEqual([]);
     });
   });
+
+  describe('getErrorText', () => {
+    it('should return the first error message from a structured body', () => {
+      const error = {
+        data: {
+          messages: [
+            {
+              data: {},
+              'debug-message': 'Need more info',
+              id: 'need.email',
+              type: 'needinfo',
+            },
+            {
+              data: {},
+              'debug-message': 'Invalid routing number',
+              id: 'selfservicepaymentinstruments.validation.failure',
+              type: 'error',
+            },
+          ],
+        },
+      };
+
+      expect(structuredErrorService.getErrorText(error)).toEqual(
+        'Invalid routing number',
+      );
+    });
+
+    it('should pass a plain-text body through unchanged', () => {
+      expect(
+        structuredErrorService.getErrorText({
+          data: 'This credit card already exists.',
+        }),
+      ).toEqual('This credit card already exists.');
+    });
+
+    it('should pass a body carrying no errors through unchanged', () => {
+      const data = {
+        messages: [
+          {
+            data: {},
+            'debug-message': 'Need more info',
+            id: 'need.email',
+            type: 'needinfo',
+          },
+        ],
+      };
+
+      expect(structuredErrorService.getErrorText({ data })).toEqual(data);
+    });
+
+    it('should stay falsy when there is no body or no error, so the alert stays hidden', () => {
+      expect(structuredErrorService.getErrorText({})).toBeUndefined();
+      expect(structuredErrorService.getErrorText(null)).toBeNull();
+    });
+  });
 });

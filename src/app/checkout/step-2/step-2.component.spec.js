@@ -293,6 +293,36 @@ describe('checkout', () => {
         });
       });
 
+      it('should read a structured error body for the payment form message', () => {
+        self.controller.existingPaymentMethods = false;
+        jest
+          .spyOn(self.controller.orderService, 'addPaymentMethod')
+          .mockReturnValue(
+            Observable.throw({
+              status: 400,
+              data: {
+                messages: [
+                  {
+                    data: {},
+                    id: 'selfservicepaymentinstruments.validation.failure',
+                    'debug-message': 'Invalid routing number',
+                    type: 'error',
+                  },
+                ],
+              },
+            }),
+          );
+        self.controller.onPaymentFormStateChange({
+          state: 'loading',
+          payload: { bankAccount: {} },
+        });
+
+        expect(self.controller.paymentFormState).toEqual('error');
+        expect(self.controller.paymentFormError).toEqual(
+          'Invalid routing number',
+        );
+      });
+
       it('should handle an error saving payment data from a modal', () => {
         self.controller.$onInit();
         jest
