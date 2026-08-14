@@ -960,7 +960,7 @@ describe('product config form component', function () {
         });
         expect($ctrl.errorAlreadyInCart).toEqual(false);
         expect($ctrl.errorSavingGeneric).toEqual(false);
-        expect($ctrl.amountFormatError).toEqual = error.data;
+        expect($ctrl.amountFormatError).toEqual(error.data);
       });
 
       it('should handle an error when saving a bad decimal amount - new error style', () => {
@@ -988,8 +988,9 @@ describe('product config form component', function () {
         });
         expect($ctrl.errorAlreadyInCart).toEqual(false);
         expect($ctrl.errorSavingGeneric).toEqual(false);
-        expect($ctrl.amountFormatError).toEqual =
-          error.data.messages[0]['debug-message'];
+        expect($ctrl.amountFormatError).toEqual(
+          error.data.messages[0]['debug-message'],
+        );
       });
 
       it('should clear the cover fee decision when editing the amount of an item in the cart', () => {
