@@ -913,6 +913,36 @@ describe('product config form component', function () {
         expect($ctrl.errorSavingGeneric).toEqual(false);
       });
 
+      it('should handle a duplicate item sent as a structured body', () => {
+        $ctrl.cartService[operation].mockReturnValue(
+          Observable.throw({
+            data: {
+              messages: [
+                {
+                  data: {
+                    'item-code': '0671540',
+                    'recurring-day-of-month': '14',
+                  },
+                  id: 'cart.lineitem.duplicate',
+                  'debug-message':
+                    'Recurring gift to designation: 0671540 on draw day: 14 is already in the cart',
+                  type: 'error',
+                },
+              ],
+            },
+          }),
+        );
+        $ctrl.itemConfigForm.$dirty = true;
+        $ctrl.saveGiftToCart();
+
+        expect($ctrl.onStateChange).toHaveBeenCalledWith({
+          state: 'errorAlreadyInCart',
+        });
+        expect($ctrl.errorAlreadyInCart).toEqual(true);
+        expect($ctrl.errorSavingGeneric).toEqual(false);
+        expect($ctrl.$log.error.logs).toEqual([]);
+      });
+
       it('should handle an error when saving a bad decimal amount - old error style', () => {
         const error = {
           data: 'Amount must be a valid decimal number without dollar signs or commas.',
