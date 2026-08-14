@@ -67,3 +67,16 @@ export function getErrors(error: any): StructuredErrorMessage[] {
 
   return messages.filter(isError).map(toStructuredErrorMessage);
 }
+
+/**
+ * Returns the text to show for a failure, whichever shape the body arrived in: the first structured
+ * error's message, or the body itself when it is not structured.
+ *
+ * For a caller that matched on plain-text bodies and needs to keep matching without knowing which
+ * backend answered. Nothing is filtered on status, so a caller sees exactly what it saw before for
+ * every body that is not structured.
+ */
+export function getErrorText(error: any): any {
+  const firstError = getErrors(error)[0];
+  return firstError ? firstError.message : error && error.data;
+}
