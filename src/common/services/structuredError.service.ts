@@ -25,8 +25,8 @@
  * that are not attributable to a single field.
  */
 interface StructuredErrorMessage {
-  id: string;
-  message: string;
+  id: string | undefined;
+  message: string | undefined;
   fieldName: string | undefined;
 }
 

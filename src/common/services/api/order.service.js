@@ -12,6 +12,7 @@ import 'rxjs/add/observable/empty';
 import map from 'lodash/map';
 import omit from 'lodash/omit';
 import isString from 'lodash/isString';
+import * as structuredErrorService from 'common/services/structuredError.service';
 import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort';
 import extractPaymentAttributes from 'common/services/paymentHelpers/extractPaymentAttributes';
 import { cartUpdatedEvent } from 'common/lib/cartEvents';
@@ -614,8 +615,11 @@ class Order {
           ); // here in order to show up in Error Tracking in DD
           controller.onSubmitted();
           controller.submissionErrorStatus = error.status;
-          controller.submissionError = isString(error && error.data)
-            ? (error && error.data).replace(/[:].*$/, '')
+          // 8.3 wraps these failures in a structured body, so read whichever
+          // shape arrived; a plain-text body still passes through untouched.
+          const errorText = structuredErrorService.getErrorText(error);
+          controller.submissionError = isString(errorText)
+            ? errorText.replace(/[:].*$/, '')
             : 'generic error'; // Keep prefix before first colon for easier ng-switch matching
           this.$window.scrollTo(0, 0);
         },
