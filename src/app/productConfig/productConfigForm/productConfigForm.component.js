@@ -28,6 +28,7 @@ import suggestedGiftAmounts from '../giftPanels/suggestedGiftAmounts/suggestedGi
 import giftFrequency from '../giftPanels/giftFrequency/giftFrequency.component';
 import giftDates from '../giftPanels/giftDates/giftDates.component';
 import specialInstructions from '../giftPanels/specialInstructions/specialInstructions.component';
+import * as structuredErrorService from 'common/services/structuredError.service';
 import template from './productConfigForm.tpl.html';
 
 export const brandedCoverFeeCheckedEvent = 'brandedCoverFeeCheckedEvent';
@@ -432,7 +433,15 @@ class ProductConfigFormController {
         this.onStateChange({ state: 'submitted' });
       },
       (error) => {
-        if (includes(error.data, 'already in the cart')) {
+        // Matched against both backends: pre-8.3 sends the wording as the whole
+        // plain-text body, 8.3 sends it as a structured debug-message.
+        // TODO: remove the plain-text arm once EP 8.3 is live.
+        if (
+          includes(error.data, 'already in the cart') ||
+          structuredErrorService
+            .getErrors(error)
+            .some((message) => includes(message.message, 'already in the cart'))
+        ) {
           this.errorAlreadyInCart = true;
           this.onStateChange({ state: 'errorAlreadyInCart' });
         } else if (

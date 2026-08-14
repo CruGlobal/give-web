@@ -319,6 +319,31 @@ describe('PaymentMethodsComponent', function () {
       expect($ctrl.paymentFormResolve.error).toBe('some error');
     });
 
+    it('should read a structured error body for the payment form message', () => {
+      jest.spyOn($ctrl.profileService, 'addPaymentMethod').mockReturnValue(
+        Observable.throw({
+          status: 400,
+          data: {
+            messages: [
+              {
+                data: {},
+                id: 'selfservicepaymentinstruments.validation.failure',
+                'debug-message': 'Invalid routing number',
+                type: 'error',
+              },
+            ],
+          },
+        }),
+      );
+      $ctrl.onPaymentFormStateChange({
+        state: 'loading',
+        payload: 'some data',
+      });
+
+      expect($ctrl.paymentFormResolve.state).toBe('error');
+      expect($ctrl.paymentFormResolve.error).toBe('Invalid routing number');
+    });
+
     it('should handle data.address format', () => {
       $ctrl.paymentMethodFormModal = { close: jest.fn() };
       jest.spyOn($ctrl.profileService, 'addPaymentMethod').mockReturnValue(

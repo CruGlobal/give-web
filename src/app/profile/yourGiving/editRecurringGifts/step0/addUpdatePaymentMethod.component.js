@@ -5,6 +5,7 @@ import paymentMethodForm from 'common/components/paymentMethods/paymentMethodFor
 import profileService from 'common/services/api/profile.service';
 
 import template from './addUpdatePaymentMethod.tpl.html';
+import * as structuredErrorService from 'common/services/structuredError.service';
 
 const componentName = 'step0AddUpdatePaymentMethod';
 
@@ -48,7 +49,7 @@ class AddUpdatePaymentMethodsController {
             this.$log.error('Error adding/updating payment method', error);
           }
           this.paymentFormState = 'error';
-          this.paymentFormError = error.data;
+          this.paymentFormError = structuredErrorService.getErrorText(error);
         },
       );
     }
