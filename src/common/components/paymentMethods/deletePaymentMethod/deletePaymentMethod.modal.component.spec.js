@@ -331,6 +331,33 @@ describe('delete payment method modal', function () {
       expect(self.controller.changeView).toHaveBeenCalled();
     });
 
+    it('should read a structured error body for the payment form message', () => {
+      self.controller.profileService.addPaymentMethod.mockReturnValue(
+        Observable.throw({
+          status: 400,
+          data: {
+            messages: [
+              {
+                data: {},
+                id: 'selfservicepaymentinstruments.validation.failure',
+                'debug-message': 'Invalid routing number',
+                type: 'error',
+              },
+            ],
+          },
+        }),
+      );
+      self.controller.onPaymentFormStateChange({
+        state: 'loading',
+        payload: 'some data',
+      });
+
+      expect(self.controller.paymentFormState).toEqual('error');
+      expect(self.controller.paymentFormError).toEqual(
+        'Invalid routing number',
+      );
+    });
+
     it('should fail and throw error', () => {
       self.controller.profileService.addPaymentMethod.mockReturnValue(
         Observable.throw({
