@@ -13,6 +13,7 @@ import module, {
   redirectLocation,
   locationSearchOnLogin,
   forcedUserToLogout,
+  cardSecurityStorageKeys,
 } from './session.service';
 import { cortexRole } from 'common/services/session/fixtures/cortex-role';
 import { giveSession } from 'common/services/session/fixtures/give-session';
@@ -513,6 +514,30 @@ describe('session service', function () {
         }, done);
         $httpBackend.flush();
       });
+
+      it('should clear stored card security data before redirecting to Okta', (done) => {
+        Object.values(cardSecurityStorageKeys).forEach((key) =>
+          $window.sessionStorage.setItem(key, 'sensitive'),
+        );
+        sessionService.signOut(true).subscribe(() => {
+          Object.values(cardSecurityStorageKeys).forEach((key) =>
+            expect($window.sessionStorage.getItem(key)).toBeNull(),
+          );
+          done();
+        }, done);
+        $httpBackend.flush();
+      });
+
+      it('should clear stored card security data synchronously, without waiting on the logout request', () => {
+        Object.values(cardSecurityStorageKeys).forEach((key) =>
+          $window.sessionStorage.setItem(key, 'sensitive'),
+        );
+        sessionService.signOut(true).subscribe(angular.noop, angular.noop);
+        Object.values(cardSecurityStorageKeys).forEach((key) =>
+          expect($window.sessionStorage.getItem(key)).toBeNull(),
+        );
+        $httpBackend.flush();
+      });
     });
 
     describe('Failed cortex logout', () => {
@@ -913,6 +938,20 @@ describe('session service', function () {
       jest.spyOn(sessionService.authClient, 'revokeAccessToken');
       jest.spyOn(sessionService.authClient, 'revokeRefreshToken');
     });
+    it('should clear stored card security data', () => {
+      $httpBackend
+        .expectDELETE('https://give-stage2.cru.org/okta/logout')
+        .respond(200, {});
+      Object.values(cardSecurityStorageKeys).forEach((key) =>
+        $window.sessionStorage.setItem(key, 'sensitive'),
+      );
+      sessionService.signOutWithoutRedirectToOkta().subscribe(angular.noop);
+      Object.values(cardSecurityStorageKeys).forEach((key) =>
+        expect($window.sessionStorage.getItem(key)).toBeNull(),
+      );
+      $httpBackend.flush();
+    });
+
     it('make http request to signout user without redirect', (done) => {
       $httpBackend
         .expectDELETE('https://give-stage2.cru.org/okta/logout')
@@ -930,6 +969,32 @@ describe('session service', function () {
         done();
       });
       $httpBackend.flush();
+    });
+  });
+
+  describe('clearCardSecurityData()', () => {
+    it('removes every card security key written during checkout and leaves other keys alone', () => {
+      Object.values(cardSecurityStorageKeys).forEach((key) =>
+        $window.sessionStorage.setItem(key, 'sensitive'),
+      );
+      $window.sessionStorage.setItem('unrelated', 'keep me');
+
+      sessionService.clearCardSecurityData();
+
+      Object.values(cardSecurityStorageKeys).forEach((key) =>
+        expect($window.sessionStorage.getItem(key)).toBeNull(),
+      );
+      expect($window.sessionStorage.getItem('unrelated')).toEqual('keep me');
+      $window.sessionStorage.removeItem('unrelated');
+    });
+
+    it('covers the CVV and card BIN keys used by orderService', () => {
+      expect(Object.values(cardSecurityStorageKeys).sort()).toEqual([
+        'cardBin',
+        'cvv',
+        'storedBins',
+        'storedCvvs',
+      ]);
     });
   });
 
