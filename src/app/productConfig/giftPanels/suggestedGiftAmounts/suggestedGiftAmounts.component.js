@@ -40,7 +40,7 @@ export default angular
       itemConfigForm: '<',
       customAmount: '=',
       changeCustomAmount: '<',
-      minimumAmount: '<',
+      minimumCustomAmount: '<',
       selectableAmounts: '<',
     },
   });

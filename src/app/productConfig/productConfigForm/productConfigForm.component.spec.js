@@ -100,22 +100,22 @@ describe('product config form component', function () {
       expect($ctrl.changeCustomAmount).toHaveBeenCalledWith(1.02, true);
     });
 
-    it('should default effectiveMinimumAmount when minimumAmount is not supplied', () => {
+    it('should default effectiveMinimumCustomAmount when minimumCustomAmount is not supplied', () => {
       jest.spyOn($ctrl.$rootScope, '$on').mockImplementation(() => {});
-      $ctrl.minimumAmount = undefined;
+      $ctrl.minimumCustomAmount = undefined;
 
       $ctrl.$onInit();
 
-      expect($ctrl.effectiveMinimumAmount).toEqual(1);
+      expect($ctrl.effectiveMinimumCustomAmount).toEqual(1);
     });
 
-    it('should use minimumAmount for effectiveMinimumAmount when supplied', () => {
+    it('should use minimumCustomAmount for effectiveMinimumCustomAmount when supplied', () => {
       jest.spyOn($ctrl.$rootScope, '$on').mockImplementation(() => {});
-      $ctrl.minimumAmount = 25;
+      $ctrl.minimumCustomAmount = 25;
 
       $ctrl.$onInit();
 
-      expect($ctrl.effectiveMinimumAmount).toEqual(25);
+      expect($ctrl.effectiveMinimumCustomAmount).toEqual(25);
     });
   });
 
@@ -430,7 +430,7 @@ describe('product config form component', function () {
         $validators: {},
         $parsers: [],
       };
-      $ctrl.effectiveMinimumAmount = 1;
+      $ctrl.effectiveMinimumCustomAmount = 1;
     });
 
     it('should create validators', () => {
@@ -459,9 +459,9 @@ describe('product config form component', function () {
       );
     });
 
-    it('should enforce a configured minimumAmount', () => {
+    it('should enforce a configured minimumCustomAmount', () => {
       $ctrl.customInputActive = true;
-      $ctrl.effectiveMinimumAmount = 25;
+      $ctrl.effectiveMinimumCustomAmount = 25;
       $ctrl.addCustomValidators();
 
       expect($ctrl.itemConfigForm.amount.$validators.minimum('25')).toBe(true);
