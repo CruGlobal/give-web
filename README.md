@@ -69,6 +69,7 @@ Add the following code to your page where appropriate. See the [Branded checkout
   hide-annual="true"
   hide-quarterly="true"
   use-v3="true"
+  minimum-custom-amount="25"
   premium-code="BOOKS01"
   premium-name="Books"
   premium-image-url="https://api.images.com/img.png"
@@ -151,6 +152,7 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
 - `hide-annual` - Hides the annual frequency option. If you don't want this feature, do not add this attribute at all. - _Optional_
 - `hide-quarterly` - Hides the quarterly frequency option. If you don't want this feature, do not add this attribute at all. - _Optional_
 - `use-v3` - `true` if you want to enable version 3. Version 3 removes the review page from the checkout flow and makes UX improvements on the form. - _Optional_
+- `minimum-custom-amount` - the smallest gift a donor may type into the "other amount" field, as a number without a currency symbol (for example `25`). Defaults to `1` if the attribute is omitted. This applies only to the custom amount field. The suggested amount buttons are not affected. - _Optional_
 
 #### Setup for a new branded checkout domain
 
