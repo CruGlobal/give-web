@@ -62,6 +62,9 @@ class BrandedCheckoutController {
     this.analyticsFactory.pageLoaded(true);
     this.formatDonorDetails();
 
+    const parsedMinimum = parseFloat(this.minimumAmount);
+    this.minimumAmount = isNaN(parsedMinimum) ? null : parsedMinimum;
+
     // We want to use signOutWithoutRedirectToOkta, as signout will redirect the user to okta to flush Okta's session data.
     this.sessionService.signOutWithoutRedirectToOkta().subscribe(
       () => {
@@ -260,5 +263,6 @@ export default angular
       useV3: '@',
       hideAnnual: '@',
       hideQuarterly: '@',
+      minimumAmount: '@',
     },
   });

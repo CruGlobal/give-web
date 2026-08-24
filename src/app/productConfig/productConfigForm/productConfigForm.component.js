@@ -81,6 +81,7 @@ class ProductConfigFormController {
     this.loadData();
     this.waitForFormInitialization();
     this.shouldShowForcedUserToLogoutError();
+    this.effectiveMinimumAmount = this.minimumAmount ?? 1;
 
     this.$rootScope.$on(brandedCoverFeeCheckedEvent, () => {
       this.initItemConfig();
@@ -253,7 +254,9 @@ class ProductConfigFormController {
       value.replace('$', '').replace(',', ''),
     ); // Ignore a dollar sign and comma if included by the user
     this.itemConfigForm.amount.$validators.minimum = (value) => {
-      return !this.customInputActive || value * 1.0 >= 1;
+      return (
+        !this.customInputActive || value * 1.0 >= this.effectiveMinimumAmount
+      );
     };
     this.itemConfigForm.amount.$validators.maximum = (value) => {
       return !this.customInputActive || value * 1.0 < 10000000;
@@ -534,5 +537,6 @@ export default angular
       useV3: '<',
       hideAnnual: '<',
       hideQuarterly: '<',
+      minimumAmount: '<',
     },
   });

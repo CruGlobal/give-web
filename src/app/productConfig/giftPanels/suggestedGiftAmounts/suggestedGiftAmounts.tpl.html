@@ -97,7 +97,7 @@
             class="help-block"
             ng-message="minimum"
             translate
-            translate-values="{currencyLimit: (1 | currency)}"
+            translate-values="{currencyLimit: ($ctrl.minimumAmount | currency)}"
           >
             {{'AMOUNT_MIN_ERROR'}}
           </div>
@@ -167,7 +167,7 @@
               class="help-block"
               ng-message="minimum"
               translate
-              translate-values="{currencyLimit: (1 | currency)}"
+              translate-values="{currencyLimit: ($ctrl.minimumAmount | currency)}"
             >
               {{'AMOUNT_MIN_ERROR'}}
             </div>
@@ -247,7 +247,7 @@
           class="help-block"
           ng-message="minimum"
           translate="AMOUNT_MIN_ERROR"
-          translate-values="{currencyLimit: (1 | currency)}"
+          translate-values="{currencyLimit: ($ctrl.minimumAmount | currency)}"
         ></div>
         <div
           class="help-block"

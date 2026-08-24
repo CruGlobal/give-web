@@ -328,6 +328,7 @@ export default angular
       defaultPaymentType: '<',
       hidePaymentTypeOptions: '<',
       showCoverFees: '<',
+      minimumAmount: '<',
       next: '&',
       onPaymentFailed: '&',
       radioStationApiUrl: '<',
