@@ -93,6 +93,23 @@ describe('branded checkout', () => {
       $ctrl.$onInit();
       expect($ctrl.checkoutService.initializeRecaptcha).toHaveBeenCalled();
     });
+
+    it('should parse the minimumAmount attribute into a number', () => {
+      $ctrl.minimumAmount = '25';
+      $ctrl.$onInit();
+
+      expect($ctrl.minimumAmount).toEqual(25);
+    });
+
+    it('should null out minimumAmount when the attribute is missing or invalid', () => {
+      $ctrl.minimumAmount = undefined;
+      $ctrl.$onInit();
+      expect($ctrl.minimumAmount).toBeNull();
+
+      $ctrl.minimumAmount = 'not-a-number';
+      $ctrl.$onInit();
+      expect($ctrl.minimumAmount).toBeNull();
+    });
   });
 
   describe('normalizeApiUrl', () => {
