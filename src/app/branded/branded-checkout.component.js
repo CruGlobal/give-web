@@ -103,19 +103,44 @@ class BrandedCheckoutController {
     }
   }
 
+  resolveThankYouMessage() {
+    if (!this.thankYouMessageId) {
+      return;
+    }
+
+    const element = this.$window.document.getElementById(
+      this.thankYouMessageId,
+    );
+    const message = element && element.innerHTML.trim();
+
+    if (!message) {
+      console.error(
+        `thank-you-message points at "${this.thankYouMessageId}", which is empty or does not exist`,
+      );
+      return;
+    }
+
+    this.thankYouMessage = message;
+  }
+
+  showThankYou() {
+    this.resolveThankYouMessage();
+    this.checkoutStep = 'thankYou';
+  }
+
   next() {
     switch (this.checkoutStep) {
       case 'giftContactPayment':
         // If it is a single step form, the next step should be 'thankYou'
         if (this.useV3 === 'true') {
-          this.checkoutStep = 'thankYou';
+          this.showThankYou();
         } else {
           this.checkoutStep = 'review';
           this.fireAnalyticsEvents('review');
         }
         break;
       case 'review':
-        this.checkoutStep = 'thankYou';
+        this.showThankYou();
         break;
     }
     this.$element.scrollIntoView({ behavior: 'smooth' });
@@ -245,6 +270,7 @@ export default angular
       premiumMinimumAmount: '@',
       radioStationApiUrl: '@',
       donorDetailsVariable: '@donorDetails',
+      thankYouMessageId: '@thankYouMessage',
       defaultPaymentType: '@',
       hidePaymentTypeOptions: '@',
       onOrderCompleted: '&',

@@ -41,9 +41,11 @@ class ThankYouSummaryController {
     designationsService,
     thankYouService,
     $log,
+    $sce,
   ) {
     this.$rootScope = $rootScope;
     this.$window = $window;
+    this.$sce = $sce;
     this.envService = envService;
     this.orderService = orderService;
     this.profileService = profileService;
@@ -58,6 +60,7 @@ class ThankYouSummaryController {
 
   $onInit() {
     this.$rootScope.$on(SignOutEvent, (event) => this.signedOut(event));
+    this.customThankYouHtml = this.$sce.trustAsHtml(this.customThankYou);
     this.loadLastPurchase();
     this.loadEmail();
     this.shouldShowThankYouImage();
@@ -266,5 +269,6 @@ export default angular
     bindings: {
       onPurchaseLoaded: '&',
       isBrandedCheckout: '<',
+      customThankYou: '<',
     },
   });

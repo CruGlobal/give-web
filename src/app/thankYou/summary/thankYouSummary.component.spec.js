@@ -121,6 +121,27 @@ describe('thank you summary', () => {
     });
   });
 
+  describe('custom thank you message', () => {
+    it('should expose a provided custom message as trusted html', inject((
+      $sce,
+    ) => {
+      self.controller.customThankYou =
+        '<p>Thank you!</p><p><a href="guide.pdf" download>Download the guide</a></p>';
+
+      self.controller.$onInit();
+
+      expect($sce.getTrustedHtml(self.controller.customThankYouHtml)).toEqual(
+        '<p>Thank you!</p><p><a href="guide.pdf" download>Download the guide</a></p>',
+      );
+    }));
+
+    it('should not set a trusted message when no custom message is provided', () => {
+      self.controller.$onInit();
+
+      expect(self.controller.customThankYouHtml).toBeUndefined();
+    });
+  });
+
   describe('signedOut( event )', () => {
     describe('default prevented', () => {
       it('does nothing', () => {

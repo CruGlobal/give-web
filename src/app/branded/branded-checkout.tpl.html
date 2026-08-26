@@ -45,6 +45,7 @@
           ng-if="$ctrl.checkoutStep === 'thankYou'"
           on-purchase-loaded="$ctrl.onThankYouPurchaseLoaded($event.purchase)"
           is-branded-checkout="true"
+          custom-thank-you="$ctrl.thankYouMessage"
         >
         </thank-you-summary>
       </div>
