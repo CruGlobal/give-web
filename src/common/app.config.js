@@ -450,6 +450,10 @@ export const appConfig = /* @ngInject */ function (
     FREQUENCY_GIFT_TOTAL: '{{frequency}} Gift Total:',
     CHOOSE_RESOURCE: 'Choose a Resource',
     NO_THANK_YOU: 'Thank you, but please do not send me the resources.',
+    PREMIUM_MINIMUM_MESSAGE:
+      "When you make a gift of {{amount}} or more, you'll receive {{premiumName}} as our thank-you.",
+    PREMIUM_MINIMUM_ERROR:
+      'To receive {{premiumName}}, please enter a gift of {{amount}} or more.',
     RADIO_STATION: 'Radio Station',
     RADIO_STATION_LIST_ERROR:
       'There was an error loading radio stations in your area.',
@@ -770,6 +774,10 @@ export const appConfig = /* @ngInject */ function (
     FREQUENCY_GIFT_TOTAL: '{{frequency}} Gift Total:',
     CHOOSE_RESOURCE: 'Choose a Resource',
     NO_THANK_YOU: 'Thank you, but please do not send me the resources.',
+    PREMIUM_MINIMUM_MESSAGE:
+      'Cuando hagas una donación de {{amount}} o más, recibirás {{premiumName}} como nuestro agradecimiento.',
+    PREMIUM_MINIMUM_ERROR:
+      'Para recibir {{premiumName}}, ingresa una donación de {{amount}} o más.',
     RADIO_STATION: 'Estación de Radio',
     RADIO_STATION_LIST_ERROR:
       'There was an error loading radio stations in your area.',

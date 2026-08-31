@@ -72,6 +72,7 @@ Add the following code to your page where appropriate. See the [Branded checkout
   premium-code="BOOKS01"
   premium-name="Books"
   premium-image-url="https://api.images.com/img.png"
+  premium-minimum-amount="5"
 >
 </branded-checkout>
 
@@ -97,6 +98,7 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
 - `premium-code` - the premium code you would like to use - _Optional_ - make sure you use the proper premium code associated with the campaign
 - `premium-name` - the name of the premium offered to donors - _Optional_
 - `premium-image-url` - the custom image to appear when selecting a premium - _Optional_
+- `premium-minimum-amount` - the minimum gift amount required to receive the premium, such as `50` - _Optional_
 - `tsys-device` - the device name that corresponds to the TSYS Merchant Account which will be used for tokenizing your site's credit cards with TSYS - **Required** - Will be provided by DPS when adding your domain to the TSYS whitelist. `cru` is the default and corresponds with Cru's main TSYS Merchant ID
 - `amount` - defaults the gift's amount - _Optional_
 - `frequency` - defaults the gift's frequency - _Optional_ - can be one of the following values:
