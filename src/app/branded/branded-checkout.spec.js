@@ -96,6 +96,64 @@ describe('branded checkout', () => {
     });
   });
 
+  describe('premium minimum', () => {
+    beforeEach(() => {
+      jest
+        .spyOn($ctrl.checkoutService, 'initializeRecaptcha')
+        .mockImplementation(() => {});
+      $ctrl.premiumCode = 'BOOKS01';
+    });
+
+    it('should parse the configured minimum', () => {
+      $ctrl.premiumMinimumAmount = '50';
+      $ctrl.$onInit();
+
+      expect($ctrl.premiumMinimum).toEqual(50);
+    });
+
+    it('should parse a minimum with cents', () => {
+      $ctrl.premiumMinimumAmount = '49.99';
+      $ctrl.$onInit();
+
+      expect($ctrl.premiumMinimum).toEqual(49.99);
+    });
+
+    it('should be null when no minimum is configured', () => {
+      $ctrl.$onInit();
+
+      expect($ctrl.premiumMinimum).toBeNull();
+    });
+
+    it('should be null when the configured minimum is not a number', () => {
+      $ctrl.premiumMinimumAmount = 'abc';
+      $ctrl.$onInit();
+
+      expect($ctrl.premiumMinimum).toBeNull();
+    });
+
+    it('should be null when the configured minimum is zero', () => {
+      $ctrl.premiumMinimumAmount = '0';
+      $ctrl.$onInit();
+
+      expect($ctrl.premiumMinimum).toBeNull();
+    });
+
+    it('should be null when the configured minimum is negative', () => {
+      $ctrl.premiumMinimumAmount = '-5';
+      $ctrl.$onInit();
+
+      expect($ctrl.premiumMinimum).toBeNull();
+    });
+
+    it('should be null without a premium code, since there is no premium to earn', () => {
+      $ctrl.premiumCode = undefined;
+      $ctrl.premiumMinimumAmount = '50';
+      $ctrl.$onInit();
+
+      expect($ctrl.premiumMinimum).toBeNull();
+    });
+  });
+
   describe('normalizeApiUrl', () => {
     it('should handle URLs with https:// protocol', () => {
       const result = $ctrl.normalizeApiUrl('https://give.domain.com');
