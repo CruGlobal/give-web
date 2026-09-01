@@ -12,9 +12,32 @@
     <title>Cru | Branded Checkout</title>
   </head>
   <body>
+    <template id="dev-thank-you-message">
+      <h4 style="color: #0086b4">You just did something that lasts.</h4>
+
+      <p>Thank you! We don't take your generosity lightly.</p>
+
+      <blockquote>&ldquo;Sample supporter quote.&rdquo;</blockquote>
+
+      <ul>
+        <li>
+          <a href="/assets/img/check-sample.png" download>Sample guide (PDF)</a>
+        </li>
+        <li>
+          <a
+            href="https://example.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Watch the welcome video
+          </a>
+        </li>
+      </ul>
+    </template>
     <branded-checkout
       designation-number="2294554"
       show-cover-fees="true"
+      thank-you-message="dev-thank-you-message"
       ng-cloak
     ></branded-checkout>
     <script src="dev.v2.js"></script>

@@ -62,6 +62,7 @@ Add the following code to your page where appropriate. See the [Branded checkout
   day="<day>"
   default-payment-type="creditCard"
   donor-details="<window variable containing default values for donor's name and contact info>"
+  thank-you-message="<id of the element containing custom thank you page copy>"
   show-cover-fees="true"
   on-order-completed="$event.$window.onOrderCompleted($event.purchase)"
   on-order-failed="$event.$window.onOrderFailed($event.donorDetails)"
@@ -145,6 +146,25 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
       email: 'email@example.com'
   };
   ```
+- `thank-you-message` - Optional. `id` of an element on your page holding custom HTML for the thank you page, replacing the default "Thanks for making a difference..." paragraph shown after a gift is submitted. Put the copy in a `<template>` element, and point the attribute at that id. The markup inside is rendered as-is, so you can include links, lists and downloadable resources. Leave the attribute off to keep the default paragraph. Note that this copy is used regardless of the `language` attribute, so write it in the language your page is in:
+
+  ```html
+  <template id="my-thank-you-message">
+    <p>Thank you for partnering with us!</p>
+    <p>
+      <a href="https://mydomain.com/guide.pdf" download>
+        Download your free guide
+      </a>
+    </p>
+  </template>
+
+  <branded-checkout
+    designation-number="1234567"
+    thank-you-message="my-thank-you-message"
+  >
+  </branded-checkout>
+  ```
+
 - `show-cover-fees` - `true` if you want to show the checkbox that allows donors to cover processing fees, otherwise leave the attribute off.
 - `on-order-completed` - an Angular expression that is executed when the order was submitted successfully - _Optional_ - provides 2 variables:
   - `$event.$window` - Provides access to the browser's global `window` object. This allows you to call a custom callback function like `onOrderCompleted` in the example.
