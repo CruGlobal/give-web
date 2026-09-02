@@ -267,6 +267,83 @@ describe('branded checkout', () => {
     });
   });
 
+  describe('parseAmounts', () => {
+    it('should return nothing when no amounts are given', () => {
+      expect($ctrl.parseAmounts(undefined, 'single-amounts')).toBeUndefined();
+      expect($ctrl.parseAmounts('', 'single-amounts')).toBeUndefined();
+    });
+
+    it('should read a comma separated list', () => {
+      expect($ctrl.parseAmounts('25, 50,100', 'single-amounts')).toEqual([
+        { amount: 25, order: 1 },
+        { amount: 50, order: 2 },
+        { amount: 100, order: 3 },
+      ]);
+    });
+
+    it('should read a json array with descriptions', () => {
+      const json =
+        '[{"amount":50,"description":"Feeds a family"},{"amount":100}]';
+
+      expect($ctrl.parseAmounts(json, 'single-amounts')).toEqual([
+        { amount: 50, label: 'Feeds a family', order: 1 },
+        { amount: 100, label: undefined, order: 2 },
+      ]);
+    });
+
+    it('should drop entries that are not positive numbers', () => {
+      expect($ctrl.parseAmounts('25,abc,0,-5,50', 'single-amounts')).toEqual([
+        { amount: 25, order: 1 },
+        { amount: 50, order: 2 },
+      ]);
+    });
+
+    it('should report an error and ignore malformed json', () => {
+      jest.spyOn(console, 'error').mockImplementation(() => {});
+
+      expect(
+        $ctrl.parseAmounts('[{"amount":50,}]', 'single-amounts'),
+      ).toBeUndefined();
+      expect(console.error).toHaveBeenCalledWith(
+        expect.stringContaining('single-amounts'),
+      );
+    });
+
+    it('should report an error when nothing usable is left', () => {
+      jest.spyOn(console, 'error').mockImplementation(() => {});
+
+      expect($ctrl.parseAmounts('abc,-5', 'monthly-amounts')).toBeUndefined();
+      expect(console.error).toHaveBeenCalledWith(
+        expect.stringContaining('monthly-amounts'),
+      );
+    });
+  });
+
+  describe('resolveGivingAmounts', () => {
+    it('should parse both attributes', () => {
+      $ctrl.singleAmountsInput = '25,50';
+      $ctrl.monthlyAmountsInput = '15,30';
+
+      $ctrl.resolveGivingAmounts();
+
+      expect($ctrl.singleAmounts).toEqual([
+        { amount: 25, order: 1 },
+        { amount: 50, order: 2 },
+      ]);
+      expect($ctrl.monthlyAmounts).toEqual([
+        { amount: 15, order: 1 },
+        { amount: 30, order: 2 },
+      ]);
+    });
+
+    it('should leave amounts unset when no attributes are given', () => {
+      $ctrl.resolveGivingAmounts();
+
+      expect($ctrl.singleAmounts).toBeUndefined();
+      expect($ctrl.monthlyAmounts).toBeUndefined();
+    });
+  });
+
   describe('resolveThankYouMessage', () => {
     const addTemplate = (id, html) => {
       const template = document.createElement('template');
