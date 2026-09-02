@@ -5,6 +5,7 @@ import find from 'lodash/find';
 import omit from 'lodash/omit';
 import omitBy from 'lodash/omitBy';
 import map from 'lodash/map';
+import some from 'lodash/some';
 import includes from 'lodash/includes';
 import isEmpty from 'lodash/isEmpty';
 import padStart from 'lodash/padStart';
@@ -33,6 +34,8 @@ import template from './productConfigForm.tpl.html';
 export const brandedCoverFeeCheckedEvent = 'brandedCoverFeeCheckedEvent';
 
 const FEE_DERIVATIVE = 0.9765; // 2.35% processing fee (calculated by 1 - 0.0235)
+
+const DEFAULT_AMOUNTS = [50, 100, 250, 500, 1000, 5000];
 
 const componentName = 'productConfigForm';
 
@@ -67,7 +70,7 @@ class ProductConfigFormController {
     this.envService = envService;
     this.amountChanged = false;
 
-    this.selectableAmounts = [50, 100, 250, 500, 1000, 5000];
+    this.selectableAmounts = DEFAULT_AMOUNTS;
 
     // Bind methods to maintain 'this' context when called from child components
     this.changeFrequency = this.changeFrequency.bind(this);
@@ -85,7 +88,7 @@ class ProductConfigFormController {
     this.$rootScope.$on(brandedCoverFeeCheckedEvent, () => {
       this.initItemConfig();
       //  Based on EP 8.1 JSON Object amount has been changed to uppercase
-      if (this.selectableAmounts.includes(this.itemConfig.AMOUNT)) {
+      if (this.visibleAmounts().includes(this.itemConfig.AMOUNT)) {
         this.changeAmount(this.itemConfig.AMOUNT, true);
       } else {
         this.changeCustomAmount(this.itemConfig.AMOUNT, true);
@@ -145,6 +148,7 @@ class ProductConfigFormController {
         if (this.envService.read('isBrandedCheckout')) {
           this.brandedAnalyticsFactory.beginCheckout(this.productData);
         }
+        this.refreshAmounts(productData.frequency);
         this.setDefaultAmount();
         this.setDefaultFrequency();
         if (this.envService.read('isBrandedCheckout')) {
@@ -173,10 +177,10 @@ class ProductConfigFormController {
     const suggestedAmountsObservable = this.designationsService
       .suggestedAmounts(this.code, this.itemConfig)
       .do((suggestedAmounts) => {
-        this.suggestedAmounts = suggestedAmounts.filter(
+        this.campaignAmounts = suggestedAmounts.filter(
           (amount) => amount?.amount,
         );
-        this.useSuggestedAmounts = !isEmpty(this.suggestedAmounts);
+        this.refreshAmounts(this.productData?.frequency);
       });
 
     const givingLinksObservable = this.designationsService
@@ -212,6 +216,60 @@ class ProductConfigFormController {
     );
   }
 
+  amountsForFrequency(frequency) {
+    return this.overrideAmountsFor(frequency) || this.campaignAmounts;
+  }
+
+  overrideAmountsFor(frequency) {
+    return { NA: this.singleAmounts, MON: this.monthlyAmounts }[frequency];
+  }
+
+  visibleAmounts() {
+    return this.useSuggestedAmounts
+      ? map(this.suggestedAmounts, 'amount')
+      : this.selectableAmounts;
+  }
+
+  roundToNearestAmount(amounts) {
+    return amounts.reduce((previous, current) => {
+      return Math.abs(current - this.itemConfig.AMOUNT) <
+        Math.abs(previous - this.itemConfig.AMOUNT)
+        ? current
+        : previous;
+    });
+  }
+
+  refreshAmounts(frequency) {
+    const override = this.overrideAmountsFor(frequency);
+
+    // The suggested amount layout sets a description beside each amount, so a
+    // page that gave us bare amounts belongs in the plain button grid instead
+    if (override && !some(override, 'label')) {
+      this.selectableAmounts = map(override, 'amount');
+      this.suggestedAmounts = [];
+      this.useSuggestedAmounts = false;
+      return;
+    }
+
+    this.selectableAmounts = DEFAULT_AMOUNTS;
+    this.suggestedAmounts = this.amountsForFrequency(frequency);
+    this.useSuggestedAmounts = !isEmpty(this.suggestedAmounts);
+  }
+
+  // Swaps the amounts on screen for the ones belonging to the new frequency.
+  syncAmountsToFrequency(frequency) {
+    this.refreshAmounts(frequency);
+
+    if (this.customInputActive) {
+      return;
+    }
+
+    const amounts = this.visibleAmounts();
+    if (!isEmpty(amounts) && !amounts.includes(this.itemConfig.AMOUNT)) {
+      this.changeAmount(this.roundToNearestAmount(amounts));
+    }
+  }
+
   //  Based on EP 8.1 JSON Object amount has been changed to uppercase
   setDefaultAmount() {
     const amountOptions = isEmpty(this.suggestedAmounts)
@@ -240,11 +298,14 @@ class ProductConfigFormController {
   }
 
   waitForFormInitialization() {
-    const unregister = this.$scope.$watch('$ctrl.itemConfigForm.amount', () => {
-      if (this.itemConfigForm && this.itemConfigForm.amount) {
-        unregister();
-        this.addCustomValidators();
+    this.$scope.$watch('$ctrl.itemConfigForm.amount', () => {
+      const amountControl = this.itemConfigForm && this.itemConfigForm.amount;
+      if (!amountControl || amountControl === this.amountControl) {
+        return;
       }
+
+      this.amountControl = amountControl;
+      this.addCustomValidators();
     });
   }
 
@@ -292,6 +353,7 @@ class ProductConfigFormController {
           (data) => {
             this.itemConfigForm.$setDirty();
             this.productData = data;
+            this.syncAmountsToFrequency(product.name);
             if (this.envService.read('isBrandedCheckout')) {
               this.filterChosenFrequencies();
             }
@@ -536,5 +598,7 @@ export default angular
       hideQuarterly: '<',
       premiumMinimum: '<',
       premiumName: '<',
+      singleAmounts: '<',
+      monthlyAmounts: '<',
     },
   });

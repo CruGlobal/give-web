@@ -99,6 +99,18 @@ describe('product config form component', function () {
       expect($ctrl.initItemConfig).toHaveBeenCalled();
       expect($ctrl.changeCustomAmount).toHaveBeenCalledWith(1.02, true);
     });
+
+    it('should handle brandedCoverFeeCheckedEvent for suggested amounts', () => {
+      jest.spyOn($ctrl, 'changeAmount').mockImplementation(() => {});
+      $ctrl.suggestedAmounts = [{ amount: 25, order: 1 }];
+      $ctrl.useSuggestedAmounts = true;
+      $ctrl.itemConfig.AMOUNT = 25;
+
+      $ctrl.$onInit();
+      $ctrl.$rootScope.$emit(brandedCoverFeeCheckedEvent);
+
+      expect($ctrl.changeAmount).toHaveBeenCalledWith(25, true);
+    });
   });
 
   describe('initItemConfig', () => {
@@ -404,6 +416,73 @@ describe('product config form component', function () {
       expect($ctrl.addCustomValidators).toHaveBeenCalled();
       done();
     });
+
+    it('should not push another amount parser when only the amount changes', () => {
+      $ctrl.itemConfigForm.amount = { $validators: {}, $parsers: [] };
+      $ctrl.waitForFormInitialization();
+      $ctrl.$scope.$digest();
+
+      expect($ctrl.itemConfigForm.amount.$parsers).toHaveLength(1);
+
+      $ctrl.changeAmount(100);
+      $ctrl.$scope.$digest();
+
+      expect($ctrl.itemConfigForm.amount.$parsers).toHaveLength(1);
+    });
+  });
+
+  describe('custom amount validation after changing frequency', () => {
+    const frequencies = [
+      { name: 'NA', display: 'Single', selectAction: 'single-action' },
+      { name: 'MON', display: 'Monthly', selectAction: 'monthly-action' },
+    ];
+    let scope;
+    let ctrl;
+
+    beforeEach(inject((
+      $rootScope,
+      $compile,
+      designationsService,
+      commonService,
+    ) => {
+      jest
+        .spyOn(designationsService, 'productLookup')
+        .mockReturnValue(Observable.of({ frequency: 'NA', frequencies }));
+      jest
+        .spyOn(designationsService, 'suggestedAmounts')
+        .mockReturnValue(Observable.of([]));
+      jest
+        .spyOn(designationsService, 'givingLinks')
+        .mockReturnValue(Observable.of([]));
+      jest
+        .spyOn(commonService, 'getNextDrawDate')
+        .mockReturnValue(Observable.of('2026-8-25'));
+
+      scope = $rootScope.$new();
+
+      const element = $compile(
+        angular.element(
+          '<product-config-form single-amounts="[{ amount: 25, order: 1 }]" ' +
+            'monthly-amounts="[{ amount: 15, label: \'Epic\', order: 1 }]"' +
+            '></product-config-form>',
+        ),
+      )(scope);
+      scope.$apply();
+      ctrl = element.controller('productConfigForm');
+    }));
+
+    it('should keep validating the amount and stripping currency characters', () => {
+      ctrl.customInputActive = true;
+
+      ctrl.changeFrequency(frequencies[1]);
+      scope.$apply();
+
+      const amount = ctrl.itemConfigForm.amount;
+      expect(amount.$validators.minimum('0.5')).toBe(false);
+      expect(amount.$validators.maximum('10000000')).toBe(false);
+      expect(amount.$validators.pattern('4.235')).toBe(false);
+      expect(amount.$parsers[0]('$10,000')).toBe('10000');
+    });
   });
 
   describe('addCustomValidators()', () => {
@@ -457,6 +536,219 @@ describe('product config form component', function () {
     });
   });
 
+  describe('amountsForFrequency()', () => {
+    beforeEach(() => {
+      $ctrl.campaignAmounts = [{ amount: 75, order: 1 }];
+      $ctrl.singleAmounts = [{ amount: 25, order: 1 }];
+      $ctrl.monthlyAmounts = [{ amount: 15, order: 1 }];
+    });
+
+    it('uses the single amounts for a single gift', () => {
+      expect($ctrl.amountsForFrequency('NA')).toEqual($ctrl.singleAmounts);
+    });
+
+    it('uses the monthly amounts for a monthly gift', () => {
+      expect($ctrl.amountsForFrequency('MON')).toEqual($ctrl.monthlyAmounts);
+    });
+
+    it('falls back to the campaign amounts for other frequencies', () => {
+      expect($ctrl.amountsForFrequency('QUARTERLY')).toEqual(
+        $ctrl.campaignAmounts,
+      );
+      expect($ctrl.amountsForFrequency('ANNUAL')).toEqual(
+        $ctrl.campaignAmounts,
+      );
+    });
+
+    it('falls back to the campaign amounts when a frequency has no override', () => {
+      delete $ctrl.monthlyAmounts;
+
+      expect($ctrl.amountsForFrequency('MON')).toEqual($ctrl.campaignAmounts);
+    });
+
+    it('always uses the campaign amounts when no overrides are given', () => {
+      delete $ctrl.singleAmounts;
+      delete $ctrl.monthlyAmounts;
+
+      ['NA', 'MON', 'QUARTERLY', 'ANNUAL'].forEach((frequency) => {
+        expect($ctrl.amountsForFrequency(frequency)).toEqual(
+          $ctrl.campaignAmounts,
+        );
+      });
+    });
+  });
+
+  describe('roundToNearestAmount()', () => {
+    it('picks the amount closest to the one already chosen', () => {
+      $ctrl.itemConfig.AMOUNT = 40;
+
+      expect($ctrl.roundToNearestAmount([15, 30, 50])).toEqual(30);
+    });
+
+    it('picks the amount itself when the list offers it', () => {
+      $ctrl.itemConfig.AMOUNT = 30;
+
+      expect($ctrl.roundToNearestAmount([15, 30, 50])).toEqual(30);
+    });
+
+    it('picks the smallest amount when the chosen one is below the list', () => {
+      $ctrl.itemConfig.AMOUNT = 5;
+
+      expect($ctrl.roundToNearestAmount([15, 30, 50])).toEqual(15);
+    });
+
+    it('picks the largest amount when the chosen one is above the list', () => {
+      $ctrl.itemConfig.AMOUNT = 500;
+
+      expect($ctrl.roundToNearestAmount([15, 30, 50])).toEqual(50);
+    });
+
+    it('picks the lower amount when the chosen one sits halfway between', () => {
+      $ctrl.itemConfig.AMOUNT = 40;
+
+      expect($ctrl.roundToNearestAmount([30, 50])).toEqual(30);
+    });
+
+    it('picks the only amount when the list has one', () => {
+      $ctrl.itemConfig.AMOUNT = 500;
+
+      expect($ctrl.roundToNearestAmount([25])).toEqual(25);
+    });
+  });
+
+  describe('syncAmountsToFrequency()', () => {
+    beforeEach(() => {
+      $ctrl.campaignAmounts = [];
+      $ctrl.singleAmounts = [
+        { amount: 25, order: 1 },
+        { amount: 50, order: 2 },
+        { amount: 100, order: 3 },
+      ];
+      $ctrl.monthlyAmounts = [
+        { amount: 15, order: 1 },
+        { amount: 30, order: 2 },
+        { amount: 50, order: 3 },
+      ];
+      jest.spyOn($ctrl, 'changeAmount');
+    });
+
+    // Amounts without descriptions go in the button grid. The suggested amount
+    // layout puts a description beside each amount and looks broken without one.
+    it('shows amounts without descriptions as selectable buttons', () => {
+      $ctrl.syncAmountsToFrequency('MON');
+
+      expect($ctrl.selectableAmounts).toEqual([15, 30, 50]);
+      expect($ctrl.useSuggestedAmounts).toEqual(false);
+    });
+
+    it('shows amounts with descriptions as suggested amounts', () => {
+      $ctrl.monthlyAmounts = [
+        { amount: 15, label: 'a family a week', order: 1 },
+        { amount: 30, order: 2 },
+      ];
+
+      $ctrl.syncAmountsToFrequency('MON');
+
+      expect($ctrl.suggestedAmounts).toEqual($ctrl.monthlyAmounts);
+      expect($ctrl.useSuggestedAmounts).toEqual(true);
+    });
+
+    it('leaves campaign amounts as suggested amounts', () => {
+      delete $ctrl.monthlyAmounts;
+      $ctrl.campaignAmounts = [{ amount: 75, order: 1 }];
+
+      $ctrl.syncAmountsToFrequency('MON');
+
+      expect($ctrl.suggestedAmounts).toEqual($ctrl.campaignAmounts);
+      expect($ctrl.useSuggestedAmounts).toEqual(true);
+    });
+
+    it('shows the standard amounts for a frequency the page did not set', () => {
+      $ctrl.syncAmountsToFrequency('MON');
+
+      $ctrl.syncAmountsToFrequency('QUARTERLY');
+
+      expect($ctrl.selectableAmounts).toEqual([50, 100, 250, 500, 1000, 5000]);
+      expect($ctrl.useSuggestedAmounts).toEqual(false);
+    });
+
+    it('shows the page amounts again when the donor comes back to them', () => {
+      $ctrl.syncAmountsToFrequency('NA');
+      $ctrl.syncAmountsToFrequency('QUARTERLY');
+
+      $ctrl.syncAmountsToFrequency('MON');
+
+      expect($ctrl.selectableAmounts).toEqual([15, 30, 50]);
+      expect($ctrl.useSuggestedAmounts).toEqual(false);
+    });
+
+    it('keeps the selected amount when the new ladder offers it', () => {
+      $ctrl.itemConfig.AMOUNT = 50;
+
+      $ctrl.syncAmountsToFrequency('MON');
+
+      expect($ctrl.itemConfig.AMOUNT).toEqual(50);
+      expect($ctrl.changeAmount).not.toHaveBeenCalled();
+    });
+
+    it('moves to the nearest amount when the new ladder does not offer it', () => {
+      $ctrl.itemConfig.AMOUNT = 100;
+
+      $ctrl.syncAmountsToFrequency('MON');
+
+      expect($ctrl.changeAmount).toHaveBeenCalledWith(50);
+    });
+
+    it('keeps an amount the donor typed themselves', () => {
+      $ctrl.itemConfig.AMOUNT = 73;
+      $ctrl.customInputActive = true;
+
+      $ctrl.syncAmountsToFrequency('MON');
+
+      expect($ctrl.itemConfig.AMOUNT).toEqual(73);
+      expect($ctrl.changeAmount).not.toHaveBeenCalled();
+    });
+
+    // give.cru.org passes no overrides, so every frequency shares the campaign
+    // page amounts and a donor's choice has to survive changing frequency
+    describe('when a page has no overrides', () => {
+      beforeEach(() => {
+        delete $ctrl.singleAmounts;
+        delete $ctrl.monthlyAmounts;
+        $ctrl.campaignAmounts = [
+          { amount: 25, order: 1 },
+          { amount: 100, order: 2 },
+        ];
+      });
+
+      it('keeps showing the campaign amounts', () => {
+        $ctrl.syncAmountsToFrequency('MON');
+
+        expect($ctrl.suggestedAmounts).toEqual($ctrl.campaignAmounts);
+        expect($ctrl.useSuggestedAmounts).toEqual(true);
+      });
+
+      it('leaves the chosen amount alone', () => {
+        $ctrl.itemConfig.AMOUNT = 100;
+
+        $ctrl.syncAmountsToFrequency('MON');
+
+        expect($ctrl.itemConfig.AMOUNT).toEqual(100);
+        expect($ctrl.changeAmount).not.toHaveBeenCalled();
+      });
+
+      it('leaves a typed amount alone', () => {
+        $ctrl.itemConfig.AMOUNT = 73;
+        $ctrl.customInputActive = true;
+
+        $ctrl.syncAmountsToFrequency('MON');
+
+        expect($ctrl.itemConfig.AMOUNT).toEqual(73);
+        expect($ctrl.changeAmount).not.toHaveBeenCalled();
+      });
+    });
+  });
+
   describe('changeFrequency()', () => {
     beforeEach(() => {
       jest
@@ -494,6 +786,14 @@ describe('product config form component', function () {
       expect($ctrl.onStateChange).toHaveBeenCalledWith({
         state: 'unsubmitted',
       });
+    });
+
+    it('shows the amounts for the frequency it changed to', () => {
+      jest.spyOn($ctrl, 'syncAmountsToFrequency');
+
+      $ctrl.changeFrequency({ name: 'NA', selectAction: '/a' });
+
+      expect($ctrl.syncAmountsToFrequency).toHaveBeenCalledWith('NA');
     });
 
     it('should handle an error changing frequency', () => {
