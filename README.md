@@ -58,6 +58,8 @@ Add the following code to your page where appropriate. See the [Branded checkout
   campaign-page="<campaign-page>"
   tsys-device="<tsys-device>"
   amount="<amount>"
+  single-amounts="<amounts offered for a single gift>"
+  monthly-amounts="<amounts offered for a monthly gift>"
   frequency="<frequency>"
   day="<day>"
   default-payment-type="creditCard"
@@ -102,6 +104,25 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
 - `premium-minimum-amount` - the minimum gift amount required to receive the premium, such as `50` - _Optional_
 - `tsys-device` - the device name that corresponds to the TSYS Merchant Account which will be used for tokenizing your site's credit cards with TSYS - **Required** - Will be provided by DPS when adding your domain to the TSYS whitelist. `cru` is the default and corresponds with Cru's main TSYS Merchant ID
 - `amount` - defaults the gift's amount - _Optional_
+- `single-amounts` / `monthly-amounts` - the amounts offered for single and monthly gifts - _Optional_ - Each takes a comma separated list, and takes precedence over the amounts on your campaign page. Quarterly and annual gifts, and any frequency you leave out, keep using the campaign page amounts:
+  ```html
+  <branded-checkout
+    designation-number="1234567"
+    single-amounts="25,50,100"
+    monthly-amounts="15,30,45"
+  >
+  </branded-checkout>
+  ```
+  To show a description beside an amount, pass a json array instead. Descriptions need `use-v3="true"` to be laid out correctly, so leave them off if your page does not use version 3:
+  ```html
+  <branded-checkout
+    designation-number="1234567"
+    use-v3="true"
+    single-amounts='[{"amount":50,"description":"Feeds a family for a week"},{"amount":100}]'
+  >
+  </branded-checkout>
+  ```
+  Changing frequency swaps the amounts on screen. If the donor had picked an amount the new list does not offer, the closest amount in the new list is selected instead, though an amount they typed themselves is left alone.
 - `frequency` - defaults the gift's frequency - _Optional_ - can be one of the following values:
   - `single` - single gift - this is the default so it doesn't need to be specified
   - `monthly` - monthly recurring gift
