@@ -373,10 +373,10 @@ describe('product config form component', function () {
       };
       $ctrl.setDefaultFrequency();
 
-      expect($ctrl.changeFrequency).toHaveBeenCalledWith({
-        name: 'MON',
-        selectAction: 'uri',
-      });
+      expect($ctrl.changeFrequency).toHaveBeenCalledWith(
+        { name: 'MON', selectAction: 'uri' },
+        true, // applyingDefault signifies the page's default, not a donor choice
+      );
     });
   });
 
@@ -699,6 +699,28 @@ describe('product config form component', function () {
       expect($ctrl.changeAmount).toHaveBeenCalledWith(50);
     });
 
+    // The page can set both an amount and a non-default frequency. Applying that
+    // frequency on load must not round away the amount the page asked for.
+    it('keeps the amount the page configured when applying its default frequency', () => {
+      $ctrl.itemConfig.AMOUNT = 100;
+      $ctrl.configuredAmount = 100;
+
+      $ctrl.syncAmountsToFrequency('MON', true);
+
+      expect($ctrl.itemConfig.AMOUNT).toEqual(100);
+      expect($ctrl.customInputActive).toEqual(true);
+      expect($ctrl.changeAmount).not.toHaveBeenCalled();
+    });
+
+    it('still moves to the nearest amount once the donor has changed it', () => {
+      $ctrl.itemConfig.AMOUNT = 100;
+      $ctrl.configuredAmount = 25;
+
+      $ctrl.syncAmountsToFrequency('MON', true);
+
+      expect($ctrl.changeAmount).toHaveBeenCalledWith(50);
+    });
+
     it('keeps an amount the donor typed themselves', () => {
       $ctrl.itemConfig.AMOUNT = 73;
       $ctrl.customInputActive = true;
@@ -793,7 +815,7 @@ describe('product config form component', function () {
 
       $ctrl.changeFrequency({ name: 'NA', selectAction: '/a' });
 
-      expect($ctrl.syncAmountsToFrequency).toHaveBeenCalledWith('NA');
+      expect($ctrl.syncAmountsToFrequency).toHaveBeenCalledWith('NA', false);
     });
 
     it('should handle an error changing frequency', () => {

@@ -113,6 +113,8 @@ class ProductConfigFormController {
       this.setAmount(amount);
     }
 
+    this.configuredAmount = this.itemConfig.AMOUNT;
+
     if (inRange(parseInt(this.itemConfig.RECURRING_DAY_OF_MONTH, 10), 1, 29)) {
       this.itemConfig.RECURRING_DAY_OF_MONTH = padStart(
         this.itemConfig.RECURRING_DAY_OF_MONTH,
@@ -257,7 +259,7 @@ class ProductConfigFormController {
   }
 
   // Swaps the amounts on screen for the ones belonging to the new frequency.
-  syncAmountsToFrequency(frequency) {
+  syncAmountsToFrequency(frequency, applyingDefault = false) {
     this.refreshAmounts(frequency);
 
     if (this.customInputActive) {
@@ -266,7 +268,11 @@ class ProductConfigFormController {
 
     const amounts = this.visibleAmounts();
     if (!isEmpty(amounts) && !amounts.includes(this.itemConfig.AMOUNT)) {
-      this.changeAmount(this.roundToNearestAmount(amounts));
+      if (applyingDefault && this.itemConfig.AMOUNT === this.configuredAmount) {
+        this.changeCustomAmount(this.itemConfig.AMOUNT);
+      } else {
+        this.changeAmount(this.roundToNearestAmount(amounts));
+      }
     }
   }
 
@@ -292,7 +298,7 @@ class ProductConfigFormController {
         this.defaultFrequency,
       ]);
       if (frequency && frequency.selectAction) {
-        this.changeFrequency(frequency);
+        this.changeFrequency(frequency, true);
       }
     }
   }
@@ -325,7 +331,7 @@ class ProductConfigFormController {
     };
   }
 
-  changeFrequency(product) {
+  changeFrequency(product, applyingDefault = false) {
     if (product.name === this.productData.frequency) {
       // Do nothing if same frequency is selected
       return;
@@ -353,7 +359,7 @@ class ProductConfigFormController {
           (data) => {
             this.itemConfigForm.$setDirty();
             this.productData = data;
-            this.syncAmountsToFrequency(product.name);
+            this.syncAmountsToFrequency(product.name, applyingDefault);
             if (this.envService.read('isBrandedCheckout')) {
               this.filterChosenFrequencies();
             }
