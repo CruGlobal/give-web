@@ -34,9 +34,13 @@
         </li>
       </ul>
     </template>
+    <!-- use-v3 is only needed to style amounts that supply a description -->
     <branded-checkout
       designation-number="2294554"
       show-cover-fees="true"
+      use-v3="true"
+      single-amounts="25,55,100"
+      monthly-amounts="15,30,55"
       thank-you-message="dev-thank-you-message"
       ng-cloak
     ></branded-checkout>

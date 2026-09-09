@@ -361,5 +361,7 @@ export default angular
       loadingAndSubmitting: '<',
       hideAnnual: '<',
       hideQuarterly: '<',
+      singleAmounts: '<',
+      monthlyAmounts: '<',
     },
   });

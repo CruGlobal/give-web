@@ -3,6 +3,8 @@ import 'angular-environment';
 import 'angular-translate';
 import pick from 'lodash/pick';
 import omit from 'lodash/omit';
+import isEmpty from 'lodash/isEmpty';
+import toFinite from 'lodash/toFinite';
 import changeCaseObject from 'change-case-object';
 import uibModal from 'angular-ui-bootstrap/src/modal';
 
@@ -65,6 +67,7 @@ class BrandedCheckoutController {
     this.tsysService.setDevice(this.tsysDevice);
     this.analyticsFactory.pageLoaded(true);
     this.formatDonorDetails();
+    this.resolveGivingAmounts();
 
     // We want to use signOutWithoutRedirectToOkta, as signout will redirect the user to okta to flush Okta's session data.
     this.sessionService.signOutWithoutRedirectToOkta().subscribe(
@@ -113,6 +116,55 @@ class BrandedCheckoutController {
         this.donorDetails.mailingAddress = mailingAddress;
       }
     }
+  }
+
+  resolveGivingAmounts() {
+    this.singleAmounts = this.parseAmounts(
+      this.singleAmountsInput,
+      'single-amounts',
+    );
+    this.monthlyAmounts = this.parseAmounts(
+      this.monthlyAmountsInput,
+      'monthly-amounts',
+    );
+  }
+
+  // Accepts either a comma separated list of amounts or, for pages that want a
+  // description alongside each amount, a json array. Returns the shape the gift
+  // form already uses for campaign page amounts.
+  parseAmounts(value, attribute) {
+    if (!value) {
+      return undefined;
+    }
+
+    let entries;
+    if (value.trim().startsWith('[')) {
+      try {
+        entries = JSON.parse(value);
+      } catch (error) {
+        console.error(`${attribute} is not valid json`);
+        return undefined;
+      }
+    } else {
+      entries = value.split(',').map((amount) => ({ amount }));
+    }
+
+    const amounts = entries
+      .filter((entry) => toFinite(entry?.amount) > 0)
+      .map((entry, index) => ({
+        amount: toFinite(entry.amount),
+        ...(entry.description === undefined
+          ? {}
+          : { label: entry.description }),
+        order: index + 1,
+      }));
+
+    if (isEmpty(amounts)) {
+      console.error(`${attribute} contains no usable amounts`);
+      return undefined;
+    }
+
+    return amounts;
   }
 
   resolveThankYouMessage() {
@@ -281,6 +333,8 @@ export default angular
       premiumMinimumAmount: '@',
       radioStationApiUrl: '@',
       donorDetailsVariable: '@donorDetails',
+      singleAmountsInput: '@singleAmounts',
+      monthlyAmountsInput: '@monthlyAmounts',
       thankYouMessageId: '@thankYouMessage',
       defaultPaymentType: '@',
       hidePaymentTypeOptions: '@',
