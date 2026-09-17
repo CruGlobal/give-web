@@ -23,6 +23,11 @@
         >
           <span class="giftsum-about giftsum-title" ng-switch="f.name">
             <span ng-switch-when="NA" translate>{{'SINGLE_GIFT'}}</span>
+            <span ng-switch-when="MON" translate>{{'MONTHLY_GIFT'}}</span>
+            <span ng-switch-when="QUARTERLY" translate
+              >{{'QUARTERLY_GIFT'}}</span
+            >
+            <span ng-switch-when="ANNUAL" translate>{{'ANNUAL_GIFT'}}</span>
             <span ng-switch-default>{{f.display}}</span>
           </span>
         </label>

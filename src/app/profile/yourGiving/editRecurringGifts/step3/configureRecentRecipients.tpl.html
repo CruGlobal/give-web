@@ -52,6 +52,7 @@
       class="btn btn-primary"
       type="button"
       ng-click="$ctrl.next({ additions: $ctrl.additions })"
+      ng-disabled="!$ctrl.allGiftsValid()"
       translate
     >
       Continue

@@ -22,9 +22,12 @@
           use-v3="$ctrl.useV3 === 'true'"
           hide-quarterly="$ctrl.hideQuarterly"
           hide-annual="$ctrl.hideAnnual"
+          single-amounts="$ctrl.singleAmounts"
+          monthly-amounts="$ctrl.monthlyAmounts"
           premium-code="$ctrl.premiumCode"
           premium-name="$ctrl.premiumName"
           premium-image-url="$ctrl.premiumImageUrl"
+          premium-minimum="$ctrl.premiumMinimum"
           item-config="$ctrl.itemConfig"
         >
         </branded-checkout-step-1>
@@ -39,6 +42,7 @@
         <thank-you-summary
           ng-if="$ctrl.checkoutStep === 'thankYou'"
           on-purchase-loaded="$ctrl.onThankYouPurchaseLoaded($event.purchase)"
+          custom-thank-you="$ctrl.thankYouMessage"
         >
         </thank-you-summary>
       </div>

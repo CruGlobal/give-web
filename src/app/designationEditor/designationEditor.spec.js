@@ -300,6 +300,40 @@ describe('Designation Editor', function () {
       $httpBackend.flush();
     });
 
+    it('should show a permission message if the response is 403', (done) => {
+      $ctrl.designationNumber = designationSecurityResponse.designationNumber;
+
+      $httpBackend
+        .expectGET(
+          designationConstants.designationEndpoint +
+            '?designationNumber=' +
+            designationSecurityResponse.designationNumber,
+        )
+        .respond(403, null);
+      $httpBackend
+        .expectGET(
+          designationConstants.designationImagesEndpoint +
+            '?designationNumber=' +
+            designationSecurityResponse.designationNumber,
+        )
+        .respond(403, null);
+
+      $ctrl
+        .getDesignationContent()
+        .then(() => {
+          expect($ctrl.permissionError).toEqual(true);
+          expect($ctrl.loadingContentError).toEqual(false);
+          expect($ctrl.contentLoaded).toEqual(false);
+          expect($ctrl.$log.warn.logs[0][0]).toEqual(
+            'User does not have permission to edit this designation.',
+          );
+          expect($ctrl.$log.error.logs).toEqual([]);
+          done();
+        })
+        .catch(done);
+      $httpBackend.flush();
+    });
+
     it('should log an error if content fails', () => {
       $ctrl.designationNumber = '0123456';
       jest

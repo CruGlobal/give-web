@@ -34,6 +34,9 @@
               have entered duplicate phone numbers. Please verify that all of
               your phone numbers are unique.</translate
             >
+            <span ng-switch-when="server"
+              >{{ $ctrl.phoneNumberErrorMessage }}</span
+            >
           </p>
           <p ng-switch="$ctrl.mailingAddressError">
             <translate ng-switch-when="loading"

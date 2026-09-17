@@ -24,6 +24,17 @@
   <div
     class="alert alert-danger mt-"
     role="alert"
+    ng-if="$ctrl.permissionError"
+  >
+    <p translate>
+      You don't have permission to edit this page. If you think this is a
+      mistake, contact
+      <a href="mailto:techhelp@cru.org">techhelp@cru.org</a> for assistance.
+    </p>
+  </div>
+  <div
+    class="alert alert-danger mt-"
+    role="alert"
     ng-if="$ctrl.saveDesignationError"
   >
     <p translate>

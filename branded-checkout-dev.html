@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en" data-framework="angularjs">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta
+      name="viewport"
+      content="width = device-width, minimal-ui, initial-scale = 1, user-scalable = no"
+    />
+    <title>Cru | Branded Checkout</title>
+  </head>
+  <body>
+    <template id="dev-thank-you-message">
+      <h4 style="color: #0086b4">You just did something that lasts.</h4>
+
+      <p>Thank you! We don't take your generosity lightly.</p>
+
+      <blockquote>&ldquo;Sample supporter quote.&rdquo;</blockquote>
+
+      <ul>
+        <li>
+          <a href="/assets/img/check-sample.png" download>Sample guide (PDF)</a>
+        </li>
+        <li>
+          <a
+            href="https://example.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Watch the welcome video
+          </a>
+        </li>
+      </ul>
+    </template>
+    <!-- use-v3 is only needed to style amounts that supply a description -->
+    <branded-checkout
+      designation-number="2294554"
+      show-cover-fees="true"
+      use-v3="true"
+      single-amounts="25,55,100"
+      monthly-amounts="15,30,55"
+      thank-you-message="dev-thank-you-message"
+      ng-cloak
+    ></branded-checkout>
+    <script src="dev.v2.js"></script>
+  </body>
+</html>

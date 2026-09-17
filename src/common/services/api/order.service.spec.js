@@ -893,6 +893,39 @@ describe('order service', () => {
 
       self.$httpBackend.flush();
     });
+
+    it('should still load all payment methods when one is missing payment-instrument-identification-attributes', (done) => {
+      delete clonedPaymentMethodSelectorResponse._order[0]
+        ._paymentinstrumentselector[0]._choice[0]._description[0][
+        'payment-instrument-identification-attributes'
+      ];
+
+      // The malformed payment method is still returned, just without its identification attributes
+      expectedResponse[2] = {
+        self: expectedResponse[2].self,
+        messages: [],
+        links: [],
+        'default-on-profile': false,
+        name: 'Cru Payment Instrument',
+        selectAction: expectedResponse[2].selectAction,
+      };
+
+      self.$httpBackend
+        .expectGET(
+          'https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentinstrumentselector:choice,order:paymentinstrumentselector:choice:description,order:paymentinstrumentselector:chosen,order:paymentinstrumentselector:chosen:description',
+        )
+        .respond(200, clonedPaymentMethodSelectorResponse);
+
+      self.orderService.getExistingPaymentMethods().subscribe(
+        (data) => {
+          expect(data).toEqual(expectedResponse);
+          done();
+        },
+        (error) => done(error),
+      );
+
+      self.$httpBackend.flush();
+    });
   });
 
   describe('selectPaymentMethod', () => {
@@ -995,6 +1028,31 @@ describe('order service', () => {
         expect(data).toEqual(expectedPaymentInfo);
         done();
       });
+
+      self.$httpBackend.flush();
+    });
+
+    it('should pass when the current payment is missing payment-instrument-identification-attributes', (done) => {
+      const clonedResponse = angular.copy(paymentMethodCreditCardResponse);
+      const description =
+        clonedResponse._order[0]._paymentinstrumentselector[0]._chosen[0]
+          ._description[0];
+      delete description['payment-instrument-identification-attributes'];
+
+      self.$httpBackend
+        .expectGET(
+          'https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentinstrumentselector:chosen:description',
+        )
+        .respond(200, clonedResponse);
+
+      self.orderService.getCurrentPayment().subscribe(
+        (data) => {
+          expect(data).toEqual(angular.copy(description));
+          expect(data.address).toBeUndefined();
+          done();
+        },
+        (error) => done(error),
+      );
 
       self.$httpBackend.flush();
     });

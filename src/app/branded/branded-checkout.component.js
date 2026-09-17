@@ -3,6 +3,8 @@ import 'angular-environment';
 import 'angular-translate';
 import pick from 'lodash/pick';
 import omit from 'lodash/omit';
+import isEmpty from 'lodash/isEmpty';
+import toFinite from 'lodash/toFinite';
 import changeCaseObject from 'change-case-object';
 import uibModal from 'angular-ui-bootstrap/src/modal';
 
@@ -58,9 +60,14 @@ class BrandedCheckoutController {
         this.normalizeApiUrl(this.apiUrl);
     }
     this.code = this.designationNumber;
+    // Invalid values or minimums without a premium code means no minimum applies.
+    const premiumMinimum = parseFloat(this.premiumMinimumAmount);
+    this.premiumMinimum =
+      this.premiumCode && premiumMinimum > 0 ? premiumMinimum : null;
     this.tsysService.setDevice(this.tsysDevice);
     this.analyticsFactory.pageLoaded(true);
     this.formatDonorDetails();
+    this.resolveGivingAmounts();
 
     // We want to use signOutWithoutRedirectToOkta, as signout will redirect the user to okta to flush Okta's session data.
     this.sessionService.signOutWithoutRedirectToOkta().subscribe(
@@ -111,19 +118,93 @@ class BrandedCheckoutController {
     }
   }
 
+  resolveGivingAmounts() {
+    this.singleAmounts = this.parseAmounts(
+      this.singleAmountsInput,
+      'single-amounts',
+    );
+    this.monthlyAmounts = this.parseAmounts(
+      this.monthlyAmountsInput,
+      'monthly-amounts',
+    );
+  }
+
+  // Accepts either a comma separated list of amounts or, for pages that want a
+  // description alongside each amount, a json array. Returns the shape the gift
+  // form already uses for campaign page amounts.
+  parseAmounts(value, attribute) {
+    if (!value) {
+      return undefined;
+    }
+
+    let entries;
+    if (value.trim().startsWith('[')) {
+      try {
+        entries = JSON.parse(value);
+      } catch (error) {
+        console.error(`${attribute} is not valid json`);
+        return undefined;
+      }
+    } else {
+      entries = value.split(',').map((amount) => ({ amount }));
+    }
+
+    const amounts = entries
+      .filter((entry) => toFinite(entry?.amount) > 0)
+      .map((entry, index) => ({
+        amount: toFinite(entry.amount),
+        ...(entry.description === undefined
+          ? {}
+          : { label: entry.description }),
+        order: index + 1,
+      }));
+
+    if (isEmpty(amounts)) {
+      console.error(`${attribute} contains no usable amounts`);
+      return undefined;
+    }
+
+    return amounts;
+  }
+
+  resolveThankYouMessage() {
+    if (!this.thankYouMessageId) {
+      return;
+    }
+
+    const element = this.$window.document.getElementById(
+      this.thankYouMessageId,
+    );
+    const message = element && element.innerHTML.trim();
+
+    if (!message) {
+      console.error(
+        `thank-you-message points at "${this.thankYouMessageId}", which is empty or does not exist`,
+      );
+      return;
+    }
+
+    this.thankYouMessage = message;
+  }
+
+  showThankYou() {
+    this.resolveThankYouMessage();
+    this.checkoutStep = 'thankYou';
+  }
+
   next() {
     switch (this.checkoutStep) {
       case 'giftContactPayment':
         // If it is a single step form, the next step should be 'thankYou'
         if (this.useV3 === 'true') {
-          this.checkoutStep = 'thankYou';
+          this.showThankYou();
         } else {
           this.checkoutStep = 'review';
           this.fireAnalyticsEvents('review');
         }
         break;
       case 'review':
-        this.checkoutStep = 'thankYou';
+        this.showThankYou();
         break;
     }
     this.$element.scrollIntoView({ behavior: 'smooth' });
@@ -249,8 +330,12 @@ export default angular
       premiumCode: '@',
       premiumName: '@',
       premiumImageUrl: '@',
+      premiumMinimumAmount: '@',
       radioStationApiUrl: '@',
       donorDetailsVariable: '@donorDetails',
+      singleAmountsInput: '@singleAmounts',
+      monthlyAmountsInput: '@monthlyAmounts',
+      thankYouMessageId: '@thankYouMessage',
       defaultPaymentType: '@',
       hidePaymentTypeOptions: '@',
       onOrderCompleted: '&',

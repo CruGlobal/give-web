@@ -144,7 +144,7 @@ class PaymentMethodsController {
           if (data.address) {
             data.address = formatAddressForTemplate(data.address);
           } else if (
-            data['payment-instrument-identification-attributes'][
+            data['payment-instrument-identification-attributes']?.[
               'street-address'
             ]
           ) {

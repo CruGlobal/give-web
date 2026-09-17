@@ -107,6 +107,84 @@ describe('cortex api service', () => {
         );
     });
 
+    describe('stale session retries', () => {
+      it('should retry a read once when cortex rejects it with a 403', () => {
+        self.$httpBackend
+          .expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default')
+          .respond(403, 'Access to the specified resource is forbidden.');
+        self.$httpBackend
+          .expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default')
+          .respond(200, 'success');
+
+        const onError = jest.fn();
+        const onSuccess = jest.fn();
+        self.cortexApiService
+          .get({
+            path: ['carts', 'crugive', 'default'],
+          })
+          .subscribe(onSuccess, onError);
+        self.$httpBackend.flush();
+        self.$httpBackend.flush();
+
+        expect(onSuccess).toHaveBeenCalledWith('success');
+        expect(onError).not.toHaveBeenCalled();
+      });
+
+      it('should surface the error when the retried read fails too', () => {
+        self.$httpBackend
+          .expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default')
+          .respond(403, 'Access to the specified resource is forbidden.');
+        self.$httpBackend
+          .expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default')
+          .respond(403, 'Access to the specified resource is forbidden.');
+
+        const onError = jest.fn();
+        self.cortexApiService
+          .get({
+            path: ['carts', 'crugive', 'default'],
+          })
+          .subscribe(() => fail(), onError);
+        self.$httpBackend.flush();
+        self.$httpBackend.flush();
+
+        expect(onError).toHaveBeenCalledTimes(1);
+        expect(onError.mock.calls[0][0].status).toEqual(403);
+      });
+
+      it('should not retry a write that fails with a 403', () => {
+        self.$httpBackend
+          .expectPOST('https://give-stage2.cru.org/cortex/test')
+          .respond(403, 'Access to the specified resource is forbidden.');
+
+        const onError = jest.fn();
+        self.cortexApiService
+          .post({
+            path: 'test',
+          })
+          .subscribe(() => fail(), onError);
+        self.$httpBackend.flush();
+
+        expect(onError).toHaveBeenCalledTimes(1);
+      });
+
+      it('should not retry a read that fails for another reason', () => {
+        self.$httpBackend
+          .expectGET('https://give-stage2.cru.org/cortex/test')
+          .respond(500, 'Server failure processing resource operation.');
+
+        const onError = jest.fn();
+        self.cortexApiService
+          .get({
+            path: 'test',
+          })
+          .subscribe(() => fail(), onError);
+        self.$httpBackend.flush();
+
+        expect(onError).toHaveBeenCalledTimes(1);
+        expect(onError.mock.calls[0][0].status).toEqual(500);
+      });
+    });
+
     describe('zoom config object', () => {
       it('should extract the data objects specified by the zoom values and place them as a keys in the response object', () => {
         const testResponse = {
