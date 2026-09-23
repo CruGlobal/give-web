@@ -20,7 +20,10 @@ import cortexApiService from '../cortexApi.service';
 import cartService from './cart.service';
 import tsysService from './tsys.service';
 import hateoasHelperService from 'common/services/hateoasHelper.service';
-import sessionService, { Roles } from 'common/services/session/session.service';
+import sessionService, {
+  Roles,
+  cardSecurityStorageKeys,
+} from 'common/services/session/session.service';
 import { datadogRum } from '@datadog/browser-rum';
 
 import formatAddressForCortex from '../addressHelpers/formatAddressForCortex';
@@ -416,16 +419,18 @@ class Order {
   }
 
   retrieveCardBin() {
-    return this.sessionStorage.getItem('cardBin');
+    return this.sessionStorage.getItem(cardSecurityStorageKeys.cardBin);
   }
 
   clearCardBins() {
-    this.sessionStorage.removeItem('cardBin');
-    this.sessionStorage.removeItem('storedBins');
+    this.sessionStorage.removeItem(cardSecurityStorageKeys.cardBin);
+    this.sessionStorage.removeItem(cardSecurityStorageKeys.storedBins);
   }
 
   retrieveCardBins() {
-    const storedBins = this.sessionStorage.getItem('storedBins');
+    const storedBins = this.sessionStorage.getItem(
+      cardSecurityStorageKeys.storedBins,
+    );
     return (
       (storedBins && angular.fromJson(storedBins)) || {}
     ); /* eslint-disable-line no-mixed-operators */
@@ -438,13 +443,16 @@ class Order {
     } else {
       // Save new cardBin in list of stored cardBins
       storedBins[uri] = cardBin;
-      this.sessionStorage.setItem('storedBins', angular.toJson(storedBins));
+      this.sessionStorage.setItem(
+        cardSecurityStorageKeys.storedBins,
+        angular.toJson(storedBins),
+      );
     }
 
     if (cardBin) {
-      this.sessionStorage.setItem('cardBin', cardBin);
+      this.sessionStorage.setItem(cardSecurityStorageKeys.cardBin, cardBin);
     } else {
-      this.sessionStorage.removeItem('cardBin');
+      this.sessionStorage.removeItem(cardSecurityStorageKeys.cardBin);
     }
   }
 
@@ -455,30 +463,35 @@ class Order {
     } else {
       // Save new cvv in list of stored CVVs
       storedCvvs[uri] = cvv;
-      this.sessionStorage.setItem('storedCvvs', angular.toJson(storedCvvs));
+      this.sessionStorage.setItem(
+        cardSecurityStorageKeys.storedCvvs,
+        angular.toJson(storedCvvs),
+      );
     }
 
     if (cvv) {
-      this.sessionStorage.setItem('cvv', cvv);
+      this.sessionStorage.setItem(cardSecurityStorageKeys.cvv, cvv);
     } else {
-      this.sessionStorage.removeItem('cvv');
+      this.sessionStorage.removeItem(cardSecurityStorageKeys.cvv);
     }
   }
 
   retrieveCardSecurityCode() {
-    return this.sessionStorage.getItem('cvv');
+    return this.sessionStorage.getItem(cardSecurityStorageKeys.cvv);
   }
 
   retrieveCardSecurityCodes() {
-    const storedCvvs = this.sessionStorage.getItem('storedCvvs');
+    const storedCvvs = this.sessionStorage.getItem(
+      cardSecurityStorageKeys.storedCvvs,
+    );
     return (
       (storedCvvs && angular.fromJson(storedCvvs)) || {}
     ); /* eslint-disable-line no-mixed-operators */
   }
 
   clearCardSecurityCodes() {
-    this.sessionStorage.removeItem('cvv');
-    this.sessionStorage.removeItem('storedCvvs');
+    this.sessionStorage.removeItem(cardSecurityStorageKeys.cvv);
+    this.sessionStorage.removeItem(cardSecurityStorageKeys.storedCvvs);
   }
 
   storeCoverFeeDecision(coverFees) {
