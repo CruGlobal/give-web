@@ -1,5 +1,7 @@
 import angular from 'angular';
+import filter from 'lodash/filter';
 import map from 'lodash/map';
+import some from 'lodash/some';
 
 import giftSearchView from 'common/components/giftViews/giftSearchView/giftSearchView.component';
 
@@ -15,6 +17,14 @@ class SearchRecipientsController {
 
   onChange(selectedRecipients) {
     this.additionalRecipients = selectedRecipients;
+    // The backend is authoritative for duplicate handling; this is only a non-blocking warning
+    this.duplicatedRecipients = filter(selectedRecipients, (gift) =>
+      some(
+        this.recurringGifts,
+        (recurringGift) =>
+          recurringGift.designationNumber === gift.designationNumber,
+      ),
+    );
   }
 
   gatherSelections() {
@@ -37,6 +47,7 @@ export default angular
     controller: SearchRecipientsController,
     templateUrl: template,
     bindings: {
+      recurringGifts: '<',
       dismiss: '&',
       previous: '&',
       next: '&',
