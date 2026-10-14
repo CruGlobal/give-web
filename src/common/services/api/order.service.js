@@ -55,7 +55,6 @@ class Order {
     this.$window = $window;
     this.$log = $log;
     this.$filter = $filter;
-    this.datadogRum = datadogRum;
   }
 
   getDonorDetails() {
@@ -610,7 +609,10 @@ class Order {
             ].replace(/./g, 'X'); // Mask security-code
           }
           this.$log.error('Error submitting purchase:', error);
-          this.logToDatadogRum(error);
+          datadogRum.addError(
+            new Error(`Error submitting purchase: ${JSON.stringify(error)}`),
+            { context: 'Checkout Submission', errorCode: error.status },
+          ); // here in order to show up in Error Tracking in DD
           controller.onSubmitted();
           controller.submissionErrorStatus = error.status;
           // 8.3 wraps these failures in a structured body, so read whichever
@@ -626,20 +628,6 @@ class Order {
         controller.submittingOrder = false;
         controller.onSubmittingOrder({ value: false });
       });
-  }
-
-  // Log error to Datadog in order to show up in Error Tracking (RUM)
-  logToDatadogRum(error) {
-    let errorMessage = `Error submitting purchase: ${JSON.stringify(error)}`;
-    if (error?.data) {
-      if (error.data.includes('InvalidCVV2Exception')) {
-        errorMessage = 'Invalid CVV';
-      }
-    }
-    this.datadogRum.addError(new Error(errorMessage), {
-      context: 'Checkout Submission',
-      errorCode: error.status,
-    });
   }
 }
 
