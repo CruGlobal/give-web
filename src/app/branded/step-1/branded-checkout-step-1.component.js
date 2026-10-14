@@ -116,6 +116,9 @@ class BrandedCheckoutStep1Controller {
   }
 
   submit() {
+    if (!this.canSubmitOrder()) {
+      return;
+    }
     this.resetSubmission();
     this.premiumMinimumError = !this.premiumMinimumMet();
     this.validationError = false;
@@ -317,7 +320,7 @@ class BrandedCheckoutStep1Controller {
   }
 
   canSubmitOrder() {
-    return !this.submittingOrder;
+    return !this.submitted && !this.submittingOrder;
   }
 }
 

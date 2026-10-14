@@ -144,7 +144,7 @@
         ng-if="!$ctrl.useV3"
         class="btn btn-primary"
         ng-click="$ctrl.submit()"
-        ng-disabled="$ctrl.errorLoadingProductConfig"
+        ng-disabled="$ctrl.errorLoadingProductConfig || !$ctrl.canSubmitOrder()"
         translate
       >
         {{'CONTINUE'}}
