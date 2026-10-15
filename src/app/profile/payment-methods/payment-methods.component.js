@@ -16,6 +16,7 @@ import extractPaymentAttributes from 'common/services/paymentHelpers/extractPaym
 import formatAddressForTemplate from 'common/services/addressHelpers/formatAddressForTemplate';
 import { scrollModalToTop } from 'common/services/modalState.service';
 import uibModal from 'angular-ui-bootstrap/src/modal';
+import * as structuredErrorService from 'common/services/structuredError.service';
 
 class PaymentMethodsController {
   /* @ngInject */
@@ -100,7 +101,7 @@ class PaymentMethodsController {
       },
       (error) => {
         this.loading = false;
-        if (error.status === 500) {
+        if (error.status === 500 || error.status === 403) {
           this.loadingError = 'authentication';
         } else {
           this.loadingError = true;
@@ -160,7 +161,8 @@ class PaymentMethodsController {
             this.$log.error('Error adding payment method', error);
           }
           this.paymentFormResolve.state = 'error';
-          this.paymentFormResolve.error = error.data;
+          this.paymentFormResolve.error =
+            structuredErrorService.getErrorText(error);
           scrollModalToTop();
         },
       );

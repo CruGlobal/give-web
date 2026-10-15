@@ -1876,6 +1876,41 @@ describe('order service', () => {
         );
       });
 
+      it('should read a structured error body when submitting an order', (done) => {
+        self.orderService.submit.mockImplementation(() =>
+          Observable.throw({
+            status: 400,
+            data: {
+              messages: [
+                {
+                  data: {},
+                  id: 'purchase.card.declined',
+                  'debug-message':
+                    'CardDeclinedException: Invalid Card Number: some details',
+                  type: 'error',
+                },
+              ],
+            },
+          }),
+        );
+        mockController.creditCardPaymentDetails = {};
+        self.orderService.retrieveCardSecurityCode = jest
+          .fn()
+          .mockReturnValue('1234');
+        self.orderService.retrieveCardBin = jest.fn().mockReturnValue('411111');
+        self.orderService.submitOrder(mockController).subscribe(
+          () => done('Observable unexpectedly succeeded'),
+          () => {
+            // The ng-switch in checkout-error-messages.tpl.html matches the
+            // exception name, so the prefix must survive both body shapes.
+            expect(mockController.submissionError).toEqual(
+              'CardDeclinedException',
+            );
+            done();
+          },
+        );
+      });
+
       it('should mask the security code on a credit card error', (done) => {
         self.orderService.submit.mockReturnValue(
           Observable.throw({

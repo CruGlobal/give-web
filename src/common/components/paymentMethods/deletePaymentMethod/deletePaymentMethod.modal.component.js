@@ -16,6 +16,7 @@ import formatAddressForTemplate from 'common/services/addressHelpers/formatAddre
 import { scrollModalToTop } from 'common/services/modalState.service';
 
 import template from './deletePaymentMethod.modal.tpl.html';
+import * as structuredErrorService from 'common/services/structuredError.service';
 
 const componentName = 'deletePaymentMethodModal';
 
@@ -149,7 +150,7 @@ class deletePaymentMethodModalController {
             error,
           );
           this.paymentFormState = 'error';
-          this.paymentFormError = error && error.data;
+          this.paymentFormError = structuredErrorService.getErrorText(error);
         },
       );
     }
