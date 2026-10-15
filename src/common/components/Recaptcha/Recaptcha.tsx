@@ -1,6 +1,6 @@
 import angular from 'angular';
 import { react2angular } from 'react2angular';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 const componentName = 'recaptcha';
 
@@ -43,6 +43,7 @@ export const Recaptcha = ({
 }: RecaptchaProps): JSX.Element => {
   const [ready, setReady] = useState(false);
   const [grecaptcha, setGrecaptcha] = useState(window.grecaptcha);
+  const verifying = useRef(false);
   let timesIntervalRun = 0;
 
   useEffect(() => {
@@ -67,6 +68,10 @@ export const Recaptcha = ({
       $log.info('Execute recaptcha not yet available');
       return;
     }
+    if (verifying.current) {
+      return;
+    }
+    verifying.current = true;
 
     grecaptcha.enterprise.ready(async () => {
       try {
@@ -79,6 +84,8 @@ export const Recaptcha = ({
       } catch (error) {
         $log.error(`Failed to verify recaptcha, continuing on: ${error}`);
         onSuccess();
+      } finally {
+        verifying.current = false;
       }
     });
   }, [grecaptcha, buttonId, ready]);
