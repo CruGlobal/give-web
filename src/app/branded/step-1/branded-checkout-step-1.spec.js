@@ -203,6 +203,55 @@ describe('branded checkout step 1', () => {
 
       expect($ctrl.validationError).toEqual(false);
     });
+
+    it('should keep the progress of a submission that is already running', () => {
+      $ctrl.submit();
+      $ctrl.onGiftConfigStateChange('submitted');
+      $ctrl.onContactInfoSubmit(true);
+      $ctrl.submit();
+
+      expect($ctrl.submission.giftConfig.completed).toEqual(true);
+      expect($ctrl.submission.contactInfo.completed).toEqual(true);
+    });
+
+    it('should submit the order when the payment finishes after a repeated click', () => {
+      jest.spyOn($ctrl, 'submitOrderInternal').mockImplementation(() => {});
+      $ctrl.useV3 = true;
+      $ctrl.submit();
+      $ctrl.onGiftConfigStateChange('submitted');
+      $ctrl.onContactInfoSubmit(true);
+      $ctrl.submit();
+      $ctrl.onPaymentStateChange('submitted');
+
+      expect($ctrl.submitOrderInternal).toHaveBeenCalled();
+    });
+
+    it('should not start a submission while the order is being placed', () => {
+      jest.spyOn($ctrl, 'resetSubmission');
+      $ctrl.submittingOrder = true;
+      $ctrl.submit();
+
+      expect($ctrl.resetSubmission).not.toHaveBeenCalled();
+      expect($ctrl.submitted).toBeFalsy();
+    });
+  });
+
+  describe('canSubmitOrder', () => {
+    it('should allow submitting before the donor clicks submit', () => {
+      expect($ctrl.canSubmitOrder()).toEqual(true);
+    });
+
+    it('should not allow submitting while a submission is running', () => {
+      $ctrl.submitted = true;
+
+      expect($ctrl.canSubmitOrder()).toEqual(false);
+    });
+
+    it('should not allow submitting while the order is being placed', () => {
+      $ctrl.submittingOrder = true;
+
+      expect($ctrl.canSubmitOrder()).toEqual(false);
+    });
   });
 
   describe('premiumMinimumMet', () => {
