@@ -10,6 +10,7 @@ import brandedAnalyticsFactory from 'app/branded/analytics/branded-analytics.fac
 import { scrollModalToTop } from 'common/services/modalState.service';
 
 import template from './step-2.tpl.html';
+import * as structuredErrorService from 'common/services/structuredError.service';
 
 const componentName = 'checkoutStep2';
 
@@ -130,7 +131,7 @@ class Step2Controller {
             this.$log.error('Error saving payment method', error);
           }
           this.paymentFormState = 'error';
-          this.paymentFormError = error.data;
+          this.paymentFormError = structuredErrorService.getErrorText(error);
           this.onStateChange({ state: 'errorSubmitting' });
           if (this.existingPaymentMethods) {
             this.scrollModalToTop();
