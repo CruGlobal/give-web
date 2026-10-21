@@ -615,6 +615,18 @@ hr.horizontal-divider {
   }
 }
 
+// Embedded host-page CSS can target flex-direction/flex-wrap or padding on
+// .button-group, so branded-checkout gets its own overrides here.
+branded-checkout .button-group {
+  display: grid;
+  grid-template-columns: 1fr;
+
+  .amount-description {
+    padding-left: 0;
+    text-indent: 10px;
+  }
+}
+
 .custom-amount-button {
   display: flex;
   height: 50px;
