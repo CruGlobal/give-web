@@ -623,7 +623,12 @@ branded-checkout .button-group {
 
   .amount-description {
     padding-left: 0;
-    text-indent: 10px;
+
+    // Unknown to host CSS, so padding here survives and indents every line.
+    .amount-description-text {
+      display: block;
+      padding-left: 10px;
+    }
   }
 }
 
