@@ -186,6 +186,34 @@ describe('product config modal', function () {
       expect($ctrl.itemConfig.CAMPAIGN_CODE).toEqual('DEFAULT');
     });
 
+    it('keeps the campaignCode from the give button when opening a campaign page', () => {
+      $ctrl.$location.search.mockReturnValue({});
+      $ctrl.itemConfig.CAMPAIGN_CODE = 'BUTTON';
+      $ctrl.itemConfig['campaign-page'] = 'some-page';
+      $ctrl.initializeParams();
+
+      expect($ctrl.itemConfig.CAMPAIGN_CODE).toEqual('BUTTON');
+    });
+
+    it('keeps the campaignCode from the give button when default-campaign-code is set', () => {
+      $ctrl.$location.search.mockReturnValue({});
+      $ctrl.itemConfig.CAMPAIGN_CODE = 'BUTTON';
+      $ctrl.itemConfig['default-campaign-code'] = 'DEFAULT';
+      $ctrl.initializeParams();
+
+      expect($ctrl.itemConfig.CAMPAIGN_CODE).toEqual('BUTTON');
+    });
+
+    it('prefers the campaignCode in the url over the one from the give button', () => {
+      $ctrl.$location.search.mockReturnValue({
+        [giveGiftParams.campaignCode]: 'URL',
+      });
+      $ctrl.itemConfig.CAMPAIGN_CODE = 'BUTTON';
+      $ctrl.initializeParams();
+
+      expect($ctrl.itemConfig.CAMPAIGN_CODE).toEqual('URL');
+    });
+
     it('cleans campaignCode if containing invalid characters', () => {
       $ctrl.$location.search.mockReturnValue({
         [giveGiftParams.campaignCode]:
