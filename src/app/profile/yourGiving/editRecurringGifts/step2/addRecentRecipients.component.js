@@ -1,5 +1,6 @@
 import angular from 'angular';
 import filter from 'lodash/filter';
+import some from 'lodash/some';
 
 import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component';
 
@@ -26,6 +27,15 @@ class AddRecentRecipientsController {
       additions: filter(this.recentRecipients, { _selectedGift: true }),
     });
   }
+
+  // The backend is authoritative for duplicate handling; this is only a non-blocking warning
+  isExistingRecurringGift(gift) {
+    return some(
+      this.recurringGifts,
+      (recurringGift) =>
+        recurringGift.designationNumber === gift.designationNumber,
+    );
+  }
 }
 
 export default angular
@@ -35,6 +45,7 @@ export default angular
     templateUrl: template,
     bindings: {
       recentRecipients: '<',
+      recurringGifts: '<',
       hasRecentRecipients: '<',
       loadingRecentRecipients: '<',
       hasRecurringGiftChanges: '<',
