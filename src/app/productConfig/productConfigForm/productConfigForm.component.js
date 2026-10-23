@@ -244,7 +244,7 @@ class ProductConfigFormController {
 
   refreshAmounts(frequency) {
     const override = this.overrideAmountsFor(frequency);
-    const amounts = override || this.campaignAmounts;
+    const amounts = this.amountsForFrequency(frequency);
 
     // Bare amounts look broken in the box layout, so fall back to plain buttons.
     const noDescriptions = !isEmpty(amounts) && !some(amounts, 'label');
