@@ -237,7 +237,12 @@ class CreditCardController {
                       ?.replace(/\s+/g, '')
                       .substring(0, 6) || null,
                   transactionId: tokenObj.transactionID,
-                  cvv: this.creditCardPayment.securityCode,
+                  // New card: use the security code TSYS echoed back on the token response rather
+                  // than the value typed into the form. Saved card: no tokenization happens, so
+                  // there is no TSYS value and the code the donor typed is the only source. Either
+                  // way this is forwarded to authorize the charge and must never be logged or
+                  // stored. See the cvv2 note in the cru-payments README.
+                  cvv: tokenObj.cvv2 || this.creditCardPayment.securityCode,
                 },
               },
             },
