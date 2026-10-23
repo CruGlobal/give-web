@@ -244,19 +244,20 @@ class ProductConfigFormController {
 
   refreshAmounts(frequency) {
     const override = this.overrideAmountsFor(frequency);
+    const amounts = override || this.campaignAmounts;
 
-    // The suggested amount layout sets a description beside each amount, so a
-    // page that gave us bare amounts belongs in the plain button grid instead
-    if (override && !some(override, 'label')) {
-      this.selectableAmounts = map(override, 'amount');
+    // Bare amounts look broken in the box layout, so fall back to plain buttons.
+    const noDescriptions = !isEmpty(amounts) && !some(amounts, 'label');
+    if (noDescriptions && (override || this.useV3)) {
+      this.selectableAmounts = map(amounts, 'amount');
       this.suggestedAmounts = [];
       this.useSuggestedAmounts = false;
       return;
     }
 
     this.selectableAmounts = DEFAULT_AMOUNTS;
-    this.suggestedAmounts = this.amountsForFrequency(frequency);
-    this.useSuggestedAmounts = !isEmpty(this.suggestedAmounts);
+    this.suggestedAmounts = amounts;
+    this.useSuggestedAmounts = !isEmpty(amounts);
   }
 
   // Swaps the amounts on screen for the ones belonging to the new frequency.
