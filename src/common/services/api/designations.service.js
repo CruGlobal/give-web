@@ -19,12 +19,14 @@ class DesignationsService {
   constructor(
     $http,
     $location,
+    $log,
     envService,
     cortexApiService,
     hateoasHelperService,
   ) {
     this.$http = $http;
     this.$location = $location;
+    this.$log = $log;
     this.envService = envService;
     this.cortexApiService = cortexApiService;
     this.hateoasHelperService = hateoasHelperService;
@@ -269,7 +271,23 @@ class DesignationsService {
         }
         return suggestedAmounts;
       })
-      .catch(() => Observable.of([]));
+      .catch((error) => {
+        this.logAemContentError(error, 'suggested amounts', code);
+        return Observable.of([]);
+      });
+  }
+
+  // A 404 usually means the designation has no AEM page (inactive designation
+  // or stale search result), so keep those out of the error stream.
+  logAemContentError(error, contentType, code) {
+    if (error.status === 404) {
+      this.$log.info(`No AEM page for designation ${code}`);
+    } else {
+      this.$log.error(
+        `Error loading ${contentType} for designation ${code}`,
+        error,
+      );
+    }
   }
 
   facebookPixel(code) {
@@ -285,31 +303,36 @@ class DesignationsService {
     const path = this.generatePath(code, campaignPage);
     return Observable.from(
       this.$http.get(this.envService.read('publicGive') + path),
-    ).map((data) => {
-      const givingLinks = [];
-      if (data.data['jcr:content']) {
-        // Map giving links
-        if (data.data['jcr:content'].givingLinks) {
-          angular.forEach(data.data['jcr:content'].givingLinks, (v, k) => {
-            if (!v || !v.name || !v.url) {
-              // Some accounts contain multiple, empty giving links. Until we figure how how they
-              // are being created, we are ignoring them on the frontend.
-              // https://jira.cru.org/browse/EP-2554
-              return;
-            }
+    )
+      .map((data) => {
+        const givingLinks = [];
+        if (data.data['jcr:content']) {
+          // Map giving links
+          if (data.data['jcr:content'].givingLinks) {
+            angular.forEach(data.data['jcr:content'].givingLinks, (v, k) => {
+              if (!v || !v.name || !v.url) {
+                // Some accounts contain multiple, empty giving links. Until we figure how how they
+                // are being created, we are ignoring them on the frontend.
+                // https://jira.cru.org/browse/EP-2554
+                return;
+              }
 
-            if (toFinite(k) > 0 || startsWith(k, 'item')) {
-              givingLinks.push({
-                name: v.name,
-                url: v.url,
-                order: toFinite(k) > 0 ? toFinite(k) : Number(k.substring(4)),
-              });
-            }
-          });
+              if (toFinite(k) > 0 || startsWith(k, 'item')) {
+                givingLinks.push({
+                  name: v.name,
+                  url: v.url,
+                  order: toFinite(k) > 0 ? toFinite(k) : Number(k.substring(4)),
+                });
+              }
+            });
+          }
         }
-      }
-      return givingLinks;
-    });
+        return givingLinks;
+      })
+      .catch((error) => {
+        this.logAemContentError(error, 'giving links', code);
+        return Observable.of([]);
+      });
   }
 
   ministriesList(pagePath) {
