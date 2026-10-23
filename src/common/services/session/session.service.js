@@ -58,6 +58,14 @@ export function hasDuplicateCortexRole(cookieHeader) {
 export const SignInEvent = 'SessionSignedIn';
 // AngularJS event broadcasted when the user signs in
 export const SignOutEvent = 'SessionSignedOut';
+// sessionStorage keys orderService uses to hold the CVV and card BIN between checkout steps.
+// They hold sensitive authentication data, so they must be cleared on sign-out (PCI DSS 3.3.1).
+export const cardSecurityStorageKeys = {
+  cvv: 'cvv',
+  storedCvvs: 'storedCvvs',
+  cardBin: 'cardBin',
+  storedBins: 'storedBins',
+};
 // DOM event triggered on document.body when the user signs in
 export const BodySignInEvent = 'giveSignInSuccess';
 
@@ -116,6 +124,7 @@ const session = /* @ngInject */ function (
     authClient: authClient, // Exposed for tests only
     oktaSignInWidgetDefaultOptions,
     clearCheckoutSavedData: clearCheckoutSavedData,
+    clearCardSecurityData: clearCardSecurityData,
     downgradeToGuest: downgradeToGuest,
     getRole: currentRole,
     getOktaUrl: getOktaUrl,
@@ -256,6 +265,8 @@ const session = /* @ngInject */ function (
   }
 
   function signOut(redirectHome = true) {
+    // Clear before any network round trip: sessionStorage survives the redirect to Okta and back.
+    clearCardSecurityData();
     const oktaSignOut = () => {
       // Add session data so on return to page we can show an explanation to the user about what happened.
       if (!redirectHome) {
@@ -293,6 +304,7 @@ const session = /* @ngInject */ function (
   function signOutWithoutRedirectToOkta() {
     // ** This function requires third-party cookies **
     // If unsure of the consequences use sessionService.signOut()
+    clearCardSecurityData();
     const observable = Observable.from(
       $http({
         method: 'DELETE',
@@ -551,6 +563,12 @@ const session = /* @ngInject */ function (
       return session.checkoutSavedData;
     } catch {}
   }
+  function clearCardSecurityData() {
+    Object.values(cardSecurityStorageKeys).forEach((key) =>
+      $window.sessionStorage.removeItem(key),
+    );
+  }
+
   // Added 'isTest' as needed cookie created without domain for unit tests to remove the cookie.
   function clearCheckoutSavedData(isTest = false) {
     try {
