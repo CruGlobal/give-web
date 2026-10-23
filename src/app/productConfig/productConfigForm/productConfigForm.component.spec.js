@@ -665,6 +665,30 @@ describe('product config form component', function () {
       expect($ctrl.useSuggestedAmounts).toEqual(true);
     });
 
+    it('shows campaign amounts without descriptions as selectable buttons when useV3 is on', () => {
+      delete $ctrl.monthlyAmounts;
+      $ctrl.useV3 = true;
+      $ctrl.campaignAmounts = [{ amount: 75, order: 1 }];
+
+      $ctrl.syncAmountsToFrequency('MON');
+
+      expect($ctrl.selectableAmounts).toEqual([75]);
+      expect($ctrl.useSuggestedAmounts).toEqual(false);
+    });
+
+    it('leaves campaign amounts with descriptions as suggested amounts when useV3 is on', () => {
+      delete $ctrl.monthlyAmounts;
+      $ctrl.useV3 = true;
+      $ctrl.campaignAmounts = [
+        { amount: 75, label: 'feeds a family for a week', order: 1 },
+      ];
+
+      $ctrl.syncAmountsToFrequency('MON');
+
+      expect($ctrl.suggestedAmounts).toEqual($ctrl.campaignAmounts);
+      expect($ctrl.useSuggestedAmounts).toEqual(true);
+    });
+
     it('shows the standard amounts for a frequency the page did not set', () => {
       $ctrl.syncAmountsToFrequency('MON');
 
