@@ -674,6 +674,20 @@ describe('product config form component', function () {
       expect($ctrl.useSuggestedAmounts).toEqual(false);
     });
 
+    it('treats whitespace-only campaign descriptions as no description when useV3 is on', () => {
+      delete $ctrl.monthlyAmounts;
+      $ctrl.useV3 = true;
+      $ctrl.campaignAmounts = [
+        { amount: 25, label: ' ', order: 1 },
+        { amount: 50, label: ' ', order: 2 },
+      ];
+
+      $ctrl.syncAmountsToFrequency('MON');
+
+      expect($ctrl.selectableAmounts).toEqual([25, 50]);
+      expect($ctrl.useSuggestedAmounts).toEqual(false);
+    });
+
     it('leaves campaign amounts with descriptions as suggested amounts when useV3 is on', () => {
       delete $ctrl.monthlyAmounts;
       $ctrl.useV3 = true;

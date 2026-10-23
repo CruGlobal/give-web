@@ -247,7 +247,8 @@ class ProductConfigFormController {
     const amounts = this.amountsForFrequency(frequency);
 
     // Bare amounts look broken in the box layout, so fall back to plain buttons.
-    const noDescriptions = !isEmpty(amounts) && !some(amounts, 'label');
+    const noDescriptions =
+      !isEmpty(amounts) && !some(amounts, (a) => a.label?.trim());
     if (noDescriptions && (override || this.useV3)) {
       this.selectableAmounts = map(amounts, 'amount');
       this.suggestedAmounts = [];
