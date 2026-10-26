@@ -262,7 +262,8 @@
 
     <p
       class="help-block"
-      ng-if="$ctrl.showPremiumMinimumMessage()"
+      ng-if="$ctrl.premiumMinimum"
+      ng-class="{invisible: !$ctrl.showPremiumMinimumMessage()}"
       translate="PREMIUM_MINIMUM_MESSAGE"
       translate-values="{amount: ($ctrl.premiumMinimum | giftAmount), premiumName: $ctrl.premiumName}"
     ></p>
