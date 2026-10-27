@@ -36,6 +36,7 @@ export const checkoutSavedDataCookieName = 'checkoutSavedData';
 export const forcedUserToLogout = 'forcedUserToLogout';
 export const lastPurchase = 'lastPurchase';
 export const lastPurchaseEmail = 'lastPurchaseEmail';
+export const lastPurchaseLink = 'lastPurchaseLink';
 export const cookieDomain = '.cru.org';
 
 // Returns true if the given cookie header string contains more than one
@@ -319,6 +320,7 @@ const session = /* @ngInject */ function (
   function clearLastPurchase() {
     $window.sessionStorage.removeItem(lastPurchase);
     $window.sessionStorage.removeItem(lastPurchaseEmail);
+    $window.sessionStorage.removeItem(lastPurchaseLink);
   }
 
   function removeForcedUserToLogoutSessionData() {

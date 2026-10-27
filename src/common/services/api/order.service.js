@@ -26,6 +26,7 @@ import sessionService, {
   Roles,
   lastPurchase,
   lastPurchaseEmail,
+  lastPurchaseLink,
 } from 'common/services/session/session.service';
 import { datadogRum } from '@datadog/browser-rum';
 
@@ -500,13 +501,13 @@ class Order {
   }
 
   storeLastPurchaseLink(link) {
-    this.sessionStorage.setItem('lastPurchaseLink', link);
+    this.sessionStorage.setItem(lastPurchaseLink, link);
     this.sessionStorage.removeItem(lastPurchase);
     this.sessionStorage.removeItem(lastPurchaseEmail);
   }
 
   retrieveLastPurchaseLink() {
-    return this.sessionStorage.getItem('lastPurchaseLink');
+    return this.sessionStorage.getItem(lastPurchaseLink);
   }
 
   // Keep only the fields the thank-you summary renders
