@@ -13,6 +13,8 @@ import module, {
   redirectLocation,
   locationSearchOnLogin,
   forcedUserToLogout,
+  lastPurchase,
+  lastPurchaseEmail,
 } from './session.service';
 import { cortexRole } from 'common/services/session/fixtures/cortex-role';
 import { giveSession } from 'common/services/session/fixtures/give-session';
@@ -504,6 +506,18 @@ describe('session service', function () {
         $httpBackend.flush();
       });
 
+      it('should forget the saved purchase and email', (done) => {
+        $window.sessionStorage.setItem(lastPurchase, '{}');
+        $window.sessionStorage.setItem(lastPurchaseEmail, 'guest@example.com');
+
+        sessionService.signOut(true).subscribe(() => {
+          expect($window.sessionStorage.getItem(lastPurchase)).toBeNull();
+          expect($window.sessionStorage.getItem(lastPurchaseEmail)).toBeNull();
+          done();
+        }, done);
+        $httpBackend.flush();
+      });
+
       it('should add forcedUserToLogout session data', (done) => {
         sessionService.signOut(false).subscribe(() => {
           expect($window.sessionStorage.getItem(forcedUserToLogout)).toEqual(
@@ -930,6 +944,20 @@ describe('session service', function () {
         done();
       });
       $httpBackend.flush();
+    });
+
+    it('should forget the saved purchase and email', () => {
+      $window.sessionStorage.setItem(lastPurchase, '{}');
+      $window.sessionStorage.setItem(lastPurchaseEmail, 'guest@example.com');
+      $httpBackend
+        .expectDELETE('https://give-stage2.cru.org/okta/logout')
+        .respond(200, {});
+
+      sessionService.signOutWithoutRedirectToOkta().subscribe();
+      $httpBackend.flush();
+
+      expect($window.sessionStorage.getItem(lastPurchase)).toBeNull();
+      expect($window.sessionStorage.getItem(lastPurchaseEmail)).toBeNull();
     });
   });
 
