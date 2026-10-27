@@ -13,6 +13,9 @@ import module, {
   redirectLocation,
   locationSearchOnLogin,
   forcedUserToLogout,
+  lastPurchase,
+  lastPurchaseEmail,
+  lastPurchaseLink,
 } from './session.service';
 import { cortexRole } from 'common/services/session/fixtures/cortex-role';
 import { giveSession } from 'common/services/session/fixtures/give-session';
@@ -504,6 +507,23 @@ describe('session service', function () {
         $httpBackend.flush();
       });
 
+      it('should forget the saved purchase, email, and link', (done) => {
+        $window.sessionStorage.setItem(lastPurchase, '{}');
+        $window.sessionStorage.setItem(lastPurchaseEmail, 'guest@example.com');
+        $window.sessionStorage.setItem(
+          lastPurchaseLink,
+          '/purchases/crugive/gi4dmnbw=',
+        );
+
+        sessionService.signOut(true).subscribe(() => {
+          expect($window.sessionStorage.getItem(lastPurchase)).toBeNull();
+          expect($window.sessionStorage.getItem(lastPurchaseEmail)).toBeNull();
+          expect($window.sessionStorage.getItem(lastPurchaseLink)).toBeNull();
+          done();
+        }, done);
+        $httpBackend.flush();
+      });
+
       it('should add forcedUserToLogout session data', (done) => {
         sessionService.signOut(false).subscribe(() => {
           expect($window.sessionStorage.getItem(forcedUserToLogout)).toEqual(
@@ -930,6 +950,25 @@ describe('session service', function () {
         done();
       });
       $httpBackend.flush();
+    });
+
+    it('should forget the saved purchase, email, and link', () => {
+      $window.sessionStorage.setItem(lastPurchase, '{}');
+      $window.sessionStorage.setItem(lastPurchaseEmail, 'guest@example.com');
+      $window.sessionStorage.setItem(
+        lastPurchaseLink,
+        '/purchases/crugive/gi4dmnbw=',
+      );
+      $httpBackend
+        .expectDELETE('https://give-stage2.cru.org/okta/logout')
+        .respond(200, {});
+
+      sessionService.signOutWithoutRedirectToOkta().subscribe();
+      $httpBackend.flush();
+
+      expect($window.sessionStorage.getItem(lastPurchase)).toBeNull();
+      expect($window.sessionStorage.getItem(lastPurchaseEmail)).toBeNull();
+      expect($window.sessionStorage.getItem(lastPurchaseLink)).toBeNull();
     });
   });
 
