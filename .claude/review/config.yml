@@ -1,0 +1,490 @@
+# agent-review configuration (v2)
+#
+# Lives at `.claude/review/config.yml` in the repo being reviewed.
+# Validate any edit with: `agent-review config validate`
+#
+# This skeleton is intentionally generic. `/agent-review:init` fills in the
+# repo-specific globs, triggers, and packages; you can also edit it by hand.
+
+version: 2
+
+# Global severity/verbosity dial.
+# chill     → fewer, high-confidence findings; raises the consensus threshold
+# standard  → default behavior
+# assertive → more findings, lower threshold, may be nitpicky
+profile: standard
+
+# Branch every review diffs against unless `--base` is passed.
+base_branch: master
+
+# ── Risk scoring ──────────────────────────────────────────────────────────────
+risk:
+  # File-pattern contributions. `tier` is descriptive; `points` drives the score.
+  # Per file, the highest-scoring matching pattern wins (patterns don't stack on
+  # one file; files sum across the diff). A 0-point entry never changes the score
+  # (max starts at 0) — it documents that a path was considered and deemed
+  # no-risk; use `excluded_paths` to actually exclude.
+  patterns:
+    - { glob: '.github/workflows/**', points: 3, tier: critical }
+    # Auth and session: Okta widget, cortex-role/give-session cookies.
+    - { glob: 'src/common/services/session/**', points: 3, tier: critical }
+    - {
+        glob: 'src/common/lib/oktaSignInWidgetHelper/**',
+        points: 3,
+        tier: critical,
+      }
+    - { glob: 'src/app/oktaAuthCallback/**', points: 3, tier: critical }
+    - { glob: 'src/app/signIn/**', points: 3, tier: critical }
+    - { glob: 'src/app/signOut/**', points: 3, tier: critical }
+    # Every Cortex request goes through this client, including its retry logic.
+    - {
+        glob: 'src/common/services/cortexApi.service.js',
+        points: 3,
+        tier: critical,
+      }
+    # Host → environment map: an unlisted host silently falls through to production.
+    - { glob: 'src/common/app.config.js', points: 3, tier: critical }
+    - { glob: 'webpack.config.js', points: 3, tier: critical }
+    # The review harness itself.
+    - { glob: '.claude/review/config.yml', points: 3, tier: critical }
+    - { glob: '.claude/review/static/**', points: 3, tier: critical }
+    - { glob: '.claude/settings.json', points: 3, tier: critical }
+
+    # Money paths and the public embed: these keep drawing post-merge fixes.
+    - { glob: 'src/common/components/paymentMethods/**', points: 2, tier: high }
+    - { glob: 'src/common/services/paymentHelpers/**', points: 2, tier: high }
+    - { glob: 'src/common/directives/creditCard*.js', points: 2, tier: high }
+    - { glob: 'src/common/components/Recaptcha/**', points: 2, tier: high }
+    - { glob: 'src/common/services/api/**', points: 2, tier: high }
+    - { glob: 'src/app/checkout/**', points: 2, tier: high }
+    - { glob: 'src/app/branded/**', points: 2, tier: high }
+    - { glob: 'src/loaders/**', points: 2, tier: high }
+    - { glob: 'src/app/productConfig/**', points: 2, tier: high }
+    - { glob: 'src/app/profile/**', points: 2, tier: high }
+    - { glob: 'src/app/thankYou/**', points: 2, tier: high }
+    # Shared cross-feature code.
+    - { glob: 'src/common/**', points: 2, tier: high }
+    - { glob: 'package.json', points: 2, tier: high }
+    - { glob: 'jest.config.js', points: 2, tier: high }
+    - { glob: 'jest/**', points: 2, tier: high }
+    - { glob: 'babel.config.js', points: 2, tier: high }
+    - { glob: 'tsconfig.json', points: 2, tier: high }
+    - { glob: '.husky/**', points: 2, tier: high }
+
+    - { glob: 'src/**/*.{js,ts,tsx,html}', points: 1, tier: medium }
+    - { glob: 'src/assets/**/*.scss', points: 1, tier: medium }
+    - { glob: '*.html', points: 1, tier: medium }
+
+    # Explicit 0-point entries: documentation of intent, not scoring behavior.
+    - { glob: '**/*.spec.{js,ts}', points: 0, tier: low }
+    - { glob: '**/*.test.{ts,tsx}', points: 0, tier: low }
+    - { glob: '**/*.fixture.js', points: 0, tier: low }
+    - { glob: '**/*.snap', points: 0, tier: low }
+
+  # Unknown paths are not zero-risk. Each non-excluded file that matches none of
+  # the patterns above gets this many points, preventing a newly introduced
+  # directory from being silently skipped by auto mode. Set to 0 only if your
+  # pattern map is intentionally exhaustive.
+  unmatched_file_points: 1
+
+  # Dependency manifests and lockfiles, used by the special detections below.
+  manifests: ['package.json']
+  lockfiles: ['yarn.lock']
+
+  # Change-volume → points (lines changed across the diff).
+  volume_multiplier:
+    - { upTo: 50, points: 0 }
+    - { upTo: 200, points: 1 }
+    - { upTo: 500, points: 2 }
+    - { upTo: 1000, points: 3 }
+    - { upTo: null, points: 4 } # 1000+
+
+  # Scope multiplier applied to the pattern+volume subtotal.
+  scope_multiplier:
+    single_file: 1.0
+    single_feature: 1.0
+    multi_feature: 1.3
+    cross_cutting: 1.7
+    core_infra: 2.0
+
+  # Special detections. Entries with empty `paths`/`files`/`packages` never fire —
+  # fill them in to enable the detection.
+  special:
+    - { when: new_dependency, points: 2 }
+    # List the packages whose upgrades deserve extra scrutiny (framework,
+    # language runtime, auth/payment SDKs, ORM, validation library, …).
+    - {
+        when: critical_pkg_update,
+        points: 3,
+        packages:
+          [
+            angular,
+            angular-ui-router,
+            angular-sanitize,
+            angular-cookies,
+            angular-translate,
+            angular-environment,
+            '@okta/okta-signin-widget',
+            '@cruglobal/cru-payments',
+            jwt-decode,
+            crypto-js,
+            rxjs,
+            react,
+            react-dom,
+            react2angular,
+            typescript,
+            webpack,
+            rollbar,
+            '@datadog/browser-rum',
+          ],
+      }
+    - { when: lockfile_only_change, points: 1 }
+    # No database or schema migrations live in this repo.
+    - { when: migration_change, points: 3, paths: [] }
+    # `files` = security-relevant config files (framework config, CSP/header
+    # config); `keywords` = diff text that signals a security-relevant edit.
+    - {
+        when: config_security_change,
+        points: 2,
+        files: ['src/common/app.config.js', 'webpack.config.js'],
+        keywords:
+          [
+            headers,
+            content-security,
+            csp,
+            cors,
+            domains,
+            apiUrl,
+            oktaUrl,
+            envServiceProvider,
+            '$sceDelegateProvider',
+            aHrefSanitization,
+            ROLLBAR_ACCESS_TOKEN,
+            DATADOG_RUM_CLIENT_TOKEN,
+            S3_GIVE_DOMAIN,
+          ],
+      }
+
+  # Score → risk level + required reviewer.
+  levels:
+    - { range: [0, 3], level: LOW, reviewer: entry }
+    - { range: [4, 6], level: MEDIUM, reviewer: entry }
+    - { range: [7, 9], level: HIGH, reviewer: experienced }
+    - { range: [10, null], level: CRITICAL, reviewer: 'senior maintainer' }
+
+# ── Agents ────────────────────────────────────────────────────────────────────
+# `always: true` runs the agent on every review. Otherwise the agent runs only
+# when a changed file matches `triggers.paths` or the diff contains one of
+# `triggers.content`. `rules[]` paths resolve against `.claude/review/`.
+# `triggers.specials` (optional) does NOT trigger the agent — it only records
+# which risk.special[].when detections this lane owns, so loadConfig's
+# `escalates` default can still find the right lane if you rename/remove the
+# security/data-integrity/architecture ids below.
+# `model` picks the review tier: an explicit `model:` (opus/sonnet/haiku) is
+# honored in every review mode; `smart` lanes are the ones quick mode may
+# downgrade to haiku, and only when `escalates` is false.
+# WARNING: the engine honors this operator override — explicitly setting `escalates: false` on
+# the security lane below removes it from the escalating-lane coverage guarantee (an unmatched
+# reviewable file no longer force-includes a lane that actually escalates to opus). The engine
+# still force-includes `security` by id when NO lane escalates at all, so coverage never silently
+# vanishes — but if every lane's `escalates` is set to false, that forced lane won't actually
+# escalate either. De-escalating every lane disables coverage escalation entirely: an unmatched
+# reviewable file will still get a lane, but never one that reads at opus rigor.
+agents:
+  - id: security
+    title: Security Review Agent
+    expertise: Authentication, authorization, data protection, vulnerability detection, secure coding.
+    enabled: true
+    model: smart # smart | opus | sonnet | haiku
+    always: false
+    escalates: true # deserves Opus on HIGH/CRITICAL PRs
+    triggers:
+      paths:
+        - 'src/common/services/session/**'
+        - 'src/common/lib/oktaSignInWidgetHelper/**'
+        - 'src/app/oktaAuthCallback/**'
+        - 'src/app/signIn/**'
+        - 'src/app/signOut/**'
+        - 'src/common/components/signInForm/**'
+        - 'src/common/components/signInModal/**'
+        - 'src/common/components/signUpModal/**'
+        - 'src/common/components/registerAccountModal/**'
+        - 'src/common/components/resetPasswordModal/**'
+        - 'src/common/components/Recaptcha/**'
+        - 'src/common/components/paymentMethods/**'
+        - 'src/common/directives/creditCard*.js'
+        - 'src/common/services/api/tsys.service.js'
+        - 'src/common/services/cortexApi.service.js'
+        - 'src/common/app.config.js'
+        - 'webpack.config.js'
+        - '.github/workflows/**'
+        - 'package.json'
+      content:
+        - 'ng-bind-html'
+        - '$sce'
+        - 'trustAsHtml'
+        - 'innerHTML'
+        - 'dangerouslySetInnerHTML'
+        - 'sessionStorage'
+        - 'localStorage'
+        - '$cookies'
+        - 'document.cookie'
+        - 'jwtDecode'
+        - 'window.open'
+        - 'postMessage'
+        - 'security-code'
+        - 'securityCode'
+        - 'cvv'
+        - 'grecaptcha'
+        - 'ROLLBAR_ACCESS_TOKEN'
+    rules: ['rules/security.md']
+
+  - id: architecture
+    title: Architecture Review Agent
+    expertise: System design, patterns, technical debt, maintainability, scalability.
+    enabled: true
+    always: true
+    escalates: true # deserves Opus on HIGH/CRITICAL PRs
+    rules: ['rules/architecture.md']
+
+  - id: data-integrity
+    title: Data Integrity Review Agent
+    expertise: Data flow, persistence, caching, input validation, type safety, data consistency.
+    enabled: true
+    always: false
+    escalates: true # deserves Opus on HIGH/CRITICAL PRs
+    triggers:
+      paths:
+        - 'src/common/services/api/**'
+        - 'src/common/services/cortexApi.service.js'
+        - 'src/common/services/hateoasHelper.service.js'
+        - 'src/common/services/structuredError.service.ts'
+        - 'src/common/services/addressHelpers/**'
+        - 'src/common/services/checkoutHelpers/**'
+        - 'src/common/services/giftHelpers/**'
+        - 'src/common/models/**'
+        - 'src/common/lib/cartEvents.js'
+        - 'src/common/app.constants.js'
+        - 'src/app/productConfig/**'
+      content:
+        - 'cortexApiService.'
+        - 'hateoasHelperService'
+        - 'changeCaseObject'
+        - 'sessionStorage'
+        - 'localStorage'
+        - '$cookies'
+        - 'cartUpdatedEvent'
+        - 'giftAddedEvent'
+        - 'CAMPAIGN_CODE'
+        - 'formatAddressForCortex'
+        - '$onChanges'
+    rules: ['rules/data-integrity.md']
+
+  - id: testing
+    title: Testing & Quality Review Agent
+    expertise: Test coverage, test quality, edge cases, error handling, code quality.
+    enabled: true
+    always: true
+    rules: ['rules/testing.md']
+
+  - id: standards
+    title: Standards Compliance Review Agent
+    expertise: Project-specific coding standards, patterns, and conventions.
+    enabled: true
+    always: true
+    rules: ['rules/standards.md']
+
+  - id: financial
+    title: Financial Correctness Review Agent
+    expertise: Gift amounts, recurring gift schedules and dates, cover-fee math, payment-method handling (TSYS, cru-payments), amount formatting.
+    enabled: true
+    model: smart
+    always: false
+    triggers:
+      paths:
+        - 'src/common/components/paymentMethods/**'
+        - 'src/common/services/paymentHelpers/**'
+        - 'src/common/services/giftHelpers/**'
+        - 'src/common/services/api/tsys.service.js'
+        - 'src/common/services/api/order.service.js'
+        - 'src/common/services/api/donations.service.js'
+        - 'src/common/models/recurringGift.model.js'
+        - 'src/common/components/displayRateTotals/**'
+        - 'src/common/components/giftViews/**'
+        - 'src/app/productConfig/**'
+        - 'src/app/profile/yourGiving/**'
+        - 'src/app/profile/payment-methods/**'
+        - 'src/app/checkout/**'
+      content:
+        - 'amount'
+        - 'coverFees'
+        - 'frequency'
+        - 'cru-payments'
+        - 'tsysService'
+        - 'hasValidAmount'
+        - '.toFixed('
+        - 'parseFloat('
+        - 'currency'
+    rules: ['rules/financial.md']
+
+  - id: api-contracts
+    title: Cortex API Contract Review Agent
+    expertise: Elastic Path Cortex HATEOAS requests and zoom paths, link/uri handling, structured error parsing, fixtures that match real responses.
+    enabled: true
+    model: smart
+    always: false
+    triggers:
+      paths:
+        - 'src/common/services/api/**'
+        - 'src/common/services/cortexApi.service.js'
+        - 'src/common/services/hateoasHelper.service.js'
+        - 'src/common/services/structuredError.service.ts'
+        - 'src/common/lib/getServerErrorMessage.js'
+        - '**/fixtures/**'
+      content:
+        - 'cortexApiService'
+        - 'zoom:'
+        - 'hateoasHelperService'
+        - 'getErrors('
+        - 'getErrorText('
+        - 'getServerErrorMessage'
+        - 'error.data'
+        - 'debug-message'
+    rules: ['rules/api-contracts.md']
+
+  - id: i18n
+    title: Localization Review Agent
+    expertise: angular-translate keys in en and es, user-visible strings, translated error messages.
+    enabled: true
+    model: smart
+    always: false
+    triggers:
+      paths:
+        - 'src/common/app.config.js'
+      content:
+        - 'translate'
+        - '$translateProvider'
+    rules: ['rules/i18n.md']
+
+  # Novel lane: <branded-checkout> is a public embed contract consumed by
+  # third-party host sites (FamilyLife and the Branded Checkout WordPress plugin).
+  - id: branded-embed
+    title: Branded Checkout Embed Review Agent
+    expertise: The public <branded-checkout> element contract — attributes, onOrderCompleted/onOrderFailed payloads, loader bundles, and behavior on third-party host pages.
+    enabled: true
+    model: smart
+    always: false
+    triggers:
+      paths:
+        - 'src/app/branded/**'
+        - 'src/loaders/**'
+        - 'branded-checkout.html'
+        - 'branded-checkout-dev.html'
+        - 'README.md'
+      content:
+        - 'onOrderCompleted'
+        - 'onOrderFailed'
+        - 'isBrandedCheckout'
+        - 'brandedCheckout'
+        - 'branded-checkout'
+    rules: ['rules/branded-embed.md']
+
+  # Advisory lane: rules/simplification.md caps pure cleanups below the blocker
+  # threshold and requires cited proof for every reuse claim. Keep this entry
+  # LAST — quick mode's third slot takes the first plan entry after
+  # testing/standards, and it must never land on this lane. Costs one extra
+  # smart-tier lane per standard/deep review; set `enabled: false` to opt out.
+  - id: simplification
+    title: Simplification & Reuse Review Agent
+    expertise: Code reuse, duplication, unnecessary abstraction, dead weight, wasteful computation on real data paths.
+    enabled: true
+    always: true
+    rules: ['rules/simplification.md']
+
+# ── Per-path rules ────────────────────────────────────────────────────────────
+# Extra rule docs applied to EVERY agent reviewing a matching file.
+# Example: - { paths: ['<ui-components>/**'], rules: ['rules/ux.md'] }
+path_rules: []
+
+# ── Exclusions — never reviewed, never scored ─────────────────────────────────
+excluded_paths:
+  - '**/*.snap'
+  - '**/*.generated.*'
+  - 'docs/**'
+  - '.claude/review/rules/**' # prose rule docs — config/guidance, not reviewable code
+  # Package-manager artifacts — generated/vendored, never reviewable
+  - 'yarn.lock'
+  - 'package-lock.json'
+  - 'pnpm-lock.yaml'
+  # Build output and vendored assets
+  - 'dist/**'
+  - 'src/assets/okta-sign-in/**'
+  - 'src/assets/crubrand/generic/bourbon/**'
+  - 'src/assets/img/**'
+  - 'src/assets/fonts/**'
+
+# ── Deterministic evidence ────────────────────────────────────────────────────
+# ast-grep runs trusted, repo-authored AST rules before the model. Only matches
+# on added lines become ledger findings. Enable after creating the referenced
+# sgconfig + rule directory (see templates/static/README.md).
+static_analysis:
+  ast_grep:
+    enabled: false # flip to true once `ast-grep test` passes on static/
+    config: static/sgconfig.yml
+    version: 0.45.0 # pin the CI binary; do not use "latest"
+    severity: { error: 8, warning: 6, info: 4, hint: 2 }
+    excluded_paths: []
+
+# Snapshot existing GitHub checks and their annotations into the review prompt.
+# This does not replace branch protection and does not turn a flaky test into a
+# model-authored blocker.
+ci:
+  enabled: true
+  ignore_checks: []
+
+# Optional SHA-pinned API/client/documentation repositories.
+#
+# DISABLED at bootstrap. The obvious candidate is `CruGlobal/give-ep-commerce`
+# (the Cortex backend this repo is a client of). Enabling it requires a full
+# commit SHA to pin and, for private access, the `AGENT_REVIEW_CONTEXT_TOKEN`
+# secret.
+context:
+  enabled: false
+  manifest: context/repositories.json
+
+# Reports approve by default (`advisory`). Set `shadow` to post advice only; the
+# review workflow refuses a caller whose rollout_mode disagrees with this value,
+# so change the caller templates and this key together. `agent-review rollout`
+# still scores the seeded suite and dismissal telemetry for teams that want the
+# gate before turning approval on.
+rollout:
+  mode: advisory
+  label: agent-review
+  minimum_evaluated_runs: 50
+  minimum_dispositions: 30
+  thresholds:
+    dismissal_rate: 0.35
+    false_positive_dismissal_rate: 0.20
+
+# ── Index layer: file-level import graph for impact analysis ──────────────────
+index:
+  enabled: true
+  path: '.claude/review/index'
+  roots: ['src']
+  extensions: ['.js', '.ts', '.tsx']
+  # webpack resolve.modules and jest modulePaths both resolve bare imports from src/.
+  aliases:
+    - { prefix: 'common/', target: 'src/common/' }
+    - { prefix: 'app/', target: 'src/app/' }
+    - { prefix: 'loaders/', target: 'src/loaders/' }
+
+# ── Learning layer: approval-gated feedback loop ──────────────────────────────
+learning:
+  enabled: true
+  path: '.claude/review/learnings'
+  approval_required: true # not yet enforced — reserved; promotion is always approval-gated today
+  min_support: 3
+  scope: local # not yet enforced — reserved (local | shared)
+
+enforcement:
+  mode: warn # warn | block — reserved for future merge-gating
