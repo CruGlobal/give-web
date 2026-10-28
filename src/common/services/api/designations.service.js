@@ -271,23 +271,7 @@ class DesignationsService {
         }
         return suggestedAmounts;
       })
-      .catch((error) => {
-        this.logAemContentError(error, 'suggested amounts', code);
-        return Observable.of([]);
-      });
-  }
-
-  // A 404 usually means the designation has no AEM page (inactive designation
-  // or stale search result), so keep those out of the error stream.
-  logAemContentError(error, contentType, code) {
-    if (error.status === 404) {
-      this.$log.info(`No AEM page for designation ${code}`);
-    } else {
-      this.$log.error(
-        `Error loading ${contentType} for designation ${code}`,
-        error,
-      );
-    }
+      .catch(() => Observable.of([])); // givingLinks() logs this same failure
   }
 
   facebookPixel(code) {
@@ -330,7 +314,17 @@ class DesignationsService {
         return givingLinks;
       })
       .catch((error) => {
-        this.logAemContentError(error, 'giving links', code);
+        // Code stays out of the message: Rollbar titles stack-grouped items by the first one
+        if (error.status === 404) {
+          // Usually an inactive designation or stale search result
+          this.$log.info('No AEM page for designation', code);
+        } else {
+          this.$log.error(
+            'Error loading giving links for designation',
+            error,
+            code,
+          );
+        }
         return Observable.of([]);
       });
   }
