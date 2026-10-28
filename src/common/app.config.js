@@ -36,6 +36,7 @@ export const appConfig = /* @ngInject */ function (
         'cru-givestage.s3.amazonaws.com',
         'give-stage-static.cru.org',
         'wp-stage.familylife.com',
+        'cru-poc.cru.org',
       ],
       nonprod: [
         'give-stage2-next.cru.org',
