@@ -94,6 +94,32 @@ describe('Recaptcha component', () => {
     });
   });
 
+  it('should ignore clicks while verifying', async () => {
+    mockExecuteRecaptcha.mockClear();
+    let resolveToken: (token: string) => void = () => {};
+    mockExecuteRecaptcha.mockImplementationOnce(
+      () => new Promise((resolve) => (resolveToken = resolve)),
+    );
+    const { getByRole } = render(buildRecaptcha());
+
+    await userEvent.click(getByRole('button'));
+    await userEvent.click(getByRole('button'));
+    resolveToken('token');
+    await waitFor(() => {
+      expect(onSuccess).toHaveBeenCalledTimes(1);
+    });
+    expect(mockExecuteRecaptcha).toHaveBeenCalledTimes(1);
+  });
+
+  it('should allow verifying again after the previous verification finishes', async () => {
+    const { getByRole } = render(buildRecaptcha());
+
+    await userEvent.click(getByRole('button'));
+    await waitFor(() => expect(onSuccess).toHaveBeenCalledTimes(1));
+    await userEvent.click(getByRole('button'));
+    await waitFor(() => expect(onSuccess).toHaveBeenCalledTimes(2));
+  });
+
   it('should skip the recaptcha call', async () => {
     //@ts-ignore
     global.window.grecaptcha = { enterprise: { ready: mockRecaptchaReady } };

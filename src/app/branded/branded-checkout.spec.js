@@ -37,6 +37,7 @@ describe('branded checkout', () => {
           sessionStorage: {
             removeItem: jest.fn(),
           },
+          document,
         },
         brandedAnalyticsFactory: {
           savePurchase: jest.fn(),
@@ -92,6 +93,64 @@ describe('branded checkout', () => {
     it('should initialize recaptcha', () => {
       $ctrl.$onInit();
       expect($ctrl.checkoutService.initializeRecaptcha).toHaveBeenCalled();
+    });
+  });
+
+  describe('premium minimum', () => {
+    beforeEach(() => {
+      jest
+        .spyOn($ctrl.checkoutService, 'initializeRecaptcha')
+        .mockImplementation(() => {});
+      $ctrl.premiumCode = 'BOOKS01';
+    });
+
+    it('should parse the configured minimum', () => {
+      $ctrl.premiumMinimumAmount = '50';
+      $ctrl.$onInit();
+
+      expect($ctrl.premiumMinimum).toEqual(50);
+    });
+
+    it('should parse a minimum with cents', () => {
+      $ctrl.premiumMinimumAmount = '49.99';
+      $ctrl.$onInit();
+
+      expect($ctrl.premiumMinimum).toEqual(49.99);
+    });
+
+    it('should be null when no minimum is configured', () => {
+      $ctrl.$onInit();
+
+      expect($ctrl.premiumMinimum).toBeNull();
+    });
+
+    it('should be null when the configured minimum is not a number', () => {
+      $ctrl.premiumMinimumAmount = 'abc';
+      $ctrl.$onInit();
+
+      expect($ctrl.premiumMinimum).toBeNull();
+    });
+
+    it('should be null when the configured minimum is zero', () => {
+      $ctrl.premiumMinimumAmount = '0';
+      $ctrl.$onInit();
+
+      expect($ctrl.premiumMinimum).toBeNull();
+    });
+
+    it('should be null when the configured minimum is negative', () => {
+      $ctrl.premiumMinimumAmount = '-5';
+      $ctrl.$onInit();
+
+      expect($ctrl.premiumMinimum).toBeNull();
+    });
+
+    it('should be null without a premium code, since there is no premium to earn', () => {
+      $ctrl.premiumCode = undefined;
+      $ctrl.premiumMinimumAmount = '50';
+      $ctrl.$onInit();
+
+      expect($ctrl.premiumMinimum).toBeNull();
     });
   });
 
@@ -208,6 +267,142 @@ describe('branded checkout', () => {
     });
   });
 
+  describe('parseAmounts', () => {
+    it('should return nothing when no amounts are given', () => {
+      expect($ctrl.parseAmounts(undefined, 'single-amounts')).toBeUndefined();
+      expect($ctrl.parseAmounts('', 'single-amounts')).toBeUndefined();
+    });
+
+    it('should read a comma separated list', () => {
+      expect($ctrl.parseAmounts('25, 50,100', 'single-amounts')).toEqual([
+        { amount: 25, order: 1 },
+        { amount: 50, order: 2 },
+        { amount: 100, order: 3 },
+      ]);
+    });
+
+    it('should read a json array with descriptions', () => {
+      const json =
+        '[{"amount":50,"description":"Feeds a family"},{"amount":100}]';
+
+      expect($ctrl.parseAmounts(json, 'single-amounts')).toEqual([
+        { amount: 50, label: 'Feeds a family', order: 1 },
+        { amount: 100, label: undefined, order: 2 },
+      ]);
+    });
+
+    it('should drop entries that are not positive numbers', () => {
+      expect($ctrl.parseAmounts('25,abc,0,-5,50', 'single-amounts')).toEqual([
+        { amount: 25, order: 1 },
+        { amount: 50, order: 2 },
+      ]);
+    });
+
+    it('should report an error and ignore malformed json', () => {
+      jest.spyOn(console, 'error').mockImplementation(() => {});
+
+      expect(
+        $ctrl.parseAmounts('[{"amount":50,}]', 'single-amounts'),
+      ).toBeUndefined();
+      expect(console.error).toHaveBeenCalledWith(
+        expect.stringContaining('single-amounts'),
+      );
+    });
+
+    it('should report an error when nothing usable is left', () => {
+      jest.spyOn(console, 'error').mockImplementation(() => {});
+
+      expect($ctrl.parseAmounts('abc,-5', 'monthly-amounts')).toBeUndefined();
+      expect(console.error).toHaveBeenCalledWith(
+        expect.stringContaining('monthly-amounts'),
+      );
+    });
+  });
+
+  describe('resolveGivingAmounts', () => {
+    it('should parse both attributes', () => {
+      $ctrl.singleAmountsInput = '25,50';
+      $ctrl.monthlyAmountsInput = '15,30';
+
+      $ctrl.resolveGivingAmounts();
+
+      expect($ctrl.singleAmounts).toEqual([
+        { amount: 25, order: 1 },
+        { amount: 50, order: 2 },
+      ]);
+      expect($ctrl.monthlyAmounts).toEqual([
+        { amount: 15, order: 1 },
+        { amount: 30, order: 2 },
+      ]);
+    });
+
+    it('should leave amounts unset when no attributes are given', () => {
+      $ctrl.resolveGivingAmounts();
+
+      expect($ctrl.singleAmounts).toBeUndefined();
+      expect($ctrl.monthlyAmounts).toBeUndefined();
+    });
+  });
+
+  describe('resolveThankYouMessage', () => {
+    const addTemplate = (id, html) => {
+      const template = document.createElement('template');
+      template.id = id;
+      template.innerHTML = html;
+      document.body.appendChild(template);
+      return template;
+    };
+
+    afterEach(() => {
+      document.body.innerHTML = '';
+    });
+
+    it('should do nothing if no thank you message id is set', () => {
+      $ctrl.resolveThankYouMessage();
+
+      expect($ctrl.thankYouMessage).toBeUndefined();
+    });
+
+    it('should read the message html from the matching element', () => {
+      addTemplate(
+        'flThankYou',
+        '<p>Thank you!</p><p><a href="guide.pdf" download>Download the guide</a></p>',
+      );
+      $ctrl.thankYouMessageId = 'flThankYou';
+
+      $ctrl.resolveThankYouMessage();
+
+      expect($ctrl.thankYouMessage).toEqual(
+        '<p>Thank you!</p><p><a href="guide.pdf" download="">Download the guide</a></p>',
+      );
+    });
+
+    it('should report an error if no element has that id', () => {
+      jest.spyOn(console, 'error').mockImplementation(() => {});
+      $ctrl.thankYouMessageId = 'elementThatWasNeverAdded';
+
+      $ctrl.resolveThankYouMessage();
+
+      expect($ctrl.thankYouMessage).toBeUndefined();
+      expect(console.error).toHaveBeenCalledWith(
+        expect.stringContaining('elementThatWasNeverAdded'),
+      );
+    });
+
+    it('should report an error if the element is empty', () => {
+      jest.spyOn(console, 'error').mockImplementation(() => {});
+      addTemplate('emptyThankYou', '   ');
+      $ctrl.thankYouMessageId = 'emptyThankYou';
+
+      $ctrl.resolveThankYouMessage();
+
+      expect($ctrl.thankYouMessage).toBeUndefined();
+      expect(console.error).toHaveBeenCalledWith(
+        expect.stringContaining('emptyThankYou'),
+      );
+    });
+  });
+
   describe('next', () => {
     afterEach(() => {
       expect(scrollIntoViewMock).toHaveBeenCalledWith({ behavior: 'smooth' });
@@ -225,6 +420,34 @@ describe('branded checkout', () => {
       $ctrl.next();
 
       expect($ctrl.checkoutStep).toEqual('thankYou');
+    });
+
+    it('should not read the thank you message when moving to review', () => {
+      jest.spyOn(console, 'error').mockImplementation(() => {});
+      $ctrl.thankYouMessageId = 'missingThankYou';
+      $ctrl.checkoutStep = 'giftContactPayment';
+
+      $ctrl.next();
+
+      expect($ctrl.checkoutStep).toEqual('review');
+      expect(console.error).not.toHaveBeenCalled();
+    });
+
+    it('should read the thank you message on transition', () => {
+      jest.spyOn(console, 'error').mockImplementation(() => {});
+      $ctrl.thankYouMessageId = 'lateThankYou';
+      $ctrl.resolveThankYouMessage();
+
+      const template = document.createElement('template');
+      template.id = 'lateThankYou';
+      template.innerHTML = '<p>Defined later</p>';
+      document.body.appendChild(template);
+
+      $ctrl.checkoutStep = 'review';
+      $ctrl.next();
+
+      expect($ctrl.thankYouMessage).toEqual('<p>Defined later</p>');
+      document.body.innerHTML = '';
     });
   });
 
@@ -355,5 +578,79 @@ describe('branded checkout', () => {
         $ctrl.onPaymentFailed({ 'donor-type': 'Household' }),
       ).not.toThrow();
     });
+  });
+});
+
+describe('branded checkout thank you step', () => {
+  let element;
+  let scope;
+  let compile;
+  let httpBackend;
+
+  beforeEach(
+    angular.mock.module(module.name, ($provide) => {
+      $provide.value('checkoutService', { initializeRecaptcha: jest.fn() });
+    }),
+  );
+
+  beforeEach(inject((_$compile_, $rootScope, $httpBackend, sessionService) => {
+    jest
+      .spyOn(sessionService, 'signOutWithoutRedirectToOkta')
+      .mockReturnValue(Observable.of(''));
+    httpBackend = $httpBackend;
+    httpBackend.whenGET(/.*/).respond(200, {});
+    httpBackend.whenPOST(/.*/).respond(200, {});
+    compile = _$compile_;
+    scope = $rootScope.$new();
+  }));
+
+  const renderGiftForm = (attributes = '') => {
+    element = compile(
+      `<branded-checkout designation-number="1234567" use-v3="true" ${attributes}></branded-checkout>`,
+    )(scope);
+    element[0].scrollIntoView = jest.fn();
+    scope.$digest();
+    httpBackend.flush();
+
+    return element[0];
+  };
+
+  const advanceToThankYou = () => {
+    element.controller('brandedCheckout').next();
+    scope.$digest();
+  };
+
+  afterEach(() => {
+    document.body.innerHTML = '';
+  });
+
+  it('should render the custom message when the thank you step is reached', () => {
+    const template = document.createElement('template');
+    template.id = 'specThankYou';
+    template.innerHTML =
+      '<p>Thank you!</p><p><a href="guide.pdf" download>Download the guide</a></p>';
+    document.body.appendChild(template);
+
+    const dom = renderGiftForm('thank-you-message="specThankYou"');
+
+    expect(dom.querySelector('branded-checkout-step-1')).not.toBeNull();
+    expect(dom.querySelector('thank-you-summary')).toBeNull();
+
+    advanceToThankYou();
+
+    expect(dom.querySelector('branded-checkout-step-1')).toBeNull();
+    const message = dom.querySelector('.custom-thank-you');
+    expect(message.querySelector('a[download]').getAttribute('href')).toEqual(
+      'guide.pdf',
+    );
+  });
+
+  it('should render the default copy when no custom message is given', () => {
+    const dom = renderGiftForm();
+
+    advanceToThankYou();
+
+    expect(dom.querySelector('.custom-thank-you')).toBeNull();
+    expect(dom.querySelector('thank-you-summary')).not.toBeNull();
   });
 });

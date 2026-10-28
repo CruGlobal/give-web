@@ -97,7 +97,7 @@ const routingConfig = /* @ngInject */ function (
       template: '<designation-editor></designation-editor>',
     })
     .state('branded-checkout', {
-      url: '/branded-checkout.html',
+      url: '/branded-checkout-dev.html',
       template:
         '<branded-checkout designation-number="2294554" default-payment-type="creditCard"></branded-checkout>',
     })

@@ -58,10 +58,13 @@ Add the following code to your page where appropriate. See the [Branded checkout
   campaign-page="<campaign-page>"
   tsys-device="<tsys-device>"
   amount="<amount>"
+  single-amounts="<amounts offered for a single gift>"
+  monthly-amounts="<amounts offered for a monthly gift>"
   frequency="<frequency>"
   day="<day>"
   default-payment-type="creditCard"
   donor-details="<window variable containing default values for donor's name and contact info>"
+  thank-you-message="<id of the element containing custom thank you page copy>"
   show-cover-fees="true"
   on-order-completed="$event.$window.onOrderCompleted($event.purchase)"
   on-order-failed="$event.$window.onOrderFailed($event.donorDetails)"
@@ -72,6 +75,7 @@ Add the following code to your page where appropriate. See the [Branded checkout
   premium-code="BOOKS01"
   premium-name="Books"
   premium-image-url="https://api.images.com/img.png"
+  premium-minimum-amount="5"
 >
 </branded-checkout>
 
@@ -97,8 +101,28 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
 - `premium-code` - the premium code you would like to use - _Optional_ - make sure you use the proper premium code associated with the campaign
 - `premium-name` - the name of the premium offered to donors - _Optional_
 - `premium-image-url` - the custom image to appear when selecting a premium - _Optional_
+- `premium-minimum-amount` - the minimum gift amount required to receive the premium, such as `50` - _Optional_
 - `tsys-device` - the device name that corresponds to the TSYS Merchant Account which will be used for tokenizing your site's credit cards with TSYS - **Required** - Will be provided by DPS when adding your domain to the TSYS whitelist. `cru` is the default and corresponds with Cru's main TSYS Merchant ID
 - `amount` - defaults the gift's amount - _Optional_
+- `single-amounts` / `monthly-amounts` - the amounts offered for single and monthly gifts - _Optional_ - Each takes a comma separated list, and takes precedence over the amounts on your campaign page. Quarterly and annual gifts, and any frequency you leave out, keep using the campaign page amounts:
+  ```html
+  <branded-checkout
+    designation-number="1234567"
+    single-amounts="25,50,100"
+    monthly-amounts="15,30,45"
+  >
+  </branded-checkout>
+  ```
+  To show a description beside an amount, pass a json array instead. Descriptions need `use-v3="true"` to be laid out correctly, so leave them off if your page does not use version 3:
+  ```html
+  <branded-checkout
+    designation-number="1234567"
+    use-v3="true"
+    single-amounts='[{"amount":50,"description":"Feeds a family for a week"},{"amount":100}]'
+  >
+  </branded-checkout>
+  ```
+  Changing frequency swaps the amounts on screen. If the donor had picked an amount the new list does not offer, the closest amount in the new list is selected instead, though an amount they typed themselves is left alone.
 - `frequency` - defaults the gift's frequency - _Optional_ - can be one of the following values:
   - `single` - single gift - this is the default so it doesn't need to be specified
   - `monthly` - monthly recurring gift
@@ -143,6 +167,25 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
       email: 'email@example.com'
   };
   ```
+- `thank-you-message` - Optional. `id` of an element on your page holding custom HTML for the thank you page, replacing the default "Thanks for making a difference..." paragraph shown after a gift is submitted. Put the copy in a `<template>` element, and point the attribute at that id. The markup inside is rendered as-is, so you can include links, lists and downloadable resources. Leave the attribute off to keep the default paragraph. Note that this copy is used regardless of the `language` attribute, so write it in the language your page is in:
+
+  ```html
+  <template id="my-thank-you-message">
+    <p>Thank you for partnering with us!</p>
+    <p>
+      <a href="https://mydomain.com/guide.pdf" download>
+        Download your free guide
+      </a>
+    </p>
+  </template>
+
+  <branded-checkout
+    designation-number="1234567"
+    thank-you-message="my-thank-you-message"
+  >
+  </branded-checkout>
+  ```
+
 - `show-cover-fees` - `true` if you want to show the checkbox that allows donors to cover processing fees, otherwise leave the attribute off.
 - `on-order-completed` - an Angular expression that is executed when the order was submitted successfully - _Optional_ - provides 2 variables:
   - `$event.$window` - Provides access to the browser's global `window` object. This allows you to call a custom callback function like `onOrderCompleted` in the example.
@@ -152,41 +195,10 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
 - `hide-quarterly` - Hides the quarterly frequency option. If you don't want this feature, do not add this attribute at all. - _Optional_
 - `use-v3` - `true` if you want to enable version 3. Version 3 removes the review page from the checkout flow and makes UX improvements on the form. - _Optional_
 
-#### Server-side configuration for a new branded checkout domain
+#### Setup for a new branded checkout domain
 
-1. Figure out what domain you will be hosting the branded checkout form on. For example, `myministry.org`
-2. Make sure HTTPS is enabled on that domain
-3. You will need to setup a subdomain for the give.cru.org API. We've experienced cross-domain cookie issues trying to hit the give.cru.org API directly from a custom domain. Create a CNAME record for `brandedcheckout.myministry.org` (the subdomain could be different but using that suggested subdomain makes it consistent with other sites) and point it at `cortex-gateway-production-alb-425941461.us-east-1.elb.amazonaws.com`.
-4. In order to accept credit cards on your own domain, you will need a new TSYS device id (a numeric id around 14 digits) associated with one of our Merchant Accounts. Contact the Cru's Financial Services Group ([hazel.mcpherson@cru.org](mailto:hazel.mcpherson@cru.org)) and request one. You will use the device id to complete step 6.
-5. To prepare for the next step, think of a unique identifier like `"jesusfilm"` or `"aia"` that uniquely identifies your ministry and domain. We can create this for you but we need enough information about your ministry to do so.
-6. Once you have completed the steps above, contact Cru's Digital Products and Services (DPS) department ([help@cru.org](mailto:help@cru.org)). Below is an example email: (replace the `{{}}`s with the info for your site)
-
-   > I'm working on implementing branded checkout for {{my ministry}}. I would like to host the branded checkout form on {{myminsitry.org}}. HTTPS is setup on my domain and I have created a CNAME record for the subdomain {{brandedcheckout.myministry.org}} that points to cortex-gateway-production-alb-425941461.us-east-1.elb.amazonaws.com. (DPS may be able to help with the CNAME record configuration if the domain is hosted with us.)
-   >
-   > I need help configuring the give.cru.org API to work on my domain. Can you:
-   >
-   > - Add an SSL certificate to cruorg-alb for my subdomain {{brandedcheckout.myministry.org}}
-   > - Add that same subdomain to cortex_gateway's AUTH_PROXY_VALID_ORIGINS environment variable
-   > - Add the user facing domain to the maintenance app's cortex_gateway CORS Whitelist
-   >
-   > I also need help setting up a my TSYS merchant account with the give.cru.org API to be able to proccess credit cards on my site. Can you:
-   >
-   > - Add my TSYS device id to the give.cru.org API configuration. My device id is {{12345678901234}} and the url I would like to use for the branded checkout form is {{https://myministry.org}}. I would like to use a identifier of "{{myministry}}". (Or uniquely describe your ministry and domain if you want DPS to create the identifier. We can't have multiple sites that use the same identifier.)
-   > - Whitelist my site {{https://myministry.org}} with TSYS so their TSEP credit card tokenization services will work on my domain.
-   > - Whitelist my domain {{myminisry.org}} with Recaptcha.
-
-7. Test the subdomain configured to point to the give.cru.org API. https://brandedcheckout.myministry.org/cortex/nextdrawdate is a good test url. There should be no certificate errors and you should get a response that looks like this `{"next-draw-date":"2018-09-27"}`. If there are errors, please get in touch with ([help@cru.org](mailto:help@cru.org)) again and provide details as to what is happening.
-8. Add the `<branded-checkout>` tag to a page on the domain you've configured above. You can follow the documentation above for all the possible attributes and the required style and script tags. The email conversations above should have provided the values for the `api-url` (the subdomain that has a CNAME to cortex-gateway-production-alb-425941461.us-east-1.elb.amazonaws.com) and `tsys-device` (the unique string identifier created by you or by DPS) attributes. You can add them like this:
-   ```html
-   <branded-checkout
-     designation-number="0763355"
-     api-url="https://brandedcheckout.myministry.com"
-     tsys-device="myministry"
-   >
-   </branded-checkout>
-   <script src="https://give-static.cru.org/branded-checkout.v2.js"></script>
-   ```
-9. If you go to this page in a browser, you should see the `<branded-checkout>` tag fill with content. There should also be no errors in the browser's console. If you see errors that appear to be caused by branded checkout please contact us at [help@cru.org](mailto:help@cru.org).
+To set up a branded checkout for your ministry, there are a number of steps that must be completed. Please follow the instructions in this Google Doc:
+https://docs.google.com/document/d/1in5Nw2T2c0Umm-3npFhIydHml53lAG6Z_9wCF5k2_8M/edit.
 
 #### Updates
 

@@ -22,7 +22,14 @@
       translate-value-useremail="{{$ctrl.email}}"
     ></p>
 
-    <p translate>{{'FINAL_GIFT_THANK_YOU'}}</p>
+    <div
+      class="custom-thank-you"
+      ng-if="$ctrl.customThankYouHtml"
+      ng-bind-html="$ctrl.customThankYouHtml"
+    ></div>
+    <p ng-if="!$ctrl.customThankYouHtml" translate>
+      {{'FINAL_GIFT_THANK_YOU'}}
+    </p>
 
     <div ng-if="!$ctrl.loading && !$ctrl.loadingError">
       <div class="row mt">

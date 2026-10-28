@@ -57,26 +57,26 @@
 </div>
 
 <div class="modal-footer">
-  <div class="col-xs-6">
-    <button class="btn btn-default" ng-click="$ctrl.previous()" translate>
-      Back
-    </button>
-  </div>
-  <div class="col-xs-6 text-right">
-    <button
-      class="btn btn-primary"
-      ng-click="$ctrl.addToCart()"
-      ng-disabled="!$ctrl.hasSelectedRecipients || $ctrl.addingToCart"
+  <button
+    class="btn btn-primary btn-block-xs pull-right"
+    ng-click="$ctrl.addToCart()"
+    ng-disabled="!$ctrl.hasSelectedRecipients || $ctrl.addingToCart"
+  >
+    <span ng-if="$ctrl.addingToCart" translate>Adding to Cart...</span>
+    <span ng-if="!$ctrl.addingToCart" translate>Add to Cart</span>
+    <span
+      class="sr-only"
+      aria-live="polite"
+      aria-atomic="true"
+      ng-bind="$ctrl.addingToCart ? ('Adding to Cart...' | translate) : ''"
     >
-      <span ng-if="$ctrl.addingToCart" translate>Adding to Cart...</span>
-      <span ng-if="!$ctrl.addingToCart" translate>Add to Cart</span>
-      <span
-        class="sr-only"
-        aria-live="polite"
-        aria-atomic="true"
-        ng-bind="$ctrl.addingToCart ? ('Adding to Cart...' | translate) : ''"
-      >
-      </span>
-    </button>
-  </div>
+    </span>
+  </button>
+  <button
+    class="btn btn-default btn-block-xs pull-left"
+    ng-click="$ctrl.previous()"
+    translate
+  >
+    Back
+  </button>
 </div>

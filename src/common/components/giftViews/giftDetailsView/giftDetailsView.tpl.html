@@ -9,7 +9,7 @@
     On the {{$ctrl.gift.transactionDay | ordinal}} of
     {{$ctrl.quarterlyMonths(null, $ctrl.gift.nextGiftDate)}}
   </div>
-  <div class="u-block" ng-switch-when="Annually">
+  <div class="u-block" ng-switch-when="Annual">
     On {{$ctrl.gift.nextGiftDate.format('MMMM')}} {{$ctrl.gift.transactionDay |
     ordinal}} of each year
   </div>

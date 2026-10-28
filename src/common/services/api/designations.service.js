@@ -56,7 +56,7 @@ class DesignationsService {
       '1-TH-6': 'Christian Embassy - Washington, D.C.',
       '1-TH-7': 'Christian Embassy - New York',
       '1-TH-8': 'FamilyLife',
-      '1-TH-9': 'Unto™',
+      '1-TH-9': 'Unto®',
       '1-TH-10': 'Gift and Estate Design',
       '1-TH-11': 'Global Executive Ministries',
       '1-TH-12': 'Cru Inner City',
