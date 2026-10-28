@@ -460,6 +460,8 @@ describe('checkout', () => {
           .mockReturnValue(true);
       });
 
+      afterEach(clear);
+
       it('should call analyticsFactory when it is not branded checkout', () => {
         self.controller.isBranded = false;
 
@@ -501,7 +503,6 @@ describe('checkout', () => {
 
         expect(self.controller.orderService.submitOrder).not.toHaveBeenCalled();
         expect(self.controller.changeStep).not.toHaveBeenCalled();
-        clear();
       });
     });
 
