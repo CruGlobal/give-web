@@ -162,8 +162,7 @@ class Step3Controller {
   }
 
   submitOrder() {
-    // Guards direct callers (submitOrderEvent, branded submit binding) and
-    // cards that expire after the button state was last evaluated
+    // submitOrderEvent bypasses the button state, and a card can expire after the last digest
     if (this.isCardExpired()) {
       return;
     }

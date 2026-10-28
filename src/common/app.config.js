@@ -387,6 +387,7 @@ export const appConfig = /* @ngInject */ function (
     REVIEW: 'Review',
     CONTACT_INFORMATION: 'Contact Information',
     CHANGE: 'Change',
+    UPDATE_PAYMENT_METHOD: 'Update payment method',
     PAYMENT_METHOD: 'Payment Method',
     REVIEW_EMAIL_ERROR:
       'There was an issue with your email. Please verify that it is correct.',
@@ -716,6 +717,7 @@ export const appConfig = /* @ngInject */ function (
     REVIEW: 'Review',
     CONTACT_INFORMATION: 'Contact Information',
     CHANGE: 'Change',
+    UPDATE_PAYMENT_METHOD: 'Actualizar método de pago',
     PAYMENT_METHOD: 'Forma de Pago',
     REVIEW_EMAIL_ERROR:
       'There was an issue with your email. Please verify that it is correct.',
