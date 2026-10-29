@@ -1,0 +1,7 @@
+# agent-review-template-version: 1.0.0
+name: agent-review rollout readiness
+on:
+  workflow_dispatch:
+jobs:
+  readiness:
+    uses: CruGlobal/agent-review/.github/workflows/readiness.yml@main

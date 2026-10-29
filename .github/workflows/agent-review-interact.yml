@@ -1,0 +1,23 @@
+# agent-review-template-version: 1.0.0
+name: agent-review interact
+on:
+  issue_comment:
+    types: [created]
+jobs:
+  interact:
+    if: >-
+      github.event.issue.pull_request != null &&
+      startsWith(github.event.comment.body, '@claude') &&
+      (contains(github.event.comment.body, 'fix') || contains(github.event.comment.body, 'dismiss')) &&
+      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)
+    permissions:
+      actions: write
+      contents: write
+      pull-requests: write
+    uses: CruGlobal/agent-review/.github/workflows/interact.yml@main
+    with:
+      comment_id: ${{ github.event.comment.id }}
+      pr_number: ${{ github.event.issue.number }}
+      auto_approve: true
+    secrets:
+      anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}

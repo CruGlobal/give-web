@@ -1,0 +1,27 @@
+# agent-review-template-version: 1.0.0
+name: agent-review
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  review:
+    # Label gate: adding the `agent-review` label starts a review; later pushes
+    # re-review incrementally. The gate controls review cost, not trust — drop the
+    # first condition and `labeled` from the trigger to review every PR.
+    if: >-
+      contains(github.event.pull_request.labels.*.name, 'agent-review') &&
+      (github.event.action != 'labeled' || github.event.label.name == 'agent-review') &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    uses: CruGlobal/agent-review/.github/workflows/review.yml@main
+    with:
+      mode: auto
+      rollout_mode: advisory
+      # Approve the PR when the CI report passes for the current head (advisory
+      # reports approve; set the mode to shadow to post advice only).
+      auto_approve: true
+    secrets:
+      anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+      context_token: ${{ secrets.AGENT_REVIEW_CONTEXT_TOKEN }}

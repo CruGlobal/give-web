@@ -1,0 +1,18 @@
+--- a/src/app/productConfig/productConfigForm/productConfigForm.component.js
++++ b/src/app/productConfig/productConfigForm/productConfigForm.component.js
+@@ -243,12 +243,12 @@
+   }
+ 
+   refreshAmounts(frequency) {
+-    const override = this.overrideAmountsFor(frequency);
++    const overrideAmounts = this.overrideAmountsFor(frequency);
+ 
+     // The suggested amount layout sets a description beside each amount, so a
+     // page that gave us bare amounts belongs in the plain button grid instead
+-    if (override && !some(override, 'label')) {
+-      this.selectableAmounts = map(override, 'amount');
++    if (overrideAmounts && !some(overrideAmounts, 'label')) {
++      this.selectableAmounts = map(overrideAmounts, 'amount');
+       this.suggestedAmounts = [];
+       this.useSuggestedAmounts = false;
+       return;
