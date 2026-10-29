@@ -62,7 +62,7 @@
           id="changePaymentButton"
           class="btn btn-default btn-panel-head pull-right"
           ng-click="$ctrl.changeStep({newStep: 'payment'})"
-          aria-label="Update payment method"
+          aria-label="{{'UPDATE_PAYMENT_METHOD' | translate}}"
           translate
         >
           {{'CHANGE'}}
@@ -134,6 +134,20 @@
                   <display-address
                     address="$ctrl.creditCardPaymentDetails.address"
                   ></display-address>
+                </div>
+              </div>
+              <div class="col-md-12" ng-if="$ctrl.isCardExpired()">
+                <div class="alert alert-danger" role="alert">
+                  <p translate>{{'REVIEW_SELECTED_CARD_EXPIRED_ERROR'}}</p>
+                  <button
+                    id="expiredCardChangePaymentButton"
+                    class="btn btn-primary"
+                    ng-click="$ctrl.changeStep({newStep: 'payment'})"
+                    aria-label="{{'UPDATE_PAYMENT_METHOD' | translate}}"
+                    translate
+                  >
+                    {{'CHANGE'}}
+                  </button>
                 </div>
               </div>
             </div>
