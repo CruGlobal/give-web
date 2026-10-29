@@ -385,6 +385,7 @@ export const appConfig = /* @ngInject */ function (
     REVIEW: 'Review',
     CONTACT_INFORMATION: 'Contact Information',
     CHANGE: 'Change',
+    UPDATE_PAYMENT_METHOD: 'Update payment method',
     PAYMENT_METHOD: 'Payment Method',
     REVIEW_EMAIL_ERROR:
       'There was an issue with your email. Please verify that it is correct.',
@@ -399,6 +400,8 @@ export const appConfig = /* @ngInject */ function (
     REVIEW_SUBMITTING_PAYMENT_ERROR:
       'There was an error submitting your payment. Verify that your payment info is correct or try adding it again. If you are still seeing this message, please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
     REVIEW_CARD_EXPIRED_ERROR: 'Your card is expired.',
+    REVIEW_SELECTED_CARD_EXPIRED_ERROR:
+      'The credit card you selected has expired. Please choose or add another payment method.',
     REVIEW_INVALID_CARD_ERROR: 'The credit card number entered is invalid.',
     REVIEW_CARD_DECLINED_ERROR: 'Your credit card was declined.',
     REVIEW_INSUFFICIENT_FUNDS_ERROR:
@@ -434,9 +437,9 @@ export const appConfig = /* @ngInject */ function (
       'There was an error loading your gifts. You may <a id="retryLoadButton" href="" ng-click="{{retryLoadFunction}}">retry</a> loading them. If you continue to see this message, please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
     FINAL_THANK_YOU_HEADING: 'Thank you for Your Gift',
     FINAL_GIFT_SUMMARY_EXPIRATION_ERROR: `Your gift was submitted but we cannot provide a detailed summary at this time as your session has expired.
-        You will receive a confirmation email from us shortly, or you can review your donation now by looking at <a href="/your-giving.html">Your Giving</a>.`,
+        You will receive a confirmation email from us shortly, and your donation will be available to review in <a href="/your-giving.html">Your Giving</a> soon.`,
     FINAL_GIFT_NO_SUMMARY_ERROR: `Your gift was submitted but we cannot provide a detailed summary at this time.
-        You will receive a confirmation email from us shortly, or you can review your donation now by looking at <a href="/your-giving.html">Your Giving</a>.`,
+        You will receive a confirmation email from us shortly, and your donation will be available to review in <a href="/your-giving.html">Your Giving</a> soon.`,
     FINAL_PROCESSING_GIFT: `We are processing your gift now. We'll send an email confirmation to
       <strong>{{useremail}}</strong> as well as a tax-deductible receipt by postal mail.`,
     FINAL_GIFT_THANK_YOU:
@@ -452,7 +455,7 @@ export const appConfig = /* @ngInject */ function (
     CHOOSE_RESOURCE: 'Choose a Resource',
     NO_THANK_YOU: 'Thank you, but please do not send me the resources.',
     PREMIUM_MINIMUM_MESSAGE:
-      "When you make a gift of {{amount}} or more, you'll receive {{premiumName}} as our thank-you.",
+      'Every gift makes a difference. Gifts of {{amount}}+ also include {{premiumName}} as our thank-you.',
     PREMIUM_MINIMUM_ERROR:
       'To receive {{premiumName}}, please enter a gift of {{amount}} or more.',
     RADIO_STATION: 'Radio Station',
@@ -709,6 +712,7 @@ export const appConfig = /* @ngInject */ function (
     REVIEW: 'Review',
     CONTACT_INFORMATION: 'Contact Information',
     CHANGE: 'Change',
+    UPDATE_PAYMENT_METHOD: 'Actualizar método de pago',
     PAYMENT_METHOD: 'Forma de Pago',
     REVIEW_EMAIL_ERROR:
       'There was an issue with your email. Please verify that it is correct.',
@@ -723,6 +727,8 @@ export const appConfig = /* @ngInject */ function (
     REVIEW_SUBMITTING_PAYMENT_ERROR:
       'There was an error submitting your payment. Verify that your payment info is correct or try adding it again. If you are still seeing this message, please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
     REVIEW_CARD_EXPIRED_ERROR: 'Your card is expired.',
+    REVIEW_SELECTED_CARD_EXPIRED_ERROR:
+      'La tarjeta de crédito que seleccionó ha expirado. Por favor, elija o agregue otro método de pago.',
     REVIEW_INVALID_CARD_ERROR: 'The credit card number entered is invalid.',
     REVIEW_CARD_DECLINED_ERROR: 'Your credit card was declined.',
     REVIEW_INSUFFICIENT_FUNDS_ERROR:
@@ -758,9 +764,9 @@ export const appConfig = /* @ngInject */ function (
       'There was an error loading your gifts. You may <a id="retryLoadButton" href="" ng-click="{{retryLoadFunction}}">retry</a> loading them. If you continue to see this message, please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
     FINAL_THANK_YOU_HEADING: 'Gracias por Tu Regalo',
     FINAL_GIFT_SUMMARY_EXPIRATION_ERROR: `Your gift was submitted but we cannot provide a detailed summary at this time as your session has expired.
-        You will receive a confirmation email from us shortly, or you can review your donation now by looking at <a href="/your-giving.html">Your Giving</a>.`,
+        You will receive a confirmation email from us shortly, and your donation will be available to review in <a href="/your-giving.html">Your Giving</a> soon.`,
     FINAL_GIFT_NO_SUMMARY_ERROR: `Your gift was submitted but we cannot provide a detailed summary at this time.
-        You will receive a confirmation email from us shortly, or you can review your donation now by looking at <a href="/your-giving.html">Your Giving</a>.`,
+        You will receive a confirmation email from us shortly, and your donation will be available to review in <a href="/your-giving.html">Your Giving</a> soon.`,
     FINAL_PROCESSING_GIFT: `Estamos procesando tu donación ahora. Te enviaremos un correo electrónico de confirmación a
       <strong>{{useremail}}</strong>, así como un recibo deducible de impuestos por correo postal.`,
     FINAL_GIFT_THANK_YOU:
@@ -776,7 +782,7 @@ export const appConfig = /* @ngInject */ function (
     CHOOSE_RESOURCE: 'Choose a Resource',
     NO_THANK_YOU: 'Thank you, but please do not send me the resources.',
     PREMIUM_MINIMUM_MESSAGE:
-      'Cuando hagas una donación de {{amount}} o más, recibirás {{premiumName}} como nuestro agradecimiento.',
+      'Cada donación marca la diferencia. Las donaciones de {{amount}} o más también incluyen {{premiumName}} como nuestro agradecimiento.',
     PREMIUM_MINIMUM_ERROR:
       'Para recibir {{premiumName}}, ingresa una donación de {{amount}} o más.',
     RADIO_STATION: 'Estación de Radio',
