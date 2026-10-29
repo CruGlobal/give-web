@@ -455,7 +455,7 @@ export const appConfig = /* @ngInject */ function (
     CHOOSE_RESOURCE: 'Choose a Resource',
     NO_THANK_YOU: 'Thank you, but please do not send me the resources.',
     PREMIUM_MINIMUM_MESSAGE:
-      "When you make a gift of {{amount}} or more, you'll receive {{premiumName}} as our thank-you.",
+      'Every gift makes a difference. Gifts of {{amount}}+ also include {{premiumName}} as our thank-you.',
     PREMIUM_MINIMUM_ERROR:
       'To receive {{premiumName}}, please enter a gift of {{amount}} or more.',
     RADIO_STATION: 'Radio Station',
@@ -782,7 +782,7 @@ export const appConfig = /* @ngInject */ function (
     CHOOSE_RESOURCE: 'Choose a Resource',
     NO_THANK_YOU: 'Thank you, but please do not send me the resources.',
     PREMIUM_MINIMUM_MESSAGE:
-      'Cuando hagas una donación de {{amount}} o más, recibirás {{premiumName}} como nuestro agradecimiento.',
+      'Cada donación marca la diferencia. Las donaciones de {{amount}} o más también incluyen {{premiumName}} como nuestro agradecimiento.',
     PREMIUM_MINIMUM_ERROR:
       'Para recibir {{premiumName}}, ingresa una donación de {{amount}} o más.',
     RADIO_STATION: 'Estación de Radio',

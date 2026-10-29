@@ -73,8 +73,9 @@
               step="1"
               aria-label="{{'CUSTOM_AMOUNT' | translate}}"
               ng-model="$ctrl.customAmount"
+              ng-blur="$ctrl.amountAtFocus = undefined"
               ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
-              ng-focus="$ctrl.customInputActive = true;"
+              ng-focus="$ctrl.customInputActive = true; $ctrl.amountAtFocus = $ctrl.itemConfig.AMOUNT"
               ng-required="$ctrl.customInputActive"
               placeholder="{{'OTHER_PLACEHOLDER' | translate}}"
             />
@@ -144,8 +145,9 @@
               type="text"
               step="1"
               ng-model="$ctrl.customAmount"
+              ng-blur="$ctrl.amountAtFocus = undefined"
               ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
-              ng-focus="$ctrl.customInputActive = true"
+              ng-focus="$ctrl.customInputActive = true; $ctrl.amountAtFocus = $ctrl.itemConfig.AMOUNT"
               ng-required="$ctrl.customInputActive"
               placeholder="{{'OTHER_PLACEHOLDER' | translate}}"
             />
@@ -219,9 +221,10 @@
             step="1"
             ng-required="$ctrl.customInputActive"
             ng-model="$ctrl.customAmount"
+            ng-blur="$ctrl.amountAtFocus = undefined"
             aria-label="{{'CUSTOM_AMOUNT' | translate}}"
             ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
-            ng-focus="$ctrl.customInputActive = true;"
+            ng-focus="$ctrl.customInputActive = true; $ctrl.amountAtFocus = $ctrl.itemConfig.AMOUNT"
             placeholder="{{'Other' | translate}}"
             ng-attr-aria-invalid="{{$ctrl.itemConfigForm.amount | showErrors}}"
             ng-attr-aria-errormessage="{{ ($ctrl.itemConfigForm.amount | showErrors) ? 'amountErrors' : undefined }}"
@@ -260,6 +263,7 @@
     <p
       class="help-block"
       ng-if="$ctrl.premiumMinimum"
+      ng-class="{invisible: !$ctrl.showPremiumMinimumMessage()}"
       translate="PREMIUM_MINIMUM_MESSAGE"
       translate-values="{amount: ($ctrl.premiumMinimum | giftAmount), premiumName: $ctrl.premiumName}"
     ></p>
