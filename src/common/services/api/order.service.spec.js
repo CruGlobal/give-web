@@ -1469,6 +1469,92 @@ describe('order service', () => {
         '/purchases/crugive/giydanbt=',
       );
     });
+
+    it('should forget the saved purchase and email from the previous purchase', () => {
+      self.orderService.storeLastPurchase({ purchaseNumber: '1' });
+      self.orderService.storeLastPurchaseEmail('old@example.com');
+
+      self.orderService.storeLastPurchaseLink('/purchases/crugive/giydanbt=');
+
+      expect(self.orderService.retrieveLastPurchase()).toBeUndefined();
+      expect(self.orderService.retrieveLastPurchaseEmail()).toBeNull();
+    });
+  });
+
+  describe('storeLastPurchase', () => {
+    it('should save only the fields the thank you summary shows', () => {
+      self.orderService.storeLastPurchase({
+        donorDetails: {
+          name: { 'given-name': 'Guest' },
+          'donor-type': 'Household',
+          email: 'guest@example.com',
+        },
+        paymentInstruments: {
+          'bank-name': 'First Bank',
+          'routing-number': '121042882',
+          'account-number': '1234567890',
+        },
+        lineItems: [
+          {
+            name: 'Staff Member',
+            itemCode: { code: '0123456' },
+            itemOfferCode: { code: '0123456' },
+            rate: {
+              display: '$50.00',
+              cost: [{ amount: 50 }],
+              recurrence: { interval: 'NA' },
+            },
+          },
+        ],
+        rateTotals: [
+          {
+            recurrence: { display: 'Single' },
+            cost: { display: '$50.00', amount: 50, currency: 'USD' },
+          },
+        ],
+        rawData: { 'purchase-number': '23022' },
+      });
+
+      expect(self.orderService.retrieveLastPurchase()).toEqual({
+        donorDetails: {
+          name: { 'given-name': 'Guest' },
+          'donor-type': 'Household',
+        },
+        paymentInstruments: {
+          'bank-name': 'First Bank',
+          'routing-number': '121042882',
+        },
+        lineItems: [
+          {
+            name: 'Staff Member',
+            itemOfferCode: { code: '0123456' },
+            rate: { display: '$50.00', recurrence: { interval: 'NA' } },
+          },
+        ],
+        rateTotals: [
+          {
+            recurrence: { display: 'Single' },
+            cost: { display: '$50.00', amount: 50 },
+          },
+        ],
+      });
+    });
+  });
+
+  describe('retrieveLastPurchase', () => {
+    it('should return undefined when no purchase is saved', () => {
+      expect(self.orderService.retrieveLastPurchase()).toBeUndefined();
+    });
+  });
+
+  describe('storeLastPurchaseEmail', () => {
+    it('should save the email used for the purchase', () => {
+      self.orderService.storeLastPurchaseEmail('guest@example.com');
+
+      expect(self.orderService.retrieveLastPurchaseEmail()).toEqual(
+        'guest@example.com',
+      );
+    });
   });
 
   describe('retrieveLastPurchaseLink', () => {
