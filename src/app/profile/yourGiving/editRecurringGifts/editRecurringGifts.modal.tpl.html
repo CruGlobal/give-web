@@ -101,6 +101,7 @@
   <step-2-add-recent-recipients
     ng-switch-when="step2AddRecentRecipients"
     recent-recipients="$ctrl.recentRecipients"
+    recurring-gifts="$ctrl.recurringGifts"
     has-recent-recipients="$ctrl.hasRecentRecipients"
     loading-recent-recipients="$ctrl.loadingRecentRecipients"
     has-recurring-gift-changes="$ctrl.hasRecurringGiftChanges"
@@ -113,6 +114,7 @@
 
   <step-2-search-recipients
     ng-switch-when="step2SearchRecipients"
+    recurring-gifts="$ctrl.recurringGifts"
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
     next="$ctrl.next(null, null, additions)"
