@@ -1997,6 +1997,23 @@ describe('order service', () => {
         );
       });
 
+      it('should read the error from a gateway reCAPTCHA rejection', (done) => {
+        self.orderService.submit.mockImplementation(() =>
+          Observable.throw({
+            status: 422,
+            data: { error: 'Invalid Data' },
+          }),
+        );
+        mockController.bankAccountPaymentDetails = {};
+        self.orderService.submitOrder(mockController).subscribe(
+          () => done('Observable unexpectedly succeeded'),
+          () => {
+            expect(mockController.submissionError).toEqual('Invalid Data');
+            done();
+          },
+        );
+      });
+
       it('should mask the security code on a credit card error', (done) => {
         self.orderService.submit.mockReturnValue(
           Observable.throw({

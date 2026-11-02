@@ -414,6 +414,8 @@ export const appConfig = /* @ngInject */ function (
       'The billing address entered does not match the address associated with the card.',
     REVIEW_DEFAULT_ERROR:
       'There was an issue processing your request. Please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
+    REVIEW_VERIFICATION_ERROR:
+      'We were unable to verify your gift. Please refresh the page and try again. If you are still seeing this message, please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
     ACCOUNT_NUM_FULL: 'Account Number',
     ROUTING_NUM_FULL: 'Routing Number',
     CARD_NUM_FULL: 'Card Number',
@@ -741,6 +743,8 @@ export const appConfig = /* @ngInject */ function (
       'The billing address entered does not match the address associated with the card.',
     REVIEW_DEFAULT_ERROR:
       'There was an issue processing your request. Please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
+    REVIEW_VERIFICATION_ERROR:
+      'No pudimos verificar su donación. Por favor, actualice la página e intente de nuevo. Si sigue viendo este mensaje, comuníquese con <a href="mailto:eGift@cru.org">eGift@cru.org</a> para recibir ayuda.',
     ACCOUNT_NUM_FULL: 'Account Number',
     ROUTING_NUM_FULL: 'Routing Number',
     CARD_NUM_FULL: 'Número de tarjeta',
