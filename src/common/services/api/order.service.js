@@ -676,7 +676,9 @@ class Order {
           controller.submissionErrorStatus = error.status;
           // 8.3 wraps these failures in a structured body, so read whichever
           // shape arrived; a plain-text body still passes through untouched.
-          const errorText = structuredErrorService.getErrorText(error);
+          // The cortex gateway's reCAPTCHA check answers with { error: 'Invalid Data' }
+          const errorText =
+            error?.data?.error ?? structuredErrorService.getErrorText(error);
           controller.submissionError = isString(errorText)
             ? errorText.replace(/[:].*$/, '')
             : 'generic error'; // Keep prefix before first colon for easier ng-switch matching
