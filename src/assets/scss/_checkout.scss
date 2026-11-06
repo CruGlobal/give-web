@@ -194,6 +194,7 @@
 .credit-card-number-wrapper {
   input.is-masked {
     color: transparent;
+    -webkit-text-fill-color: transparent;
   }
 
   .masked-number {
