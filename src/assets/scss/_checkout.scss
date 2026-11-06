@@ -195,6 +195,21 @@
     right: 5px;
   }
 
+  input.is-masked {
+    color: transparent;
+  }
+
+  .credit-card-number-mask {
+    position: absolute;
+    left: 13px;
+    font-feature-settings: "calt" 0;
+    font-size: 16px;
+    font-weight: normal;
+    letter-spacing: normal;
+    pointer-events: none;
+    text-transform: none;
+  }
+
   img {
     max-width: unset;
     height: 20px;

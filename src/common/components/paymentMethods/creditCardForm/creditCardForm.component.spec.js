@@ -40,6 +40,7 @@ describe('credit card form', () => {
       ),
     )(self.outerScope);
     self.outerScope.$apply();
+    self.element = compiledElement;
     self.controller = compiledElement.controller(module.name);
     self.formController = self.controller.creditCardPaymentForm;
   }));
@@ -535,6 +536,102 @@ describe('credit card form', () => {
       self.controller.creditCardPayment.cardNumber = '1111111111111111';
 
       expect(self.controller.getCardType()).toBe('');
+    });
+  });
+
+  describe('getMaskedCardNumber', () => {
+    it('should return an empty string when there is no card number', () => {
+      self.controller.creditCardPayment.cardNumber = undefined;
+
+      expect(self.controller.getMaskedCardNumber()).toBe('');
+    });
+
+    it('should show only the last four digits', () => {
+      self.controller.creditCardPayment.cardNumber = '4111 1111 1111 1234';
+
+      expect(self.controller.getMaskedCardNumber()).toBe('**** **** **** 1234');
+    });
+
+    it('should ignore spaces and other non-digits', () => {
+      self.controller.creditCardPayment.cardNumber = '3782 822463 1-0005';
+
+      expect(self.controller.getMaskedCardNumber()).toBe('**** **** **** 0005');
+    });
+  });
+
+  describe('shouldMaskCardNumber', () => {
+    beforeEach(() => {
+      self.formController.cardNumber.$setViewValue('4111111111111111');
+      self.controller.isCardNumberFocused = false;
+    });
+
+    it('should mask a valid card number that is not focused', () => {
+      expect(self.controller.shouldMaskCardNumber()).toBe(true);
+    });
+
+    it('should not mask while the input is focused', () => {
+      self.controller.isCardNumberFocused = true;
+
+      expect(self.controller.shouldMaskCardNumber()).toBe(false);
+    });
+
+    it('should not mask when the card number is empty', () => {
+      self.formController.cardNumber.$setViewValue('');
+
+      expect(self.controller.shouldMaskCardNumber()).toBe(false);
+    });
+
+    it('should not mask an invalid card number', () => {
+      self.formController.cardNumber.$setViewValue('4111');
+
+      expect(self.controller.shouldMaskCardNumber()).toBe(false);
+    });
+
+    it('should not crash or mask before the form exists', () => {
+      self.controller.creditCardPaymentForm = undefined;
+
+      expect(self.controller.shouldMaskCardNumber()).toBe(false);
+    });
+  });
+
+  describe('card number masking in the template', () => {
+    const getInput = () =>
+      angular.element(
+        self.element[0].querySelector('input[name="cardNumber"]'),
+      );
+    const getMask = () =>
+      self.element[0].querySelector('.credit-card-number-mask');
+
+    beforeEach(() => {
+      getInput().val('4111111111111111').triggerHandler('input');
+      self.outerScope.$apply();
+    });
+
+    it('should show the masked overlay and hide the input text after blur', () => {
+      getInput().triggerHandler('focus');
+      getInput().triggerHandler('blur');
+      self.outerScope.$apply();
+
+      expect(getMask().textContent.trim()).toBe('**** **** **** 1111');
+      expect(getInput().hasClass('is-masked')).toBe(true);
+    });
+
+    it('should hide the overlay and show the input text on focus', () => {
+      getInput().triggerHandler('focus');
+      self.outerScope.$apply();
+
+      expect(getMask()).toBeNull();
+      expect(getInput().hasClass('is-masked')).toBe(false);
+    });
+
+    it('should hide the overlay from screen readers', () => {
+      expect(getMask().getAttribute('aria-hidden')).toBe('true');
+    });
+
+    it('should keep the full card number in the model while masked', () => {
+      expect(self.controller.creditCardPayment.cardNumber).toBe(
+        '4111 1111 1111 1111',
+      );
     });
   });
 

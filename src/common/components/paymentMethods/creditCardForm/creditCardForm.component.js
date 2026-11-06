@@ -172,6 +172,24 @@ class CreditCardController {
     return this.cardInfo.type(this.creditCardPayment.cardNumber);
   }
 
+  getMaskedCardNumber() {
+    if (!this.creditCardPayment.cardNumber) {
+      return '';
+    }
+    const lastFourDigits = this.creditCardPayment.cardNumber
+      .replace(/\D/g, '')
+      .slice(-4);
+    return `**** **** **** ${lastFourDigits}`;
+  }
+
+  shouldMaskCardNumber() {
+    return (
+      !this.isCardNumberFocused &&
+      !!this.creditCardPayment.cardNumber &&
+      !!this.creditCardPaymentForm?.cardNumber?.$valid
+    );
+  }
+
   savePayment() {
     this.creditCardPaymentForm.$setSubmitted();
     if (this.creditCardPaymentForm.$valid) {
