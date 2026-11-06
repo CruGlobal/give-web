@@ -628,6 +628,44 @@ describe('credit card form', () => {
       expect(getMask().getAttribute('aria-hidden')).toBe('true');
     });
 
+    it('should send the real card number and CVV to TSYS when saving while masked', () => {
+      advanceTo(new Date(2012, 11, 31)); // Dec 31 2012
+      jest
+        .spyOn(self.controller.tsysService, 'getManifest')
+        .mockReturnValue(
+          Observable.of({ deviceId: '<device id>', manifest: '<manifest>' }),
+        );
+      jest.spyOn(cruPayments.creditCard, 'init').mockImplementation(() => {});
+      jest
+        .spyOn(cruPayments.creditCard, 'encrypt')
+        .mockReturnValue(Observable.of({ tsepToken: '<token>' }));
+
+      const cvvInput = angular.element(
+        self.element[0].querySelector('input[name="securityCode"]'),
+      );
+      cvvInput.triggerHandler('focus');
+      cvvInput.val('123').triggerHandler('input');
+      cvvInput.triggerHandler('blur');
+      getInput().triggerHandler('focus');
+      getInput().triggerHandler('blur');
+      self.formController.cardholderName.$setViewValue('Person Name');
+      self.formController.expiryMonth.$setViewValue('12');
+      self.formController.expiryYear.$setViewValue('2012');
+      self.outerScope.$apply();
+
+      expect(getInput().hasClass('is-masked')).toBe(true);
+      expect(cvvInput.attr('type')).toBe('password');
+
+      self.controller.savePayment();
+
+      expect(cruPayments.creditCard.encrypt).toHaveBeenCalledWith(
+        '4111 1111 1111 1111',
+        '123',
+        '12',
+        '2012',
+      );
+    });
+
     it('should keep the full card number in the model while masked', () => {
       expect(self.controller.creditCardPayment.cardNumber).toBe(
         '4111 1111 1111 1111',
