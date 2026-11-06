@@ -172,6 +172,22 @@ class CreditCardController {
     return this.cardInfo.type(this.creditCardPayment.cardNumber);
   }
 
+  getMaskedNumber(value) {
+    if (!value) {
+      return '';
+    }
+    const lastFourDigits = value.replace(/\D/g, '').slice(-4);
+    return `**** **** **** ${lastFourDigits}`;
+  }
+
+  shouldMaskField(fieldName, isFocused) {
+    return (
+      !isFocused &&
+      !!this.creditCardPayment[fieldName] &&
+      !!this.creditCardPaymentForm?.[fieldName]?.$valid
+    );
+  }
+
   savePayment() {
     this.creditCardPaymentForm.$setSubmitted();
     if (this.creditCardPaymentForm.$valid) {
