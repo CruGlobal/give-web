@@ -1,0 +1,10 @@
+--- a/src/app/productConfig/productConfigForm/productConfigForm.component.js
++++ b/src/app/productConfig/productConfigForm/productConfigForm.component.js
+@@ -254,7 +254,6 @@
+       return;
+     }
+ 
+-    this.selectableAmounts = DEFAULT_AMOUNTS;
+     this.suggestedAmounts = this.amountsForFrequency(frequency);
+     this.useSuggestedAmounts = !isEmpty(this.suggestedAmounts);
+   }

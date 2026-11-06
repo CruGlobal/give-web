@@ -1,0 +1,26 @@
+# agent-review-template-version: 1.0.0
+name: agent-review approve
+on:
+  issue_comment:
+    types: [created, edited]
+jobs:
+  approve:
+    # A review run locally and posted with "Post review to GitHub" starts with
+    # the agent-review marker; a re-post edits the poster's own earlier comment,
+    # which is why edited fires too. Only posts by repository writers count,
+    # shadow reports never approve, and the report must cover the PR's current
+    # head, so an edited report for an older push cannot approve the newer one.
+    # auto_approve here trusts a writer's posted report — a stronger
+    # grant than the CI path, which judges only the bot's own report.
+    if: >-
+      github.event.issue.pull_request != null &&
+      startsWith(github.event.comment.body, '<!-- agent-review -->') &&
+      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)
+    permissions:
+      contents: read
+      pull-requests: write
+    uses: CruGlobal/agent-review/.github/workflows/approve.yml@main
+    with:
+      pr_number: ${{ github.event.issue.number }}
+      comment_id: ${{ github.event.comment.id }}
+      auto_approve: true

@@ -1,0 +1,11 @@
+--- a/src/app/productConfig/productConfigModal/productConfig.modal.component.spec.js
++++ b/src/app/productConfig/productConfigModal/productConfig.modal.component.spec.js
+@@ -169,7 +169,7 @@
+       $ctrl.itemConfig['default-campaign-code'] = 'DEFAULT';
+       $ctrl.initializeParams();
+ 
+-      expect($ctrl.itemConfig.CAMPAIGN_CODE).toEqual('DEFAULT');
++      expect($ctrl.itemConfig.CAMPAIGN_CODE).toEqual = 'DEFAULT';
+     });
+ 
+     it('sets the campaignCode from default-campaign-code if opening from modal directly', () => {
