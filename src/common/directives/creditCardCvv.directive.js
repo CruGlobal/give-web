@@ -5,10 +5,13 @@ const directiveName = 'creditCardCvv';
 const template = `<div class="credit-card-cvv-container form-group" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.securityCode | showErrors), 'is-required': !$ctrl.paymentMethod}">
   <label>
     <span class="credit-card-cvv-label" translate>{{'SEC_CODE'}}</span>
-    <input type="text"
+    <input ng-attr-type="{{isCvvFocused ? 'text' : 'password'}}"
       name="securityCode"
       autocomplete="off"
       class="form-control form-control-subtle"
+      inputmode="numeric"
+      ng-focus="isCvvFocused = true"
+      ng-blur="isCvvFocused = false"
       ng-model="$ctrl.creditCardPayment.securityCode"
       ng-required="!$ctrl.paymentMethod || $ctrl.creditCardPayment.cardNumber"
       ng-attr-placeholder="{{$ctrl.paymentMethod && !$ctrl.creditCardPayment.cardNumber ? '***' : ''}}">
@@ -28,6 +31,7 @@ const creditCardCvv = /* @ngInject */ () => {
   const directiveDefinitionObject = {
     restrict: 'E',
     template,
+    scope: true,
   };
   return directiveDefinitionObject;
 };
