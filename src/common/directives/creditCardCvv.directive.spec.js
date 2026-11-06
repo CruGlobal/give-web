@@ -15,15 +15,24 @@ describe('creditCardCvv', function () {
     input = element.find('input');
   }));
 
+  it('never uses a password field, so browsers do not offer to save the CVV', () => {
+    expect(input.attr('type')).toEqual('text');
+    input.triggerHandler('focus');
+    input.triggerHandler('blur');
+    scope.$digest();
+
+    expect(input.attr('type')).toEqual('text');
+  });
+
   it('masks the input before the user focuses it', () => {
-    expect(input.attr('type')).toEqual('password');
+    expect(input.hasClass('is-cvv-masked')).toBe(true);
   });
 
   it('shows the value while the input is focused', () => {
     input.triggerHandler('focus');
     scope.$digest();
 
-    expect(input.attr('type')).toEqual('text');
+    expect(input.hasClass('is-cvv-masked')).toBe(false);
   });
 
   it('masks the value again after the input loses focus', () => {
@@ -32,7 +41,7 @@ describe('creditCardCvv', function () {
     input.triggerHandler('blur');
     scope.$digest();
 
-    expect(input.attr('type')).toEqual('password');
+    expect(input.hasClass('is-cvv-masked')).toBe(true);
   });
 
   it('still updates the model while masked', () => {

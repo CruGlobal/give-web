@@ -492,6 +492,46 @@ describe('bank account form', () => {
     it('should keep the full account number in the model while masked', () => {
       expect(self.controller.bankPayment.accountNumber).toBe('123456789012');
     });
+
+    it('should send the real account number to be encrypted when saving while masked', () => {
+      jest.spyOn(cruPayments.bankAccount, 'init').mockImplementation(() => {});
+      jest
+        .spyOn(cruPayments.bankAccount, 'encrypt')
+        .mockReturnValue(Observable.of('<encrypted>'));
+      jest.spyOn(self.controller, 'onPaymentFormStateChange');
+
+      self.formController.bankName.$setViewValue('First Bank');
+      self.formController.accountType.$setViewValue('checking');
+      self.formController.routingNumber.$setViewValue('267084131');
+      self.formController.acceptedAgreement.$setViewValue('true');
+      ['accountNumber', 'verifyAccountNumber'].forEach((name) => {
+        getInput(name).triggerHandler('focus');
+        getInput(name).triggerHandler('blur');
+      });
+      self.outerScope.$apply();
+
+      expect(getInput('accountNumber').hasClass('is-masked')).toBe(true);
+      expect(getInput('verifyAccountNumber').hasClass('is-masked')).toBe(true);
+
+      self.controller.savePayment();
+
+      expect(cruPayments.bankAccount.encrypt).toHaveBeenCalledWith(
+        '123456789012',
+      );
+      expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith(
+        expect.objectContaining({
+          $event: expect.objectContaining({
+            state: 'loading',
+            payload: {
+              bankAccount: expect.objectContaining({
+                'encrypted-account-number': '<encrypted>',
+                'display-account-number': '9012',
+              }),
+            },
+          }),
+        }),
+      );
+    });
   });
 
   describe('form controller', () => {

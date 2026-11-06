@@ -539,58 +539,54 @@ describe('credit card form', () => {
     });
   });
 
-  describe('getMaskedCardNumber', () => {
-    it('should return an empty string when there is no card number', () => {
-      self.controller.creditCardPayment.cardNumber = undefined;
-
-      expect(self.controller.getMaskedCardNumber()).toBe('');
+  describe('getMaskedNumber', () => {
+    it('should return an empty string when there is no value', () => {
+      expect(self.controller.getMaskedNumber(undefined)).toBe('');
+      expect(self.controller.getMaskedNumber('')).toBe('');
     });
 
     it('should show only the last four digits', () => {
-      self.controller.creditCardPayment.cardNumber = '4111 1111 1111 1234';
-
-      expect(self.controller.getMaskedCardNumber()).toBe('**** **** **** 1234');
+      expect(self.controller.getMaskedNumber('4111 1111 1111 1234')).toBe(
+        '**** **** **** 1234',
+      );
     });
 
     it('should ignore spaces and other non-digits', () => {
-      self.controller.creditCardPayment.cardNumber = '3782 822463 1-0005';
-
-      expect(self.controller.getMaskedCardNumber()).toBe('**** **** **** 0005');
+      expect(self.controller.getMaskedNumber('3782 822463 1-0005')).toBe(
+        '**** **** **** 0005',
+      );
     });
   });
 
-  describe('shouldMaskCardNumber', () => {
+  describe('shouldMaskField', () => {
     beforeEach(() => {
       self.formController.cardNumber.$setViewValue('4111111111111111');
-      self.controller.isCardNumberFocused = false;
     });
 
     it('should mask a valid card number that is not focused', () => {
-      expect(self.controller.shouldMaskCardNumber()).toBe(true);
+      expect(self.controller.shouldMaskField('cardNumber', false)).toBe(true);
     });
 
     it('should not mask while the input is focused', () => {
-      self.controller.isCardNumberFocused = true;
-
-      expect(self.controller.shouldMaskCardNumber()).toBe(false);
+      expect(self.controller.shouldMaskField('cardNumber', true)).toBe(false);
     });
 
     it('should not mask when the card number is empty', () => {
       self.formController.cardNumber.$setViewValue('');
 
-      expect(self.controller.shouldMaskCardNumber()).toBe(false);
+      expect(self.controller.shouldMaskField('cardNumber', false)).toBe(false);
     });
 
     it('should not mask an invalid card number', () => {
       self.formController.cardNumber.$setViewValue('4111');
 
-      expect(self.controller.shouldMaskCardNumber()).toBe(false);
+      expect(self.controller.shouldMaskField('cardNumber', false)).toBe(false);
     });
 
     it('should not crash or mask before the form exists', () => {
       self.controller.creditCardPaymentForm = undefined;
 
-      expect(self.controller.shouldMaskCardNumber()).toBe(false);
+      expect(self.controller.shouldMaskField('cardNumber', false)).toBe(false);
     });
   });
 
@@ -599,8 +595,7 @@ describe('credit card form', () => {
       angular.element(
         self.element[0].querySelector('input[name="cardNumber"]'),
       );
-    const getMask = () =>
-      self.element[0].querySelector('.credit-card-number-mask');
+    const getMask = () => self.element[0].querySelector('.masked-number');
 
     beforeEach(() => {
       getInput().val('4111111111111111').triggerHandler('input');
@@ -654,7 +649,7 @@ describe('credit card form', () => {
       self.outerScope.$apply();
 
       expect(getInput().hasClass('is-masked')).toBe(true);
-      expect(cvvInput.attr('type')).toBe('password');
+      expect(cvvInput.hasClass('is-cvv-masked')).toBe(true);
 
       self.controller.savePayment();
 

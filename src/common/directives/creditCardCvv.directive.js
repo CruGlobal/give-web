@@ -5,10 +5,11 @@ const directiveName = 'creditCardCvv';
 const template = `<div class="credit-card-cvv-container form-group" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.securityCode | showErrors), 'is-required': !$ctrl.paymentMethod}">
   <label>
     <span class="credit-card-cvv-label" translate>{{'SEC_CODE'}}</span>
-    <input ng-attr-type="{{isCvvFocused ? 'text' : 'password'}}"
+    <input type="text"
       name="securityCode"
       autocomplete="off"
       class="form-control form-control-subtle"
+      ng-class="{'is-cvv-masked': !isCvvFocused}"
       inputmode="numeric"
       ng-focus="isCvvFocused = true"
       ng-blur="isCvvFocused = false"

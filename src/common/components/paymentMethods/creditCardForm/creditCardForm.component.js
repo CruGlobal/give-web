@@ -172,21 +172,19 @@ class CreditCardController {
     return this.cardInfo.type(this.creditCardPayment.cardNumber);
   }
 
-  getMaskedCardNumber() {
-    if (!this.creditCardPayment.cardNumber) {
+  getMaskedNumber(value) {
+    if (!value) {
       return '';
     }
-    const lastFourDigits = this.creditCardPayment.cardNumber
-      .replace(/\D/g, '')
-      .slice(-4);
+    const lastFourDigits = value.replace(/\D/g, '').slice(-4);
     return `**** **** **** ${lastFourDigits}`;
   }
 
-  shouldMaskCardNumber() {
+  shouldMaskField(fieldName, isFocused) {
     return (
-      !this.isCardNumberFocused &&
-      !!this.creditCardPayment.cardNumber &&
-      !!this.creditCardPaymentForm?.cardNumber?.$valid
+      !isFocused &&
+      !!this.creditCardPayment[fieldName] &&
+      !!this.creditCardPaymentForm?.[fieldName]?.$valid
     );
   }
 
