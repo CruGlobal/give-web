@@ -149,6 +149,21 @@ describe('Recaptcha component', () => {
     });
   });
 
+  it('should not reuse a token from a previous attempt when recaptcha fails', async () => {
+    window.sessionStorage.setItem('recaptchaToken', 'old-token');
+    window.sessionStorage.setItem('recaptchaAction', 'checkout');
+    mockExecuteRecaptcha.mockImplementationOnce(() => Promise.reject('Failed'));
+
+    const { getByRole } = render(buildRecaptcha());
+
+    await userEvent.click(getByRole('button'));
+    await waitFor(() => {
+      expect(onSuccess).toHaveBeenCalledTimes(1);
+    });
+    expect(window.sessionStorage.getItem('recaptchaToken')).toBeNull();
+    expect(window.sessionStorage.getItem('recaptchaAction')).toBeNull();
+  });
+
   const buildRecaptcha = () => {
     return (
       <Recaptcha
