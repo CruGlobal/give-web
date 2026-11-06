@@ -206,7 +206,7 @@ class SignUpModalController {
   }
 
   getSteps(schema) {
-    const passwordInput = schema.find(
+    const passcodeInput = schema.find(
       (field) => field.name === 'credentials.passcode',
     );
     // When Okta has CAPTCHA enabled, the schema includes two flattened
@@ -229,10 +229,10 @@ class SignUpModalController {
       // Step 1: Name, email, account type and organization name (if applicable)
       1: this.getStep1Fields(schema),
       // Step 2: Address
-      2: this.getStep2Fields(schema),
+      2: this.getStep2Fields(),
       // Step 3: Password (We don't save the password for security reasons.
       // Which is why it's the last step)
-      3: [passwordInput, ...(captchaTokenInput ? [captchaTokenInput] : [])],
+      3: [passcodeInput, ...(captchaTokenInput ? [captchaTokenInput] : [])],
     };
   }
 
@@ -295,7 +295,7 @@ class SignUpModalController {
     ];
   }
 
-  getStep2Fields(schema) {
+  getStep2Fields() {
     // Retain the values entered by the user when navigating between steps.
     // Pre-populate the form fields with existing user details.
     return [
