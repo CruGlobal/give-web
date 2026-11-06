@@ -184,6 +184,29 @@
   }
 }
 
+.masked-number-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+input.is-masked {
+  color: transparent;
+}
+
+.credit-card-number-mask,
+.masked-number {
+  position: absolute;
+  left: 13px;
+  color: $colorCru-gray;
+  font-feature-settings: "calt" 0;
+  font-size: 16px;
+  font-weight: normal;
+  letter-spacing: normal;
+  pointer-events: none;
+  text-transform: none;
+}
+
 .credit-card-number-wrapper {
   position:relative;
   display: flex;
@@ -193,21 +216,6 @@
   .credit-card-icons {
     position: absolute;
     right: 5px;
-  }
-
-  input.is-masked {
-    color: transparent;
-  }
-
-  .credit-card-number-mask {
-    position: absolute;
-    left: 13px;
-    font-feature-settings: "calt" 0;
-    font-size: 16px;
-    font-weight: normal;
-    letter-spacing: normal;
-    pointer-events: none;
-    text-transform: none;
   }
 
   img {

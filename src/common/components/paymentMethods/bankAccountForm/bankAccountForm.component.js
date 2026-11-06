@@ -91,6 +91,22 @@ class BankAccountController {
     };
   }
 
+  getMaskedNumber(value) {
+    if (!value) {
+      return '';
+    }
+    const digits = value.replace(/\D/g, '');
+    return '*'.repeat(Math.max(0, digits.length - 4)) + digits.slice(-4);
+  }
+
+  shouldMaskField(fieldName, isFocused) {
+    return (
+      !isFocused &&
+      !!this.bankPayment[fieldName] &&
+      !!this.bankPaymentForm?.[fieldName]?.$valid
+    );
+  }
+
   savePayment() {
     this.bankPaymentForm.$setSubmitted();
     if (this.bankPaymentForm.$valid) {
