@@ -452,7 +452,7 @@ describe('signUpForm', function () {
       beforeEach(() => {
         $ctrl.currentStep = 3;
         $ctrl.captchaId = null;
-        $ctrl.translations = { repeatPassword: 'Repeat password' };
+        $ctrl.translations = { confirmPassword: 'Confirm password' };
         onSuccess.mockClear();
       });
 
@@ -460,7 +460,7 @@ describe('signUpForm', function () {
         $ctrl.parseSchema(schema, onSuccess);
         expect(onSuccess).toHaveBeenCalledWith([
           schema[3],
-          { ...customFields.repeatPasscode, label: 'Repeat password' },
+          { ...customFields.confirmPasscode, label: 'Confirm password' },
         ]);
         expect($ctrl.captchaId).toBeNull();
       });
@@ -488,7 +488,7 @@ describe('signUpForm', function () {
 
         expect(onSuccess).toHaveBeenCalledWith([
           schema[3],
-          { ...customFields.repeatPasscode, label: 'Repeat password' },
+          { ...customFields.confirmPasscode, label: 'Confirm password' },
           captchaTokenField,
         ]);
         expect($ctrl.captchaId).toBe('abc123captchaConfigId');
@@ -931,7 +931,7 @@ describe('signUpForm', function () {
       it('should error when passwords are not the same', () => {
         const postData = {
           credentials: { passcode: 'passcode' },
-          passcodeVerification: { repeatPasscode: 'differentPassword' },
+          passcodeVerification: { confirmPasscode: 'differentPassword' },
         };
 
         $ctrl.preSubmit(postData, onSuccess);
@@ -940,7 +940,7 @@ describe('signUpForm', function () {
         expect($ctrl.signUpErrors).toEqual([
           {
             errorSummary: 'Passwords do not match. Please try again.',
-            property: 'passcodeVerification.repeatPasscode',
+            property: 'passcodeVerification.confirmPasscode',
           },
         ]);
         expect($ctrl.injectErrorMessages).toHaveBeenCalled();
@@ -949,7 +949,7 @@ describe('signUpForm', function () {
       it('should send only the passcode to Okta when passwords are the same', () => {
         const postData = {
           credentials: { passcode: 'passcode' },
-          passcodeVerification: { repeatPasscode: 'passcode' },
+          passcodeVerification: { confirmPasscode: 'passcode' },
         };
 
         $ctrl.preSubmit(postData, onSuccess);

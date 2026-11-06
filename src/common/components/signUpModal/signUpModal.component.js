@@ -147,7 +147,7 @@ class SignUpModalController {
       'OKTA_LAST_NAME_FIELD',
       'OKTA_EMAIL_FIELD',
       'OKTA_PASSWORD_FIELD',
-      'OKTA_REPEAT_PASSWORD_LABEL',
+      'OKTA_CONFIRM_PASSWORD_LABEL',
       'OKTA_PASSWORD_MISMATCH',
     ]).then((translations) => {
       this.translations = {
@@ -172,7 +172,7 @@ class SignUpModalController {
         lastNameField: translations.OKTA_LAST_NAME_FIELD,
         emailField: translations.OKTA_EMAIL_FIELD,
         passwordField: translations.OKTA_PASSWORD_FIELD,
-        repeatPassword: translations.OKTA_REPEAT_PASSWORD_LABEL,
+        confirmPassword: translations.OKTA_CONFIRM_PASSWORD_LABEL,
         passwordMismatch: translations.OKTA_PASSWORD_MISMATCH,
       };
     });
@@ -239,8 +239,8 @@ class SignUpModalController {
       3: [
         passcodeInput,
         {
-          ...customFields.repeatPasscode,
-          label: this.translations.repeatPassword,
+          ...customFields.confirmPasscode,
+          label: this.translations.confirmPassword,
         },
         ...(captchaTokenInput ? [captchaTokenInput] : []),
       ],
@@ -527,13 +527,13 @@ class SignUpModalController {
   submitFinalData(postData, onSuccess) {
     if (
       postData.credentials?.passcode !==
-      postData.passcodeVerification?.repeatPasscode
+      postData.passcodeVerification?.confirmPasscode
     ) {
       // Stored so afterRender re-injects it if the widget re-renders
       this.signUpErrors = [
         {
           errorSummary: this.translations.passwordMismatch,
-          property: 'passcodeVerification.repeatPasscode',
+          property: 'passcodeVerification.confirmPasscode',
         },
       ];
       this.injectErrorMessages();
