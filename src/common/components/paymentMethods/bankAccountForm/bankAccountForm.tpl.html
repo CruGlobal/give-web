@@ -129,20 +129,11 @@
                 class="form-control form-control-subtle"
                 name="accountNumber"
                 autocomplete="off"
-                ng-class="{'is-masked': $ctrl.shouldMaskField('accountNumber', $ctrl.isAccountNumberFocused)}"
-                ng-focus="$ctrl.isAccountNumberFocused = true"
-                ng-blur="$ctrl.isAccountNumberFocused = false"
                 ng-model="$ctrl.bankPayment.accountNumber"
                 ng-attr-placeholder="************{{$ctrl.bankPayment.accountNumberPlaceholder}}"
                 ng-required="!$ctrl.paymentMethod || $ctrl.bankPayment.accountNumber"
+                masked-number="account"
               />
-              <span
-                class="masked-number"
-                ng-if="$ctrl.shouldMaskField('accountNumber', $ctrl.isAccountNumberFocused)"
-                aria-hidden="true"
-              >
-                {{$ctrl.getMaskedNumber($ctrl.bankPayment.accountNumber)}}
-              </span>
             </div>
             <div
               role="alert"
@@ -175,20 +166,11 @@
                 class="form-control form-control-subtle"
                 name="verifyAccountNumber"
                 autocomplete="off"
-                ng-class="{'is-masked': $ctrl.shouldMaskField('verifyAccountNumber', $ctrl.isVerifyAccountNumberFocused)}"
-                ng-focus="$ctrl.isVerifyAccountNumberFocused = true"
-                ng-blur="$ctrl.isVerifyAccountNumberFocused = false"
                 ng-model="$ctrl.bankPayment.verifyAccountNumber"
                 ng-attr-placeholder="************{{$ctrl.bankPayment.accountNumberPlaceholder}}"
                 ng-required="$ctrl.bankPayment.accountNumber"
+                masked-number="account"
               />
-              <span
-                class="masked-number"
-                ng-if="$ctrl.shouldMaskField('verifyAccountNumber', $ctrl.isVerifyAccountNumberFocused)"
-                aria-hidden="true"
-              >
-                {{$ctrl.getMaskedNumber($ctrl.bankPayment.verifyAccountNumber)}}
-              </span>
             </div>
             <div
               role="alert"

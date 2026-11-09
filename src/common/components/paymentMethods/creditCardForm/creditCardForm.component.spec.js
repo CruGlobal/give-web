@@ -539,57 +539,6 @@ describe('credit card form', () => {
     });
   });
 
-  describe('getMaskedNumber', () => {
-    it('should return an empty string when there is no value', () => {
-      expect(self.controller.getMaskedNumber(undefined)).toBe('');
-      expect(self.controller.getMaskedNumber('')).toBe('');
-    });
-
-    it('should show only the last four digits', () => {
-      expect(self.controller.getMaskedNumber('4111 1111 1111 1234')).toBe(
-        '**** **** **** 1234',
-      );
-    });
-
-    it('should ignore spaces and other non-digits', () => {
-      expect(self.controller.getMaskedNumber('3782 822463 1-0005')).toBe(
-        '**** **** **** 0005',
-      );
-    });
-  });
-
-  describe('shouldMaskField', () => {
-    beforeEach(() => {
-      self.formController.cardNumber.$setViewValue('4111111111111111');
-    });
-
-    it('should mask a valid card number that is not focused', () => {
-      expect(self.controller.shouldMaskField('cardNumber', false)).toBe(true);
-    });
-
-    it('should not mask while the input is focused', () => {
-      expect(self.controller.shouldMaskField('cardNumber', true)).toBe(false);
-    });
-
-    it('should not mask when the card number is empty', () => {
-      self.formController.cardNumber.$setViewValue('');
-
-      expect(self.controller.shouldMaskField('cardNumber', false)).toBe(false);
-    });
-
-    it('should not mask an invalid card number', () => {
-      self.formController.cardNumber.$setViewValue('4111');
-
-      expect(self.controller.shouldMaskField('cardNumber', false)).toBe(false);
-    });
-
-    it('should not crash or mask before the form exists', () => {
-      self.controller.creditCardPaymentForm = undefined;
-
-      expect(self.controller.shouldMaskField('cardNumber', false)).toBe(false);
-    });
-  });
-
   describe('card number masking in the template', () => {
     const getInput = () =>
       angular.element(
@@ -621,6 +570,14 @@ describe('credit card form', () => {
 
     it('should hide the overlay from screen readers', () => {
       expect(getMask().getAttribute('aria-hidden')).toBe('true');
+    });
+
+    it('should not mask an invalid card number', () => {
+      getInput().val('4111').triggerHandler('input');
+      self.outerScope.$apply();
+
+      expect(getMask()).toBeNull();
+      expect(getInput().hasClass('is-masked')).toBe(false);
     });
 
     it('should send the real card number and CVV to TSYS when saving while masked', () => {

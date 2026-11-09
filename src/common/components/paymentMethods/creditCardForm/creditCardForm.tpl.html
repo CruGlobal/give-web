@@ -26,22 +26,13 @@
                 name="cardNumber"
                 autocomplete="cc-number"
                 class="form-control form-control-subtle"
-                ng-class="{'is-masked': $ctrl.shouldMaskField('cardNumber', $ctrl.isCardNumberFocused)}"
-                ng-focus="$ctrl.isCardNumberFocused = true"
-                ng-blur="$ctrl.isCardNumberFocused = false"
                 ng-model="$ctrl.creditCardPayment.cardNumber"
                 ng-attr-placeholder="************{{$ctrl.creditCardPayment.cardNumberPlaceholder}}"
                 ng-required="!$ctrl.paymentMethod || $ctrl.creditCardPayment.cardNumber"
                 ng-disabled="$ctrl.disableCardNumber"
                 credit-card-number
+                masked-number="card"
               />
-              <span
-                class="masked-number"
-                ng-if="$ctrl.shouldMaskField('cardNumber', $ctrl.isCardNumberFocused)"
-                aria-hidden="true"
-              >
-                {{$ctrl.getMaskedNumber($ctrl.creditCardPayment.cardNumber)}}
-              </span>
               <div ng-switch="$ctrl.getCardType()" class="credit-card-icons">
                 <img
                   ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/american-express-curved-128px.png"

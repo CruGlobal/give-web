@@ -7,6 +7,7 @@ import 'rxjs/add/observable/of';
 import showErrors from 'common/filters/showErrors.filter';
 import { scrollModalToTop } from 'common/services/modalState.service';
 import analyticsFactory from 'app/analytics/analytics.factory';
+import maskedNumber from 'common/directives/maskedNumber.directive';
 
 import * as cruPayments from '@cruglobal/cru-payments/dist/cru-payments';
 import { ccpKey, ccpStagingKey } from 'common/app.constants';
@@ -91,22 +92,6 @@ class BankAccountController {
     };
   }
 
-  getMaskedNumber(value) {
-    if (!value) {
-      return '';
-    }
-    const digits = value.replace(/\D/g, '');
-    return '*'.repeat(Math.max(0, digits.length - 4)) + digits.slice(-4);
-  }
-
-  shouldMaskField(fieldName, isFocused) {
-    return (
-      !isFocused &&
-      !!this.bankPayment[fieldName] &&
-      !!this.bankPaymentForm?.[fieldName]?.$valid
-    );
-  }
-
   savePayment() {
     this.bankPaymentForm.$setSubmitted();
     if (this.bankPaymentForm.$valid) {
@@ -183,6 +168,7 @@ export default angular
     commonModule.name,
     showErrors.name,
     analyticsFactory.name,
+    maskedNumber.name,
   ])
   .component(componentName, {
     controller: BankAccountController,

@@ -366,81 +366,6 @@ describe('bank account form', () => {
     });
   });
 
-  describe('getMaskedNumber', () => {
-    it('should return an empty string when there is no value', () => {
-      expect(self.controller.getMaskedNumber(undefined)).toBe('');
-      expect(self.controller.getMaskedNumber('')).toBe('');
-    });
-
-    it('should show only the last four digits', () => {
-      expect(self.controller.getMaskedNumber('123456789012')).toBe(
-        '********9012',
-      );
-    });
-
-    it('should use one star for each hidden digit', () => {
-      expect(self.controller.getMaskedNumber('12345678')).toBe('****5678');
-    });
-
-    it('should not crash on numbers shorter than four digits', () => {
-      expect(self.controller.getMaskedNumber('12')).toBe('12');
-    });
-  });
-
-  describe('shouldMaskField', () => {
-    beforeEach(() => {
-      self.formController.accountNumber.$setViewValue('123456789012');
-      self.formController.verifyAccountNumber.$setViewValue('123456789012');
-    });
-
-    it('should mask a valid field that is not focused', () => {
-      expect(self.controller.shouldMaskField('accountNumber', false)).toBe(
-        true,
-      );
-      expect(
-        self.controller.shouldMaskField('verifyAccountNumber', false),
-      ).toBe(true);
-    });
-
-    it('should not mask while the field is focused', () => {
-      expect(self.controller.shouldMaskField('accountNumber', true)).toBe(
-        false,
-      );
-    });
-
-    it('should not mask an empty field', () => {
-      self.formController.accountNumber.$setViewValue('');
-
-      expect(self.controller.shouldMaskField('accountNumber', false)).toBe(
-        false,
-      );
-    });
-
-    it('should not mask an account number that is too short', () => {
-      self.formController.accountNumber.$setViewValue('1');
-
-      expect(self.controller.shouldMaskField('accountNumber', false)).toBe(
-        false,
-      );
-    });
-
-    it('should not mask a verify account number that does not match', () => {
-      self.formController.verifyAccountNumber.$setViewValue('999999999999');
-
-      expect(
-        self.controller.shouldMaskField('verifyAccountNumber', false),
-      ).toBe(false);
-    });
-
-    it('should not crash or mask before the form exists', () => {
-      self.controller.bankPaymentForm = undefined;
-
-      expect(self.controller.shouldMaskField('accountNumber', false)).toBe(
-        false,
-      );
-    });
-  });
-
   describe('account number masking in the template', () => {
     const getInput = (name) =>
       angular.element(self.element[0].querySelector(`input[name="${name}"]`));
@@ -475,6 +400,24 @@ describe('bank account form', () => {
       expect(getInput('verifyAccountNumber').hasClass('is-masked')).toBe(false);
       expect(getMask('accountNumber')).not.toBeNull();
       expect(getInput('accountNumber').hasClass('is-masked')).toBe(true);
+    });
+
+    it('should not mask an account number that is too short', () => {
+      getInput('accountNumber').val('1').triggerHandler('input');
+      self.outerScope.$apply();
+
+      expect(getMask('accountNumber')).toBeNull();
+      expect(getInput('accountNumber').hasClass('is-masked')).toBe(false);
+    });
+
+    it('should not mask a verify account number that does not match', () => {
+      getInput('verifyAccountNumber')
+        .val('999999999999')
+        .triggerHandler('input');
+      self.outerScope.$apply();
+
+      expect(getMask('verifyAccountNumber')).toBeNull();
+      expect(getInput('verifyAccountNumber').hasClass('is-masked')).toBe(false);
     });
 
     it('should not mask the routing number', () => {
