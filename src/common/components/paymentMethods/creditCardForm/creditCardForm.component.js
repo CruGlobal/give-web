@@ -22,6 +22,7 @@ import tsys from 'common/services/api/tsys.service';
 import template from './creditCardForm.tpl.html';
 import creditCardNumberDirective from '../../../directives/creditCardNumber.directive';
 import creditCardCvv from '../../../../common/directives/creditCardCvv.directive';
+import maskedNumber from 'common/directives/maskedNumber.directive';
 
 const componentName = 'creditCardForm';
 
@@ -172,22 +173,6 @@ class CreditCardController {
     return this.cardInfo.type(this.creditCardPayment.cardNumber);
   }
 
-  getMaskedNumber(value) {
-    if (!value) {
-      return '';
-    }
-    const lastFourDigits = value.replace(/\D/g, '').slice(-4);
-    return `**** **** **** ${lastFourDigits}`;
-  }
-
-  shouldMaskField(fieldName, isFocused) {
-    return (
-      !isFocused &&
-      !!this.creditCardPayment[fieldName] &&
-      !!this.creditCardPaymentForm?.[fieldName]?.$valid
-    );
-  }
-
   savePayment() {
     this.creditCardPaymentForm.$setSubmitted();
     if (this.creditCardPaymentForm.$valid) {
@@ -295,6 +280,7 @@ export default angular
     tsys.name,
     creditCardNumberDirective.name,
     creditCardCvv.name,
+    maskedNumber.name,
   ])
   .component(componentName, {
     controller: CreditCardController,
