@@ -1,3 +1,6 @@
+.credit-card-cvv-container input.is-cvv-masked {
+  -webkit-text-security: disc;
+}
 
 .existing-payment-method {
   .credit-card-cvv-container {

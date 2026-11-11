@@ -123,15 +123,18 @@
         >
           <label>
             <span translate>{{'ACCOUNT_NUM'}}</span>
-            <input
-              type="text"
-              class="form-control form-control-subtle"
-              name="accountNumber"
-              autocomplete="off"
-              ng-model="$ctrl.bankPayment.accountNumber"
-              ng-attr-placeholder="************{{$ctrl.bankPayment.accountNumberPlaceholder}}"
-              ng-required="!$ctrl.paymentMethod || $ctrl.bankPayment.accountNumber"
-            />
+            <div class="masked-number-wrapper">
+              <input
+                type="text"
+                class="form-control form-control-subtle"
+                name="accountNumber"
+                autocomplete="off"
+                ng-model="$ctrl.bankPayment.accountNumber"
+                ng-attr-placeholder="************{{$ctrl.bankPayment.accountNumberPlaceholder}}"
+                ng-required="!$ctrl.paymentMethod || $ctrl.bankPayment.accountNumber"
+                masked-number="account"
+              />
+            </div>
             <div
               role="alert"
               ng-messages="$ctrl.bankPaymentForm.accountNumber.$error"
@@ -157,15 +160,18 @@
         >
           <label>
             <span translate>{{'RETYPE_ACCOUNT_NUM'}}</span>
-            <input
-              type="text"
-              class="form-control form-control-subtle"
-              name="verifyAccountNumber"
-              autocomplete="off"
-              ng-model="$ctrl.bankPayment.verifyAccountNumber"
-              ng-attr-placeholder="************{{$ctrl.bankPayment.accountNumberPlaceholder}}"
-              ng-required="$ctrl.bankPayment.accountNumber"
-            />
+            <div class="masked-number-wrapper">
+              <input
+                type="text"
+                class="form-control form-control-subtle"
+                name="verifyAccountNumber"
+                autocomplete="off"
+                ng-model="$ctrl.bankPayment.verifyAccountNumber"
+                ng-attr-placeholder="************{{$ctrl.bankPayment.accountNumberPlaceholder}}"
+                ng-required="$ctrl.bankPayment.accountNumber"
+                masked-number="account"
+              />
+            </div>
             <div
               role="alert"
               ng-messages="$ctrl.bankPaymentForm.verifyAccountNumber.$error"
