@@ -1,0 +1,10 @@
+id: no-assigned-jest-matcher
+language: JavaScript
+severity: error
+message: A jest matcher is assigned instead of called, so this line asserts nothing.
+note: Call the matcher, e.g. `expect(x).toEqual(y)`, not `expect(x).toEqual = y`.
+files:
+  - '**/*.spec.js'
+  - '**/*.test.js'
+rule:
+  pattern: expect($$$ARGS).$MATCHER = $VALUE
