@@ -14,3 +14,7 @@ stats.json
 # Okta sign in  assets
 src/assets/okta-sign-in/font
 src/assets/okta-sign-in/labels
+/.claude/review/metrics/
+/.claude/review/index/
+/.claude/review/learnings/pending/
+/.claude/review/learnings/findings.json
