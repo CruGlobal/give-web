@@ -1,13 +1,14 @@
 {
-  "extraKnownMarketplaces": {
-    "cruglobal": {
-      "source": {
-        "source": "github",
-        "repo": "CruGlobal/agent-review"
-      }
-    }
-  },
   "enabledPlugins": {
-    "agent-review@cruglobal": true
+    "agent-review@cru-plugins": true
+  },
+  "extraKnownMarketplaces": {
+    "cru-plugins": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/CruGlobal/claude-code-plugins.git"
+      },
+      "autoUpdate": true
+    }
   }
 }
