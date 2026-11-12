@@ -72,6 +72,9 @@ export const Recaptcha = ({
       return;
     }
     verifying.current = true;
+    // Tokens are single-use, so a leftover one from a failed attempt would be rejected as a duplicate
+    window.sessionStorage.removeItem('recaptchaToken');
+    window.sessionStorage.removeItem('recaptchaAction');
 
     grecaptcha.enterprise.ready(async () => {
       try {

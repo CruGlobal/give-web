@@ -34,6 +34,9 @@ export const redirectLocation = 'redirectLocation';
 export const locationSearchOnLogin = 'locationSearchOnLogin';
 export const checkoutSavedDataCookieName = 'checkoutSavedData';
 export const forcedUserToLogout = 'forcedUserToLogout';
+export const lastPurchase = 'lastPurchase';
+export const lastPurchaseEmail = 'lastPurchaseEmail';
+export const lastPurchaseLink = 'lastPurchaseLink';
 export const cookieDomain = '.cru.org';
 
 // Returns true if the given cookie header string contains more than one
@@ -256,6 +259,7 @@ const session = /* @ngInject */ function (
   }
 
   function signOut(redirectHome = true) {
+    clearLastPurchase();
     const oktaSignOut = () => {
       // Add session data so on return to page we can show an explanation to the user about what happened.
       if (!redirectHome) {
@@ -301,6 +305,7 @@ const session = /* @ngInject */ function (
       }),
     ).map((response) => response.data);
     clearCheckoutSavedData();
+    clearLastPurchase();
     // revokeAccessToken() & revokeRefreshToken() sign the user out of Okta on this application.
     // It doesn't close the Okta session on Okta.
     // To close the session on Okta would require calling authClient.signOut(), refreshing the page.
@@ -309,6 +314,13 @@ const session = /* @ngInject */ function (
     return observable.finally(() => {
       $rootScope.$broadcast(SignOutEvent);
     });
+  }
+
+  // The thank-you page fallback must not show the previous donor's gift to the next user of this tab
+  function clearLastPurchase() {
+    $window.sessionStorage.removeItem(lastPurchase);
+    $window.sessionStorage.removeItem(lastPurchaseEmail);
+    $window.sessionStorage.removeItem(lastPurchaseLink);
   }
 
   function removeForcedUserToLogoutSessionData() {

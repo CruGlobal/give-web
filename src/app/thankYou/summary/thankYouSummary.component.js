@@ -109,18 +109,7 @@ class ThankYouSummaryController {
   loadPurchaseByUri(uri, isFreshPurchase) {
     this.profileService.getPurchase(uri).subscribe(
       (data) => {
-        this.purchase = data;
-
-        // Map rate totals to match format from order endpoint
-        this.rateTotals = map(this.purchase.rateTotals, (rateTotal) => {
-          return {
-            frequency: rateTotal.recurrence.display,
-            total: rateTotal.cost.display,
-            amount: rateTotal.cost.amount,
-          };
-        });
-        delete this.loadingError;
-        this.loading = false;
+        this.showPurchase(data);
         this.onPurchaseLoaded({
           $event: { purchase: this.purchase },
         });
@@ -128,6 +117,7 @@ class ThankYouSummaryController {
         this.analyticsFactory.pageLoaded();
         // Don't fire purchase analytics if the user returns to the thank you page
         if (isFreshPurchase) {
+          this.orderService.storeLastPurchase(data);
           this.analyticsFactory.setPurchaseNumber(
             data.rawData['purchase-number'],
           );
@@ -141,15 +131,47 @@ class ThankYouSummaryController {
           'Error loading purchase data for thank you component',
           error,
         );
+
+        // After sign-in, EP denies access to the order still owned by the guest customer
+        const savedPurchase =
+          isFreshPurchase && this.orderService.retrieveLastPurchase();
+        if (savedPurchase) {
+          this.showPurchase(savedPurchase);
+          this.analyticsFactory.pageLoaded();
+          return;
+        }
+
         this.loadingError = 'api error';
         this.loading = false;
       },
     );
   }
 
+  showPurchase(purchase) {
+    this.purchase = purchase;
+
+    // Map rate totals to match format from order endpoint
+    this.rateTotals = map(this.purchase.rateTotals, (rateTotal) => {
+      return {
+        frequency: rateTotal.recurrence.display,
+        total: rateTotal.cost.display,
+        amount: rateTotal.cost.amount,
+      };
+    });
+    delete this.loadingError;
+    this.loading = false;
+  }
+
   loadEmail() {
+    const savedEmail = this.orderService.retrieveLastPurchaseEmail();
+    if (savedEmail) {
+      this.email = savedEmail;
+      return;
+    }
+
     this.profileService.getEmails().subscribe((data) => {
       this.email = data[0].email;
+      this.orderService.storeLastPurchaseEmail(this.email);
     });
   }
 

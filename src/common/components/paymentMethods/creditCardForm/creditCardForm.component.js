@@ -22,6 +22,7 @@ import tsys from 'common/services/api/tsys.service';
 import template from './creditCardForm.tpl.html';
 import creditCardNumberDirective from '../../../directives/creditCardNumber.directive';
 import creditCardCvv from '../../../../common/directives/creditCardCvv.directive';
+import maskedNumber from 'common/directives/maskedNumber.directive';
 
 const componentName = 'creditCardForm';
 
@@ -279,6 +280,7 @@ export default angular
     tsys.name,
     creditCardNumberDirective.name,
     creditCardCvv.name,
+    maskedNumber.name,
   ])
   .component(componentName, {
     controller: CreditCardController,
