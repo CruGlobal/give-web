@@ -1,8 +1,16 @@
-# agent-review-template-version: 1.0.0
+# agent-review-template-version: 1.1.8
 name: agent-review approve
 on:
   issue_comment:
     types: [created, edited]
+  # pull_request_target runs this file as it is on the default branch, so a PR
+  # cannot remove the withdraw job, and its token can dismiss reviews on fork
+  # and Dependabot PRs. It is safe only while no job here checks out or runs
+  # the PR's code.
+  # reopened: a push while the PR was closed moves its head with no
+  # synchronize. edited: a new base branch changes what the approval covered.
+  pull_request_target:
+    types: [synchronize, reopened, edited]
 jobs:
   approve:
     # A review run locally and posted with "Post review to GitHub" starts with
@@ -13,6 +21,7 @@ jobs:
     # auto_approve here trusts a writer's posted report — a stronger
     # grant than the CI path, which judges only the bot's own report.
     if: >-
+      github.event_name == 'issue_comment' &&
       github.event.issue.pull_request != null &&
       startsWith(github.event.comment.body, '<!-- agent-review -->') &&
       contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)
@@ -24,3 +33,19 @@ jobs:
       pr_number: ${{ github.event.issue.number }}
       comment_id: ${{ github.event.comment.id }}
       auto_approve: true
+  withdraw:
+    # New commits take back the bot's approval of an older commit, unless the
+    # push only merged in (or rebased onto) the default branch. An edit that
+    # leaves the base branch alone (title, body) runs nothing.
+    if: >-
+      github.event_name == 'pull_request_target' &&
+      (github.event.action != 'edited' || github.event.changes.base != null)
+    permissions:
+      contents: read
+      pull-requests: write
+    uses: CruGlobal/agent-review/.github/workflows/withdraw.yml@main
+    with:
+      pr_number: ${{ github.event.pull_request.number }}
+      # A commit SHA, which the action checks is 40 hex characters and uses only
+      # as data. Never pass the branch name or other text the author picks.
+      expected_head: ${{ github.event.pull_request.head.sha }}
