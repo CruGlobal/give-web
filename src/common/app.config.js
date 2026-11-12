@@ -219,6 +219,8 @@ export const appConfig = /* @ngInject */ function (
     SEND_MESSAGE_TO: 'Send a Message to {{ministry}}',
     SPECIAL_INSTRUCTIONS:
       'Special Handling Instructions for Processing This Gift',
+    ANONYMOUS_MESSAGE:
+      'For anonymous donations, please leave this field blank.',
     MESSAGE_EXAMPLE:
       'For example: stop my gift after 18 months, make this gift anonymous (note: please remove any messages to ministry or missionary to remain anonymous), etc.',
     YOUR_INFORMATION: 'Your information',
@@ -546,6 +548,8 @@ export const appConfig = /* @ngInject */ function (
     SEND_MESSAGE_TO: 'Enviar un mensaje al {{ministry}}',
     SPECIAL_INSTRUCTIONS:
       'Instrucciones especiales de manejo para procesar este regalo',
+    ANONYMOUS_MESSAGE:
+      'Para donaciones anónimas, por favor deje este campo en blanco.',
     MESSAGE_EXAMPLE:
       'Por ejemplo: Detener mi donación después de 18 meses, hacer esta donación anónima (nota: favor de quitar cualquier mensaje al ministerio o al misionero para permanecer en el anonimato), etc.',
     YOUR_INFORMATION: 'Tu información',
