@@ -180,7 +180,7 @@ describe('credit card form', () => {
           tsepToken: 'YfxWvtXJxjET5100',
           maskedCardNumber: '1111',
           transactionID: '<transaction id>',
-          cvv2: '123',
+          cvv2: '999',
         }),
       );
     });
@@ -250,7 +250,7 @@ describe('credit card form', () => {
           'last-four-digits': '1111',
           'card-bin': '411111',
           transactionId: '<transaction id>',
-          cvv: '123',
+          cvv: '999',
         },
       };
 
@@ -280,6 +280,7 @@ describe('credit card form', () => {
               'last-four-digits': '1111',
               'card-bin': '411111',
               transactionId: '<transaction id>',
+              cvv: '999',
             },
           },
         },
@@ -322,7 +323,7 @@ describe('credit card form', () => {
           'last-four-digits': '1111',
           'card-bin': '411111',
           transactionId: '<transaction id>',
-          cvv: '123',
+          cvv: '999',
         },
       };
 
@@ -393,6 +394,7 @@ describe('credit card form', () => {
           'last-four-digits': '4567',
           'card-bin': null,
           transactionId: undefined,
+          // Saved card: no tokenization, so this is the code the donor typed, not a TSYS value.
           cvv: '123',
         },
       };
