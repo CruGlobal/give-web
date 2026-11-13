@@ -26,6 +26,75 @@ describe('dataDogConfig', () => {
     });
   });
 
+  describe('allowedTracingUrls', () => {
+    let initSpy;
+
+    const initializeDataDog = () => {
+      angular
+        .module('testDataDogTracingConfig', [
+          'environment',
+          'pascalprecht.translate',
+        ])
+        .config(appConfig)
+        .config(module.default);
+      angular.mock.module('testDataDogTracingConfig');
+      inject(() => {});
+
+      expect(initSpy).toHaveBeenCalled();
+      // DataDog prefix-matches request urls against these strings
+      return initSpy.mock.calls[0][0].allowedTracingUrls;
+    };
+
+    beforeEach(() => {
+      initSpy = jest.spyOn(datadogRum, 'init').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      initSpy.mockRestore();
+      document
+        .querySelectorAll('branded-checkout')
+        .forEach((element) => element.remove());
+    });
+
+    it('should trace the environment apiUrl cortex requests when no branded-checkout element exists', () => {
+      // development environment apiUrl from app.config.js
+      expect(initializeDataDog()).toEqual([
+        'https://give-stage2.cru.org/cortex',
+      ]);
+    });
+
+    it('should also trace the branded-checkout api-url cortex requests when the attribute includes a protocol', () => {
+      const element = document.createElement('branded-checkout');
+      element.setAttribute('api-url', 'https://brandedcheckout.jesusfilm.org');
+      document.body.appendChild(element);
+
+      expect(initializeDataDog()).toEqual([
+        'https://give-stage2.cru.org/cortex',
+        'https://brandedcheckout.jesusfilm.org/cortex',
+      ]);
+    });
+
+    it('should resolve the branded-checkout api-url to https when the attribute omits the protocol', () => {
+      const element = document.createElement('branded-checkout');
+      element.setAttribute('api-url', 'brandedcheckout.jesusfilm.org/');
+      document.body.appendChild(element);
+
+      expect(initializeDataDog()).toEqual([
+        'https://give-stage2.cru.org/cortex',
+        'https://brandedcheckout.jesusfilm.org/cortex',
+      ]);
+    });
+
+    it('should fall back to the environment apiUrl when the branded-checkout element has no api-url attribute', () => {
+      const element = document.createElement('branded-checkout');
+      document.body.appendChild(element);
+
+      expect(initializeDataDog()).toEqual([
+        'https://give-stage2.cru.org/cortex',
+      ]);
+    });
+  });
+
   describe('updateDatadogUser', () => {
     let setUserSpy, clearUserSpy;
 
