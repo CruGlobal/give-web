@@ -236,6 +236,46 @@ describe('product config form component', function () {
       expect($ctrl.analyticsFactory.giveGiftModal($ctrl.productData));
     });
 
+    it('should use the preset day next month when it already passed this month', () => {
+      $ctrl.itemConfig.RECURRING_DAY_OF_MONTH = '01';
+      $ctrl.loadData();
+
+      expect($ctrl.itemConfig['RECURRING_DAY_OF_MONTH']).toEqual('01');
+      expect($ctrl.itemConfig['RECURRING_START_MONTH']).toEqual('11');
+    });
+
+    it('should roll the preset day into January when it already passed in December', () => {
+      advanceTo(moment.utc('2016-12-15').toDate());
+      $ctrl.commonService.getNextDrawDate.mockReturnValue(
+        Observable.of('2016-12-16'),
+      );
+      $ctrl.itemConfig.RECURRING_DAY_OF_MONTH = '01';
+      $ctrl.loadData();
+
+      expect($ctrl.itemConfig['RECURRING_DAY_OF_MONTH']).toEqual('01');
+      expect($ctrl.itemConfig['RECURRING_START_MONTH']).toEqual('01');
+    });
+
+    it('should keep the preset day when it is still ahead this month', () => {
+      $ctrl.itemConfig.RECURRING_DAY_OF_MONTH = '15';
+      $ctrl.loadData();
+
+      expect($ctrl.itemConfig['RECURRING_DAY_OF_MONTH']).toEqual('15');
+      expect($ctrl.itemConfig['RECURRING_START_MONTH']).toEqual('10');
+    });
+
+    it('should keep the preset day when the next available date is in next month', () => {
+      advanceTo(moment.utc('2016-10-30').toDate());
+      $ctrl.commonService.getNextDrawDate.mockReturnValue(
+        Observable.of('2016-10-28'),
+      );
+      $ctrl.itemConfig.RECURRING_DAY_OF_MONTH = '01';
+      $ctrl.loadData();
+
+      expect($ctrl.itemConfig['RECURRING_DAY_OF_MONTH']).toEqual('01');
+      expect($ctrl.itemConfig['RECURRING_START_MONTH']).toEqual('11');
+    });
+
     it('should called beginCheckout in branded checkout', () => {
       $ctrl.envService.read.mockReturnValue(true);
       $ctrl.loadData();
