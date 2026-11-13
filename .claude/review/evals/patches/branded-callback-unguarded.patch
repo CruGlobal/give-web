@@ -1,0 +1,29 @@
+--- a/src/app/branded/branded-checkout.component.js
++++ b/src/app/branded/branded-checkout.component.js
+@@ -256,18 +256,14 @@
+   }
+ 
+   onThankYouPurchaseLoaded(purchase) {
+-    try {
+-      this.onOrderCompleted({
+-        $event: {
+-          $window: this.$window,
+-          purchase: changeCaseObject.camelCase(
+-            pick(purchase, ['donorDetails', 'lineItems']),
+-          ),
+-        },
+-      });
+-    } catch (error) {
+-      console.error('onOrderCompleted callback threw:', error);
+-    }
++    this.onOrderCompleted({
++      $event: {
++        $window: this.$window,
++        purchase: changeCaseObject.camelCase(
++          pick(purchase, ['donorDetails', 'lineItems']),
++        ),
++      },
++    });
+     this.brandedAnalyticsFactory.savePurchase(purchase);
+     this.brandedAnalyticsFactory.purchase();
+   }

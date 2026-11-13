@@ -40,6 +40,7 @@ describe('credit card form', () => {
       ),
     )(self.outerScope);
     self.outerScope.$apply();
+    self.element = compiledElement;
     self.controller = compiledElement.controller(module.name);
     self.formController = self.controller.creditCardPaymentForm;
   }));
@@ -535,6 +536,92 @@ describe('credit card form', () => {
       self.controller.creditCardPayment.cardNumber = '1111111111111111';
 
       expect(self.controller.getCardType()).toBe('');
+    });
+  });
+
+  describe('card number masking in the template', () => {
+    const getInput = () =>
+      angular.element(
+        self.element[0].querySelector('input[name="cardNumber"]'),
+      );
+    const getMask = () => self.element[0].querySelector('.masked-number');
+
+    beforeEach(() => {
+      getInput().val('4111111111111111').triggerHandler('input');
+      self.outerScope.$apply();
+    });
+
+    it('should show the masked overlay and hide the input text after blur', () => {
+      getInput().triggerHandler('focus');
+      getInput().triggerHandler('blur');
+      self.outerScope.$apply();
+
+      expect(getMask().textContent.trim()).toBe('**** **** **** 1111');
+      expect(getInput().hasClass('is-masked')).toBe(true);
+    });
+
+    it('should hide the overlay and show the input text on focus', () => {
+      getInput().triggerHandler('focus');
+      self.outerScope.$apply();
+
+      expect(getMask()).toBeNull();
+      expect(getInput().hasClass('is-masked')).toBe(false);
+    });
+
+    it('should hide the overlay from screen readers', () => {
+      expect(getMask().getAttribute('aria-hidden')).toBe('true');
+    });
+
+    it('should not mask an invalid card number', () => {
+      getInput().val('4111').triggerHandler('input');
+      self.outerScope.$apply();
+
+      expect(getMask()).toBeNull();
+      expect(getInput().hasClass('is-masked')).toBe(false);
+    });
+
+    it('should send the real card number and CVV to TSYS when saving while masked', () => {
+      advanceTo(new Date(2012, 11, 31)); // Dec 31 2012
+      jest
+        .spyOn(self.controller.tsysService, 'getManifest')
+        .mockReturnValue(
+          Observable.of({ deviceId: '<device id>', manifest: '<manifest>' }),
+        );
+      jest.spyOn(cruPayments.creditCard, 'init').mockImplementation(() => {});
+      jest
+        .spyOn(cruPayments.creditCard, 'encrypt')
+        .mockReturnValue(Observable.of({ tsepToken: '<token>' }));
+
+      const cvvInput = angular.element(
+        self.element[0].querySelector('input[name="securityCode"]'),
+      );
+      cvvInput.triggerHandler('focus');
+      cvvInput.val('123').triggerHandler('input');
+      cvvInput.triggerHandler('blur');
+      getInput().triggerHandler('focus');
+      getInput().triggerHandler('blur');
+      self.formController.cardholderName.$setViewValue('Person Name');
+      self.formController.expiryMonth.$setViewValue('12');
+      self.formController.expiryYear.$setViewValue('2012');
+      self.outerScope.$apply();
+
+      expect(getInput().hasClass('is-masked')).toBe(true);
+      expect(cvvInput.hasClass('is-cvv-masked')).toBe(true);
+
+      self.controller.savePayment();
+
+      expect(cruPayments.creditCard.encrypt).toHaveBeenCalledWith(
+        '4111 1111 1111 1111',
+        '123',
+        '12',
+        '2012',
+      );
+    });
+
+    it('should keep the full card number in the model while masked', () => {
+      expect(self.controller.creditCardPayment.cardNumber).toBe(
+        '4111 1111 1111 1111',
+      );
     });
   });
 

@@ -38,6 +38,7 @@ describe('bank account form', () => {
       ),
     )(self.outerScope);
     self.outerScope.$apply();
+    self.element = compiledElement;
     self.controller = compiledElement.controller(module.name);
     self.formController = self.controller.bankPaymentForm;
   }));
@@ -362,6 +363,117 @@ describe('bank account form', () => {
         'Error encrypting bank account number',
         'some error',
       ]);
+    });
+  });
+
+  describe('account number masking in the template', () => {
+    const getInput = (name) =>
+      angular.element(self.element[0].querySelector(`input[name="${name}"]`));
+    const getMask = (name) =>
+      getInput(name)[0].parentElement.querySelector('.masked-number');
+
+    beforeEach(() => {
+      getInput('accountNumber').val('123456789012').triggerHandler('input');
+      getInput('verifyAccountNumber')
+        .val('123456789012')
+        .triggerHandler('input');
+      self.outerScope.$apply();
+    });
+
+    it('should mask both fields after blur', () => {
+      ['accountNumber', 'verifyAccountNumber'].forEach((name) => {
+        getInput(name).triggerHandler('focus');
+        getInput(name).triggerHandler('blur');
+        self.outerScope.$apply();
+
+        expect(getMask(name).textContent.trim()).toBe('********9012');
+        expect(getMask(name).getAttribute('aria-hidden')).toBe('true');
+        expect(getInput(name).hasClass('is-masked')).toBe(true);
+      });
+    });
+
+    it('should only unmask the field that is focused', () => {
+      getInput('verifyAccountNumber').triggerHandler('focus');
+      self.outerScope.$apply();
+
+      expect(getMask('verifyAccountNumber')).toBeNull();
+      expect(getInput('verifyAccountNumber').hasClass('is-masked')).toBe(false);
+      expect(getMask('accountNumber')).not.toBeNull();
+      expect(getInput('accountNumber').hasClass('is-masked')).toBe(true);
+    });
+
+    it('should not mask an account number that is too short', () => {
+      getInput('accountNumber').val('1').triggerHandler('input');
+      self.outerScope.$apply();
+
+      expect(getMask('accountNumber')).toBeNull();
+      expect(getInput('accountNumber').hasClass('is-masked')).toBe(false);
+    });
+
+    it('should not mask a verify account number that does not match', () => {
+      getInput('verifyAccountNumber')
+        .val('999999999999')
+        .triggerHandler('input');
+      self.outerScope.$apply();
+
+      expect(getMask('verifyAccountNumber')).toBeNull();
+      expect(getInput('verifyAccountNumber').hasClass('is-masked')).toBe(false);
+    });
+
+    it('should not mask the routing number', () => {
+      getInput('routingNumber').val('267084131').triggerHandler('input');
+      self.outerScope.$apply();
+
+      expect(getInput('routingNumber').hasClass('is-masked')).toBe(false);
+      expect(
+        getInput('routingNumber')[0].parentElement.querySelector(
+          '.masked-number',
+        ),
+      ).toBeNull();
+    });
+
+    it('should keep the full account number in the model while masked', () => {
+      expect(self.controller.bankPayment.accountNumber).toBe('123456789012');
+    });
+
+    it('should send the real account number to be encrypted when saving while masked', () => {
+      jest.spyOn(cruPayments.bankAccount, 'init').mockImplementation(() => {});
+      jest
+        .spyOn(cruPayments.bankAccount, 'encrypt')
+        .mockReturnValue(Observable.of('<encrypted>'));
+      jest.spyOn(self.controller, 'onPaymentFormStateChange');
+
+      self.formController.bankName.$setViewValue('First Bank');
+      self.formController.accountType.$setViewValue('checking');
+      self.formController.routingNumber.$setViewValue('267084131');
+      self.formController.acceptedAgreement.$setViewValue('true');
+      ['accountNumber', 'verifyAccountNumber'].forEach((name) => {
+        getInput(name).triggerHandler('focus');
+        getInput(name).triggerHandler('blur');
+      });
+      self.outerScope.$apply();
+
+      expect(getInput('accountNumber').hasClass('is-masked')).toBe(true);
+      expect(getInput('verifyAccountNumber').hasClass('is-masked')).toBe(true);
+
+      self.controller.savePayment();
+
+      expect(cruPayments.bankAccount.encrypt).toHaveBeenCalledWith(
+        '123456789012',
+      );
+      expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith(
+        expect.objectContaining({
+          $event: expect.objectContaining({
+            state: 'loading',
+            payload: {
+              bankAccount: expect.objectContaining({
+                'encrypted-account-number': '<encrypted>',
+                'display-account-number': '9012',
+              }),
+            },
+          }),
+        }),
+      );
     });
   });
 

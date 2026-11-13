@@ -1,0 +1,8 @@
+id: no-assigned-jest-matcher
+valid:
+  - expect($ctrl.itemConfig.CAMPAIGN_CODE).toEqual('DEFAULT');
+  - expect(result).not.toBe(undefined);
+  - self.toEqual = 'x';
+invalid:
+  - expect($ctrl.itemConfig.CAMPAIGN_CODE).toEqual = 'DEFAULT';
+  - expect(result).toBe = true;
