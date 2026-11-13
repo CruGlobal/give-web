@@ -14,24 +14,17 @@ const dataDogConfig = /* @ngInject */ function (envServiceProvider) {
     // Always trace the env cortex URL; additionally trace the branded one when present
     const apiUrls = [envServiceProvider.read('apiUrl')];
     if (brandedCheckoutApiUrl) {
-      apiUrls.push(normalizeApiUrl(brandedCheckoutApiUrl));
+      // The api-url attribute may omit the protocol (see README); cortex is
+      // only served over https, so resolve it to an absolute https URL
+      apiUrls.push('https:' + normalizeApiUrl(brandedCheckoutApiUrl));
     }
-    // The api-url attribute may omit the protocol, so match request urls protocol-relatively
-    const cortexUrls = apiUrls.map(
-      (apiUrl) => apiUrl.replace(/^https?:/, '') + '/cortex',
-    );
     const config = {
       applicationId: '3937053e-386b-4b5b-ab4a-c83217d2f953',
       clientToken,
       site: 'datadoghq.com',
       service: 'give-web',
       env: envServiceProvider.get(),
-      allowedTracingUrls: [
-        (url) =>
-          cortexUrls.some((cortexUrl) =>
-            url.replace(/^https?:/, '').startsWith(cortexUrl),
-          ),
-      ],
+      allowedTracingUrls: apiUrls.map((apiUrl) => `${apiUrl}/cortex`),
       version: process.env.GITHUB_SHA,
       sessionSampleRate: envServiceProvider.is('staging') ? 100 : 50,
       sessionReplaySampleRate: envServiceProvider.is('staging') ? 100 : 1,
