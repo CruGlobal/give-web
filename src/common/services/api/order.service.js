@@ -11,7 +11,9 @@ import 'rxjs/add/operator/finally';
 import 'rxjs/add/observable/empty';
 import map from 'lodash/map';
 import omit from 'lodash/omit';
+import pick from 'lodash/pick';
 import isString from 'lodash/isString';
+import * as structuredErrorService from 'common/services/structuredError.service';
 import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort';
 import extractPaymentAttributes from 'common/services/paymentHelpers/extractPaymentAttributes';
 import { cartUpdatedEvent } from 'common/lib/cartEvents';
@@ -20,7 +22,12 @@ import cortexApiService from '../cortexApi.service';
 import cartService from './cart.service';
 import tsysService from './tsys.service';
 import hateoasHelperService from 'common/services/hateoasHelper.service';
-import sessionService, { Roles } from 'common/services/session/session.service';
+import sessionService, {
+  Roles,
+  lastPurchase,
+  lastPurchaseEmail,
+  lastPurchaseLink,
+} from 'common/services/session/session.service';
 import { datadogRum } from '@datadog/browser-rum';
 
 import formatAddressForCortex from '../addressHelpers/formatAddressForCortex';
@@ -304,7 +311,7 @@ class Order {
           if (
             paymentMethod.description[
               'payment-instrument-identification-attributes'
-            ]['street-address']
+            ]?.['street-address']
           ) {
             paymentMethod.description.address = formatAddressForTemplate(
               paymentMethod.description[
@@ -339,7 +346,9 @@ class Order {
       .map((data) => {
         if (
           data &&
-          data['payment-instrument-identification-attributes']['street-address']
+          data['payment-instrument-identification-attributes']?.[
+            'street-address'
+          ]
         ) {
           data.address = formatAddressForTemplate(
             data['payment-instrument-identification-attributes'],
@@ -492,11 +501,64 @@ class Order {
   }
 
   storeLastPurchaseLink(link) {
-    this.sessionStorage.setItem('lastPurchaseLink', link);
+    this.sessionStorage.setItem(lastPurchaseLink, link);
+    this.sessionStorage.removeItem(lastPurchase);
+    this.sessionStorage.removeItem(lastPurchaseEmail);
   }
 
   retrieveLastPurchaseLink() {
-    return this.sessionStorage.getItem('lastPurchaseLink');
+    return this.sessionStorage.getItem(lastPurchaseLink);
+  }
+
+  // Keep only the fields the thank-you summary renders
+  storeLastPurchase(purchase) {
+    const summary = {
+      donorDetails: pick(purchase.donorDetails, [
+        'name',
+        'spouse-name',
+        'donor-type',
+        'organization-name',
+        'mailingAddress',
+      ]),
+      paymentInstruments: pick(purchase.paymentInstruments, [
+        'account-type',
+        'bank-name',
+        'routing-number',
+        'display-account-number',
+        'card-type',
+        'cardholder-name',
+        'last-four-digits',
+        'expiry-month',
+        'expiry-year',
+        'address',
+      ]),
+      lineItems: map(purchase.lineItems, (lineItem) =>
+        pick(lineItem, [
+          'name',
+          'itemOfferCode.code',
+          'rate.display',
+          'rate.recurrence.interval',
+          'rate.start-date.value',
+        ]),
+      ),
+      rateTotals: map(purchase.rateTotals, (rateTotal) =>
+        pick(rateTotal, ['recurrence.display', 'cost.display', 'cost.amount']),
+      ),
+    };
+    this.sessionStorage.setItem(lastPurchase, angular.toJson(summary));
+  }
+
+  retrieveLastPurchase() {
+    const savedPurchase = this.sessionStorage.getItem(lastPurchase);
+    return savedPurchase ? angular.fromJson(savedPurchase) : undefined;
+  }
+
+  storeLastPurchaseEmail(email) {
+    this.sessionStorage.setItem(lastPurchaseEmail, email);
+  }
+
+  retrieveLastPurchaseEmail() {
+    return this.sessionStorage.getItem(lastPurchaseEmail);
   }
 
   storeRadioStationData(radioStationData) {
@@ -612,8 +674,13 @@ class Order {
           ); // here in order to show up in Error Tracking in DD
           controller.onSubmitted();
           controller.submissionErrorStatus = error.status;
-          controller.submissionError = isString(error && error.data)
-            ? (error && error.data).replace(/[:].*$/, '')
+          // 8.3 wraps these failures in a structured body, so read whichever
+          // shape arrived; a plain-text body still passes through untouched.
+          // The cortex gateway's reCAPTCHA check answers with { error: 'Invalid Data' }
+          const errorText =
+            error?.data?.error ?? structuredErrorService.getErrorText(error);
+          controller.submissionError = isString(errorText)
+            ? errorText.replace(/[:].*$/, '')
             : 'generic error'; // Keep prefix before first colon for easier ng-switch matching
           this.$window.scrollTo(0, 0);
         },

@@ -94,6 +94,32 @@ describe('Recaptcha component', () => {
     });
   });
 
+  it('should ignore clicks while verifying', async () => {
+    mockExecuteRecaptcha.mockClear();
+    let resolveToken: (token: string) => void = () => {};
+    mockExecuteRecaptcha.mockImplementationOnce(
+      () => new Promise((resolve) => (resolveToken = resolve)),
+    );
+    const { getByRole } = render(buildRecaptcha());
+
+    await userEvent.click(getByRole('button'));
+    await userEvent.click(getByRole('button'));
+    resolveToken('token');
+    await waitFor(() => {
+      expect(onSuccess).toHaveBeenCalledTimes(1);
+    });
+    expect(mockExecuteRecaptcha).toHaveBeenCalledTimes(1);
+  });
+
+  it('should allow verifying again after the previous verification finishes', async () => {
+    const { getByRole } = render(buildRecaptcha());
+
+    await userEvent.click(getByRole('button'));
+    await waitFor(() => expect(onSuccess).toHaveBeenCalledTimes(1));
+    await userEvent.click(getByRole('button'));
+    await waitFor(() => expect(onSuccess).toHaveBeenCalledTimes(2));
+  });
+
   it('should skip the recaptcha call', async () => {
     //@ts-ignore
     global.window.grecaptcha = { enterprise: { ready: mockRecaptchaReady } };
@@ -121,6 +147,21 @@ describe('Recaptcha component', () => {
         'Failed to verify recaptcha, continuing on: Failed',
       );
     });
+  });
+
+  it('should not reuse a token from a previous attempt when recaptcha fails', async () => {
+    window.sessionStorage.setItem('recaptchaToken', 'old-token');
+    window.sessionStorage.setItem('recaptchaAction', 'checkout');
+    mockExecuteRecaptcha.mockImplementationOnce(() => Promise.reject('Failed'));
+
+    const { getByRole } = render(buildRecaptcha());
+
+    await userEvent.click(getByRole('button'));
+    await waitFor(() => {
+      expect(onSuccess).toHaveBeenCalledTimes(1);
+    });
+    expect(window.sessionStorage.getItem('recaptchaToken')).toBeNull();
+    expect(window.sessionStorage.getItem('recaptchaAction')).toBeNull();
   });
 
   const buildRecaptcha = () => {

@@ -4,6 +4,9 @@
   ng-switch="rateTotal.frequency"
   ng-if="rateTotal.amount > 0"
 >
+  <span ng-switch-when="Single" translate>{{'SINGLE_GIFT_TOTAL'}}</span>
+  <span ng-switch-when="Monthly" translate>{{'MONTHLY_GIFT_TOTAL'}}</span>
+  <span ng-switch-when="Quarterly" translate>{{'QUARTERLY_GIFT_TOTAL'}}</span>
   <span ng-switch-when="Annually" translate>{{'ANNUAL_GIFT_TOTAL'}}</span>
   <span
     ng-switch-default

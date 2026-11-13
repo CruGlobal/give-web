@@ -96,7 +96,7 @@ class ProductConfigModalController {
       this.itemConfig['campaign-page'] = params[giveGiftParams.campaignPage];
     }
 
-    // If CampaignCode exists in URL, use it, otherwise use default-campaign-code if set.
+    // Prefer CampaignCode in the URL, then the give button's code, then default-campaign-code.
     if (
       Object.prototype.hasOwnProperty.call(params, giveGiftParams.campaignCode)
     ) {
@@ -113,21 +113,24 @@ class ProductConfigModalController {
       ) {
         this.itemConfig.CAMPAIGN_CODE = '';
       }
-    } else if (
-      Object.prototype.hasOwnProperty.call(
-        this.itemConfig,
-        'default-campaign-code',
-      )
-    ) {
-      this.itemConfig.CAMPAIGN_CODE = this.itemConfig['default-campaign-code'];
-    } else if (this.itemConfig['campaign-page']) {
-      // make sure we call the code to pull the default campaign code when going straight to the modal
-      this.designationsService
-        .suggestedAmounts(this.code, this.itemConfig)
-        .subscribe(null, null, () => {
-          this.itemConfig.CAMPAIGN_CODE =
-            this.itemConfig['default-campaign-code'];
-        });
+    } else if (!this.itemConfig.CAMPAIGN_CODE) {
+      if (
+        Object.prototype.hasOwnProperty.call(
+          this.itemConfig,
+          'default-campaign-code',
+        )
+      ) {
+        this.itemConfig.CAMPAIGN_CODE =
+          this.itemConfig['default-campaign-code'];
+      } else if (this.itemConfig['campaign-page']) {
+        // make sure we call the code to pull the default campaign code when going straight to the modal
+        this.designationsService
+          .suggestedAmounts(this.code, this.itemConfig)
+          .subscribe(null, null, () => {
+            this.itemConfig.CAMPAIGN_CODE =
+              this.itemConfig['default-campaign-code'];
+          });
+      }
     }
   }
 

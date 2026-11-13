@@ -22,9 +22,9 @@ jobs:
     name: 🧹 Lint Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .tool-versions
 
@@ -45,12 +45,12 @@ jobs:
     name: ✅ Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
         with:
           # Help Codecov detect commit SHA
           fetch-depth: 2
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .tool-versions
 
@@ -61,14 +61,14 @@ jobs:
         run: yarn test:coverage
 
       - name: Upload Codecov Reports
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v7
 
   build:
     name: 🏗️ Build app
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .tool-versions
 
@@ -90,9 +90,9 @@ jobs:
     needs: [lint, test]
     if: (github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/staging')) || (github.event_name == 'workflow_dispatch' && github.event.inputs.auto-deploy == 'true')
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .tool-versions
 
@@ -107,7 +107,7 @@ jobs:
         run: yarn run build
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@036a4a1ddf2c0e7a782dca6e083c6c53e5d90321
+        uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # v6.2.3
         with:
           aws-region: us-east-1
           role-to-assume: ${{ secrets.AWS_GITHUB_ACTIONS_ROLE }}

@@ -89,6 +89,35 @@ describe('editRecurringGiftsModal', () => {
         expect(self.controller.paymentFormState).toEqual('loading');
       });
 
+      it('should read a structured error body for the payment form message', () => {
+        jest
+          .spyOn(self.controller.profileService, 'addPaymentMethod')
+          .mockReturnValue(
+            Observable.throw({
+              status: 400,
+              data: {
+                messages: [
+                  {
+                    data: {},
+                    id: 'selfservicepaymentinstruments.validation.failure',
+                    'debug-message': 'Invalid routing number',
+                    type: 'error',
+                  },
+                ],
+              },
+            }),
+          );
+        self.controller.onPaymentFormStateChange({
+          state: 'loading',
+          payload: 'some payment method',
+        });
+
+        expect(self.controller.paymentFormState).toEqual('error');
+        expect(self.controller.paymentFormError).toEqual(
+          'Invalid routing number',
+        );
+      });
+
       it('should handle an error saving a new payment method to the profile service', () => {
         jest
           .spyOn(self.controller.profileService, 'addPaymentMethod')

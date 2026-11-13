@@ -735,6 +735,36 @@ describe('contactInfo', function () {
       expect(self.controller.onSubmit).toHaveBeenCalledWith({ success: false });
     });
 
+    it('should extract the debug-message and id from a structured error body when saving donor details fails', () => {
+      self.controller.detailsForm.$valid = true;
+      self.controller.donorDetails = {
+        'given-name': 'Fname',
+      };
+      jest
+        .spyOn(self.controller.orderService, 'updateDonorDetails')
+        .mockReturnValue(
+          Observable.throw({
+            data: {
+              messages: [
+                {
+                  type: 'error',
+                  id: 'donordetails.name.required',
+                  'debug-message': 'name must be provided',
+                  data: { 'field-name': 'name' },
+                },
+              ],
+            },
+          }),
+        );
+      self.controller.submitDetails();
+
+      expect(self.controller.submissionError).toEqual('name must be provided');
+      expect(self.controller.submissionErrorId).toEqual(
+        'donordetails.name.required',
+      );
+      expect(self.controller.onSubmit).toHaveBeenCalledWith({ success: false });
+    });
+
     it('should handle an error saving email', () => {
       self.controller.detailsForm.$valid = true;
       self.controller.donorDetails = {
@@ -771,6 +801,114 @@ describe('contactInfo', function () {
       ]);
       expect(self.controller.submissionError).toEqual('Invalid email address');
       expect(self.controller.onSubmit).toHaveBeenCalledWith({ success: false });
+    });
+
+    it('should normalize a structured invalid-email error to the legacy switch value', () => {
+      self.controller.detailsForm.$valid = true;
+      self.controller.donorDetails = {
+        'given-name': 'Fname',
+        email: 'a@a',
+        emailFormUri: '/emails/crugive',
+      };
+      jest
+        .spyOn(self.controller.orderService, 'updateDonorDetails')
+        .mockReturnValue(Observable.of('success'));
+      jest.spyOn(self.controller.orderService, 'addEmail').mockReturnValue(
+        Observable.throw({
+          data: {
+            messages: [
+              {
+                type: 'error',
+                id: 'field.invalid.email.format',
+                'debug-message': 'Invalid email address: a@a',
+                data: { 'field-name': 'email' },
+              },
+            ],
+          },
+        }),
+      );
+      self.controller.submitDetails();
+
+      expect(self.controller.submissionError).toEqual('Invalid email address');
+      expect(self.controller.submissionErrorId).toEqual(
+        'field.invalid.email.format',
+      );
+    });
+
+    it('should fall back to a generic error when a structured body has no messages', () => {
+      self.controller.detailsForm.$valid = true;
+      self.controller.donorDetails = {
+        'given-name': 'Fname',
+      };
+      jest
+        .spyOn(self.controller.orderService, 'updateDonorDetails')
+        .mockReturnValue(Observable.throw({ data: {} }));
+      self.controller.submitDetails();
+
+      expect(self.controller.submissionError).toEqual('unknown error');
+      expect(self.controller.submissionErrorId).toBeUndefined();
+    });
+
+    it('should skip a non-error message the API listed before the failure', () => {
+      self.controller.detailsForm.$valid = true;
+      self.controller.donorDetails = {
+        'given-name': 'Fname',
+      };
+      jest
+        .spyOn(self.controller.orderService, 'updateDonorDetails')
+        .mockReturnValue(
+          Observable.throw({
+            data: {
+              messages: [
+                {
+                  type: 'needinfo',
+                  id: 'need.email',
+                  'debug-message': 'Need more info',
+                  data: {},
+                },
+                {
+                  type: 'error',
+                  id: 'donordetails.name.required',
+                  'debug-message': 'name must be provided',
+                  data: { 'field-name': 'name' },
+                },
+              ],
+            },
+          }),
+        );
+      self.controller.submitDetails();
+
+      expect(self.controller.submissionError).toEqual('name must be provided');
+      expect(self.controller.submissionErrorId).toEqual(
+        'donordetails.name.required',
+      );
+    });
+
+    it('should fall back to a generic error when the body carries no error message', () => {
+      self.controller.detailsForm.$valid = true;
+      self.controller.donorDetails = {
+        'given-name': 'Fname',
+      };
+      jest
+        .spyOn(self.controller.orderService, 'updateDonorDetails')
+        .mockReturnValue(
+          Observable.throw({
+            data: {
+              messages: [
+                {
+                  type: 'needinfo',
+                  id: 'need.email',
+                  'debug-message': 'Need more info',
+                  data: {},
+                },
+              ],
+            },
+          }),
+        );
+      self.controller.submitDetails();
+
+      expect(self.controller.submissionError).toEqual('unknown error');
+      expect(self.controller.submissionErrorId).toBeUndefined();
     });
 
     it('should clear out spouse name', () => {

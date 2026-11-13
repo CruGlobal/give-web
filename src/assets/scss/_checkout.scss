@@ -184,6 +184,32 @@
   }
 }
 
+.masked-number-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.masked-number-wrapper,
+.credit-card-number-wrapper {
+  input.is-masked {
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .masked-number {
+    position: absolute;
+    left: 13px;
+    color: $colorCru-gray;
+    font-feature-settings: "calt" 0;
+    font-size: $font-size-base;
+    font-weight: normal;
+    letter-spacing: normal;
+    pointer-events: none;
+    text-transform: none;
+  }
+}
+
 .credit-card-number-wrapper {
   position:relative;
   display: flex;
@@ -290,4 +316,8 @@
 
 .form-group .number {
   font-feature-settings: "calt" 0;
+}
+
+.custom-thank-you {
+  overflow-wrap: break-word;
 }

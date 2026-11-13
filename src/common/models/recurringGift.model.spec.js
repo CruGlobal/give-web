@@ -182,6 +182,54 @@ describe('recurringGift model', () => {
     });
   });
 
+  describe('hasValidAmount', () => {
+    it('should return true for the original amount', () => {
+      expect(giftModel.hasValidAmount()).toEqual(true);
+    });
+
+    it('should return true for a valid updated amount', () => {
+      giftModel.amount = 50;
+
+      expect(giftModel.hasValidAmount()).toEqual(true);
+    });
+
+    it('should return true for a valid updated amount with two decimal places', () => {
+      giftModel.amount = 50.25;
+
+      expect(giftModel.hasValidAmount()).toEqual(true);
+    });
+
+    it('should return false if the amount was cleared (ng-model sets it to undefined)', () => {
+      giftModel.amount = undefined;
+
+      expect(giftModel.hasValidAmount()).toEqual(false);
+    });
+
+    it('should return false for an amount less than 1', () => {
+      giftModel.gift['updated-amount'] = 0.5;
+
+      expect(giftModel.hasValidAmount()).toEqual(false);
+    });
+
+    it('should return false for an amount greater than 10000000', () => {
+      giftModel.amount = 10000001;
+
+      expect(giftModel.hasValidAmount()).toEqual(false);
+    });
+
+    it('should return false for an amount with more than two decimal places', () => {
+      giftModel.amount = 50.123;
+
+      expect(giftModel.hasValidAmount()).toEqual(false);
+    });
+
+    it('should return false for a non-numeric amount', () => {
+      giftModel.amount = 'fifty';
+
+      expect(giftModel.hasValidAmount()).toEqual(false);
+    });
+  });
+
   describe('paymentMethodId getter', () => {
     it("should load payment id if it hasn't been updated", () => {
       expect(giftModel.paymentMethodId).toEqual(
@@ -549,6 +597,12 @@ describe('recurringGift model', () => {
       giftModel.amount = 50;
 
       expect(giftModel.hasChanges()).toEqual(true);
+    });
+
+    it('should return false if the amount was cleared (ng-model sets it to undefined)', () => {
+      giftModel.amount = undefined;
+
+      expect(giftModel.hasChanges()).toEqual(false);
     });
 
     it('should return true if payment id has been updated', () => {

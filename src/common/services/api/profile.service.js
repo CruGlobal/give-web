@@ -216,7 +216,7 @@ class Profile {
         paymentMethods = map(paymentMethods, (paymentMethod) => {
           paymentMethod.id = paymentMethod.self.uri.split('/').pop();
           if (
-            paymentMethod['payment-instrument-identification-attributes'][
+            paymentMethod['payment-instrument-identification-attributes']?.[
               'street-address'
             ]
           ) {
@@ -239,7 +239,7 @@ class Profile {
       .map((paymentMethod) => {
         paymentMethod.id = paymentMethod.self.uri.split('/').pop();
         if (
-          paymentMethod['payment-instrument-identification-attributes'][
+          paymentMethod['payment-instrument-identification-attributes']?.[
             'street-address'
           ]
         ) {
@@ -264,7 +264,7 @@ class Profile {
       .map((paymentMethods) => {
         paymentMethods = map(paymentMethods, (paymentMethod) => {
           if (
-            paymentMethod['payment-instrument-identification-attributes'][
+            paymentMethod['payment-instrument-identification-attributes']?.[
               'street-address'
             ]
           ) {

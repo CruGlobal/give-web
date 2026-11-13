@@ -31,6 +31,7 @@
                 ng-required="!$ctrl.paymentMethod || $ctrl.creditCardPayment.cardNumber"
                 ng-disabled="$ctrl.disableCardNumber"
                 credit-card-number
+                masked-number="card"
               />
               <div ng-switch="$ctrl.getCardType()" class="credit-card-icons">
                 <img

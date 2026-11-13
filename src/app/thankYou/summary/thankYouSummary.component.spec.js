@@ -64,6 +64,10 @@ describe('thank you summary', () => {
       {
         orderService: {
           retrieveLastPurchaseLink: () => '/purchases/crugive/iiydanbt=',
+          storeLastPurchase: jest.fn(),
+          retrieveLastPurchase: () => undefined,
+          storeLastPurchaseEmail: jest.fn(),
+          retrieveLastPurchaseEmail: () => null,
         },
         profileService: {
           getPurchase: () => Observable.of(self.mockPurchase),
@@ -104,6 +108,27 @@ describe('thank you summary', () => {
 
       expect(self.controller.signedOut).toHaveBeenCalled();
       expect(self.controller.loadLastPurchase).toHaveBeenCalled();
+    });
+  });
+
+  describe('custom thank you message', () => {
+    it('should expose a provided custom message as trusted html', inject((
+      $sce,
+    ) => {
+      self.controller.customThankYou =
+        '<p>Thank you!</p><p><a href="guide.pdf" download>Download the guide</a></p>';
+
+      self.controller.$onInit();
+
+      expect($sce.getTrustedHtml(self.controller.customThankYouHtml)).toEqual(
+        '<p>Thank you!</p><p><a href="guide.pdf" download>Download the guide</a></p>',
+      );
+    }));
+
+    it('should not set a trusted message when no custom message is provided', () => {
+      self.controller.$onInit();
+
+      expect(self.controller.customThankYouHtml).toBeUndefined();
     });
   });
 
@@ -162,6 +187,55 @@ describe('thank you summary', () => {
       expect(
         self.controller.analyticsFactory.transactionEvent,
       ).toHaveBeenCalledWith(self.mockPurchase);
+    });
+
+    it('should save the loaded purchase', () => {
+      self.controller.loadLastPurchase();
+
+      expect(
+        self.controller.orderService.storeLastPurchase,
+      ).toHaveBeenCalledWith(self.mockPurchase);
+    });
+
+    describe('purchase can no longer be loaded', () => {
+      beforeEach(() => {
+        jest
+          .spyOn(self.controller.profileService, 'getPurchase')
+          .mockReturnValue(Observable.throw({ status: 403 }));
+        jest.spyOn(self.controller.analyticsFactory, 'transactionEvent');
+        jest.spyOn(self.controller.analyticsFactory, 'setPurchaseNumber');
+        jest.spyOn(self.controller.analyticsFactory, 'pageLoaded');
+      });
+
+      it('should show the saved purchase without firing purchase events', () => {
+        jest
+          .spyOn(self.controller.orderService, 'retrieveLastPurchase')
+          .mockReturnValue(self.mockPurchase);
+        self.controller.loadLastPurchase();
+
+        expect(self.controller.purchase).toEqual(self.mockPurchase);
+        expect(self.controller.rateTotals).toEqual([
+          { frequency: 'Single', total: '$50.00', amount: 50 },
+          { frequency: 'Monthly', total: '$20.00', amount: 20 },
+        ]);
+        expect(self.controller.loading).toEqual(false);
+        expect(self.controller.loadingError).toBeUndefined();
+        expect(self.controller.analyticsFactory.pageLoaded).toHaveBeenCalled();
+        expect(self.controller.onPurchaseLoaded).not.toHaveBeenCalled();
+        expect(
+          self.controller.analyticsFactory.transactionEvent,
+        ).not.toHaveBeenCalled();
+        expect(
+          self.controller.analyticsFactory.setPurchaseNumber,
+        ).not.toHaveBeenCalled();
+      });
+
+      it('should show the api error when no purchase was saved', () => {
+        self.controller.loadLastPurchase();
+
+        expect(self.controller.purchase).not.toBeDefined();
+        expect(self.controller.loadingError).toEqual('api error');
+      });
     });
 
     it('does not trigger analytics event in branded checkout', () => {
@@ -238,6 +312,9 @@ describe('thank you summary', () => {
         expect(
           self.controller.analyticsFactory.setPurchaseNumber,
         ).not.toHaveBeenCalled();
+        expect(
+          self.controller.orderService.storeLastPurchase,
+        ).not.toHaveBeenCalled();
       });
 
       it('should show the missing error when there are no purchases to fall back to', () => {
@@ -284,10 +361,24 @@ describe('thank you summary', () => {
   });
 
   describe('loadEmail', () => {
-    it("should load the user's email", () => {
+    it("should load and save the user's email", () => {
       self.controller.loadEmail();
 
       expect(self.controller.email).toEqual('someperson@someaddress.com');
+      expect(
+        self.controller.orderService.storeLastPurchaseEmail,
+      ).toHaveBeenCalledWith('someperson@someaddress.com');
+    });
+
+    it('should show the saved email instead of the signed in email', () => {
+      jest
+        .spyOn(self.controller.orderService, 'retrieveLastPurchaseEmail')
+        .mockReturnValue('guest@example.com');
+      jest.spyOn(self.controller.profileService, 'getEmails');
+      self.controller.loadEmail();
+
+      expect(self.controller.email).toEqual('guest@example.com');
+      expect(self.controller.profileService.getEmails).not.toHaveBeenCalled();
     });
   });
 

@@ -12,10 +12,11 @@ describe('designation service', () => {
   beforeEach(angular.mock.module(module.name));
   const self = {};
 
-  beforeEach(inject((designationsService, $httpBackend, $location) => {
+  beforeEach(inject((designationsService, $httpBackend, $location, $log) => {
     self.designationsService = designationsService;
     self.$httpBackend = $httpBackend;
     self.$location = $location;
+    self.$log = $log;
   }));
 
   afterEach(() => {
@@ -220,6 +221,8 @@ describe('designation service', () => {
           expect(suggestedAmounts).toEqual([]);
           expect(itemConfig['default-campaign-code']).toBeUndefined();
           expect(itemConfig['jcr-title']).toBeUndefined();
+          expect(self.$log.error.logs).toEqual([]);
+          expect(self.$log.info.logs).toEqual([]);
           done();
         }, done);
       self.$httpBackend.flush();
@@ -300,6 +303,46 @@ describe('designation service', () => {
           expect(givingLinks).toEqual([
             { name: 'Name', url: 'https://example.com', order: 0 },
             { name: 'Name 2', url: 'https://example2.com', order: 2 },
+          ]);
+          done();
+        }, done);
+      self.$httpBackend.flush();
+    });
+
+    it('should handle a missing designation page, logging as info', (done) => {
+      self.$httpBackend
+        .expectGET(
+          'https://give-stage2.cru.org/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json',
+        )
+        .respond(404, {});
+      self.designationsService
+        .givingLinks('0123456')
+        .subscribe((givingLinks) => {
+          expect(givingLinks).toEqual([]);
+          expect(self.$log.error.logs).toEqual([]);
+          expect(self.$log.info.logs[0]).toEqual([
+            'No AEM page for designation',
+            '0123456',
+          ]);
+          done();
+        }, done);
+      self.$httpBackend.flush();
+    });
+
+    it('should handle an AEM error, logging as error', (done) => {
+      self.$httpBackend
+        .expectGET(
+          'https://give-stage2.cru.org/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json',
+        )
+        .respond(500, {});
+      self.designationsService
+        .givingLinks('0123456')
+        .subscribe((givingLinks) => {
+          expect(givingLinks).toEqual([]);
+          expect(self.$log.error.logs[0]).toEqual([
+            'Error loading giving links for designation',
+            expect.objectContaining({ status: 500 }),
+            '0123456',
           ]);
           done();
         }, done);

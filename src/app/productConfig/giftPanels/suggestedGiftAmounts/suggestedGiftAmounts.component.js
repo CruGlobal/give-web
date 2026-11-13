@@ -1,27 +1,21 @@
 import angular from 'angular';
 import 'angular-messages';
+import giftAmount from 'common/filters/giftAmount.filter';
 import showErrors from 'common/filters/showErrors.filter';
 import template from './suggestedGiftAmounts.tpl.html';
 
 const componentName = 'suggestedGiftAmounts';
 
 class SuggestedGiftAmountsController {
-  /* @ngInject */
-  constructor($filter) {
-    this.$filter = $filter;
-  }
-
-  suggestedAmount(amount) {
-    return this.$filter('currency')(
-      amount,
-      '$',
-      `${amount}`.indexOf('.') > -1 ? 2 : 0,
-    );
+  // Uses the amount from before the custom field was focused so the message doesn't flash mid-typing.
+  showPremiumMinimumMessage() {
+    const amount = parseFloat(this.amountAtFocus ?? this.itemConfig.AMOUNT);
+    return Boolean(this.premiumMinimum && amount < this.premiumMinimum);
   }
 }
 
 export default angular
-  .module(componentName, ['ngMessages', showErrors.name])
+  .module(componentName, ['ngMessages', giftAmount.name, showErrors.name])
   .component(componentName, {
     controller: SuggestedGiftAmountsController,
     templateUrl: template,
@@ -41,5 +35,7 @@ export default angular
       customAmount: '=',
       changeCustomAmount: '<',
       selectableAmounts: '<',
+      premiumMinimum: '<',
+      premiumName: '<',
     },
   });

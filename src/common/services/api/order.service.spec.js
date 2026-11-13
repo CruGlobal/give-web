@@ -893,6 +893,39 @@ describe('order service', () => {
 
       self.$httpBackend.flush();
     });
+
+    it('should still load all payment methods when one is missing payment-instrument-identification-attributes', (done) => {
+      delete clonedPaymentMethodSelectorResponse._order[0]
+        ._paymentinstrumentselector[0]._choice[0]._description[0][
+        'payment-instrument-identification-attributes'
+      ];
+
+      // The malformed payment method is still returned, just without its identification attributes
+      expectedResponse[2] = {
+        self: expectedResponse[2].self,
+        messages: [],
+        links: [],
+        'default-on-profile': false,
+        name: 'Cru Payment Instrument',
+        selectAction: expectedResponse[2].selectAction,
+      };
+
+      self.$httpBackend
+        .expectGET(
+          'https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentinstrumentselector:choice,order:paymentinstrumentselector:choice:description,order:paymentinstrumentselector:chosen,order:paymentinstrumentselector:chosen:description',
+        )
+        .respond(200, clonedPaymentMethodSelectorResponse);
+
+      self.orderService.getExistingPaymentMethods().subscribe(
+        (data) => {
+          expect(data).toEqual(expectedResponse);
+          done();
+        },
+        (error) => done(error),
+      );
+
+      self.$httpBackend.flush();
+    });
   });
 
   describe('selectPaymentMethod', () => {
@@ -995,6 +1028,31 @@ describe('order service', () => {
         expect(data).toEqual(expectedPaymentInfo);
         done();
       });
+
+      self.$httpBackend.flush();
+    });
+
+    it('should pass when the current payment is missing payment-instrument-identification-attributes', (done) => {
+      const clonedResponse = angular.copy(paymentMethodCreditCardResponse);
+      const description =
+        clonedResponse._order[0]._paymentinstrumentselector[0]._chosen[0]
+          ._description[0];
+      delete description['payment-instrument-identification-attributes'];
+
+      self.$httpBackend
+        .expectGET(
+          'https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentinstrumentselector:chosen:description',
+        )
+        .respond(200, clonedResponse);
+
+      self.orderService.getCurrentPayment().subscribe(
+        (data) => {
+          expect(data).toEqual(angular.copy(description));
+          expect(data.address).toBeUndefined();
+          done();
+        },
+        (error) => done(error),
+      );
 
       self.$httpBackend.flush();
     });
@@ -1411,6 +1469,92 @@ describe('order service', () => {
         '/purchases/crugive/giydanbt=',
       );
     });
+
+    it('should forget the saved purchase and email from the previous purchase', () => {
+      self.orderService.storeLastPurchase({ purchaseNumber: '1' });
+      self.orderService.storeLastPurchaseEmail('old@example.com');
+
+      self.orderService.storeLastPurchaseLink('/purchases/crugive/giydanbt=');
+
+      expect(self.orderService.retrieveLastPurchase()).toBeUndefined();
+      expect(self.orderService.retrieveLastPurchaseEmail()).toBeNull();
+    });
+  });
+
+  describe('storeLastPurchase', () => {
+    it('should save only the fields the thank you summary shows', () => {
+      self.orderService.storeLastPurchase({
+        donorDetails: {
+          name: { 'given-name': 'Guest' },
+          'donor-type': 'Household',
+          email: 'guest@example.com',
+        },
+        paymentInstruments: {
+          'bank-name': 'First Bank',
+          'routing-number': '121042882',
+          'account-number': '1234567890',
+        },
+        lineItems: [
+          {
+            name: 'Staff Member',
+            itemCode: { code: '0123456' },
+            itemOfferCode: { code: '0123456' },
+            rate: {
+              display: '$50.00',
+              cost: [{ amount: 50 }],
+              recurrence: { interval: 'NA' },
+            },
+          },
+        ],
+        rateTotals: [
+          {
+            recurrence: { display: 'Single' },
+            cost: { display: '$50.00', amount: 50, currency: 'USD' },
+          },
+        ],
+        rawData: { 'purchase-number': '23022' },
+      });
+
+      expect(self.orderService.retrieveLastPurchase()).toEqual({
+        donorDetails: {
+          name: { 'given-name': 'Guest' },
+          'donor-type': 'Household',
+        },
+        paymentInstruments: {
+          'bank-name': 'First Bank',
+          'routing-number': '121042882',
+        },
+        lineItems: [
+          {
+            name: 'Staff Member',
+            itemOfferCode: { code: '0123456' },
+            rate: { display: '$50.00', recurrence: { interval: 'NA' } },
+          },
+        ],
+        rateTotals: [
+          {
+            recurrence: { display: 'Single' },
+            cost: { display: '$50.00', amount: 50 },
+          },
+        ],
+      });
+    });
+  });
+
+  describe('retrieveLastPurchase', () => {
+    it('should return undefined when no purchase is saved', () => {
+      expect(self.orderService.retrieveLastPurchase()).toBeUndefined();
+    });
+  });
+
+  describe('storeLastPurchaseEmail', () => {
+    it('should save the email used for the purchase', () => {
+      self.orderService.storeLastPurchaseEmail('guest@example.com');
+
+      expect(self.orderService.retrieveLastPurchaseEmail()).toEqual(
+        'guest@example.com',
+      );
+    });
   });
 
   describe('retrieveLastPurchaseLink', () => {
@@ -1813,6 +1957,58 @@ describe('order service', () => {
               'CardErrorException',
             );
             expect(self.$window.scrollTo).toHaveBeenCalledWith(0, 0);
+            done();
+          },
+        );
+      });
+
+      it('should read a structured error body when submitting an order', (done) => {
+        self.orderService.submit.mockImplementation(() =>
+          Observable.throw({
+            status: 400,
+            data: {
+              messages: [
+                {
+                  data: {},
+                  id: 'purchase.card.declined',
+                  'debug-message':
+                    'CardDeclinedException: Invalid Card Number: some details',
+                  type: 'error',
+                },
+              ],
+            },
+          }),
+        );
+        mockController.creditCardPaymentDetails = {};
+        self.orderService.retrieveCardSecurityCode = jest
+          .fn()
+          .mockReturnValue('1234');
+        self.orderService.retrieveCardBin = jest.fn().mockReturnValue('411111');
+        self.orderService.submitOrder(mockController).subscribe(
+          () => done('Observable unexpectedly succeeded'),
+          () => {
+            // The ng-switch in checkout-error-messages.tpl.html matches the
+            // exception name, so the prefix must survive both body shapes.
+            expect(mockController.submissionError).toEqual(
+              'CardDeclinedException',
+            );
+            done();
+          },
+        );
+      });
+
+      it('should read the error from a gateway reCAPTCHA rejection', (done) => {
+        self.orderService.submit.mockImplementation(() =>
+          Observable.throw({
+            status: 422,
+            data: { error: 'Invalid Data' },
+          }),
+        );
+        mockController.bankAccountPaymentDetails = {};
+        self.orderService.submitOrder(mockController).subscribe(
+          () => done('Observable unexpectedly succeeded'),
+          () => {
+            expect(mockController.submissionError).toEqual('Invalid Data');
             done();
           },
         );

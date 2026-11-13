@@ -36,6 +36,7 @@ export const appConfig = /* @ngInject */ function (
         'cru-givestage.s3.amazonaws.com',
         'give-stage-static.cru.org',
         'wp-stage.familylife.com',
+        'cru-poc.cru.org',
       ],
       nonprod: [
         'give-stage2-next.cru.org',
@@ -206,6 +207,9 @@ export const appConfig = /* @ngInject */ function (
     AMOUNT_MIN_ERROR: 'Amount must be at least {{currencyLimit}}',
     AMOUNT_MAX_ERROR: 'Amount must be less than {{currencyLimit}}',
     SINGLE_GIFT: 'Single Gift',
+    MONTHLY_GIFT: 'Monthly',
+    QUARTERLY_GIFT: 'Quarterly',
+    ANNUAL_GIFT: 'Annual',
     CHANGING_FREQUENCY: 'Changing frequency...',
     RECURRING_START: 'Transaction Start Date for Recurring Gifts',
     MONTH: 'Month',
@@ -215,6 +219,8 @@ export const appConfig = /* @ngInject */ function (
     SEND_MESSAGE_TO: 'Send a Message to {{ministry}}',
     SPECIAL_INSTRUCTIONS:
       'Special Handling Instructions for Processing This Gift',
+    ANONYMOUS_MESSAGE:
+      'For anonymous donations, please leave this field blank.',
     MESSAGE_EXAMPLE:
       'For example: stop my gift after 18 months, make this gift anonymous (note: please remove any messages to ministry or missionary to remain anonymous), etc.',
     YOUR_INFORMATION: 'Your information',
@@ -381,6 +387,7 @@ export const appConfig = /* @ngInject */ function (
     REVIEW: 'Review',
     CONTACT_INFORMATION: 'Contact Information',
     CHANGE: 'Change',
+    UPDATE_PAYMENT_METHOD: 'Update payment method',
     PAYMENT_METHOD: 'Payment Method',
     REVIEW_EMAIL_ERROR:
       'There was an issue with your email. Please verify that it is correct.',
@@ -395,6 +402,8 @@ export const appConfig = /* @ngInject */ function (
     REVIEW_SUBMITTING_PAYMENT_ERROR:
       'There was an error submitting your payment. Verify that your payment info is correct or try adding it again. If you are still seeing this message, please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
     REVIEW_CARD_EXPIRED_ERROR: 'Your card is expired.',
+    REVIEW_SELECTED_CARD_EXPIRED_ERROR:
+      'The credit card you selected has expired. Please choose or add another payment method.',
     REVIEW_INVALID_CARD_ERROR: 'The credit card number entered is invalid.',
     REVIEW_CARD_DECLINED_ERROR: 'Your credit card was declined.',
     REVIEW_INSUFFICIENT_FUNDS_ERROR:
@@ -407,6 +416,8 @@ export const appConfig = /* @ngInject */ function (
       'The billing address entered does not match the address associated with the card.',
     REVIEW_DEFAULT_ERROR:
       'There was an issue processing your request. Please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
+    REVIEW_VERIFICATION_ERROR:
+      'We were unable to verify your gift. Please try again. If you are still seeing this message, please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
     ACCOUNT_NUM_FULL: 'Account Number',
     ROUTING_NUM_FULL: 'Routing Number',
     CARD_NUM_FULL: 'Card Number',
@@ -430,9 +441,9 @@ export const appConfig = /* @ngInject */ function (
       'There was an error loading your gifts. You may <a id="retryLoadButton" href="" ng-click="{{retryLoadFunction}}">retry</a> loading them. If you continue to see this message, please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
     FINAL_THANK_YOU_HEADING: 'Thank you for Your Gift',
     FINAL_GIFT_SUMMARY_EXPIRATION_ERROR: `Your gift was submitted but we cannot provide a detailed summary at this time as your session has expired.
-        You will receive a confirmation email from us shortly, or you can review your donation now by looking at <a href="/your-giving.html">Your Giving</a>.`,
+        You will receive a confirmation email from us shortly, and your donation will be available to review in <a href="/your-giving.html">Your Giving</a> soon.`,
     FINAL_GIFT_NO_SUMMARY_ERROR: `Your gift was submitted but we cannot provide a detailed summary at this time.
-        You will receive a confirmation email from us shortly, or you can review your donation now by looking at <a href="/your-giving.html">Your Giving</a>.`,
+        You will receive a confirmation email from us shortly, and your donation will be available to review in <a href="/your-giving.html">Your Giving</a> soon.`,
     FINAL_PROCESSING_GIFT: `We are processing your gift now. We'll send an email confirmation to
       <strong>{{useremail}}</strong> as well as a tax-deductible receipt by postal mail.`,
     FINAL_GIFT_THANK_YOU:
@@ -440,10 +451,17 @@ export const appConfig = /* @ngInject */ function (
     RECEIPT_MAILING_ADDRESS: 'Receipt Mailing Address',
     GIFT_SUMMARY: 'Gift Summary',
     FIRST_GIFT: 'First Gift:',
+    SINGLE_GIFT_TOTAL: 'Single Gift Total:',
+    MONTHLY_GIFT_TOTAL: 'Monthly Gift Total:',
+    QUARTERLY_GIFT_TOTAL: 'Quarterly Gift Total:',
     ANNUAL_GIFT_TOTAL: 'Annual Gift Total:',
     FREQUENCY_GIFT_TOTAL: '{{frequency}} Gift Total:',
     CHOOSE_RESOURCE: 'Choose a Resource',
     NO_THANK_YOU: 'Thank you, but please do not send me the resources.',
+    PREMIUM_MINIMUM_MESSAGE:
+      'Every gift makes a difference. Gifts of {{amount}}+ also include {{premiumName}} as our thank-you.',
+    PREMIUM_MINIMUM_ERROR:
+      'To receive {{premiumName}}, please enter a gift of {{amount}} or more.',
     RADIO_STATION: 'Radio Station',
     RADIO_STATION_LIST_ERROR:
       'There was an error loading radio stations in your area.',
@@ -461,6 +479,8 @@ export const appConfig = /* @ngInject */ function (
     OKTA_LAST_NAME_FIELD: 'last name',
     OKTA_EMAIL_FIELD: 'email',
     OKTA_PASSWORD_FIELD: 'password',
+    OKTA_CONFIRM_PASSWORD_LABEL: 'Confirm password',
+    OKTA_PASSWORD_MISMATCH: 'Passwords do not match. Please try again.',
     OKTA_REDIRECTING_IN: 'Redirecting in {{seconds}}...',
     OKTA_REDIRECTING_NOW: 'Redirecting...',
     OKTA_WELCOME: 'Welcome, {{name}}!',
@@ -476,10 +496,25 @@ export const appConfig = /* @ngInject */ function (
     REMOVE_SPOUSE: 'Remove',
     SUGGESTED_AMOUNT_HELP: 'Suggested Gift Amounts. Tab for Custom Amount',
     CUSTOM_AMOUNT: 'Custom Amount',
+    SESSION_MISMATCH_RELOAD:
+      '<strong>Please reload this page and log in again.</strong>',
+    SESSION_MISMATCH_CLEAR_DATA:
+      "If it still doesn't work, you'll need to clear saved data for cru.org in Chrome:",
+    SESSION_MISMATCH_STEP_1:
+      'Click the <strong>three dots</strong> (top-right corner) &rarr; <strong>Settings</strong>',
+    SESSION_MISMATCH_STEP_2:
+      'Go to <strong>Privacy and Security</strong> &rarr; <strong>Third-Party Cookies</strong>',
+    SESSION_MISMATCH_STEP_3:
+      'Click <strong>See all site data and permissions</strong>',
+    SESSION_MISMATCH_STEP_4:
+      'Find <strong>cru.org</strong> and click the <strong>trash can icon</strong> to delete it',
+    SESSION_MISMATCH_RELOAD_AGAIN: 'Then reload the page and log in again.',
+    SESSION_MISMATCH_CONTACT:
+      'Still stuck? Email <a href="mailto:techhelp@cru.org">techhelp@cru.org</a> - we\'re happy to help!',
   });
 
   $translateProvider.translations('es', {
-    GIVE_GIFT_HEADER: 'Dar regalo',
+    GIVE_GIFT_HEADER: 'Hacer un Regalo',
     LOADING_GIFT_DETAILS: 'Cargando detalles del regalo...',
     LOADING_ERROR:
       'There was an error loading the details needed to configure your gift. You may <a href ng-click="{{loadData}}">try again</a>. If you continue to experience issues, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
@@ -494,7 +529,7 @@ export const appConfig = /* @ngInject */ function (
     GIFT_IN_CART_ERROR: 'Ya tienes este regalo en tu carrito.',
     FORCED_USER_TO_LOGOUT:
       'There was an error adding this item to your account due to session data. Please re-add the item to your cart.',
-    GIFT_AMOUNT: 'Selecciona Una Cantidad',
+    GIFT_AMOUNT: 'Monto de la Donación',
     OTHER_PLACEHOLDER: 'Otro regalo generoso',
     GIFT_FREQUENCY: 'Frecuencia de la donación',
     VALID_DOLLAR_AMOUNT_ERROR:
@@ -502,10 +537,12 @@ export const appConfig = /* @ngInject */ function (
     AMOUNT_EMPTY_ERROR: 'El importe no debe estar vacío.',
     AMOUNT_MIN_ERROR: 'La cantidad debe ser al menos {{currencyLimit}}',
     AMOUNT_MAX_ERROR: 'El importe debe ser inferior a {{currencyLimit}}',
-    SINGLE_GIFT: 'Una sola',
+    SINGLE_GIFT: 'Donación Única',
+    MONTHLY_GIFT: 'Mensual',
+    QUARTERLY_GIFT: 'Trimestral',
+    ANNUAL_GIFT: 'Anual',
     CHANGING_FREQUENCY: 'Cambio de frecuencia...',
-    RECURRING_START:
-      'Fecha de inicio de la transacción para regalos recurrentes',
+    RECURRING_START: 'Fecha en que comienza la donación recurrente',
     MONTH: 'Mes',
     DAY: 'Dia',
     GIFT_START_DATE: 'Tu regalo comenzará el',
@@ -513,6 +550,8 @@ export const appConfig = /* @ngInject */ function (
     SEND_MESSAGE_TO: 'Enviar un mensaje al {{ministry}}',
     SPECIAL_INSTRUCTIONS:
       'Instrucciones especiales de manejo para procesar este regalo',
+    ANONYMOUS_MESSAGE:
+      'Para donaciones anónimas, por favor deje este campo en blanco.',
     MESSAGE_EXAMPLE:
       'Por ejemplo: Detener mi donación después de 18 meses, hacer esta donación anónima (nota: favor de quitar cualquier mensaje al ministerio o al misionero para permanecer en el anonimato), etc.',
     YOUR_INFORMATION: 'Tu información',
@@ -531,7 +570,7 @@ export const appConfig = /* @ngInject */ function (
     SPOUSE_FIRST_NAME: 'Nombre del cónyuge',
     SPOUSE_LAST_NAME: 'Apellido del cónyuge',
     ORGANIZATION_NAME: 'Nombre de la Organización',
-    MAILING_ADDRESS: 'Dirección de envio',
+    MAILING_ADDRESS: 'Dirección de envío',
     SUFFIX: 'Sufijo',
     COUNTRY: 'País',
     ADDRESS: 'Dirección',
@@ -557,14 +596,14 @@ export const appConfig = /* @ngInject */ function (
       'By selecting the "I Agree" checkbox above, I acknowledge that I have read, understand and agree to these Terms and Conditions, and that this agreement constitutes a "writing signed by me" under any applicable law or regulation. I authorize Cru to initiate electronic funds transfers (debits) from my account at the financial institution listed above, and to initiate deposits (credits) if necessary for any withdrawals made in error. This authority is to remain in full force and effect until Cru has received notification from me of its termination in such time as to afford Cru reasonable opportunity to act on it. All contributions to Cru are income tax-deductible and are made with the understanding that Cru has complete discretion and control over the use of all donated funds.',
     I_AGREE:
       'Reconozco que he leído, comprendido y acepto los <a ng-click="$ctrl.toggleAgreement($event)">términos y condiciones</a> relacionados con la transferencia electrónica de fondos.',
-    CREDIT_CARD_PAYMENT: 'Pago con tarjeta de crédito',
+    CREDIT_CARD_PAYMENT: 'Pago con tarjeta de crédito o débito',
     CARD_NUM: 'Número de tarjeta',
     CARD_NAME: 'Nombre en la tarjeta',
     EXP_MONTH: 'Mes de expiración',
-    EXP_YEAR: 'Año de caducidad',
+    EXP_YEAR: 'Año de expiración',
     SEC_CODE: 'Código de seguridad',
     SAME_ADDRESS: 'La misma que mi direccion de correo',
-    BILLING_ADDRESS: 'Dirección de Envio',
+    BILLING_ADDRESS: 'Dirección de Facturación',
     NEW_ADDRESS: 'Nueva',
     ERROR_SAVING_TITLE: 'Se produjo un error al guardar el título que eligió.',
     ERROR_SAVING_EMAIL:
@@ -681,7 +720,8 @@ export const appConfig = /* @ngInject */ function (
     REVIEW: 'Review',
     CONTACT_INFORMATION: 'Contact Information',
     CHANGE: 'Change',
-    PAYMENT_METHOD: 'Payment Method',
+    UPDATE_PAYMENT_METHOD: 'Actualizar método de pago',
+    PAYMENT_METHOD: 'Forma de Pago',
     REVIEW_EMAIL_ERROR:
       'There was an issue with your email. Please verify that it is correct.',
     REVIEW_PAYMENT_ERROR:
@@ -695,6 +735,8 @@ export const appConfig = /* @ngInject */ function (
     REVIEW_SUBMITTING_PAYMENT_ERROR:
       'There was an error submitting your payment. Verify that your payment info is correct or try adding it again. If you are still seeing this message, please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
     REVIEW_CARD_EXPIRED_ERROR: 'Your card is expired.',
+    REVIEW_SELECTED_CARD_EXPIRED_ERROR:
+      'La tarjeta de crédito que seleccionó ha expirado. Por favor, elija o agregue otro método de pago.',
     REVIEW_INVALID_CARD_ERROR: 'The credit card number entered is invalid.',
     REVIEW_CARD_DECLINED_ERROR: 'Your credit card was declined.',
     REVIEW_INSUFFICIENT_FUNDS_ERROR:
@@ -707,11 +749,13 @@ export const appConfig = /* @ngInject */ function (
       'The billing address entered does not match the address associated with the card.',
     REVIEW_DEFAULT_ERROR:
       'There was an issue processing your request. Please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
+    REVIEW_VERIFICATION_ERROR:
+      'No pudimos verificar su donación. Por favor, intente de nuevo. Si sigue viendo este mensaje, comuníquese con <a href="mailto:eGift@cru.org">eGift@cru.org</a> para recibir ayuda.',
     ACCOUNT_NUM_FULL: 'Account Number',
     ROUTING_NUM_FULL: 'Routing Number',
     CARD_NUM_FULL: 'Número de tarjeta',
-    CARD_TYPE: 'Card Type',
-    EXPIRES: 'Expires',
+    CARD_TYPE: 'Tipo de Tarjeta',
+    EXPIRES: 'Vence',
     REVIEW_GIFTS: 'Review Gifts',
     GIFT: 'Gift',
     FREQUENCY: 'Frequency',
@@ -722,29 +766,36 @@ export const appConfig = /* @ngInject */ function (
     KEEP_DATE: 'Keep {{keepdate}}',
     CHANGE_TO_DATE: 'Change to {{changedate}}',
     STARTING_DATE: 'Starts on: {{startdate}}',
-    SUBMIT_GIFT: 'Submit Your Gift',
+    SUBMIT_GIFT: 'Enviar Tu Donación',
     SUBMITTING_GIFT: 'Submitting your gift...',
     SUBMIT_VALIDATION_ERROR:
       'Please correct the errors above before continuing.',
     RETRY_LOAD:
       'There was an error loading your gifts. You may <a id="retryLoadButton" href="" ng-click="{{retryLoadFunction}}">retry</a> loading them. If you continue to see this message, please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
-    FINAL_THANK_YOU_HEADING: 'Thank you for Your Gift',
+    FINAL_THANK_YOU_HEADING: 'Gracias por Tu Regalo',
     FINAL_GIFT_SUMMARY_EXPIRATION_ERROR: `Your gift was submitted but we cannot provide a detailed summary at this time as your session has expired.
-        You will receive a confirmation email from us shortly, or you can review your donation now by looking at <a href="/your-giving.html">Your Giving</a>.`,
+        You will receive a confirmation email from us shortly, and your donation will be available to review in <a href="/your-giving.html">Your Giving</a> soon.`,
     FINAL_GIFT_NO_SUMMARY_ERROR: `Your gift was submitted but we cannot provide a detailed summary at this time.
-        You will receive a confirmation email from us shortly, or you can review your donation now by looking at <a href="/your-giving.html">Your Giving</a>.`,
-    FINAL_PROCESSING_GIFT: `We are processing your gift now. We'll send an email confirmation to
-      <strong>{{useremail}}</strong> as well as a tax-deductible receipt by postal mail.`,
+        You will receive a confirmation email from us shortly, and your donation will be available to review in <a href="/your-giving.html">Your Giving</a> soon.`,
+    FINAL_PROCESSING_GIFT: `Estamos procesando tu donación ahora. Te enviaremos un correo electrónico de confirmación a
+      <strong>{{useremail}}</strong>, así como un recibo deducible de impuestos por correo postal.`,
     FINAL_GIFT_THANK_YOU:
-      "Thanks for making a difference in the lives of people both now and for eternity. May the Lord bless your investment in this work for Christ's kingdom. (Luke 6:38)",
-    RECEIPT_MAILING_ADDRESS: 'Receipt Mailing Address',
-    GIFT_SUMMARY: 'Gift Summary',
-    FIRST_GIFT: 'First Gift:',
-    ANNUAL_GIFT_TOTAL: 'Annual Gift Total:',
+      'Gracias por marcar una diferencia en la vida de las personas, tanto ahora como por la eternidad. Que el Señor bendiga tu inversión en esta obra para el Reino de Cristo (Lucas 6:38).',
+    RECEIPT_MAILING_ADDRESS: 'Dirección de Envío del Recibo',
+    GIFT_SUMMARY: 'Resumen de la Donación',
+    FIRST_GIFT: 'Primer Regalo:',
+    SINGLE_GIFT_TOTAL: 'Total de la Donación Única:',
+    MONTHLY_GIFT_TOTAL: 'Total de la Donación Mensual:',
+    QUARTERLY_GIFT_TOTAL: 'Total de la Donación Trimestral:',
+    ANNUAL_GIFT_TOTAL: 'Total de la Donación Anual:',
     FREQUENCY_GIFT_TOTAL: '{{frequency}} Gift Total:',
     CHOOSE_RESOURCE: 'Choose a Resource',
     NO_THANK_YOU: 'Thank you, but please do not send me the resources.',
-    RADIO_STATION: 'Radio Station',
+    PREMIUM_MINIMUM_MESSAGE:
+      'Cada donación marca la diferencia. Las donaciones de {{amount}} o más también incluyen {{premiumName}} como nuestro agradecimiento.',
+    PREMIUM_MINIMUM_ERROR:
+      'Para recibir {{premiumName}}, ingresa una donación de {{amount}} o más.',
+    RADIO_STATION: 'Estación de Radio',
     RADIO_STATION_LIST_ERROR:
       'There was an error loading radio stations in your area.',
     RADIO_STATION_SELECT_ERROR: 'There was an error selecting a radio station.',
@@ -761,6 +812,8 @@ export const appConfig = /* @ngInject */ function (
     OKTA_LAST_NAME_FIELD: 'last name',
     OKTA_EMAIL_FIELD: 'email',
     OKTA_PASSWORD_FIELD: 'password',
+    OKTA_CONFIRM_PASSWORD_LABEL: 'Confirmar contraseña',
+    OKTA_PASSWORD_MISMATCH: 'Las contraseñas no coinciden. Inténtelo de nuevo.',
     OKTA_REDIRECTING_IN: 'Redirecting in {{seconds}}...',
     OKTA_REDIRECTING_NOW: 'Redirecting...',
     OKTA_WELCOME: 'Welcome, {{name}}!',
@@ -776,6 +829,22 @@ export const appConfig = /* @ngInject */ function (
     REMOVE_SPOUSE: 'Remove',
     SUGGESTED_AMOUNT_HELP: 'Suggested Gift Amounts. Tab for Custom Amount',
     CUSTOM_AMOUNT: 'Custom Amount',
+    SESSION_MISMATCH_RELOAD:
+      '<strong>Vuelva a cargar esta página e inicie sesión de nuevo.</strong>',
+    SESSION_MISMATCH_CLEAR_DATA:
+      'Si aún no funciona, deberá borrar los datos guardados de cru.org en Chrome:',
+    SESSION_MISMATCH_STEP_1:
+      'Haga clic en los <strong>tres puntos</strong> (esquina superior derecha) &rarr; <strong>Configuración</strong>',
+    SESSION_MISMATCH_STEP_2:
+      'Vaya a <strong>Privacidad y seguridad</strong> &rarr; <strong>Cookies de terceros</strong>',
+    SESSION_MISMATCH_STEP_3:
+      'Haga clic en <strong>Ver todos los datos y permisos de los sitios</strong>',
+    SESSION_MISMATCH_STEP_4:
+      'Busque <strong>cru.org</strong> y haga clic en el <strong>ícono de papelera</strong> para eliminarlo',
+    SESSION_MISMATCH_RELOAD_AGAIN:
+      'Luego vuelva a cargar la página e inicie sesión de nuevo.',
+    SESSION_MISMATCH_CONTACT:
+      '¿Aún tiene problemas? Escríbanos a <a href="mailto:techhelp@cru.org">techhelp@cru.org</a>; ¡con gusto le ayudaremos!',
   });
   $translateProvider.preferredLanguage('en');
 };

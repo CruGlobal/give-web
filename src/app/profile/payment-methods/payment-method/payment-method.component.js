@@ -14,6 +14,7 @@ import uibCollapse from 'angular-ui-bootstrap/src/collapse';
 import uibModal from 'angular-ui-bootstrap/src/modal';
 
 import analyticsFactory from 'app/analytics/analytics.factory';
+import * as structuredErrorService from 'common/services/structuredError.service';
 
 const componentName = 'paymentMethod';
 
@@ -108,7 +109,7 @@ class PaymentMethodController {
   handleStateChangeError(error, $log) {
     this.$log.error('Error updating payment method', error);
     this.paymentFormResolve.state = 'error';
-    this.paymentFormResolve.error = error.data;
+    this.paymentFormResolve.error = structuredErrorService.getErrorText(error);
     scrollModalToTop();
   }
 

@@ -1,4 +1,5 @@
 import angular from 'angular';
+import every from 'lodash/every';
 
 import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component';
 import giftUpdateView from 'common/components/giftViews/giftUpdateView/giftUpdateView.component';
@@ -10,6 +11,13 @@ const componentName = 'step3ConfigureRecentRecipients';
 class ConfigureRecentRecipientsController {
   /* @ngInject */
   constructor() /* eslint-disable-line no-useless-constructor */ {}
+
+  allGiftsValid() {
+    return every(
+      this.additions,
+      (gift) => gift.paymentMethod && gift.hasValidAmount(),
+    );
+  }
 }
 
 export default angular
