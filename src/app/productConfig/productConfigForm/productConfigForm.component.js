@@ -17,7 +17,10 @@ import designationsService from 'common/services/api/designations.service';
 import cartService from 'common/services/api/cart.service';
 import orderService from 'common/services/api/order.service';
 import { forcedUserToLogout } from '../../../common/services/session/session.service';
-import { startDate } from 'common/services/giftHelpers/giftDates.service';
+import {
+  possibleTransactionDays,
+  startDate,
+} from 'common/services/giftHelpers/giftDates.service';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
 import showErrors from 'common/filters/showErrors.filter';
 import { giftAddedEvent, cartUpdatedEvent } from 'common/lib/cartEvents';
@@ -170,11 +173,19 @@ class ProductConfigFormController {
           ).format('DD');
         }
         if (!this.itemConfig.RECURRING_START_MONTH && this.nextDrawDate) {
-          // Use the chosen day so a day that already passed this month starts next month, not next year
-          this.itemConfig.RECURRING_START_MONTH = startDate(
-            this.itemConfig.RECURRING_DAY_OF_MONTH,
-            this.nextDrawDate,
-          ).format('MM');
+          const nextAvailableDate = startDate(null, this.nextDrawDate);
+          this.itemConfig.RECURRING_START_MONTH =
+            nextAvailableDate.format('MM');
+          // A preset day that already passed this month is not in the day list, so use the next available day
+          if (
+            !possibleTransactionDays(
+              this.itemConfig.RECURRING_START_MONTH,
+              this.nextDrawDate,
+            ).includes(this.itemConfig.RECURRING_DAY_OF_MONTH)
+          ) {
+            this.itemConfig.RECURRING_DAY_OF_MONTH =
+              nextAvailableDate.format('DD');
+          }
         }
       });
 
