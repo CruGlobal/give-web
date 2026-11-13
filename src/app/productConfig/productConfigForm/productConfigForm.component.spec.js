@@ -238,30 +238,32 @@ describe('product config form component', function () {
       expect($ctrl.analyticsFactory.giveGiftModal($ctrl.productData));
     });
 
-    it('should default the start month to the next month the preset day can happen in', () => {
+    it('should use the next available day when the preset day already passed this month', () => {
+      $ctrl.itemConfig.RECURRING_DAY_OF_MONTH = '01';
+      $ctrl.loadData();
+
+      expect($ctrl.itemConfig['RECURRING_DAY_OF_MONTH']).toEqual('02');
+      expect($ctrl.itemConfig['RECURRING_START_MONTH']).toEqual('10');
+    });
+
+    it('should keep the preset day when it is still ahead this month', () => {
+      $ctrl.itemConfig.RECURRING_DAY_OF_MONTH = '15';
+      $ctrl.loadData();
+
+      expect($ctrl.itemConfig['RECURRING_DAY_OF_MONTH']).toEqual('15');
+      expect($ctrl.itemConfig['RECURRING_START_MONTH']).toEqual('10');
+    });
+
+    it('should keep the preset day when the next available date is in next month', () => {
+      advanceTo(moment.utc('2016-10-30').toDate());
+      $ctrl.commonService.getNextDrawDate.mockReturnValue(
+        Observable.of('2016-10-28'),
+      );
       $ctrl.itemConfig.RECURRING_DAY_OF_MONTH = '01';
       $ctrl.loadData();
 
       expect($ctrl.itemConfig['RECURRING_DAY_OF_MONTH']).toEqual('01');
       expect($ctrl.itemConfig['RECURRING_START_MONTH']).toEqual('11');
-    });
-
-    it('should keep the current start month when the preset day is still ahead this month', () => {
-      $ctrl.itemConfig.RECURRING_DAY_OF_MONTH = '15';
-      $ctrl.loadData();
-
-      expect($ctrl.itemConfig['RECURRING_START_MONTH']).toEqual('10');
-    });
-
-    it('should roll the default start month into January when the preset day has passed in December', () => {
-      advanceTo(moment.utc('2016-12-15').toDate());
-      $ctrl.commonService.getNextDrawDate.mockReturnValue(
-        Observable.of('2016-12-16'),
-      );
-      $ctrl.itemConfig.RECURRING_DAY_OF_MONTH = '01';
-      $ctrl.loadData();
-
-      expect($ctrl.itemConfig['RECURRING_START_MONTH']).toEqual('01');
     });
 
     it('should called beginCheckout in branded checkout', () => {
