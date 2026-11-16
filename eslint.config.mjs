@@ -17,7 +17,6 @@ export default defineConfig(
       sourceType: 'module',
       globals: {
         ...globals.browser,
-        ...globals.jest,
         inject: 'readonly',
         // Webpack DefinePlugin fills in process.env at build time.
         process: 'readonly',
@@ -32,6 +31,15 @@ export default defineConfig(
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
     },
+  },
+  {
+    files: [
+      '**/*.{spec,test}.{js,jsx,ts,tsx}',
+      '**/*.fixture.js',
+      'jest/**/*.js',
+      '__mocks__/**/*.js',
+    ],
+    languageOptions: { globals: globals.jest },
   },
   {
     files: ['*.{js,mjs}', 'jest/**/*.js', '__mocks__/**/*.js'],
