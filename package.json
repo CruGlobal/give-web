@@ -107,7 +107,11 @@
     "webpack-dev-server/**/spdy-transport": "^3.0.0"
   },
   "lint-staged": {
-    "*.{js,json,html,md}": "prettier --write",
+    "*.{js,jsx,ts,tsx,mjs}": [
+      "eslint --fix --pass-on-unpruned-suppressions",
+      "prettier --write"
+    ],
+    "*.{json,html,md}": "prettier --write",
     "*.{css,scss}": "stylelint --fix --quiet-deprecation-warnings"
   }
 }
