@@ -1,0 +1,29 @@
+# Git sends the pushed refs once on stdin, and both the secrets scan and the test check need them.
+refs=$(cat)
+
+if command -v gitleaks >/dev/null 2>&1; then
+  zero=0000000000000000000000000000000000000000
+  printf '%s\n' "$refs" | while read -r local_ref local_sha remote_ref remote_sha; do
+    [ -z "$local_sha" ] || [ "$local_sha" = "$zero" ] && continue
+    if [ "$remote_sha" = "$zero" ]; then
+      range="$local_sha --not --remotes"
+    else
+      range="$remote_sha..$local_sha"
+    fi
+    gitleaks git --no-banner --redact --log-opts="$range" . || exit 1
+  done || exit 1
+else
+  echo "gitleaks not installed, skipping secrets scan (brew install gitleaks)"
+fi
+
+# Tests run on the files on disk, so they only mean something when the pushed commit is the one checked out.
+pushed=$(printf '%s\n' "$refs" | awk '$2 !~ /^0+$/ { print $2; exit }')
+if [ -z "$pushed" ]; then
+  exit 0
+fi
+if [ "$pushed" != "$(git rev-parse HEAD)" ]; then
+  echo "Not pushing the checked-out commit, skipping tests (CI runs the full suite)"
+  exit 0
+fi
+
+yarn test --silent
