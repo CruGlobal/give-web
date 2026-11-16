@@ -183,7 +183,7 @@
                                 ng-model="$ctrl.donorDetails['spouse-name']['given-name']"
                                 ng-maxlength="50"
                                 ng-disabled="$ctrl.hasSpouse"
-                                ng-required="$ctrl.addingSpouse"
+                                ng-required="$ctrl.isSpouseNameRequired('family-name')"
                               />
                               <input
                                 name="spouseInitial"
@@ -201,7 +201,7 @@
                                 ng-model="$ctrl.donorDetails['spouse-name']['family-name']"
                                 ng-maxlength="50"
                                 ng-disabled="$ctrl.hasSpouse"
-                                ng-required="$ctrl.addingSpouse"
+                                ng-required="$ctrl.isSpouseNameRequired('given-name')"
                               />
 
                               <select

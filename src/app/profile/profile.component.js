@@ -99,7 +99,8 @@ class ProfileController {
     this.profileService.getProfileDonorDetails().subscribe(
       (donorDetails) => {
         this.donorDetails = donorDetails;
-        this.hasSpouse = !!this.donorDetails['spouse-name']['family-name'];
+        this.hasSpouse =
+          this.hasSpouseName('given-name') && this.hasSpouseName('family-name');
         this.initTitles();
         this.setSubscriberIds();
         this.donorDetailsLoading = false;
@@ -125,11 +126,21 @@ class ProfileController {
     );
   }
 
+  hasSpouseName(nameField) {
+    return !!this.donorDetails?.['spouse-name']?.[nameField]?.trim();
+  }
+
+  isSpouseNameRequired(otherNameField) {
+    return this.hasSpouseName(otherNameField);
+  }
+
   updateDonorDetails() {
     this.donorDetailsLoading = true;
-    const updatedDetails = this.addingSpouse
-      ? omit(this.donorDetails, 'spouse-name') // Adding a spouse is handled by saveSpouse
-      : this.donorDetails;
+    // Spouse names are only saved by saveSpouse, so leave out an unsaved or half-saved spouse
+    const updatedDetails =
+      this.addingSpouse || !this.hasSpouse
+        ? omit(this.donorDetails, 'spouse-name')
+        : this.donorDetails;
     this.profileService.updateProfileDonorDetails(updatedDetails).subscribe(
       () => {
         this.donorDetailsLoading = false;
@@ -501,7 +512,8 @@ class ProfileController {
       this.spouseDetailsForm &&
       this.spouseDetailsForm.$dirty &&
       this.spouseDetailsForm.$valid &&
-      this.addingSpouse
+      this.addingSpouse &&
+      this.hasSpouseName('given-name')
     ) {
       this.saveSpouse();
     }
