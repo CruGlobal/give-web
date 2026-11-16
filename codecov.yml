@@ -3,3 +3,8 @@ coverage:
   ignore:
     - 'src/app/analytics/*'
     - 'src/common/lib/*'
+  status:
+    # Coverage on the lines a PR changes; informational until we pick a minimum.
+    patch:
+      default:
+        informational: true
