@@ -1,0 +1,19 @@
+name: Pull request checks
+
+on:
+  pull_request:
+
+concurrency:
+  group: pr-checks-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # Lint, typecheck, tests and build stay in build.yml: the shared node-ci job runs one lint script and no build.
+  security:
+    uses: CruGlobal/.github/.github/workflows/node-security.yml@v2
+    with:
+      # Yarn 1 audit has no ignore list, and AngularJS 1.8.3 has high findings with no fix; back to high after the Yarn 4 move.
+      audit-level: critical
