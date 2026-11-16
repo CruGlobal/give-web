@@ -1,0 +1,305 @@
+{
+  "jest/htmlTransform.js": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 2
+    }
+  },
+  "src/app/analytics/analytics.factory.js": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "no-console": {
+      "count": 1
+    },
+    "no-redeclare": {
+      "count": 1
+    }
+  },
+  "src/app/branded/analytics/branded-analytics.factory.js": {
+    "no-empty": {
+      "count": 1
+    }
+  },
+  "src/app/branded/branded-checkout.component.js": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "no-console": {
+      "count": 6
+    }
+  },
+  "src/app/branded/branded-checkout.spec.js": {
+    "no-console": {
+      "count": 5
+    }
+  },
+  "src/app/cart/cart.component.js": {
+    "@typescript-eslint/no-unused-expressions": {
+      "count": 1
+    }
+  },
+  "src/app/checkout/checkout.component.js": {
+    "@typescript-eslint/no-unused-expressions": {
+      "count": 2
+    }
+  },
+  "src/app/checkout/checkout.spec.js": {
+    "no-useless-escape": {
+      "count": 1
+    }
+  },
+  "src/app/checkout/step-2/existingPaymentMethods/existingPaymentMethods.component.js": {
+    "@typescript-eslint/no-unused-expressions": {
+      "count": 2
+    }
+  },
+  "src/app/checkout/step-2/step-2.component.js": {
+    "@typescript-eslint/no-unused-expressions": {
+      "count": 1
+    }
+  },
+  "src/app/productConfig/productConfigForm/productConfigForm.component.spec.js": {
+    "@typescript-eslint/no-unused-expressions": {
+      "count": 1
+    }
+  },
+  "src/app/profile/payment-methods/payment-method/payment-method.component.js": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "src/app/profile/payment-methods/payment-method/payment-method.spec.js": {
+    "jasmine/no-unsafe-spy": {
+      "count": 1
+    }
+  },
+  "src/app/profile/payment-methods/payment-methods.component.spec.js": {
+    "no-useless-escape": {
+      "count": 1
+    }
+  },
+  "src/app/profile/profile.component.spec.js": {
+    "no-useless-escape": {
+      "count": 1
+    }
+  },
+  "src/app/profile/receipts/receipts.component.spec.js": {
+    "no-useless-escape": {
+      "count": 1
+    }
+  },
+  "src/app/profile/receipts/receipts.filter.spec.js": {
+    "angular/no-private-call": {
+      "count": 1
+    }
+  },
+  "src/app/profile/yourGiving/yourGiving.component.spec.js": {
+    "no-redeclare": {
+      "count": 1
+    },
+    "no-useless-escape": {
+      "count": 1
+    }
+  },
+  "src/app/thankYou/accountBenefits/accountBenefits.component.spec.js": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "src/app/thankYou/summary/thankYouSummary.component.js": {
+    "no-redeclare": {
+      "count": 1
+    }
+  },
+  "src/app/thankYou/summary/thankYouSummary.component.spec.js": {
+    "no-useless-escape": {
+      "count": 1
+    }
+  },
+  "src/common/components/Recaptcha/Recaptcha.test.tsx": {
+    "@typescript-eslint/ban-ts-comment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "no-console": {
+      "count": 3
+    },
+    "prefer-const": {
+      "count": 1
+    }
+  },
+  "src/common/components/Recaptcha/Recaptcha.tsx": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 3
+    }
+  },
+  "src/common/components/Recaptcha/RecaptchaWrapper.test.tsx": {
+    "no-console": {
+      "count": 1
+    }
+  },
+  "src/common/components/Recaptcha/RecaptchaWrapper.tsx": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 6
+    }
+  },
+  "src/common/components/accountBenefitsModal/accountBenefitsModal.component.spec.js": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "src/common/components/contactInfo/contactInfo.component.js": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "src/common/components/registerAccountModal/registerAccountModal.component.spec.js": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "src/common/components/resetPasswordModal/resetPasswordModal.component.js": {
+    "no-console": {
+      "count": 1
+    }
+  },
+  "src/common/components/resetPasswordModal/resetPasswordModal.component.spec.js": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "src/common/components/signInModal/signInModal.component.spec.js": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "src/common/components/signUpModal/signUpModal.component.js": {
+    "no-console": {
+      "count": 1
+    }
+  },
+  "src/common/components/signUpModal/signUpModal.component.spec.js": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "angular/timeout-service": {
+      "count": 1
+    }
+  },
+  "src/common/datadog.config.js": {
+    "@typescript-eslint/no-unused-expressions": {
+      "count": 1
+    }
+  },
+  "src/common/filters/showErrors.filter.spec.js": {
+    "angular/no-private-call": {
+      "count": 1
+    }
+  },
+  "src/common/rollbar.config.spec.js": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "src/common/services/api/cart.service.js": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "src/common/services/api/cart.service.spec.js": {
+    "no-undef": {
+      "count": 7
+    }
+  },
+  "src/common/services/api/designationEditor.service.js": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "src/common/services/api/designationEditor.service.spec.js": {
+    "no-undef": {
+      "count": 3
+    }
+  },
+  "src/common/services/api/designations.service.js": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "src/common/services/api/donations.service.spec.js": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "src/common/services/api/order.service.js": {
+    "@typescript-eslint/no-unused-expressions": {
+      "count": 1
+    }
+  },
+  "src/common/services/api/order.service.spec.js": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 2
+    },
+    "no-undef": {
+      "count": 1
+    }
+  },
+  "src/common/services/api/profile.service.spec.js": {
+    "no-undef": {
+      "count": 5
+    }
+  },
+  "src/common/services/cortexApi.spec.js": {
+    "no-undef": {
+      "count": 4
+    }
+  },
+  "src/common/services/imageCache.service.spec.js": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "src/common/services/modalState.service.js": {
+    "@typescript-eslint/no-unused-expressions": {
+      "count": 1
+    }
+  },
+  "src/common/services/modalState.spec.js": {
+    "angular/document-service": {
+      "count": 4
+    }
+  },
+  "src/common/services/session/session.service.js": {
+    "no-empty": {
+      "count": 2
+    }
+  },
+  "src/common/services/session/session.service.spec.js": {
+    "angular/timeout-service": {
+      "count": 5
+    },
+    "no-redeclare": {
+      "count": 1
+    }
+  },
+  "src/common/services/session/sessionEnforcer.service.js": {
+    "@typescript-eslint/no-unused-expressions": {
+      "count": 2
+    }
+  },
+  "src/common/services/structuredError.service.ts": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 5
+    }
+  },
+  "src/loaders/loader.js": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 4
+    },
+    "no-redeclare": {
+      "count": 1
+    }
+  }
+}
