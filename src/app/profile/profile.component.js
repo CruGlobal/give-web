@@ -9,6 +9,10 @@ import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/do';
 import { phoneNumberRegex } from 'common/app.constants';
 import getServerErrorMessage from 'common/lib/getServerErrorMessage';
+import {
+  isSpouseNameComplete,
+  isSpouseNamePartRequired,
+} from 'common/services/spouseHelpers/spouseName';
 
 import template from './profile.tpl.html';
 
@@ -99,8 +103,7 @@ class ProfileController {
     this.profileService.getProfileDonorDetails().subscribe(
       (donorDetails) => {
         this.donorDetails = donorDetails;
-        this.hasSpouse =
-          this.hasSpouseName('given-name') && this.hasSpouseName('family-name');
+        this.hasSpouse = isSpouseNameComplete(this.donorDetails['spouse-name']);
         this.initTitles();
         this.setSubscriberIds();
         this.donorDetailsLoading = false;
@@ -126,12 +129,11 @@ class ProfileController {
     );
   }
 
-  hasSpouseName(nameField) {
-    return !!this.donorDetails?.['spouse-name']?.[nameField]?.trim();
-  }
-
-  isSpouseNameRequired(otherNameField) {
-    return this.hasSpouseName(otherNameField);
+  isSpouseNameRequired(nameField) {
+    return isSpouseNamePartRequired(
+      this.donorDetails?.['spouse-name'],
+      nameField,
+    );
   }
 
   updateDonorDetails() {
@@ -513,7 +515,7 @@ class ProfileController {
       this.spouseDetailsForm.$dirty &&
       this.spouseDetailsForm.$valid &&
       this.addingSpouse &&
-      this.hasSpouseName('given-name')
+      isSpouseNameComplete(this.donorDetails['spouse-name'])
     ) {
       this.saveSpouse();
     }

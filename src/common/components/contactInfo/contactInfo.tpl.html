@@ -239,7 +239,7 @@
         <div ng-class="$ctrl.useV3 ? 'col-sm-6' : 'col-sm-4'">
           <div
             class="form-group"
-            ng-class="{'is-required': $ctrl.isSpouseNameRequired('family-name'), 'has-error': ($ctrl.detailsForm.spouseGivenName | showErrors)}"
+            ng-class="{'is-required': $ctrl.isSpouseNameRequired('given-name'), 'has-error': ($ctrl.detailsForm.spouseGivenName | showErrors)}"
           >
             <label>
               <span translate>{{'SPOUSE_FIRST_NAME'}}</span>
@@ -248,7 +248,7 @@
                 class="form-control form-control-subtle"
                 name="spouseGivenName"
                 ng-model="$ctrl.donorDetails['spouse-name']['given-name']"
-                ng-required="$ctrl.isSpouseNameRequired('family-name')"
+                ng-required="$ctrl.isSpouseNameRequired('given-name')"
                 ng-maxlength="50"
                 placeholder="{{ $ctrl.donorDetails['spouse-name']['family-name'] ? '' : 'Optional' | translate}}"
                 ng-disabled="$ctrl.spouseFieldsDisabled"
@@ -298,7 +298,7 @@
         <div ng-class="$ctrl.useV3 ? 'col-sm-6' : 'col-sm-4'">
           <div
             class="form-group"
-            ng-class="{'is-required': $ctrl.isSpouseNameRequired('given-name'), 'has-error': ($ctrl.detailsForm.spouseFamilyName | showErrors)}"
+            ng-class="{'is-required': $ctrl.isSpouseNameRequired('family-name'), 'has-error': ($ctrl.detailsForm.spouseFamilyName | showErrors)}"
           >
             <label>
               <span translate>{{'SPOUSE_LAST_NAME'}}</span>
@@ -307,7 +307,7 @@
                 class="form-control form-control-subtle"
                 name="spouseFamilyName"
                 ng-model="$ctrl.donorDetails['spouse-name']['family-name']"
-                ng-required="$ctrl.isSpouseNameRequired('given-name')"
+                ng-required="$ctrl.isSpouseNameRequired('family-name')"
                 ng-maxlength="50"
                 placeholder="{{ $ctrl.donorDetails['spouse-name']['given-name'] ? '' : 'Optional' | translate}}"
                 ng-disabled="$ctrl.spouseFieldsDisabled"

@@ -9,6 +9,11 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 import { phoneNumberRegex } from 'common/app.constants';
 import * as structuredErrorService from 'common/services/structuredError.service';
+import {
+  hasSpouseNamePart,
+  isSpouseNamePartial,
+  isSpouseNamePartRequired,
+} from 'common/services/spouseHelpers/spouseName';
 
 import addressForm from 'common/components/addressForm/addressForm.component';
 import emailField from './emailField/emailField.component';
@@ -168,15 +173,18 @@ class Step1Controller {
               'spouse-name',
             ]),
           );
+          const spouseName = this.donorDetails['spouse-name'];
           if (
-            !!this.donorDetails['spouse-name']['given-name'] ||
-            !!this.donorDetails['spouse-name']['family-name']
+            hasSpouseNamePart(spouseName, 'given-name') ||
+            hasSpouseNamePart(spouseName, 'family-name')
           ) {
             this.spouseFieldsDisabled = false;
           }
         }
+        // A half-saved spouse name must stay editable or the required field blocks checkout
         if (this.hasPartialSpouseName()) {
           this.showSpouseDetails = true;
+          this.spouseFieldsDisabled = false;
         }
         this.loadRadioStations();
       },
@@ -188,16 +196,15 @@ class Step1Controller {
     );
   }
 
-  isSpouseNameRequired(otherNameField) {
-    const spouseName = this.donorDetails?.['spouse-name'];
-    return !!spouseName?.[otherNameField]?.trim();
+  isSpouseNameRequired(nameField) {
+    return isSpouseNamePartRequired(
+      this.donorDetails?.['spouse-name'],
+      nameField,
+    );
   }
 
   hasPartialSpouseName() {
-    return (
-      this.isSpouseNameRequired('given-name') !==
-      this.isSpouseNameRequired('family-name')
-    );
+    return isSpouseNamePartial(this.donorDetails?.['spouse-name']);
   }
 
   toggleSpouseDetails() {

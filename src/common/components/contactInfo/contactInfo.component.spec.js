@@ -177,13 +177,34 @@ describe('contactInfo', function () {
       expect(self.controller.loadRadioStations).toHaveBeenCalled();
     });
 
-    it('should show the spouse fields when only one spouse name is saved', () => {
+    it('should show and enable the spouse fields when only the first name is saved', () => {
+      jest
+        .spyOn(self.controller.orderService, 'spouseEditableForOrder')
+        .mockReturnValue(false);
       jest
         .spyOn(self.controller.orderService, 'getDonorDetails')
         .mockImplementation(() =>
           Observable.of({
             'donor-type': 'Household',
             'spouse-name': { 'given-name': 'Julie', 'family-name': '' },
+          }),
+        );
+      self.controller.loadDonorDetails();
+
+      expect(self.controller.showSpouseDetails).toEqual(true);
+      expect(self.controller.spouseFieldsDisabled).toEqual(false);
+    });
+
+    it('should show and enable the spouse fields when only the last name is saved', () => {
+      jest
+        .spyOn(self.controller.orderService, 'spouseEditableForOrder')
+        .mockReturnValue(false);
+      jest
+        .spyOn(self.controller.orderService, 'getDonorDetails')
+        .mockImplementation(() =>
+          Observable.of({
+            'donor-type': 'Household',
+            'spouse-name': { 'given-name': '', 'family-name': 'Smith' },
           }),
         );
       self.controller.loadDonorDetails();
@@ -560,16 +581,14 @@ describe('contactInfo', function () {
     it('should require the last name when only the first name is filled in', () => {
       spouseName('Julie', '');
 
-      expect(self.controller.isSpouseNameRequired('given-name')).toEqual(true);
-      expect(self.controller.isSpouseNameRequired('family-name')).toEqual(
-        false,
-      );
+      expect(self.controller.isSpouseNameRequired('family-name')).toEqual(true);
+      expect(self.controller.isSpouseNameRequired('given-name')).toEqual(false);
     });
 
     it('should require the first name when only the last name is filled in', () => {
       spouseName('', 'Smith');
 
-      expect(self.controller.isSpouseNameRequired('family-name')).toEqual(true);
+      expect(self.controller.isSpouseNameRequired('given-name')).toEqual(true);
     });
 
     it('should not flag a partial name when both are filled in', () => {
@@ -581,7 +600,9 @@ describe('contactInfo', function () {
     it('should treat a whitespace-only name as blank', () => {
       spouseName('  ', 'Smith');
 
-      expect(self.controller.isSpouseNameRequired('given-name')).toEqual(false);
+      expect(self.controller.isSpouseNameRequired('family-name')).toEqual(
+        false,
+      );
       expect(self.controller.hasPartialSpouseName()).toEqual(true);
     });
   });

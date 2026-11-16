@@ -978,19 +978,19 @@ describe('ProfileComponent', function () {
     it('should require the last name when only the first name is filled in', () => {
       spouseName('Sarah', '');
 
-      expect($ctrl.isSpouseNameRequired('given-name')).toBe(true);
-      expect($ctrl.isSpouseNameRequired('family-name')).toBe(false);
+      expect($ctrl.isSpouseNameRequired('family-name')).toBe(true);
+      expect($ctrl.isSpouseNameRequired('given-name')).toBe(false);
     });
 
     it('should require the first name when only the last name is filled in', () => {
       spouseName(undefined, 'Smith');
 
-      expect($ctrl.isSpouseNameRequired('family-name')).toBe(true);
-      expect($ctrl.isSpouseNameRequired('given-name')).toBe(false);
+      expect($ctrl.isSpouseNameRequired('given-name')).toBe(true);
+      expect($ctrl.isSpouseNameRequired('family-name')).toBe(false);
     });
 
     it('should treat a whitespace-only name as blank', () => {
-      spouseName('Sarah', '   ');
+      spouseName('   ', 'Smith');
 
       expect($ctrl.isSpouseNameRequired('family-name')).toBe(false);
     });
@@ -1166,6 +1166,24 @@ describe('ProfileComponent', function () {
       $ctrl.$window.scrollTo = jest.fn();
       $ctrl.donorDetails = {
         'spouse-name': { 'given-name': '', 'family-name': '' },
+      };
+      $ctrl.addingSpouse = true;
+      $ctrl.spouseDetailsForm.$dirty = true;
+      $ctrl.spouseDetailsForm.$valid = true;
+      $ctrl.onSubmit();
+
+      expect($ctrl.saveSpouse).not.toHaveBeenCalled();
+    });
+
+    it('should not add a spouse when only the last name is filled in', () => {
+      jest.spyOn($ctrl, 'updateDonorDetails').mockImplementation(() => {});
+      jest.spyOn($ctrl, 'updateEmail').mockImplementation(() => {});
+      jest.spyOn($ctrl, 'saveSpouse').mockImplementation(() => {});
+      jest.spyOn($ctrl, 'updatePhoneNumbers').mockImplementation(() => {});
+      jest.spyOn($ctrl, 'updateMailingAddress').mockImplementation(() => {});
+      $ctrl.$window.scrollTo = jest.fn();
+      $ctrl.donorDetails = {
+        'spouse-name': { 'given-name': '', 'family-name': 'Smith' },
       };
       $ctrl.addingSpouse = true;
       $ctrl.spouseDetailsForm.$dirty = true;
