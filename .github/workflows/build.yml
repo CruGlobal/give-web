@@ -41,6 +41,12 @@ jobs:
       - name: Lint Check (TypeScript)
         run: yarn lint:ts
 
+      - name: Lint Check (ESLint)
+        # Pre-commit allows unpruned suppressions, so a stale eslint-suppressions.json fails here instead.
+        run: |
+          yarn lint --prune-suppressions
+          git diff --exit-code eslint-suppressions.json
+
   test:
     name: ✅ Tests
     runs-on: ubuntu-latest
