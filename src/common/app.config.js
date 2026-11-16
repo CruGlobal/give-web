@@ -296,6 +296,8 @@ export const appConfig = /* @ngInject */ function (
       'This field cannot be longer than 50 characters',
     MAX_LENGTH_MI_ERROR: 'This field cannot be longer than 15 characters',
     LAST_NAME_ERROR: 'You must enter a last name',
+    SPOUSE_FIRST_NAME_ERROR: "You must enter your spouse's first name",
+    SPOUSE_LAST_NAME_ERROR: "You must enter your spouse's last name",
     MAX_LENGTH_LAST_NAME_ERROR:
       'This field cannot be longer than 50 characters',
     JR: 'Jr',
@@ -629,6 +631,8 @@ export const appConfig = /* @ngInject */ function (
       'Este campo no puede tener más de 50 caracteres.',
     MAX_LENGTH_MI_ERROR: 'This field cannot be longer than 15 characters',
     LAST_NAME_ERROR: 'You must enter a last name',
+    SPOUSE_FIRST_NAME_ERROR: 'Debes ingresar el nombre de tu cónyuge',
+    SPOUSE_LAST_NAME_ERROR: 'Debes ingresar el apellido de tu cónyuge',
     MAX_LENGTH_LAST_NAME_ERROR:
       'Este campo no puede tener más de 50 caracteres.',
     JR: 'Jr',
