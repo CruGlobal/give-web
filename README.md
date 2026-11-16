@@ -216,10 +216,11 @@ Use yarn for faster installs and to update the yarn lock file: https://yarnpkg.c
 
 ### Install & Run
 
-1. `yarn`
-2. `yarn build` _(During the build we copy the latest assets from Okta sign-in-widget package to ensure the sign up form is styled, and shows icons.)_
-3. `yarn start`
-4. Browse to [`http://localhost:9000`](http://localhost:9000)
+1. `brew install gitleaks` _(secrets scanner used by the pre-push hook; it is skipped with a warning if missing)_
+2. `yarn` _(also sets up git hooks: lint, format and typecheck on commit, tests and gitleaks on push)_
+3. `yarn build` _(During the build we copy the latest assets from Okta sign-in-widget package to ensure the sign up form is styled, and shows icons.)_
+4. `yarn start`
+5. Browse to [`http://localhost:9000`](http://localhost:9000)
    Note: For session cookies to work correctly, add the below entries to your hosts file, and use [`https://localhost.cru.org:9000`](https://localhost.cru.org:9000) for development
 
 ```
@@ -230,7 +231,8 @@ Use yarn for faster installs and to update the yarn lock file: https://yarnpkg.c
 ### Development Tasks
 
 - `yarn test` to run Jest tests
-- `yarn lint` to run StandardJS linter
+- `yarn prettier:write` to run prettier linter
+- `yarn lint` to run ESLint. Older errors are baselined in `eslint-suppressions.json`; run `yarn lint --prune-suppressions` after fixing some.
 - `yarn lint:styles` to run StyleLint linter _(run with `--fix` to fix issues)._
 - `yarn build` to generate minified output files. These files are output to `/dist`. `common.js` must be included before any of the other JS files.
 - `yarn build:analyze` to open a visualization of bundle sizes after building
