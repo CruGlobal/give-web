@@ -23,8 +23,8 @@
     "change-case-object": "^2.0.0",
     "crypto-js": "^4.2.0",
     "jwt-decode": "^2.2.0",
-    "lodash": "^4.17.21",
-    "moment": "^2.24.0",
+    "lodash": "^4.18.1",
+    "moment": "^2.30.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react2angular": "^4.0.6",
@@ -100,7 +100,12 @@
     "prepare": "husky"
   },
   "resolutions": {
-    "webpack-dev-server/**/spdy-transport": "^3.0.0"
+    "webpack-dev-server/**/spdy-transport": "^3.0.0",
+    "@okta/okta-signin-widget/**/handlebars": "^4.7.10",
+    "@okta/okta-signin-widget/**/underscore": "^1.13.8",
+    "@okta/okta-signin-widget/**/picomatch": "^2.3.2",
+    "@okta/okta-signin-widget/**/js-cookie": "^3.0.7",
+    "react2angular/**/lodash": "^4.18.1"
   },
   "lint-staged": {
     "*.{js,json,html,md}": "prettier --write",
