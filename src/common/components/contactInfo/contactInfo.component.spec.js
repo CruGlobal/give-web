@@ -177,6 +177,35 @@ describe('contactInfo', function () {
       expect(self.controller.loadRadioStations).toHaveBeenCalled();
     });
 
+    it('should show the spouse fields when only one spouse name is saved', () => {
+      jest
+        .spyOn(self.controller.orderService, 'getDonorDetails')
+        .mockImplementation(() =>
+          Observable.of({
+            'donor-type': 'Household',
+            'spouse-name': { 'given-name': 'Julie', 'family-name': '' },
+          }),
+        );
+      self.controller.loadDonorDetails();
+
+      expect(self.controller.showSpouseDetails).toEqual(true);
+      expect(self.controller.spouseFieldsDisabled).toEqual(false);
+    });
+
+    it('should keep the spouse fields hidden when both spouse names are saved', () => {
+      jest
+        .spyOn(self.controller.orderService, 'getDonorDetails')
+        .mockImplementation(() =>
+          Observable.of({
+            'donor-type': 'Household',
+            'spouse-name': { 'given-name': 'Julie', 'family-name': 'Smith' },
+          }),
+        );
+      self.controller.loadDonorDetails();
+
+      expect(self.controller.showSpouseDetails).toEqual(false);
+    });
+
     it('should set the donor type if it is an empty string', () => {
       jest
         .spyOn(self.controller.orderService, 'getDonorDetails')
@@ -510,6 +539,51 @@ describe('contactInfo', function () {
       checkoutData.mailingAddress.streetAddress,
     );
     expect(self.controller.donorDetails.staff).toEqual(false);
+  });
+
+  describe('isSpouseNameRequired', () => {
+    const spouseName = (givenName, familyName) => {
+      self.controller.donorDetails = {
+        'spouse-name': { 'given-name': givenName, 'family-name': familyName },
+      };
+    };
+
+    it('should not require either name when both are blank', () => {
+      spouseName(null, '');
+
+      expect(self.controller.isSpouseNameRequired('given-name')).toEqual(false);
+      expect(self.controller.isSpouseNameRequired('family-name')).toEqual(
+        false,
+      );
+    });
+
+    it('should require the last name when only the first name is filled in', () => {
+      spouseName('Julie', '');
+
+      expect(self.controller.isSpouseNameRequired('given-name')).toEqual(true);
+      expect(self.controller.isSpouseNameRequired('family-name')).toEqual(
+        false,
+      );
+    });
+
+    it('should require the first name when only the last name is filled in', () => {
+      spouseName('', 'Smith');
+
+      expect(self.controller.isSpouseNameRequired('family-name')).toEqual(true);
+    });
+
+    it('should not flag a partial name when both are filled in', () => {
+      spouseName('Julie', 'Smith');
+
+      expect(self.controller.hasPartialSpouseName()).toEqual(false);
+    });
+
+    it('should treat a whitespace-only name as blank', () => {
+      spouseName('  ', 'Smith');
+
+      expect(self.controller.isSpouseNameRequired('given-name')).toEqual(false);
+      expect(self.controller.hasPartialSpouseName()).toEqual(true);
+    });
   });
 
   describe('loadRadioStations', () => {

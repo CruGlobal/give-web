@@ -175,6 +175,9 @@ class Step1Controller {
             this.spouseFieldsDisabled = false;
           }
         }
+        if (this.hasPartialSpouseName()) {
+          this.showSpouseDetails = true;
+        }
         this.loadRadioStations();
       },
       (error) => {
@@ -182,6 +185,18 @@ class Step1Controller {
         this.loadingDonorDetailsError = true;
         this.$log.error('Error loading donorDetails.', error);
       },
+    );
+  }
+
+  isSpouseNameRequired(otherNameField) {
+    const spouseName = this.donorDetails?.['spouse-name'];
+    return !!spouseName?.[otherNameField]?.trim();
+  }
+
+  hasPartialSpouseName() {
+    return (
+      this.isSpouseNameRequired('given-name') !==
+      this.isSpouseNameRequired('family-name')
     );
   }
 

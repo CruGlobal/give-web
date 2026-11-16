@@ -587,9 +587,10 @@ class Order {
       'order',
     );
     const storedOrder = this.localStorage.getItem('currentOrder');
+    // A half-filled spouse name stays editable so the donor can complete it
     const hasSpouse =
-      !!donorDetails['spouse-name']['given-name'] ||
-      !!donorDetails['spouse-name']['family-name'];
+      !!donorDetails['spouse-name']['given-name']?.trim() &&
+      !!donorDetails['spouse-name']['family-name']?.trim();
     const startedOrderWithoutSpouse = angular.fromJson(
       this.localStorage.getItem('startedOrderWithoutSpouse'),
     );
