@@ -170,8 +170,9 @@ class ProductConfigFormController {
           ).format('DD');
         }
         if (!this.itemConfig.RECURRING_START_MONTH && this.nextDrawDate) {
+          // Use the preset day so a day that already passed this month starts next month, not next year
           this.itemConfig.RECURRING_START_MONTH = startDate(
-            null,
+            this.itemConfig.RECURRING_DAY_OF_MONTH,
             this.nextDrawDate,
           ).format('MM');
         }
