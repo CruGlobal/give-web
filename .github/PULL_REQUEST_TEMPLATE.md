@@ -1,7 +1,12 @@
+## Links
+
+- Work item: <!-- Jira or Flightdeck link (required) -->
+- Spec: <!-- link to the spec, if there is one -->
+
 ## Description
 
 Please explain a bullet-point summary of the changes.
-List any PRs that this PR is dependent on and any Jira tickets that this PR is related to.
+List any PRs that this PR is dependent on.
 
 ## Testing
 
