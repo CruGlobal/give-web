@@ -244,11 +244,14 @@ sign-up-modal {
 
       // However, if it is a password field with a password requirements sibling, the password
       // requirements box gets the rounded border instead of the input or error message
-      &[data-se="o-form-fieldset-credentials.passcode"]:has(+ [data-se="password-authenticator--rules"]) {
-        input,
-        .o-form-input-error {
-          border-bottom-left-radius: unset;
-          border-bottom-right-radius: unset;
+      &[data-se="o-form-fieldset-credentials.passcode"],
+      &[data-se="o-form-fieldset-passcodeVerification.confirmPasscode"] {
+        &:has(~ [data-se="password-authenticator--rules"]) {
+          input,
+          .o-form-input-error {
+            border-bottom-left-radius: unset;
+            border-bottom-right-radius: unset;
+          }
         }
       }
     }

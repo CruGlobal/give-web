@@ -1,0 +1,11 @@
+--- a/src/common/services/api/order.service.js
++++ b/src/common/services/api/order.service.js
+@@ -617,7 +617,7 @@
+           controller.submissionErrorStatus = error.status;
+           // 8.3 wraps these failures in a structured body, so read whichever
+           // shape arrived; a plain-text body still passes through untouched.
+-          const errorText = structuredErrorService.getErrorText(error);
++          const errorText = error.data;
+           controller.submissionError = isString(errorText)
+             ? errorText.replace(/[:].*$/, '')
+             : 'generic error'; // Keep prefix before first colon for easier ng-switch matching

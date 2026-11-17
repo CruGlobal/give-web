@@ -452,12 +452,16 @@ describe('signUpForm', function () {
       beforeEach(() => {
         $ctrl.currentStep = 3;
         $ctrl.captchaId = null;
+        $ctrl.translations = { confirmPassword: 'Confirm password' };
         onSuccess.mockClear();
       });
 
-      it('returns just the password field when no captcha fields are in the schema', () => {
+      it('returns just the password fields when no captcha fields are in the schema', () => {
         $ctrl.parseSchema(schema, onSuccess);
-        expect(onSuccess).toHaveBeenCalledWith([schema[3]]);
+        expect(onSuccess).toHaveBeenCalledWith([
+          schema[3],
+          { ...customFields.confirmPasscode, label: 'Confirm password' },
+        ]);
         expect($ctrl.captchaId).toBeNull();
       });
 
@@ -482,7 +486,11 @@ describe('signUpForm', function () {
 
         $ctrl.parseSchema(schemaWithCaptcha, onSuccess);
 
-        expect(onSuccess).toHaveBeenCalledWith([schema[3], captchaTokenField]);
+        expect(onSuccess).toHaveBeenCalledWith([
+          schema[3],
+          { ...customFields.confirmPasscode, label: 'Confirm password' },
+          captchaTokenField,
+        ]);
         expect($ctrl.captchaId).toBe('abc123captchaConfigId');
       });
     });
@@ -909,28 +917,52 @@ describe('signUpForm', function () {
       });
     });
 
-    it('submitFinalData()', () => {
-      const postData = {};
-      $ctrl.currentStep = 3;
-      $ctrl.$scope.firstName = user.firstName;
-      $ctrl.$scope.lastName = user.lastName;
-      $ctrl.$scope.email = user.email;
-      $ctrl.$scope.accountType = user.accountType;
-      $ctrl.$scope.streetAddress = user.streetAddress;
-      $ctrl.$scope.city = user.city;
-      $ctrl.$scope.state = user.state;
-      $ctrl.$scope.zipCode = user.zipCode;
-      $ctrl.$scope.countryCode = user.countryCode;
-      $ctrl.$scope.organizationName = user.organizationName;
+    describe('submitFinalData()', () => {
+      beforeEach(() => {
+        $ctrl.currentStep = 3;
+        $ctrl.$scope.firstName = user.firstName;
+        $ctrl.$scope.lastName = user.lastName;
+        $ctrl.$scope.email = user.email;
+        $ctrl.translations = {
+          passwordMismatch: 'Passwords do not match. Please try again.',
+        };
+      });
 
-      $ctrl.preSubmit(postData, onSuccess);
+      it('should error when passwords are not the same', () => {
+        const postData = {
+          credentials: { passcode: 'passcode' },
+          passcodeVerification: { confirmPasscode: 'differentPassword' },
+        };
 
-      expect(onSuccess).toHaveBeenCalledWith({
-        userProfile: {
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-        },
+        $ctrl.preSubmit(postData, onSuccess);
+
+        expect(onSuccess).not.toHaveBeenCalled();
+        expect($ctrl.signUpErrors).toEqual([
+          {
+            errorSummary: 'Passwords do not match. Please try again.',
+            property: 'passcodeVerification.confirmPasscode',
+          },
+        ]);
+        expect($ctrl.injectErrorMessages).toHaveBeenCalled();
+      });
+
+      it('should send only the passcode to Okta when passwords are the same', () => {
+        const postData = {
+          credentials: { passcode: 'passcode' },
+          passcodeVerification: { confirmPasscode: 'passcode' },
+        };
+
+        $ctrl.preSubmit(postData, onSuccess);
+
+        expect(onSuccess).toHaveBeenCalledWith({
+          credentials: { passcode: 'passcode' },
+          userProfile: {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+          },
+        });
+        expect($ctrl.injectErrorMessages).not.toHaveBeenCalled();
       });
     });
 

@@ -128,4 +128,17 @@ export const customFields = {
       'userProfile.countryCode': 'US',
     },
   },
+  confirmPasscode: {
+    name: 'passcodeVerification.confirmPasscode',
+    type: 'password',
+    label: 'Confirm password',
+    required: true,
+    secret: true,
+    'label-top': true,
+    multirowError: true,
+    'data-se': 'o-form-fieldset-passcodeVerification.confirmPasscode',
+    params: {
+      showPasswordToggle: true,
+    },
+  },
 };

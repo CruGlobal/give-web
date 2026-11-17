@@ -1,0 +1,123 @@
+# Visible DEVELOPMENT set. Keep a separate private holdout (protected branch or
+# private repo) so prompt and rule changes cannot overfit to these answers.
+version: 1
+name: give-web-review-gate
+blocker_threshold: 7
+thresholds:
+  blocker_recall: 0.85
+  blocker_precision: 0.80
+  clean_false_blocker_rate: 0.05
+  false_positive_dismissal_rate: 0.20
+  category_recall: 0.70
+  minimum_runs: 50
+cases:
+  - id: branded-callback-unguarded
+    kind: seeded_bug
+    category: branded-embed
+    patch: patches/branded-callback-unguarded.patch
+    expected:
+      - id: host-callback-can-break-checkout
+        must_block: true
+        min_severity: 7
+        category: branded-embed
+        match:
+          paths: ['src/app/branded/branded-checkout.component.js']
+          categories: [branded-embed, architecture, testing]
+          message_any: [try, catch, onOrderCompleted, callback, host, throw]
+
+  - id: campaign-default-overwrites-button
+    kind: seeded_bug
+    category: data-integrity
+    patch: patches/campaign-default-overwrites-button.patch
+    expected:
+      - id: default-campaign-code-overwrites-explicit
+        must_block: true
+        min_severity: 7
+        category: data-integrity
+        match:
+          paths:
+            [
+              'src/app/productConfig/productConfigModal/productConfig.modal.component.js',
+            ]
+          categories: [data-integrity, financial]
+          message_any:
+            [
+              CAMPAIGN_CODE,
+              campaign code,
+              default-campaign-code,
+              overwrite,
+              precedence,
+            ]
+
+  - id: submit-error-reads-data-directly
+    kind: seeded_bug
+    category: api-contracts
+    patch: patches/submit-error-reads-data-directly.patch
+    expected:
+      - id: bypasses-structured-error-reader
+        must_block: true
+        min_severity: 7
+        category: api-contracts
+        match:
+          paths: ['src/common/services/api/order.service.js']
+          categories: [api-contracts, data-integrity]
+          message_any: [getErrorText, structured, error.data, structuredError]
+
+  - id: stale-amounts-on-frequency-change
+    kind: seeded_bug
+    category: financial
+    patch: patches/stale-amounts-on-frequency-change.patch
+    expected:
+      - id: amounts-not-reset-per-frequency
+        must_block: true
+        min_severity: 7
+        category: financial
+        match:
+          paths:
+            [
+              'src/app/productConfig/productConfigForm/productConfigForm.component.js',
+            ]
+          categories: [financial, data-integrity]
+          message_any:
+            [DEFAULT_AMOUNTS, selectableAmounts, stale, frequency, reset]
+
+  - id: es-copy-left-in-english
+    kind: seeded_bug
+    category: i18n
+    patch: patches/es-copy-left-in-english.patch
+    expected:
+      - id: es-translation-is-english
+        must_block: false
+        min_severity: 5
+        category: i18n
+        match:
+          paths: ['src/common/app.config.js']
+          categories: [i18n]
+          message_any: [Spanish, es, translation, English, GIFT_LIMIT_ERROR]
+
+  - id: spec-matcher-assigned
+    kind: seeded_bug
+    category: testing
+    patch: patches/spec-matcher-assigned.patch
+    expected:
+      - id: matcher-assigned-not-called
+        must_block: true
+        min_severity: 7
+        category: testing
+        match:
+          paths:
+            [
+              'src/app/productConfig/productConfigModal/productConfig.modal.component.spec.js',
+            ]
+          categories: [testing]
+          message_any: [toEqual, matcher, assert, assigned, never runs]
+
+  - id: clean-rename-submit-error-text
+    kind: clean_control
+    patch: patches/clean-rename-submit-error-text.patch
+    expected: []
+
+  - id: clean-rename-override-local
+    kind: clean_control
+    patch: patches/clean-rename-override-local.patch
+    expected: []

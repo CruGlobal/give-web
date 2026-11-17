@@ -1,0 +1,11 @@
+--- a/src/app/productConfig/productConfigModal/productConfig.modal.component.js
++++ b/src/app/productConfig/productConfigModal/productConfig.modal.component.js
+@@ -113,7 +113,7 @@
+       ) {
+         this.itemConfig.CAMPAIGN_CODE = '';
+       }
+-    } else if (!this.itemConfig.CAMPAIGN_CODE) {
++    } else {
+       if (
+         Object.prototype.hasOwnProperty.call(
+           this.itemConfig,
