@@ -33,6 +33,7 @@ describe('signIn', function () {
     it('has does not change location', () => {
       expect($ctrl.sessionChanged).toHaveBeenCalled();
       expect($ctrl.$window.location.replace).not.toHaveBeenCalled();
+      expect($ctrl.$window.location).toEqual({ replace: expect.any(Function) });
     });
   });
 
@@ -50,6 +51,7 @@ describe('signIn', function () {
     it('has does not change location', () => {
       expect($ctrl.sessionChanged).toHaveBeenCalled();
       expect($ctrl.$window.location.replace).not.toHaveBeenCalled();
+      expect($ctrl.$window.location).toEqual({ replace: expect.any(Function) });
     });
   });
 
@@ -66,6 +68,7 @@ describe('signIn', function () {
 
     it('navigates to checkout', () => {
       expect($ctrl.sessionChanged).toHaveBeenCalled();
+      expect($ctrl.$window.location.replace).toHaveBeenCalledTimes(1);
       expect($ctrl.$window.location.replace).toHaveBeenCalledWith(
         '/checkout.html',
       );
