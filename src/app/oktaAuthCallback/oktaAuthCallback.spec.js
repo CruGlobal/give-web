@@ -303,6 +303,35 @@ describe('oktaAuthCallback', function () {
         '/sign-in.html',
       );
     });
+
+    it('reports navigationType unknown when the Performance API has no getEntriesByType', () => {
+      jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue(Roles.public);
+      $ctrl.$window.performance = {};
+
+      $ctrl.$onInit();
+
+      expect($ctrl.datadogRum.addAction).toHaveBeenCalledWith(
+        'okta-callback-replay',
+        { signedIn: false, navigationType: 'unknown' },
+      );
+      expect($ctrl.$window.location.replace).toHaveBeenCalledWith(
+        '/sign-in.html',
+      );
+    });
+
+    it('leaves the saved redirect location alone for a sign-in that may still be in progress', () => {
+      jest
+        .spyOn($ctrl.sessionService, 'getRole')
+        .mockReturnValue(Roles.registered);
+      jest
+        .spyOn($ctrl.sessionService, 'getSignInStartLocation')
+        .mockReturnValue('https://give-stage2.cru.org/search-results.html');
+      jest.spyOn($ctrl.sessionService, 'clearRedirectLocation');
+
+      $ctrl.$onInit();
+
+      expect($ctrl.sessionService.clearRedirectLocation).not.toHaveBeenCalled();
+    });
   });
 
   describe('callback that is not a replay', () => {
