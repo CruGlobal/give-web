@@ -130,9 +130,10 @@ class ProfileController {
   }
 
   isSpouseNameRequired(nameField) {
-    return isSpouseNamePartRequired(
-      this.donorDetails?.['spouse-name'],
-      nameField,
+    // A new spouse is only saved with both names, so both are required while adding one
+    return (
+      this.addingSpouse ||
+      isSpouseNamePartRequired(this.donorDetails?.['spouse-name'], nameField)
     );
   }
 
