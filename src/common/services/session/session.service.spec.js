@@ -12,6 +12,7 @@ import module, {
   hasDuplicateCortexRole,
   redirectLocation,
   locationSearchOnLogin,
+  signInStartLocation,
   forcedUserToLogout,
   lastPurchase,
   lastPurchaseEmail,
@@ -524,6 +525,25 @@ describe('session service', function () {
         $httpBackend.flush();
       });
 
+      it('should forget the sign-in start location', (done) => {
+        $window.sessionStorage.setItem(
+          signInStartLocation,
+          'https://give-stage2.cru.org/search-results.html',
+        );
+
+        sessionService.signOut(true).subscribe(() => {
+          try {
+            expect(
+              $window.sessionStorage.getItem(signInStartLocation),
+            ).toBeNull();
+            done();
+          } catch (e) {
+            done(e);
+          }
+        }, done);
+        $httpBackend.flush();
+      });
+
       it('should add forcedUserToLogout session data', (done) => {
         sessionService.signOut(false).subscribe(() => {
           expect($window.sessionStorage.getItem(forcedUserToLogout)).toEqual(
@@ -901,6 +921,193 @@ describe('session service', function () {
     });
   });
 
+  describe('isOktaRedirectReplay()', () => {
+    let loadSpy;
+    beforeEach(() => {
+      $window.location.search = '?code=new-code&state=state-1';
+      jest
+        .spyOn(sessionService.authClient, 'isLoginRedirect')
+        .mockReturnValue(true);
+      loadSpy = jest.spyOn(
+        sessionService.authClient.transactionManager,
+        'load',
+      );
+    });
+    const savedSignIn = (state) => ({
+      state,
+      codeVerifier: 'verifier',
+      redirectUri: 'https://give-stage2.cru.org/okta-auth-callback.html',
+    });
+
+    it('returns false and does not read storage when the page is not an Okta callback', () => {
+      sessionService.authClient.isLoginRedirect.mockReturnValue(false);
+      expect(sessionService.isOktaRedirectReplay()).toBe(false);
+      expect(loadSpy).not.toHaveBeenCalled();
+    });
+
+    it('returns false when a saved sign-in matches the callback state', () => {
+      loadSpy.mockReturnValue(savedSignIn('state-1'));
+      expect(sessionService.isOktaRedirectReplay()).toBe(false);
+      expect(loadSpy).toHaveBeenCalledWith({ state: 'state-1' });
+    });
+
+    it('returns true when no saved sign-in exists for the callback state', () => {
+      loadSpy.mockReturnValue(null);
+      expect(sessionService.isOktaRedirectReplay()).toBe(true);
+    });
+
+    it('returns true when storage only holds a sign-in for a different state', () => {
+      loadSpy.mockReturnValue(savedSignIn('other-state'));
+      expect(sessionService.isOktaRedirectReplay()).toBe(true);
+    });
+
+    it('returns false when the callback URL has no state', () => {
+      $window.location.search = '?code=new-code';
+      expect(sessionService.isOktaRedirectReplay()).toBe(false);
+      expect(loadSpy).not.toHaveBeenCalled();
+    });
+
+    it('returns false when reading the saved sign-in throws', () => {
+      loadSpy.mockImplementation(() => {
+        throw new Error('storage blocked');
+      });
+      expect(sessionService.isOktaRedirectReplay()).toBe(false);
+    });
+
+    describe('with the real Okta sign-in storage', () => {
+      afterEach(() => {
+        sessionService.authClient.transactionManager.clear();
+      });
+
+      it('returns true when the only saved sign-in has a different state', () => {
+        sessionService.authClient.transactionManager.save(
+          savedSignIn('other-state'),
+        );
+        // Okta's load() hands back the other sign-in, so only an exact state match is safe
+        expect(
+          sessionService.authClient.transactionManager.load({
+            state: 'state-1',
+          }),
+        ).toEqual(expect.objectContaining({ state: 'other-state' }));
+        expect(sessionService.isOktaRedirectReplay()).toBe(true);
+      });
+
+      it('returns false when the saved sign-in has the callback state', () => {
+        sessionService.authClient.transactionManager.save(
+          savedSignIn('state-1'),
+        );
+        expect(sessionService.isOktaRedirectReplay()).toBe(false);
+      });
+
+      it('returns true when nothing is saved', () => {
+        expect(sessionService.isOktaRedirectReplay()).toBe(true);
+      });
+    });
+  });
+
+  describe('sign-in start location', () => {
+    beforeEach(() => {
+      $window.sessionStorage.removeItem(signInStartLocation);
+      $window.sessionStorage.removeItem(redirectLocation);
+      $window.location.origin = 'https://give-stage2.cru.org';
+    });
+
+    afterEach(() => {
+      $window.sessionStorage.removeItem(signInStartLocation);
+      $window.sessionStorage.removeItem(redirectLocation);
+      $window.sessionStorage.removeItem(locationSearchOnLogin);
+    });
+
+    it('returns the saved page when it is on this site', () => {
+      $window.sessionStorage.setItem(
+        signInStartLocation,
+        'https://give-stage2.cru.org/search-results.html',
+      );
+      expect(sessionService.getSignInStartLocation()).toEqual(
+        'https://give-stage2.cru.org/search-results.html',
+      );
+    });
+
+    it('returns null when nothing is saved', () => {
+      expect(sessionService.getSignInStartLocation()).toBeNull();
+    });
+
+    it('ignores a saved page on another site', () => {
+      $window.sessionStorage.setItem(
+        signInStartLocation,
+        'https://evil.example.com/search-results.html',
+      );
+      expect(sessionService.getSignInStartLocation()).toBeNull();
+    });
+
+    it('ignores a saved value that is not a full URL', () => {
+      $window.sessionStorage.setItem(signInStartLocation, 'not a url');
+      expect(sessionService.getSignInStartLocation()).toBeNull();
+    });
+
+    describe('when sign-in starts', () => {
+      beforeEach(() => {
+        jest
+          .spyOn(sessionService.authClient, 'isAuthenticated')
+          .mockResolvedValue(false);
+        jest
+          .spyOn(sessionService.authClient.token, 'getWithRedirect')
+          .mockResolvedValue(undefined);
+      });
+
+      it('keeps a copy of the page the donor signed in from', (done) => {
+        jest.spyOn($location, 'path').mockReturnValue('/search-results.html');
+
+        sessionService.signIn().subscribe(() => {
+          try {
+            expect($window.sessionStorage.getItem(signInStartLocation)).toEqual(
+              'https://URL.org?utm_source=text',
+            );
+            done();
+          } catch (e) {
+            done(e);
+          }
+        }, done);
+      });
+
+      it('keeps the copy after the callback clears redirectLocation', (done) => {
+        jest.spyOn($location, 'path').mockReturnValue('/search-results.html');
+
+        sessionService.signIn().subscribe(() => {
+          try {
+            sessionService.clearRedirectLocation();
+            expect($window.sessionStorage.getItem(redirectLocation)).toBeNull();
+            expect($window.sessionStorage.getItem(signInStartLocation)).toEqual(
+              'https://URL.org?utm_source=text',
+            );
+            done();
+          } catch (e) {
+            done(e);
+          }
+        }, done);
+      });
+
+      it('removes an older copy when sign-in starts on the sign-in page', (done) => {
+        $window.sessionStorage.setItem(
+          signInStartLocation,
+          'https://URL.org/old.html',
+        );
+        jest.spyOn($location, 'path').mockReturnValue('/sign-in.html');
+
+        sessionService.signIn().subscribe(() => {
+          try {
+            expect(
+              $window.sessionStorage.getItem(signInStartLocation),
+            ).toBeNull();
+            done();
+          } catch (e) {
+            done(e);
+          }
+        }, done);
+      });
+    });
+  });
+
   describe('getOktaUrl', () => {
     it('should return the oktaUrl from the environment', () => {
       expect(sessionService.getOktaUrl()).toEqual(envService.read('oktaUrl'));
@@ -969,6 +1176,21 @@ describe('session service', function () {
       expect($window.sessionStorage.getItem(lastPurchase)).toBeNull();
       expect($window.sessionStorage.getItem(lastPurchaseEmail)).toBeNull();
       expect($window.sessionStorage.getItem(lastPurchaseLink)).toBeNull();
+    });
+
+    it('should forget the sign-in start location', () => {
+      $window.sessionStorage.setItem(
+        signInStartLocation,
+        'https://give-stage2.cru.org/search-results.html',
+      );
+      $httpBackend
+        .expectDELETE('https://give-stage2.cru.org/okta/logout')
+        .respond(200, {});
+
+      sessionService.signOutWithoutRedirectToOkta().subscribe();
+      $httpBackend.flush();
+
+      expect($window.sessionStorage.getItem(signInStartLocation)).toBeNull();
     });
   });
 
