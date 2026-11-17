@@ -384,14 +384,19 @@ const session = /* @ngInject */ function (
   function getRedirectLocation() {
     return $window.sessionStorage.getItem(redirectLocation);
   }
-  // The page the donor was on when they last started signing in. Only a page on this site is returned.
+  // The page the donor was on when they last started signing in. Only a page on this site is returned,
+  // and never the Okta callback page itself, so a replay can't send the donor back into a loop.
   function getSignInStartLocation() {
     const saved = $window.sessionStorage.getItem(signInStartLocation);
     if (!saved) {
       return null;
     }
     try {
-      return new URL(saved).origin === $window.location.origin ? saved : null;
+      const url = new URL(saved);
+      return url.origin === $window.location.origin &&
+        url.pathname !== '/okta-auth-callback.html'
+        ? saved
+        : null;
     } catch {
       return null;
     }
