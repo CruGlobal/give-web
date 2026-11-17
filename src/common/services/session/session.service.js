@@ -32,6 +32,7 @@ export const Sessions = {
 
 export const redirectLocation = 'redirectLocation';
 export const locationSearchOnLogin = 'locationSearchOnLogin';
+export const signInStartLocation = 'giveSignInStartLocation';
 export const checkoutSavedDataCookieName = 'checkoutSavedData';
 export const forcedUserToLogout = 'forcedUserToLogout';
 export const lastPurchase = 'lastPurchase';
@@ -123,7 +124,9 @@ const session = /* @ngInject */ function (
     getRole: currentRole,
     getOktaUrl: getOktaUrl,
     handleOktaRedirect: handleOktaRedirect,
+    isOktaRedirectReplay: isOktaRedirectReplay,
     getRedirectLocation: getRedirectLocation,
+    getSignInStartLocation: getSignInStartLocation,
     isOktaRedirecting: isOktaRedirecting,
     oktaIsUserAuthenticated: oktaIsUserAuthenticated,
     updateCurrentProfile: updateCurrentProfile,
@@ -158,6 +161,24 @@ const session = /* @ngInject */ function (
       });
     } else {
       return Observable.of(false);
+    }
+  }
+
+  // Runs before parseFromUrl, which deletes the saved sign-in once it succeeds.
+  function isOktaRedirectReplay() {
+    if (!authClient.isLoginRedirect()) {
+      return false;
+    }
+    const state = new URLSearchParams($window.location.search).get('state');
+    if (!state) {
+      return false;
+    }
+    try {
+      // load() falls back to any saved sign-in when none matches this state, so compare it exactly.
+      const saved = authClient.transactionManager.load({ state });
+      return !saved || saved.state !== state;
+    } catch {
+      return false;
     }
   }
 
@@ -260,6 +281,7 @@ const session = /* @ngInject */ function (
 
   function signOut(redirectHome = true) {
     clearLastPurchase();
+    clearSignInStartLocation();
     const oktaSignOut = () => {
       // Add session data so on return to page we can show an explanation to the user about what happened.
       if (!redirectHome) {
@@ -306,6 +328,7 @@ const session = /* @ngInject */ function (
     ).map((response) => response.data);
     clearCheckoutSavedData();
     clearLastPurchase();
+    clearSignInStartLocation();
     // revokeAccessToken() & revokeRefreshToken() sign the user out of Okta on this application.
     // It doesn't close the Okta session on Okta.
     // To close the session on Okta would require calling authClient.signOut(), refreshing the page.
@@ -361,6 +384,21 @@ const session = /* @ngInject */ function (
   function getRedirectLocation() {
     return $window.sessionStorage.getItem(redirectLocation);
   }
+  // The page the donor was on when they last started signing in. Only a page on this site is returned.
+  function getSignInStartLocation() {
+    const saved = $window.sessionStorage.getItem(signInStartLocation);
+    if (!saved) {
+      return null;
+    }
+    try {
+      return new URL(saved).origin === $window.location.origin ? saved : null;
+    } catch {
+      return null;
+    }
+  }
+  function clearSignInStartLocation() {
+    $window.sessionStorage.removeItem(signInStartLocation);
+  }
   function setRedirectingOnLogin() {
     if ($location.path() === '/sign-in.html') {
       // Save marketing search queries as they are lost on redirect
@@ -368,9 +406,16 @@ const session = /* @ngInject */ function (
         locationSearchOnLogin,
         $window.location.search,
       );
+      // A sign-in from the sign-in page has no page to go back to
+      clearSignInStartLocation();
     } else {
       // Save location we need to redirect the user back to
       $window.sessionStorage.setItem(redirectLocation, $window.location.href);
+      // Kept after redirectLocation is cleared, so a replayed Okta callback can still go back here
+      $window.sessionStorage.setItem(
+        signInStartLocation,
+        $window.location.href,
+      );
     }
   }
 
