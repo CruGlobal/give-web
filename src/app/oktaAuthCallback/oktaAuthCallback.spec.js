@@ -405,6 +405,7 @@ describe('oktaAuthCallback', function () {
         .mockReturnValue('https://give-stage2.cru.org/search-results.html');
       expect($ctrl.$window.location.replace).not.toHaveBeenCalled();
       $ctrl.redirectToLocationPriorToLogin();
+      expect($ctrl.$window.location.replace).toHaveBeenCalledTimes(1);
       expect($ctrl.$window.location.replace).toHaveBeenCalledWith(
         'https://give-stage2.cru.org/search-results.html',
       );
@@ -418,6 +419,7 @@ describe('oktaAuthCallback', function () {
         .mockReturnValue(undefined);
       expect($ctrl.$window.location.replace).not.toHaveBeenCalled();
       $ctrl.redirectToLocationPriorToLogin();
+      expect($ctrl.$window.location.replace).toHaveBeenCalledTimes(1);
       expect($ctrl.$window.location.replace).toHaveBeenCalledWith(
         '/checkout.html',
       );
