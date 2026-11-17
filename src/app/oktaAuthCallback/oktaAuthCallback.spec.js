@@ -1,6 +1,10 @@
 import angular from 'angular';
 import 'angular-mocks';
-import module, { unknownErrorMessage } from './oktaAuthCallback.component';
+import module, {
+  unknownErrorMessage,
+  checkoutUrlWithoutOktaParams,
+} from './oktaAuthCallback.component';
+import { Roles } from 'common/services/session/session.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
@@ -76,6 +80,289 @@ describe('oktaAuthCallback', function () {
       $rootScope.$digest();
 
       expect($ctrl.onSignInFailure).toHaveBeenCalledWith('error');
+    });
+  });
+
+  describe('checkoutUrlWithoutOktaParams()', () => {
+    it('returns plain checkout when there is no query string', () => {
+      expect(checkoutUrlWithoutOktaParams('')).toEqual('/checkout.html');
+    });
+
+    it('drops the Okta code and state', () => {
+      expect(checkoutUrlWithoutOktaParams('?code=a&state=b')).toEqual(
+        '/checkout.html',
+      );
+    });
+
+    it('keeps other query parameters', () => {
+      expect(
+        checkoutUrlWithoutOktaParams('?code=a&state=b&ga=111&query=test'),
+      ).toEqual('/checkout.html?ga=111&query=test');
+    });
+
+    it('drops the Okta error parameters', () => {
+      expect(
+        checkoutUrlWithoutOktaParams(
+          '?error=access_denied&error_description=Not+assigned&state=b',
+        ),
+      ).toEqual('/checkout.html');
+    });
+
+    it('drops an interaction code', () => {
+      expect(
+        checkoutUrlWithoutOktaParams('?interaction_code=x&state=b'),
+      ).toEqual('/checkout.html');
+    });
+  });
+
+  describe('replayed callback', () => {
+    beforeEach(() => {
+      $ctrl.$window.location.search = '?code=new-code&state=state-1';
+      $ctrl.$window.performance = {
+        getEntriesByType: jest.fn().mockReturnValue([{ type: 'back_forward' }]),
+      };
+      $ctrl.datadogRum = { addAction: jest.fn() };
+      jest
+        .spyOn($ctrl.sessionService, 'isOktaRedirectReplay')
+        .mockReturnValue(true);
+      jest.spyOn($ctrl.sessionService, 'handleOktaRedirect');
+      ['error', 'warn', 'info'].forEach((level) =>
+        jest.spyOn($log, level).mockImplementation(() => {}),
+      );
+    });
+
+    const expectNoErrorShownOrLogged = () => {
+      expect($ctrl.errorMessage).toEqual('');
+      expect($log.error).not.toHaveBeenCalled();
+      expect($log.warn).not.toHaveBeenCalled();
+      expect($log.info).not.toHaveBeenCalled();
+    };
+
+    it('sends a signed-in donor back to the page they signed in from', () => {
+      jest
+        .spyOn($ctrl.sessionService, 'getRole')
+        .mockReturnValue(Roles.registered);
+      jest
+        .spyOn($ctrl.sessionService, 'getSignInStartLocation')
+        .mockReturnValue('https://give-stage2.cru.org/search-results.html');
+
+      $ctrl.$onInit();
+
+      expect($ctrl.$window.location.replace).toHaveBeenCalledTimes(1);
+      expect($ctrl.$window.location.replace).toHaveBeenCalledWith(
+        'https://give-stage2.cru.org/search-results.html',
+      );
+      expect($ctrl.sessionService.handleOktaRedirect).not.toHaveBeenCalled();
+      expectNoErrorShownOrLogged();
+    });
+
+    it('sends a signed-in donor to checkout when no sign-in page was saved', () => {
+      jest
+        .spyOn($ctrl.sessionService, 'getRole')
+        .mockReturnValue(Roles.registered);
+      jest
+        .spyOn($ctrl.sessionService, 'getSignInStartLocation')
+        .mockReturnValue(null);
+
+      $ctrl.$onInit();
+
+      expect($ctrl.$window.location.replace).toHaveBeenCalledTimes(1);
+      expect($ctrl.$window.location.replace).toHaveBeenCalledWith(
+        '/checkout.html',
+      );
+      expect($ctrl.sessionService.handleOktaRedirect).not.toHaveBeenCalled();
+      expectNoErrorShownOrLogged();
+    });
+
+    it('keeps other query parameters but drops the Okta ones in the checkout fallback', () => {
+      $ctrl.$window.location.search = '?code=new-code&state=state-1&ga=111';
+      jest
+        .spyOn($ctrl.sessionService, 'getRole')
+        .mockReturnValue(Roles.registered);
+      jest
+        .spyOn($ctrl.sessionService, 'getSignInStartLocation')
+        .mockReturnValue(null);
+
+      $ctrl.$onInit();
+
+      expect($ctrl.$window.location.replace).toHaveBeenCalledTimes(1);
+      expect($ctrl.$window.location.replace).toHaveBeenCalledWith(
+        '/checkout.html?ga=111',
+      );
+    });
+
+    it('sends a donor who is not signed in to the sign-in page', () => {
+      jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue(Roles.public);
+      jest.spyOn($ctrl.sessionService, 'getSignInStartLocation');
+
+      $ctrl.$onInit();
+
+      expect($ctrl.$window.location.replace).toHaveBeenCalledTimes(1);
+      expect($ctrl.$window.location.replace).toHaveBeenCalledWith(
+        '/sign-in.html',
+      );
+      expect($ctrl.sessionService.handleOktaRedirect).not.toHaveBeenCalled();
+      expect(
+        $ctrl.sessionService.getSignInStartLocation,
+      ).not.toHaveBeenCalled();
+      expectNoErrorShownOrLogged();
+    });
+
+    it('treats an IDENTIFIED donor as not signed in', () => {
+      jest
+        .spyOn($ctrl.sessionService, 'getRole')
+        .mockReturnValue(Roles.identified);
+      jest
+        .spyOn($ctrl.sessionService, 'getSignInStartLocation')
+        .mockReturnValue('https://give-stage2.cru.org/search-results.html');
+
+      $ctrl.$onInit();
+
+      expect($ctrl.$window.location.replace).toHaveBeenCalledTimes(1);
+      expect($ctrl.$window.location.replace).toHaveBeenCalledWith(
+        '/sign-in.html',
+      );
+    });
+
+    it('records a RUM action for a replay while signed in', () => {
+      jest
+        .spyOn($ctrl.sessionService, 'getRole')
+        .mockReturnValue(Roles.registered);
+      jest
+        .spyOn($ctrl.sessionService, 'getSignInStartLocation')
+        .mockReturnValue('https://give-stage2.cru.org/search-results.html');
+
+      $ctrl.$onInit();
+
+      expect($ctrl.datadogRum.addAction).toHaveBeenCalledTimes(1);
+      expect($ctrl.datadogRum.addAction).toHaveBeenCalledWith(
+        'okta-callback-replay',
+        { signedIn: true, navigationType: 'back_forward' },
+      );
+      expect($ctrl.$window.performance.getEntriesByType).toHaveBeenCalledWith(
+        'navigation',
+      );
+    });
+
+    it('records a RUM action for a replay while not signed in', () => {
+      jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue(Roles.public);
+      $ctrl.$window.performance.getEntriesByType.mockReturnValue([
+        { type: 'reload' },
+      ]);
+
+      $ctrl.$onInit();
+
+      expect($ctrl.datadogRum.addAction).toHaveBeenCalledTimes(1);
+      expect($ctrl.datadogRum.addAction).toHaveBeenCalledWith(
+        'okta-callback-replay',
+        { signedIn: false, navigationType: 'reload' },
+      );
+    });
+
+    it('sends only signedIn and navigationType to RUM', () => {
+      jest
+        .spyOn($ctrl.sessionService, 'getRole')
+        .mockReturnValue(Roles.registered);
+      jest
+        .spyOn($ctrl.sessionService, 'getSignInStartLocation')
+        .mockReturnValue(null);
+
+      $ctrl.$onInit();
+
+      expect(
+        Object.keys($ctrl.datadogRum.addAction.mock.calls[0][1]).sort(),
+      ).toEqual(['navigationType', 'signedIn']);
+    });
+
+    it('reports navigationType unknown when the browser has no navigation entry', () => {
+      jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue(Roles.public);
+      $ctrl.$window.performance.getEntriesByType.mockReturnValue([]);
+
+      $ctrl.$onInit();
+
+      expect($ctrl.datadogRum.addAction).toHaveBeenCalledWith(
+        'okta-callback-replay',
+        { signedIn: false, navigationType: 'unknown' },
+      );
+      expect($ctrl.$window.location.replace).toHaveBeenCalledWith(
+        '/sign-in.html',
+      );
+    });
+
+    it('reports navigationType unknown when the browser has no Performance API', () => {
+      jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue(Roles.public);
+      delete $ctrl.$window.performance;
+
+      $ctrl.$onInit();
+
+      expect($ctrl.datadogRum.addAction).toHaveBeenCalledWith(
+        'okta-callback-replay',
+        { signedIn: false, navigationType: 'unknown' },
+      );
+      expect($ctrl.$window.location.replace).toHaveBeenCalledWith(
+        '/sign-in.html',
+      );
+    });
+  });
+
+  describe('callback that is not a replay', () => {
+    beforeEach(() => {
+      jest
+        .spyOn($ctrl.sessionService, 'isOktaRedirectReplay')
+        .mockReturnValue(false);
+      $ctrl.datadogRum = { addAction: jest.fn() };
+    });
+
+    it('still shows and logs a real sign-in error', () => {
+      const error = new Error('Token exchange failed');
+      jest
+        .spyOn($ctrl.sessionService, 'handleOktaRedirect')
+        .mockReturnValue(Observable.throw(error));
+      jest.spyOn($log, 'error').mockImplementation(() => {});
+
+      $ctrl.$onInit();
+      $rootScope.$digest();
+
+      expect($log.error).toHaveBeenCalledWith('Token exchange failed', error);
+      expect($ctrl.errorMessage).toEqual('Token exchange failed');
+      expect($ctrl.$window.location.replace).not.toHaveBeenCalled();
+      expect($ctrl.datadogRum.addAction).not.toHaveBeenCalled();
+    });
+
+    it('sends the donor on with location.replace after a normal sign-in', () => {
+      jest
+        .spyOn($ctrl.sessionService, 'handleOktaRedirect')
+        .mockReturnValue(Observable.of('data'));
+      jest
+        .spyOn(orderService, 'getDonorDetails')
+        .mockReturnValue(Observable.of({ 'registration-state': 'REGISTERED' }));
+      jest
+        .spyOn($ctrl.sessionService, 'getRedirectLocation')
+        .mockReturnValue('https://give-stage2.cru.org/search-results.html');
+
+      $ctrl.$onInit();
+      $rootScope.$digest();
+
+      expect($ctrl.$window.location.replace).toHaveBeenCalledTimes(1);
+      expect($ctrl.$window.location.replace).toHaveBeenCalledWith(
+        'https://give-stage2.cru.org/search-results.html',
+      );
+      expect($ctrl.datadogRum.addAction).not.toHaveBeenCalled();
+    });
+
+    it('sends the donor to the sign-in page with location.replace when the URL has no Okta response', () => {
+      jest
+        .spyOn($ctrl.sessionService, 'handleOktaRedirect')
+        .mockReturnValue(Observable.of(false));
+
+      $ctrl.$onInit();
+      $rootScope.$digest();
+
+      expect($ctrl.$window.location.replace).toHaveBeenCalledTimes(1);
+      expect($ctrl.$window.location.replace).toHaveBeenCalledWith(
+        '/sign-in.html',
+      );
+      expect($ctrl.datadogRum.addAction).not.toHaveBeenCalled();
     });
   });
 
