@@ -11,7 +11,7 @@ describe('signIn', function () {
 
   beforeEach(inject(function (_$componentController_) {
     $ctrl = _$componentController_(module.name, {
-      $window: { location: '/sign-in.html' },
+      $window: { location: { replace: jest.fn() } },
     });
   }));
 
@@ -32,7 +32,7 @@ describe('signIn', function () {
 
     it('has does not change location', () => {
       expect($ctrl.sessionChanged).toHaveBeenCalled();
-      expect($ctrl.$window.location).toEqual('/sign-in.html');
+      expect($ctrl.$window.location.replace).not.toHaveBeenCalled();
     });
   });
 
@@ -49,7 +49,7 @@ describe('signIn', function () {
 
     it('has does not change location', () => {
       expect($ctrl.sessionChanged).toHaveBeenCalled();
-      expect($ctrl.$window.location).toEqual('/sign-in.html');
+      expect($ctrl.$window.location.replace).not.toHaveBeenCalled();
     });
   });
 
@@ -66,7 +66,9 @@ describe('signIn', function () {
 
     it('navigates to checkout', () => {
       expect($ctrl.sessionChanged).toHaveBeenCalled();
-      expect($ctrl.$window.location).toEqual('/checkout.html');
+      expect($ctrl.$window.location.replace).toHaveBeenCalledWith(
+        '/checkout.html',
+      );
     });
   });
 
