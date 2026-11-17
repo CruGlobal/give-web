@@ -72,6 +72,27 @@ describe('signIn', function () {
     });
   });
 
+  describe("as 'REGISTERED' with a query string", () => {
+    beforeEach(() => {
+      jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue('REGISTERED');
+      window.history.replaceState({}, '', '/sign-in.html?ga=111');
+      $ctrl.$onInit();
+    });
+
+    afterEach(() => {
+      $ctrl.$onDestroy();
+      window.history.replaceState({}, '', '/');
+    });
+
+    it('replaces the sign-in page with checkout and keeps the query string', () => {
+      expect($ctrl.$window.location.replace).toHaveBeenCalledTimes(1);
+      expect($ctrl.$window.location.replace).toHaveBeenCalledWith(
+        '/checkout.html?ga=111',
+      );
+      expect($ctrl.$window.location).toEqual({ replace: expect.any(Function) });
+    });
+  });
+
   describe('checkoutAsGuest()', () => {
     describe('downgradeToGuest success', () => {
       it('navigates to checkout', () => {
