@@ -40,7 +40,7 @@ describe('oktaAuthCallback', function () {
     $ctrl = _$componentController_(module.name, {
       $log,
       $window: {
-        location: '/okta-auth-callback.html',
+        location: { replace: jest.fn() },
         localStorage: {
           getItem: jest.fn(),
           removeItem: jest.fn(),
@@ -116,9 +116,9 @@ describe('oktaAuthCallback', function () {
       jest
         .spyOn($ctrl.sessionService, 'getRedirectLocation')
         .mockReturnValue('https://give-stage2.cru.org/search-results.html');
-      expect($ctrl.$window.location).toEqual('/okta-auth-callback.html');
+      expect($ctrl.$window.location.replace).not.toHaveBeenCalled();
       $ctrl.redirectToLocationPriorToLogin();
-      expect($ctrl.$window.location).toEqual(
+      expect($ctrl.$window.location.replace).toHaveBeenCalledWith(
         'https://give-stage2.cru.org/search-results.html',
       );
       expect($ctrl.sessionService.clearRedirectLocation).toHaveBeenCalled();
@@ -129,9 +129,11 @@ describe('oktaAuthCallback', function () {
       jest
         .spyOn($ctrl.sessionService, 'getRedirectLocation')
         .mockReturnValue(undefined);
-      expect($ctrl.$window.location).toEqual('/okta-auth-callback.html');
+      expect($ctrl.$window.location.replace).not.toHaveBeenCalled();
       $ctrl.redirectToLocationPriorToLogin();
-      expect($ctrl.$window.location).toEqual('/checkout.html');
+      expect($ctrl.$window.location.replace).toHaveBeenCalledWith(
+        '/checkout.html',
+      );
       expect($ctrl.sessionService.clearRedirectLocation).not.toHaveBeenCalled();
     });
   });
