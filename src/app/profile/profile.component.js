@@ -9,6 +9,10 @@ import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/do';
 import { phoneNumberRegex } from 'common/app.constants';
 import getServerErrorMessage from 'common/lib/getServerErrorMessage';
+import {
+  isSpouseNameComplete,
+  isSpouseNamePartRequired,
+} from 'common/services/spouseHelpers/spouseName';
 
 import template from './profile.tpl.html';
 
@@ -99,7 +103,7 @@ class ProfileController {
     this.profileService.getProfileDonorDetails().subscribe(
       (donorDetails) => {
         this.donorDetails = donorDetails;
-        this.hasSpouse = !!this.donorDetails['spouse-name']['family-name'];
+        this.hasSpouse = isSpouseNameComplete(this.donorDetails['spouse-name']);
         this.initTitles();
         this.setSubscriberIds();
         this.donorDetailsLoading = false;
@@ -125,11 +129,21 @@ class ProfileController {
     );
   }
 
+  isSpouseNameRequired(nameField) {
+    // A new spouse is only saved with both names, so both are required while adding one
+    return (
+      this.addingSpouse ||
+      isSpouseNamePartRequired(this.donorDetails?.['spouse-name'], nameField)
+    );
+  }
+
   updateDonorDetails() {
     this.donorDetailsLoading = true;
-    const updatedDetails = this.addingSpouse
-      ? omit(this.donorDetails, 'spouse-name') // Adding a spouse is handled by saveSpouse
-      : this.donorDetails;
+    // Spouse names are only saved by saveSpouse, so leave out an unsaved or half-saved spouse
+    const updatedDetails =
+      this.addingSpouse || !this.hasSpouse
+        ? omit(this.donorDetails, 'spouse-name')
+        : this.donorDetails;
     this.profileService.updateProfileDonorDetails(updatedDetails).subscribe(
       () => {
         this.donorDetailsLoading = false;
@@ -501,7 +515,8 @@ class ProfileController {
       this.spouseDetailsForm &&
       this.spouseDetailsForm.$dirty &&
       this.spouseDetailsForm.$valid &&
-      this.addingSpouse
+      this.addingSpouse &&
+      isSpouseNameComplete(this.donorDetails['spouse-name'])
     ) {
       this.saveSpouse();
     }

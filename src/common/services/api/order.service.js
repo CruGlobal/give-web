@@ -17,6 +17,7 @@ import * as structuredErrorService from 'common/services/structuredError.service
 import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort';
 import extractPaymentAttributes from 'common/services/paymentHelpers/extractPaymentAttributes';
 import { cartUpdatedEvent } from 'common/lib/cartEvents';
+import { isSpouseNameComplete } from 'common/services/spouseHelpers/spouseName';
 
 import cortexApiService from '../cortexApi.service';
 import cartService from './cart.service';
@@ -587,9 +588,8 @@ class Order {
       'order',
     );
     const storedOrder = this.localStorage.getItem('currentOrder');
-    const hasSpouse =
-      !!donorDetails['spouse-name']['given-name'] ||
-      !!donorDetails['spouse-name']['family-name'];
+    // A half-filled spouse name stays editable so the donor can complete it
+    const hasSpouse = isSpouseNameComplete(donorDetails['spouse-name']);
     const startedOrderWithoutSpouse = angular.fromJson(
       this.localStorage.getItem('startedOrderWithoutSpouse'),
     );

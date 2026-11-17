@@ -186,6 +186,7 @@ describe('ProfileComponent', function () {
     it('should load donor details on $onInit() and have a spouse info', () => {
       const data = {
         'spouse-name': {
+          'given-name': 'def',
           'family-name': 'abc',
         },
       };
@@ -215,6 +216,22 @@ describe('ProfileComponent', function () {
       expect($ctrl.hasSpouse).toBe(false);
       expect($ctrl.initTitles).toHaveBeenCalled();
       expect($ctrl.setSubscriberIds).toHaveBeenCalled();
+    });
+
+    it('should not treat a spouse with only one name as an existing spouse', () => {
+      jest
+        .spyOn($ctrl.profileService, 'getProfileDonorDetails')
+        .mockReturnValue(
+          Observable.of({
+            'spouse-name': {
+              'given-name': 'Sarah',
+              'family-name': ' ',
+            },
+          }),
+        );
+      $ctrl.loadDonorDetails();
+
+      expect($ctrl.hasSpouse).toBe(false);
     });
 
     it('should handle and error of loading donor details on $onInit()', () => {
@@ -279,6 +296,7 @@ describe('ProfileComponent', function () {
 
     it('should update donor details', () => {
       $ctrl.donorDetails = donorDetails;
+      $ctrl.hasSpouse = true;
       jest
         .spyOn($ctrl.profileService, 'updateProfileDonorDetails')
         .mockReturnValue(Observable.of(''));
@@ -312,6 +330,23 @@ describe('ProfileComponent', function () {
 
       expect($ctrl.donorDetailsForm.$setPristine).toHaveBeenCalled();
       expect($ctrl.updateEmail).toHaveBeenCalled();
+    });
+
+    it('should leave out a half-saved spouse name', () => {
+      $ctrl.donorDetails = {
+        ...donorDetails,
+        'spouse-name': { 'given-name': 'SFname', 'family-name': '' },
+      };
+      $ctrl.hasSpouse = false;
+      jest
+        .spyOn($ctrl.profileService, 'updateProfileDonorDetails')
+        .mockReturnValue(Observable.of(''));
+      jest.spyOn($ctrl, 'updateEmail').mockImplementation(() => {});
+      $ctrl.updateDonorDetails();
+
+      expect(
+        $ctrl.profileService.updateProfileDonorDetails,
+      ).toHaveBeenCalledWith({ name: donorDetails.name });
     });
 
     it('should handle and error of updating donor details', () => {
@@ -926,6 +961,55 @@ describe('ProfileComponent', function () {
     });
   });
 
+  describe('isSpouseNameRequired()', () => {
+    const spouseName = (givenName, familyName) => {
+      $ctrl.donorDetails = {
+        'spouse-name': { 'given-name': givenName, 'family-name': familyName },
+      };
+    };
+
+    it('should not require either name when both are blank', () => {
+      spouseName('', null);
+
+      expect($ctrl.isSpouseNameRequired('given-name')).toBe(false);
+      expect($ctrl.isSpouseNameRequired('family-name')).toBe(false);
+    });
+
+    it('should require the last name when only the first name is filled in', () => {
+      spouseName('Sarah', '');
+
+      expect($ctrl.isSpouseNameRequired('family-name')).toBe(true);
+      expect($ctrl.isSpouseNameRequired('given-name')).toBe(false);
+    });
+
+    it('should require the first name when only the last name is filled in', () => {
+      spouseName(undefined, 'Smith');
+
+      expect($ctrl.isSpouseNameRequired('given-name')).toBe(true);
+      expect($ctrl.isSpouseNameRequired('family-name')).toBe(false);
+    });
+
+    it('should treat a whitespace-only name as blank', () => {
+      spouseName('   ', 'Smith');
+
+      expect($ctrl.isSpouseNameRequired('family-name')).toBe(false);
+    });
+
+    it('should not require anything before donor details load', () => {
+      $ctrl.donorDetails = undefined;
+
+      expect($ctrl.isSpouseNameRequired('given-name')).toBe(false);
+    });
+
+    it('should require both names while adding a spouse', () => {
+      spouseName('', null);
+      $ctrl.addingSpouse = true;
+
+      expect($ctrl.isSpouseNameRequired('given-name')).toBe(true);
+      expect($ctrl.isSpouseNameRequired('family-name')).toBe(true);
+    });
+  });
+
   describe('saveSpouse()', () => {
     beforeEach(() => {
       $ctrl.donorDetails = {
@@ -1070,12 +1154,51 @@ describe('ProfileComponent', function () {
       expect($ctrl.$window.scrollTo).toHaveBeenCalled();
 
       // $ctrl.donorDetailsForm.$dirty = false;
+      $ctrl.donorDetails = {
+        'spouse-name': { 'given-name': 'Sarah', 'family-name': 'Smith' },
+      };
       $ctrl.addingSpouse = true;
       $ctrl.hasSpouse = true;
       $ctrl.onSubmit();
 
       expect($ctrl.updateEmail).toHaveBeenCalledWith(true);
       expect($ctrl.saveSpouse).toHaveBeenCalled();
+    });
+
+    it('should not add a spouse when both spouse names are left blank', () => {
+      jest.spyOn($ctrl, 'updateDonorDetails').mockImplementation(() => {});
+      jest.spyOn($ctrl, 'updateEmail').mockImplementation(() => {});
+      jest.spyOn($ctrl, 'saveSpouse').mockImplementation(() => {});
+      jest.spyOn($ctrl, 'updatePhoneNumbers').mockImplementation(() => {});
+      jest.spyOn($ctrl, 'updateMailingAddress').mockImplementation(() => {});
+      $ctrl.$window.scrollTo = jest.fn();
+      $ctrl.donorDetails = {
+        'spouse-name': { 'given-name': '', 'family-name': '' },
+      };
+      $ctrl.addingSpouse = true;
+      $ctrl.spouseDetailsForm.$dirty = true;
+      $ctrl.spouseDetailsForm.$valid = true;
+      $ctrl.onSubmit();
+
+      expect($ctrl.saveSpouse).not.toHaveBeenCalled();
+    });
+
+    it('should not add a spouse when only the last name is filled in', () => {
+      jest.spyOn($ctrl, 'updateDonorDetails').mockImplementation(() => {});
+      jest.spyOn($ctrl, 'updateEmail').mockImplementation(() => {});
+      jest.spyOn($ctrl, 'saveSpouse').mockImplementation(() => {});
+      jest.spyOn($ctrl, 'updatePhoneNumbers').mockImplementation(() => {});
+      jest.spyOn($ctrl, 'updateMailingAddress').mockImplementation(() => {});
+      $ctrl.$window.scrollTo = jest.fn();
+      $ctrl.donorDetails = {
+        'spouse-name': { 'given-name': '', 'family-name': 'Smith' },
+      };
+      $ctrl.addingSpouse = true;
+      $ctrl.spouseDetailsForm.$dirty = true;
+      $ctrl.spouseDetailsForm.$valid = true;
+      $ctrl.onSubmit();
+
+      expect($ctrl.saveSpouse).not.toHaveBeenCalled();
     });
   });
 });

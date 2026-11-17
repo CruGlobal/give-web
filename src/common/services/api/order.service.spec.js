@@ -1652,24 +1652,39 @@ describe('order service', () => {
       ).toEqual('true');
     });
 
-    it('should not be editable during a new order when the spouse has a first name', () => {
+    it('should be editable during a new order when the spouse has only a first name', () => {
       expect(
         self.orderService.spouseEditableForOrder({
           'spouse-name': {
             'given-name': 'Name',
           },
         }),
-      ).toEqual(false);
+      ).toEqual(true);
 
       expect(
         self.$window.localStorage.getItem('startedOrderWithoutSpouse'),
-      ).toEqual('false');
+      ).toEqual('true');
     });
 
-    it('should not be editable during a new order when the spouse has a last name', () => {
+    it('should be editable during a new order when the spouse has only a last name', () => {
       expect(
         self.orderService.spouseEditableForOrder({
           'spouse-name': {
+            'family-name': 'Name',
+          },
+        }),
+      ).toEqual(true);
+
+      expect(
+        self.$window.localStorage.getItem('startedOrderWithoutSpouse'),
+      ).toEqual('true');
+    });
+
+    it('should not be editable during a new order when the spouse has both names', () => {
+      expect(
+        self.orderService.spouseEditableForOrder({
+          'spouse-name': {
+            'given-name': 'Name',
             'family-name': 'Name',
           },
         }),
