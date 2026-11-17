@@ -1,0 +1,23 @@
+name: PR guard
+
+# Its own workflow so editing the description or a label re-runs only the guard.
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened, labeled, unlabeled]
+
+concurrency:
+  group: pr-guard-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  pr-guard:
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    uses: CruGlobal/.github/.github/workflows/pr-guard.yml@v2
+    with:
+      workflow-ref: v2
+      require-spec: false
+      # Dependabot PRs have no work item; the job must still run to report the required check.
+      require-work-item: ${{ github.event.pull_request.user.type != 'Bot' }}
