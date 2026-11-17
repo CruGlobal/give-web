@@ -1000,6 +1000,14 @@ describe('ProfileComponent', function () {
 
       expect($ctrl.isSpouseNameRequired('given-name')).toBe(false);
     });
+
+    it('should require both names while adding a spouse', () => {
+      spouseName('', null);
+      $ctrl.addingSpouse = true;
+
+      expect($ctrl.isSpouseNameRequired('given-name')).toBe(true);
+      expect($ctrl.isSpouseNameRequired('family-name')).toBe(true);
+    });
   });
 
   describe('saveSpouse()', () => {
