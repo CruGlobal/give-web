@@ -1040,6 +1040,16 @@ describe('session service', function () {
       expect(sessionService.getSignInStartLocation()).toBeNull();
     });
 
+    it.each([
+      ['https://give-stage2.cru.org/okta-auth-callback.html'],
+      [
+        'https://give-stage2.cru.org/okta-auth-callback.html?code=old-code&state=old-state',
+      ],
+    ])('ignores the Okta callback page on this site (%s)', (saved) => {
+      $window.sessionStorage.setItem(signInStartLocation, saved);
+      expect(sessionService.getSignInStartLocation()).toBeNull();
+    });
+
     it('ignores a saved value that is not a full URL', () => {
       $window.sessionStorage.setItem(signInStartLocation, 'not a url');
       expect(sessionService.getSignInStartLocation()).toBeNull();

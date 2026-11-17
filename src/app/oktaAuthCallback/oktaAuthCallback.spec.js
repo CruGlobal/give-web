@@ -4,7 +4,10 @@ import module, {
   unknownErrorMessage,
   checkoutUrlWithoutOktaParams,
 } from './oktaAuthCallback.component';
-import { Roles } from 'common/services/session/session.service';
+import {
+  Roles,
+  signInStartLocation,
+} from 'common/services/session/session.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
@@ -331,6 +334,45 @@ describe('oktaAuthCallback', function () {
       $ctrl.$onInit();
 
       expect($ctrl.sessionService.clearRedirectLocation).not.toHaveBeenCalled();
+    });
+
+    // The controller gets a fake $window, but the real sessionService reads the real window.
+    describe('when the kept sign-in page is the Okta callback page', () => {
+      afterEach(() => {
+        window.sessionStorage.removeItem(signInStartLocation);
+      });
+
+      it.each([
+        ['/okta-auth-callback.html'],
+        ['/okta-auth-callback.html?code=old-code&state=old-state'],
+      ])(
+        'sends a signed-in donor to checkout instead of back to %s',
+        (callbackPath) => {
+          const callbackPage = `${window.location.origin}${callbackPath}`;
+          window.sessionStorage.setItem(signInStartLocation, callbackPage);
+          jest
+            .spyOn($ctrl.sessionService, 'getRole')
+            .mockReturnValue(Roles.registered);
+          jest.spyOn($ctrl.sessionService, 'getSignInStartLocation');
+
+          $ctrl.$onInit();
+
+          expect(
+            $ctrl.sessionService.getSignInStartLocation,
+          ).toHaveReturnedWith(null);
+          expect($ctrl.$window.location.replace).toHaveBeenCalledTimes(1);
+          expect($ctrl.$window.location.replace).toHaveBeenCalledWith(
+            '/checkout.html',
+          );
+          expect($ctrl.$window.location.replace).not.toHaveBeenCalledWith(
+            callbackPage,
+          );
+          expect(
+            $ctrl.sessionService.handleOktaRedirect,
+          ).not.toHaveBeenCalled();
+          expectNoErrorShownOrLogged();
+        },
+      );
     });
   });
 
