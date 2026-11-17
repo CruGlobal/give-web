@@ -7,8 +7,6 @@ import lookupResponse from 'common/services/api/fixtures/product-lookup.fixture'
 import bulkLookupResponse from 'common/services/api/fixtures/product-lookup-bulk.fixture';
 import campaignResponse from '../fixtures/campaign.infinity.fixture';
 import designationResponse from '../fixtures/designation.infinity.fixture';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
 
 describe('designation service', () => {
   beforeEach(angular.mock.module(module.name));

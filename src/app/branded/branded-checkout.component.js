@@ -317,7 +317,6 @@ export default angular
       premiumName: '@',
       premiumImageUrl: '@',
       premiumMinimumAmount: '@',
-      radioStationApiUrl: '@',
       donorDetailsVariable: '@donorDetails',
       singleAmountsInput: '@singleAmounts',
       monthlyAmountsInput: '@monthlyAmounts',

@@ -1116,10 +1116,9 @@ describe('order service', () => {
   });
 
   describe('submit', () => {
-    let getPurchaseFormMock;
     beforeEach(() => {
       // Avoid another http request while testing
-      getPurchaseFormMock = jest
+      jest
         .spyOn(self.orderService, 'getPurchaseForm')
         .mockReturnValue(Observable.of(purchaseFormResponseZoomMapped));
     });
