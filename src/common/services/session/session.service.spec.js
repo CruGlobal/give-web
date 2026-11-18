@@ -1035,7 +1035,7 @@ describe('session service', function () {
     it('ignores a saved page on another site', () => {
       $window.sessionStorage.setItem(
         signInStartLocation,
-        'https://evil.example.com/search-results.html',
+        'https://example.com/search-results.html',
       );
       expect(sessionService.getSignInStartLocation()).toBeNull();
     });
