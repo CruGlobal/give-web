@@ -1,7 +1,8 @@
 import angular from 'angular';
+import { datadogRum } from '@datadog/browser-rum';
 import commonModule from 'common/common.module';
 import showErrors from 'common/filters/showErrors.filter';
-import sessionService from 'common/services/session/session.service';
+import sessionService, { Roles } from 'common/services/session/session.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
 import orderService from 'common/services/api/order.service';
 import verificationService from 'common/services/api/verification.service';
@@ -10,6 +11,16 @@ import template from './oktaAuthCallback.tpl.html';
 const componentName = 'oktaAuthCallback';
 export const unknownErrorMessage =
   'Failed to authenticate user when redirecting from Okta. Please try to sign in again.';
+
+// Okta's response params must not follow the donor to checkout, where they would reach RUM and analytics.
+export function checkoutUrlWithoutOktaParams(search) {
+  const params = new URLSearchParams(search);
+  ['code', 'state', 'interaction_code', 'error', 'error_description'].forEach(
+    (param) => params.delete(param),
+  );
+  const query = params.toString();
+  return query ? `/checkout.html?${query}` : '/checkout.html';
+}
 
 class OktaAuthCallbackController {
   /* @ngInject */
@@ -27,10 +38,15 @@ class OktaAuthCallbackController {
     this.sessionModalService = sessionModalService;
     this.orderService = orderService;
     this.verificationService = verificationService;
+    this.datadogRum = datadogRum;
   }
 
   $onInit() {
     this.initializeVariables();
+    if (this.sessionService.isOktaRedirectReplay()) {
+      this.handleReplayedCallback();
+      return;
+    }
     this.sessionService.handleOktaRedirect().subscribe({
       next: (data) => this.onSignInSuccess(data),
       error: (error) => this.onSignInFailure(error),
@@ -144,19 +160,43 @@ class OktaAuthCallbackController {
     this.errorMessage = errorMessage;
   }
 
+  // A callback whose sign-in already finished, usually reached with the Back button. Not an error.
+  handleReplayedCallback() {
+    const signedIn = this.sessionService.getRole() === Roles.registered;
+    this.datadogRum.addAction('okta-callback-replay', {
+      signedIn,
+      navigationType: this.getNavigationType(),
+    });
+    if (signedIn) {
+      this.$window.location.replace(
+        this.sessionService.getSignInStartLocation() ||
+          checkoutUrlWithoutOktaParams(this.$window.location.search),
+      );
+    } else {
+      this.redirectToSignInPage();
+    }
+  }
+
+  getNavigationType() {
+    return (
+      this.$window.performance?.getEntriesByType?.('navigation')?.[0]?.type ||
+      'unknown'
+    );
+  }
+
   redirectToLocationPriorToLogin() {
     this.isReadyToRedirect = true;
     const previousLocation = this.sessionService.getRedirectLocation();
     if (previousLocation) {
       this.sessionService.clearRedirectLocation();
-      this.$window.location = previousLocation;
+      this.$window.location.replace(previousLocation);
     } else {
-      this.$window.location = `/checkout.html${window.location.search}`;
+      this.$window.location.replace(`/checkout.html${window.location.search}`);
     }
   }
 
   redirectToSignInPage() {
-    this.$window.location = '/sign-in.html';
+    this.$window.location.replace('/sign-in.html');
   }
 }
 

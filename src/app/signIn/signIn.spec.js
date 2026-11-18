@@ -11,7 +11,7 @@ describe('signIn', function () {
 
   beforeEach(inject(function (_$componentController_) {
     $ctrl = _$componentController_(module.name, {
-      $window: { location: '/sign-in.html' },
+      $window: { location: { replace: jest.fn() } },
     });
   }));
 
@@ -32,7 +32,8 @@ describe('signIn', function () {
 
     it('has does not change location', () => {
       expect($ctrl.sessionChanged).toHaveBeenCalled();
-      expect($ctrl.$window.location).toEqual('/sign-in.html');
+      expect($ctrl.$window.location.replace).not.toHaveBeenCalled();
+      expect($ctrl.$window.location).toEqual({ replace: expect.any(Function) });
     });
   });
 
@@ -49,7 +50,8 @@ describe('signIn', function () {
 
     it('has does not change location', () => {
       expect($ctrl.sessionChanged).toHaveBeenCalled();
-      expect($ctrl.$window.location).toEqual('/sign-in.html');
+      expect($ctrl.$window.location.replace).not.toHaveBeenCalled();
+      expect($ctrl.$window.location).toEqual({ replace: expect.any(Function) });
     });
   });
 
@@ -66,7 +68,31 @@ describe('signIn', function () {
 
     it('navigates to checkout', () => {
       expect($ctrl.sessionChanged).toHaveBeenCalled();
-      expect($ctrl.$window.location).toEqual('/checkout.html');
+      expect($ctrl.$window.location.replace).toHaveBeenCalledTimes(1);
+      expect($ctrl.$window.location.replace).toHaveBeenCalledWith(
+        '/checkout.html',
+      );
+    });
+  });
+
+  describe("as 'REGISTERED' with a query string", () => {
+    beforeEach(() => {
+      jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue('REGISTERED');
+      window.history.replaceState({}, '', '/sign-in.html?ga=111');
+      $ctrl.$onInit();
+    });
+
+    afterEach(() => {
+      $ctrl.$onDestroy();
+      window.history.replaceState({}, '', '/');
+    });
+
+    it('replaces the sign-in page with checkout and keeps the query string', () => {
+      expect($ctrl.$window.location.replace).toHaveBeenCalledTimes(1);
+      expect($ctrl.$window.location.replace).toHaveBeenCalledWith(
+        '/checkout.html?ga=111',
+      );
+      expect($ctrl.$window.location).toEqual({ replace: expect.any(Function) });
     });
   });
 
