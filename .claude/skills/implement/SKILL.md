@@ -11,9 +11,8 @@ Run every step below, then /pr, without stopping. Do all you can before you
 stop. Stop early only for a question whose answer changes what gets built.
 Anything else goes in the PR description.
 
-1. Preflight: run the preflight from CLAUDE.md. If dependencies are missing,
-   the database is down or the app does not boot, fix it or tell the developer
-   before anything else.
+1. Preflight: run the preflight from CLAUDE.md. If dependencies are missing or
+   the app does not boot, fix it or tell the developer before anything else.
 2. Start the checker: a fresh agent (Agent tool) that never writes app code.
    Keep its id, because you will send it more work later with SendMessage.
    Its first job: read the ticket, the spec and the answer-key tests (not the
