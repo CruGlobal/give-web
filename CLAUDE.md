@@ -44,10 +44,10 @@ AngularJS 1.8 components (plain JS, `ng-app` per component) embedded in AEM page
 
 A mistake here moves money, touches card or bank data, or breaks sign-in. Work that touches these uses the stricter setup in `.claude/skills/implement/SKILL.md`, and a person from the code owners must approve the PR. pr-guard sets the one-way-door label from `.github/CODEOWNERS`, so this list must match it.
 
-- TSYS, cards and bank accounts: `src/common/services/api/tsys.service.js`, `src/common/components/paymentMethods/creditCardForm/`, `src/common/components/paymentMethods/bankAccountForm/`, `src/common/directives/creditCard*`, `src/app/checkout/step-2/existingPaymentMethods/`
-- Fee math: `src/common/components/paymentMethods/coverFees/`
-- Sign-in: `src/common/services/session/session.service.js`
-- Guardrail files: `.github/`, `.husky/`, `.claude/`, `CLAUDE.md`, `AGENTS.md`, `.gitleaks.toml`, `eslint.config.*`
+- TSYS, cards and bank accounts: `src/common/services/api/tsys.service*`, `src/common/components/paymentMethods/creditCardForm/`, `src/common/components/paymentMethods/bankAccountForm/`, `src/common/directives/creditCard*`, `src/app/checkout/step-2/existingPaymentMethods/`
+- Fee math and the charge payload: `src/common/components/paymentMethods/coverFees/`, `src/app/productConfig/productConfigForm/`, `src/common/services/api/order.service*`
+- Sign-in: `src/common/services/session/session.service*`
+- Guardrail files: `.github/`, `.husky/`, `.claude/`, `CLAUDE.md`, `AGENTS.md`, `.gitleaks.toml`, `eslint.config.*`, `.eslintrc*`
 
 Tests follow their folder: a test next to card, bank or TSYS code is a one-way door too.
 
