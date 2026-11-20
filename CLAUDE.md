@@ -42,7 +42,7 @@ AngularJS 1.8 components (plain JS, `ng-app` per component) embedded in AEM page
 
 ## One-way-door paths
 
-A mistake here moves money, touches card or bank data, or breaks sign-in. Work that touches these uses the stricter setup in `.claude/skills/implement/SKILL.md`, and a person from the code owners must approve the PR. The list pr-guard reads is `.github/one-way-door-paths`; keep the two in sync.
+A mistake here moves money, touches card or bank data, or breaks sign-in. Work that touches these uses the stricter setup in `.claude/skills/implement/SKILL.md`, and a person from the code owners must approve the PR. pr-guard sets the one-way-door label from `.github/CODEOWNERS`, so this list must match it.
 
 - TSYS, cards and bank accounts: `src/common/services/api/tsys.service.js`, `src/common/components/paymentMethods/creditCardForm/`, `src/common/components/paymentMethods/bankAccountForm/`, `src/common/directives/creditCard*`, `src/app/checkout/step-2/existingPaymentMethods/`
 - Fee math: `src/common/components/paymentMethods/coverFees/`
