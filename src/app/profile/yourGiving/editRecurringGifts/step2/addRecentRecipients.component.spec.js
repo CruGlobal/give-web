@@ -1,6 +1,8 @@
 import angular from 'angular';
 import 'angular-mocks';
 
+import RecurringGiftModel from 'common/models/recurringGift.model';
+
 import module from './addRecentRecipients.component';
 
 describe('editRecurringGiftsModal', () => {
@@ -73,6 +75,50 @@ describe('editRecurringGiftsModal', () => {
           additions: [{ _selectedGift: true }],
         });
       });
+    });
+
+    describe('isExistingRecurringGift', () => {
+      it('should return true when the recipient designation is already in the recurring gifts', () => {
+        self.controller.recurringGifts = [
+          new RecurringGiftModel({ 'designation-number': '0123456' }),
+        ];
+
+        expect(
+          self.controller.isExistingRecurringGift({
+            designationNumber: '0123456',
+          }),
+        ).toEqual(true);
+      });
+
+      it('should return false when the recipient designation is not in the recurring gifts', () => {
+        self.controller.recurringGifts = [
+          new RecurringGiftModel({ 'designation-number': '0123456' }),
+        ];
+
+        expect(
+          self.controller.isExistingRecurringGift({
+            designationNumber: '1234567',
+          }),
+        ).toEqual(false);
+      });
+
+      it('should return false when recurring gifts have not been loaded', () => {
+        self.controller.recurringGifts = undefined;
+
+        expect(
+          self.controller.isExistingRecurringGift({
+            designationNumber: '0123456',
+          }),
+        ).toEqual(false);
+      });
+    });
+
+    describe('component bindings', () => {
+      it('should accept the recurringGifts binding', inject(($injector) => {
+        const directive = $injector.get(`${module.name}Directive`)[0];
+
+        expect(directive.bindToController.recurringGifts).toEqual('<');
+      }));
     });
   });
 });
