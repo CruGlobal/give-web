@@ -2,17 +2,19 @@
 # pr-guard also labels PRs one-way-door from these paths; keep the list in CLAUDE.md in sync.
 
 # TSYS, cards and bank accounts
-/src/common/services/api/tsys.service.js                @CruGlobal/digital-products-and-services
+/src/common/services/api/tsys.service*                  @CruGlobal/digital-products-and-services
 /src/common/components/paymentMethods/creditCardForm/   @CruGlobal/digital-products-and-services
 /src/common/components/paymentMethods/bankAccountForm/  @CruGlobal/digital-products-and-services
 /src/common/directives/creditCard*                      @CruGlobal/digital-products-and-services
 /src/app/checkout/step-2/existingPaymentMethods/        @CruGlobal/digital-products-and-services
 
-# Fee math
+# Fee math and the charge payload
 /src/common/components/paymentMethods/coverFees/        @CruGlobal/digital-products-and-services
+/src/app/productConfig/productConfigForm/               @CruGlobal/digital-products-and-services
+/src/common/services/api/order.service*                 @CruGlobal/digital-products-and-services
 
 # Login
-/src/common/services/session/session.service.js         @CruGlobal/digital-products-and-services
+/src/common/services/session/session.service*           @CruGlobal/digital-products-and-services
 
 # Guardrail files
 /.github/                                               @CruGlobal/digital-products-and-services
