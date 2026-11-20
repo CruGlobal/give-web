@@ -1,6 +1,7 @@
 {
   "enabledPlugins": {
-    "agent-review@cru-plugins": true
+    "agent-review@cru-plugins": true,
+    "superpowers@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "cru-plugins": {
