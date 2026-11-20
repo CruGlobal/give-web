@@ -18,7 +18,7 @@ Write a spec for ticket $ARGUMENTS.
 4. Save it to docs/superpowers/specs/YYYY-MM-DD-<KEY>-<topic>-design.md with:
    Why, In scope, Out of scope, Acceptance criteria (numbered, each one
    testable), Risky (does it touch a one-way-door path in CLAUDE.md?),
-   Feature flag (if the repo is on V2 Pipeline), Questions for the BA.
+   Questions for the BA.
 5. Ask the developer to read every line. Then:
    - Not clear: pause and research. Explain how it works, or point them to
      the screen in the app.
