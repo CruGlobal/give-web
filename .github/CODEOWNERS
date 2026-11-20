@@ -1,0 +1,25 @@
+# Only one-way-door paths need a code owner; there is no * line, so the rest can merge on the agent-review approval.
+# pr-guard also labels PRs one-way-door from these paths; keep the list in CLAUDE.md in sync.
+
+# TSYS, cards and bank accounts
+/src/common/services/api/tsys.service.js                @CruGlobal/digital-products-and-services
+/src/common/components/paymentMethods/creditCardForm/   @CruGlobal/digital-products-and-services
+/src/common/components/paymentMethods/bankAccountForm/  @CruGlobal/digital-products-and-services
+/src/common/directives/creditCard*                      @CruGlobal/digital-products-and-services
+/src/app/checkout/step-2/existingPaymentMethods/        @CruGlobal/digital-products-and-services
+
+# Fee math
+/src/common/components/paymentMethods/coverFees/        @CruGlobal/digital-products-and-services
+
+# Login
+/src/common/services/session/session.service.js         @CruGlobal/digital-products-and-services
+
+# Guardrail files
+/.github/                                               @CruGlobal/digital-products-and-services
+/.husky/                                                @CruGlobal/digital-products-and-services
+/.claude/                                               @CruGlobal/digital-products-and-services
+**/CLAUDE.md                                            @CruGlobal/digital-products-and-services
+**/AGENTS.md                                            @CruGlobal/digital-products-and-services
+/.gitleaks.toml                                         @CruGlobal/digital-products-and-services
+/eslint.config.*                                        @CruGlobal/digital-products-and-services
+/.eslintrc*                                             @CruGlobal/digital-products-and-services
