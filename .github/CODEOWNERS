@@ -1,5 +1,5 @@
 # Only one-way-door paths need a code owner; there is no * line, so the rest can merge on the agent-review approval.
-# Keep in sync with .github/one-way-door-paths.
+# pr-guard also labels PRs one-way-door from these paths; keep the list in CLAUDE.md in sync.
 
 # TSYS, cards and bank accounts
 /src/common/services/api/tsys.service.js                @CruGlobal/digital-products-and-services
